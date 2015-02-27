@@ -1,0 +1,30 @@
+<% console.log('add-layer-form-item', data); %>
+<%  $("body").tooltip({selector: '[data-toggle="tooltip"]'}); %>
+
+
+	<li class="clearfix list-group-item interaction">
+		<span 
+			class="group-add-layer-name" 
+			data-role="select" 
+			data-toggle="tooltip" 
+			data-placement="left" 
+			title="<%= data.properties.description %>" >
+			<%= data.properties.name %>
+		</span>	
+		<% if(data.isAttached){%>
+			<button type="button" 
+					class="btn btn-warning btn-xs pull-right" 
+					data-role="remove">
+				remove
+			</button>
+		<%}else{%>
+			<button type="button" 
+					class="btn btn-link btn-xs pull-right" 
+					data-role="add">
+				add
+			</button>
+		<%} %>
+
+	</li>
+
+

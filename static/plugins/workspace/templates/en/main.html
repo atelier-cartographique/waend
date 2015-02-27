@@ -1,0 +1,100 @@
+<% console.log(data) %>
+<%  $("body").tooltip({selector: '[data-toggle="tooltip"]'}); %>
+
+
+<div class="map" data-anchor="map" />
+
+<div class="navigation pull-right">
+	<span class="route 
+				 pull-right 
+				 btn 
+				 btn-link 
+				 btn-xs
+				 activated" 
+		  data-route="workspace"
+		  data-toggle="tooltip" 
+		  data-placement="bottom"
+		  title="The workspace is where you create and edit your map layers">
+		workspace
+	</span>
+
+	<span class="route 
+				 pull-right 
+				 btn 
+				 btn-link 
+				 btn-xs" 
+		  data-route="browse"
+		  data-toggle="tooltip" 
+		  data-placement="bottom"
+		  title="The map browser allows you to see every public maps on the Metrolab plateform">
+		maps browser
+	</span>
+
+	<span class="btn 
+				 btn-link 
+				 btn-xs 
+				 pull-right
+				 navigation-username">
+
+		logged in as <%= data.user.name %>
+	</span> 
+
+	<span id="notificationBox" 
+		  class="btn 
+				 btn-link 
+				 btn-xs 
+				 pull-right
+				 notifications" 
+		  data-anchor="notifications" />
+
+</div>
+
+<div id="mapWidget" class="container">
+
+<!-- 	<span class="route btn btn-link btn-xs  pull-right" 
+		  data-route="browse">
+		Maps browser
+	</span> -->
+	
+<!-- 	<ul class="nav nav-pills"  role="tablist">
+	  <li class="active">
+	  	<a href="#mapWidgetLayers"  
+	  	   role="tab" 
+	  	   data-toggle="pill">Your layers
+	  	</a>
+	  </li>
+
+	  <li>
+	  	<a href="#mapWidgetGroups"  
+	  	   role="tab" 
+	  	   data-toggle="pill">Maps you follow
+	  	</a>
+	  </li>
+	</ul>
+
+
+
+	<div class="tab-content">
+		<div class="layers tab-pane fade in active" 
+			 id="mapWidgetLayers" 
+			 data-anchor="layers" />
+
+		<div class="groups tab-pane fade in"  
+			 id="mapWidgetGroups" 
+			 data-anchor="groups" />
+	</div>
+ -->
+<!-- 		<div class="layers tab-pane fade in active" 
+			 id="mapWidgetLayers" 
+			 data-anchor="layers" />
+ -->
+		<div class="groups tab-pane fade in"  
+			 id="mapWidgetGroups" 
+			 data-anchor="groups" />
+
+</div>
+
+
+
+
+

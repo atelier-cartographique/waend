@@ -1,0 +1,122 @@
+
+
+@brown : #996600;
+
+.modal-outer {
+	background-color: rgba(123,123,123,0.5);
+	height: 100%;
+
+	.layer-box,
+	.layer-wms-box,
+	.entity-box,
+	.group-create-form,
+	.group-add-layer-box {
+		.Widget;
+		width: (@widget * 1.5);
+		right: (@widget + @padding);
+
+		.name-title-input {
+			margin-bottom: @margin;
+			.form-control {
+				font-family: @light, serif;
+				font-size: @h2;
+				margin : 0px;
+				text-decoration: none;
+				width: (@widget * 1.25);
+				height: 40px;
+				padding: 0px 0px 5px 5px;
+			}
+		}
+
+		.control-label::first-letter {
+			text-transform: uppercase;
+		}
+	}
+
+}
+
+.layer-form {
+	width: 100% !important;
+}
+
+.container .jumbotron {
+ padding-right: 0px; 
+ padding-left: 0px; 
+}
+.jumbotron {
+	padding: @padding 0px 0px 0px;
+	background-color: transparent;
+
+
+	p {
+		font-size: @font-normal;
+	}
+
+	h2 {
+		font-size: @h2;
+	}
+
+	.container {
+		// border: 1px solid @brown;
+		background-color: #fff;
+		border-radius: 2px;
+		padding: 0px;
+		width: @widget;
+
+		.col-md-4 {
+			font-size: @font-normal;
+			padding: 5px;
+		}
+
+		.col-md-12,
+		.col-md-8,
+		.col-md-6,
+		.col-md-4 {
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+
+		.edit-fill {
+			padding-right: 5px;
+		}
+		.edit-stroke {
+			padding-left: 5px;
+		}
+
+		.btn-default {
+			width: 100%;
+			margin-bottom: 15px;
+			height: 24px;
+			padding: 0px;
+			border-radius: 2px;
+		}
+
+		.style-infos {
+			padding-bottom: @padding;
+			padding-top: @padding;
+		}
+
+		.col-item {
+			display: block;
+			float: none;
+			clear: both;
+			padding-bottom: 30px;
+			font-size: 8.5pt;
+
+
+			.form-control {
+			height: 25px;
+			padding: 0px 2px; 		
+			border-radius: 2px;
+			font-size: 8.5pt;
+			font-family: 'roboto_slabbold', serif;
+			}
+
+			.col-md-8,
+			.col-md-4 {
+				padding: 0px;
+			}
+		}
+	
+	}
+}

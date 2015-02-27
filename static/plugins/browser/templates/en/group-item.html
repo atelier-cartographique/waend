@@ -1,0 +1,40 @@
+<% var panelClass = data.isSubscribed ? 'panel-success' : 'panel-default'; %>
+<div class="panel <%= panelClass %>">
+	<div class="group-name 
+				panel-heading
+				route"
+		  data-route="/display/<%= data.id %>">
+
+		<h2 class="panel-title">
+			<span>"<%= data.properties.name %>"</span>
+		</h2>
+	</div>
+
+	<div class="panel-body"><%= data.properties.description %></div>
+
+	 
+	<% if(data.isSubscribed){ %>
+	<div class="panel-footer">
+		<span class="btn btn-link btn-xs"
+			  data-role="unsubscribe">
+			unsubscribe
+		</span>
+
+
+		<span class="btn btn-link btn-xs"
+			  data-role="add">
+			add layer
+		</span>
+
+	</div>
+	<% } else { %>
+	<div class="panel-footer">
+		<span class="btn btn-link btn-xs"
+			  data-role="subscribe">
+			subscribe
+		</span>
+	</div>
+	<% } %>
+</div>
+
+

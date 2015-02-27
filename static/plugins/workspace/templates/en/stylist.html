@@ -1,0 +1,118 @@
+<!-- 
+stroke	Boolean	
+color	String
+weight	Number	
+opacity	Number
+fill	Boolean	
+fillColor	String	
+fillOpacity	Number	
+-->
+
+
+<div class="container edit-style" role="form">
+	<div class="col-md-12 style-infos">
+		<h4>Layer styles</h4>
+		<p>To change the layer's style, activate the feature you want to edit by clicking on 'Edit fill' or 'Edit stroke'</p>
+		<li>color : pick-up the color you want to use</li>
+		<li>weight : thickness of the line in px</li>
+		<li>opacity : from 0 to 1 (100%) opacity </li>
+	</div>
+
+	<div class="col-md-6 edit-fill">
+		<div class="button">
+		    <input data-role="input"
+		    	class="btn btn-default <% if(data.fill){print('active');} %>" 
+		    	id="stylistFill" 
+		    	name="fill"
+		    	type="button"
+		    	value="Edit fill" 
+		    	   />
+	  	</div>
+
+		<div class="col-item">
+		    <label class="col-md-8 control-label"  for="stylistFillColor">fill color</label>
+		    <div class="col-md-4">
+			    <input data-role="input"
+			    	class="form-control"
+				    	<% if(!data.fill){ %> disabled="disabled" <% } %>
+			    	id="stylistFillColor" 
+			    	name="fillColor"
+			    	value="<%= data.fillColor %>" 
+			    	type="color" 
+			    	/>
+		    </div>
+	  	</div>
+
+		<div class="col-item">
+		    <label class="col-md-8 control-label"  for="stylistFillOpacity">fill opacity</label>
+		    <div class="col-md-4">
+			    <input data-role="input"
+			    	class="form-control"
+				    	<% if(!data.fill){ %> disabled="disabled" <% } %>
+			    	id="stylistFillOpacity" 
+			    	name="fillOpacity"
+			    	value="<%= data.fillOpacity %>" 
+			    	type="number" 
+			    	/>
+		    </div>
+	  	</div>
+	</div>
+
+
+	<div class="col-md-6 edit-stroke">
+
+		<div class="button">
+		    <input data-role="input"
+		    	class="btn btn-default <% if(data.stroke){print('active');} %>" 
+		    	id="stylistStroke" 
+		    	name="stroke"
+		    	type="button"
+		    	value="Edit stroke" 
+		    	   />
+	  	</div>
+
+		<div class="col-item">
+		    <label class="col-md-8 control-label"  for="stylistColor">stroke color</label>
+		    <div class="col-md-4">
+			    <input data-role="input"
+			    	class="form-control"
+			    	<% if(!data.stroke){ %> disabled="disabled" <% } %>
+			    	id="stylistColor" 
+			    	name="color"
+			    	value="<%= data.color %>" 
+			    	type="color" 
+			    	/>
+			    
+		    </div>
+	  	</div>
+
+		<div class="col-item">
+		    <label class="col-md-8 control-label"  for="stylistWeight">weight</label>
+		    <div class="col-md-4">
+			    <input data-role="input"
+			    	class="form-control "
+				    	<% if(!data.stroke){ %> disabled="disabled" <% } %>
+			    	id="stylistWeight" 
+			    	name="weight"
+			    	value="<%= data.weight %>" 
+			    	type="number" 
+		    	/>
+		    </div>
+	  	</div>
+
+		<div class="col-item">
+		    <label class="col-md-8 control-label"  for="stylistOpacity">stroke opacity</label>
+		    <div class="col-md-4">
+			    <input data-role="input"
+			    	class="form-control "
+				    	<% if(!data.stroke){ %> disabled="disabled" <% } %>
+			    	id="stylistOpacity" 
+			    	name="opacity"
+			    	value="<%= data.opacity %>" 
+			    	type="number" 
+			    	/>
+		    </div>
+	  	</div>
+	</div>
+</div>
+

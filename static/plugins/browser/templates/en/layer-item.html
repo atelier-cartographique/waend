@@ -1,0 +1,43 @@
+<% console.log(data) %>
+
+<% var layerType = ('geojson' === data.type) ? 'geojson' : 'wms'; %>
+<% var layerActive = data.active ? 'active': ''; %>
+
+<div class="layer <%= layerType %> <%= layerActive %>">
+
+	<div class="LayerName interaction"
+		 data-role="select"
+		<% if(data.properties.description){ %>
+	     data-toggle="tooltip" 
+	     data-placement="left" 
+	     title="<%= data.properties.description %>"
+		 <% } %>
+		 >
+	<%= data.properties.name %>
+	</div>
+	
+	<div class="glyphs <%= layerActive %>">
+		<% if('geojson' === data.type){ %>
+			<span class="layer-zoom interaction"  data-role="zoom">
+				<span class="glyphicon  glyphicon-fullscreen"></span>
+			</span>
+			<span class="layer-color"></span>
+		<% }else{ %>
+			<span class="icon-wms">wms</span>
+		<% } %>
+	</div>
+
+
+	<div class="OnMapView" >
+		<% _.each(data.groups, function(group){ %>
+			<span class="MapName" 
+				  data-role="subscribe"
+				  data-id="<%= group.id %>">
+				<%= group.properties.name %> 
+			</span> 
+		<% }); %>
+	</div>
+
+</div>
+
+

@@ -1,0 +1,51 @@
+<html>
+<head>
+    <title>wænd - register failed</title>
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="styles/login.css" />
+</head>
+<body>
+<div class="bkg-img">
+    <div class="container logo">
+        <img src="/styles/imgs/logo-white.png">
+    </div>
+     
+
+      <div class="container login">
+        <form class="form-horizontal" role="form" action="/register" method="post">
+            <div class="list-group">
+                <input name="username" 
+                     type="email" 
+                     class="list-group-item" 
+                     id="inputEmail3" 
+                     placeholder="email" />
+
+                <input name="password" 
+                     type="password" 
+                     class="list-group-item" 
+                     id="inputPassword3" 
+                     placeholder="password" />
+
+                <input type="submit" 
+                     class="list-group-item btn-login" 
+                     value="register">
+            </div>
+        </form>
+    </div>
+
+
+    <div class="container text">
+        <div class="error">error</div>
+        <div class="description">
+            <code>
+              <%= error %>
+            </code>
+        </div>
+    </div>
+
+    <div class="credits">
+        Initiated by <a href="http://atelier-cartographique.be">Atelier Cartographique</a>.
+    </div>
+</div>
+</body>
+</html>

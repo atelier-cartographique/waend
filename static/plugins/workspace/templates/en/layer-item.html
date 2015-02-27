@@ -1,0 +1,75 @@
+<% console.log("workspace/layer-item", data); %>
+<%  $("body").tooltip({selector: '[data-toggle="tooltip"]'}); %>
+
+
+
+<div class="glyphs <% if(data.active){ %>active<% } %>">
+	<span class="icon-layer-color" 
+	      style="background-color: <%= data.fillColor %><%= data.borderStyle %>" />
+
+	
+	<span class="layer-zoom interaction"  data-role="zoom">
+		<span class="glyphicon  
+					 glyphicon-fullscreen"
+			  data-toggle="tooltip" 
+			  data-placement="left" 
+			  title="Zoom to layer"/>
+	</span>
+
+	<span class="layer-visible interaction"  data-role="visible">
+
+	<% if(data.visible){ %>
+		<span class="glyphicon  
+					 glyphicon-eye-open" 
+			   data-toggle="tooltip" 
+			   data-placement="left" 
+			   title="Make invisible"/>
+	<% }else{ %>
+		<span class="glyphicon  
+					 glyphicon-eye-close" 
+			  data-toggle="tooltip" 
+			  data-placement="left" 
+			  title="Make visible"/>
+	<% } %>
+
+	</span>
+
+	<% if(data.movable){ %>
+	<span class="interaction"  data-role="layerUp">
+		<span class="glyphicon  
+					 glyphicon-arrow-up"
+			  data-toggle="tooltip" 
+			  data-placement="left" 
+			  title="raise layer"/>
+	</span>
+	<span class="interaction"  data-role="layerDown">
+		<span class="glyphicon  
+					 glyphicon-arrow-down"
+			  data-toggle="tooltip" 
+			  data-placement="left" 
+			  title="down layer"/>
+	</span>
+	<% } %>
+
+	<% if(data.editable){ %>
+
+	<span class="layer-settings interaction"  data-role="settings">
+		<span class="glyphicon  
+					 glyphicon-cog"
+			  data-toggle="tooltip" 
+			  data-placement="left" 
+			  title="Edit layer"/>
+	</span>
+
+	<% } %>
+</div>
+
+
+<span 
+	class="layer-name interaction" 
+	data-role="select" 
+	data-toggle="tooltip" 
+	data-placement="right" 
+	title="<%= data.description %>">
+	<%= data.name %>
+</span>

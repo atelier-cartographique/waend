@@ -1,0 +1,27 @@
+
+<div class="marker"
+	 style="opacity:<%= data.style.fillOpacity %>"
+	 title="<%= data.main %>">
+
+<div class="marker-icon"
+	style="color:<%= data.style.color %>; 
+		   background-color:<%= data.style.fillColor %>;
+		   border: 2px solid <%= data.style.color %>">
+
+	<div class="marker-initials">
+		<span class="marker-first-letter">
+			<%= data.initials.first %>
+		</span>
+		<span class="marker-second-letter">
+			<%= data.initials.second %>
+		</span>
+	</div>
+	
+	<div class="marker-full-name"
+		 style="border-top: 2px solid <%= data.style.color %>">
+		 <%= data.name %>
+	</div>
+	
+	<div class="marker-arrow-down">&#9660;</div>
+</div>
+ </div>
