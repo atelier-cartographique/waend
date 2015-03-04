@@ -97,7 +97,7 @@ Nous ne sommes pas en concurrence, les services proposés sont complémentaires.
 Nous utilisons certains composants développés par MapBox et des technologies misent au point par OSM et OpenLayers.
 
 
-##Je suis intéressé à participer au développement de Wænd, comment puis-je faire ?
+##Je suis intéressé/e à participer au développement de Wænd, comment puis-je faire ?
 
 C’est avec grand plaisir que nous recevrons vos propositions et contributions, le dépôt du projet est disponible sur GitHub, et vos commits sont les bienvenus !
 
