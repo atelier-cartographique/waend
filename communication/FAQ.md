@@ -42,7 +42,7 @@ Le mécanisme de socialité permet en outre d’ajouter une couche d’entité a
 
 > (oui, c'est mignon)
 
-Nous vous invitons à consulter la documentation pour une description plus détaillée des différentes fonctionnalités de la plateforme.
+Nous vous invitons à consulter la documentation pour une description plus détaillée des différentes fonctionnalités de la plateforme, et notament des subtilités liées au mécanisme de socialité.
 
 ## Qu’est ce qui fait la différence entre Wænd et les autre plateforme de cartographie en ligne ? Pourquoi aurai-je envie d’utiliser Wænd?
 
