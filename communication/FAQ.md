@@ -10,17 +10,20 @@ Son champs d’application est extrêmement varié, allant de la recherche acad�
 
 ######Sur Wænd, tout est possible.
 
-La majeur partie des plateformes cartographiques actuelles permettent de visualiser le territoire selon son utilisation urbanistique (routes, bâtiments, type d’occupation du sol), ce qui constitue une portion infime du potentiel de la cartographie. Wænd permet de faire tout le reste. 
+La majeur partie des plateformes cartographiques actuelles permettent de visualiser le territoire selon son utilisation urbanistique (routes, bâtiments, type d’occupation du sol), ce qui constitue une portion infime du potentiel de la cartographie.  
+Wænd permet de faire tout le reste. 
 
-En plus de pouvoir utiliser votre propre fond de carte (uniquement les voies d’eau, par exemple), vous pouvez également travailler sans représentation pré-établie du territoire, en laissant les éléments géographique que vous ajoutez en tisser une nouvelle représentation. C’est ici qu’une forme de ré-appropriation du territoire émerge et que la création cartographique commence.
+En plus de pouvoir utiliser votre propre fond de carte (uniquement les voies d’eau, par exemple), vous pouvez également travailler sans représentation pré-établie du territoire, en laissant les éléments géographique que vous ajoutez en tisser une nouvelle représentation.   C’est ici qu’une forme de ré-appropriation du territoire émerge et que la création cartographique commence.
 
 ######Wænd propose de nouveaux outils narratifs
 
-Une autre grande spécificité de la plateforme consiste à intégrer les éléments à la carte, nous ne faisons pas de pop-up : si vous zoomez vers une image, vous zoomez réellement vers l’image, et pas seulement vers son emplacement. Il en va de même pour le texte, le son et la majeur partie des éléments utilisables sur la plateforme. 
-C’est une différence fondamentale qui permet la publication dans un espace à trois dimensions, où la notion de profondeur prend tout son sens. C’est une nouvelle façon de hiérarchiser et présenter l’information, qui permet de nouvelles formes de narrations.
+Une autre grande spécificité de la plateforme consiste à intégrer les éléments à la carte, nous ne faisons pas de pop-up : si vous zoomez vers une image, vous zoomez réellement vers l’image, et pas seulement vers son emplacement. Il en va de même pour le texte, le son et la majeur partie des éléments utilisables sur la plateforme.  
+C’est une différence fondamentale qui permet la publication dans un espace à trois dimensions, où la notion de profondeur prend tout son sens.  
+C’est une nouvelle façon de hiérarchiser et présenter l’information, qui permet de nouvelles formes de narrations.
 
 ######Wænd permet un travail cartographique collaboratif puissant.  
-Wænd est aussi résolument orientée vers la cartographie collaborative : les utilisateurs peuvent contribuer à des carte pré-existantes en y ajoutant leur propre couches de données. Ceci ouvre la voie à la mise en relation d’informations jusqu’alors isolées les unes des autres. C’est toute la puissance de la cartographie qui devient accessible à tous. 
+Wænd est aussi résolument orientée vers la cartographie collaborative : les utilisateurs peuvent contribuer à des carte pré-existantes en y ajoutant leur propre couches de données.  
+Ceci ouvre la voie à la mise en relation d’informations jusqu’alors isolées les unes des autres. C’est toute la puissance de la cartographie qui devient accessible à tous. 
 
 
 Wænd permet de faire de la cartographie comme jamais auparavant, tout simplement.
@@ -53,13 +56,14 @@ Car Wænd entend bien accueillir des usages cartographique inattendus.
 
 ##Quand Wænd sera disponible et à quel prix ?
 
-Wænd sera très bientôt disponible dans une première version, et sera une plateforme dont l’usage de base sera gratuit. 
+Wænd sera très bientôt disponible dans une première version.  
+Ce sera une plateforme dont l’usage de base sera gratuit. 
 
 
 ##Que faites-vous des données de Wænd et sur quel mécanisme économique repose la plateforme ?
 
 Nous ne voulons pas vendre les données de nos utilisateurs. C’est d’ailleurs pour ça que nous travaillons à un modèle économique qui ne repose pas sur des investissements extérieurs qui pourraient nous brider dans cette démarche.  
-Nous sommes conscient de la nature de Wænd et de l’usage qui pourrait en être fait en terme d’utilisation de données, nous souhaitons vous assurer que nous n’irons pas dans ce sens : vous restez propriétaires de vos données.
+Nous sommes conscient de la nature de Wænd et de l’usage qui pourrait en être fait en terme d’utilisation de données ; nous souhaitons vous assurer que nous n’irons pas dans ce sens : vous restez propriétaires de vos données.
 
 Pour subvenir aux besoins de la plateforme, nous réfléchissons entre autre à des solutions telles que la vente de fonctionnalités spécifiques et la vente de services liés à la plateforme.
 
