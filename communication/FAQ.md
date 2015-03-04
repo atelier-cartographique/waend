@@ -106,4 +106,4 @@ Si vous ne pouvez pas le faire vous-même ou qu’il s’agit de quelque chose d
 
 ##Il parait que Wænd fait des lasagnes, c’est vrai ?
 
-Pas vraiment. Mais presque. Disons que si c’était le cas, Wænd permettrait de venir ajouter sa couche de lasagne à celle qu’a préparé un ami pour l’améliorer (ou pas). 
+Pas vraiment. Mais presque. Disons que si c’était le cas, Wænd permettrait de venir ajouter sa propre couche de lasagne à celle qu’a préparé un ami pour l’améliorer (ou pas). 
