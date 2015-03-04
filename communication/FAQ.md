@@ -14,7 +14,7 @@ Son champs d’application est extrêmement varié, allant de la recherche acad�
 La plateforme repose sur trois types d’éléments :
  
 - l’entité géographique (point, ligne, polygone, image, son, vidéo etc…)
-- la couche d’entités, qui fonctionne comme un ensemble thématique d’entités.
+- la couche d’entités, qui fonctionne comme un ensemble thématique.
 - la carte, qui est une compilation publiée de différentes couches d’entités.
 
 Il est à noter que les couches d'entités restent privées tant qu'elles ne sont pas publiées dans une carte.
