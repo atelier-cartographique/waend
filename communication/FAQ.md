@@ -38,7 +38,7 @@ Le mécanisme de socialité permet en outre d’ajouter une couche d’entité a
 
 > 	Bart, qui a recensé beaucoup de nids dans sa région, voit la carte d’Alain et s’apperçoit qu’il pourrait y avoir un lien entre la répartition des rapaces et celles des Cricetus cricetus. 
 
-> 	Il ajoute alors son ensemble « Limburg roofvogels » à la carte d’Alain. Ce dernier, bien qu’un peu surpris au premier abord, voit finalement la chose d’un bon oeil en s’apercevant de la corrélation.
+> 	Il ajoute alors son ensemble « Roofvogel nesten in Limburg » à la carte d’Alain. Ce dernier, bien qu’un peu surpris au premier abord, voit finalement la chose d’un bon oeil en s’apercevant de la corrélation.
 
 > (oui, c'est mignon)
 
