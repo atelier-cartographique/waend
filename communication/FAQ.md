@@ -69,7 +69,7 @@ Pour subvenir aux besoins de la plateforme, nous réfléchissons entre autre à 
 Wænd viens de wænd, wand et wend.
  
 On trouve que ça sonne bien, que ça a du sens, et nous sommes très content d’avoir un e dans l’a dans notre nom.  
-Ce n’est pas toujours évident à trouver sur le clavier, mais nous trouvons que c’est assez beau.
+Ce n’est pas toujours évident à repérer sur le clavier, mais nous trouvons que c’est assez beau.
 
 *Wænd* : [Old Eng], "de la sorte"  
 Exemple "*Wænd þu þa hlafes, þæt heo ne forbeornen*" soit "*La femme dit au roi : Retourne les cakes, de la sorte à ce qu'ils ne brûlent pas*"  
