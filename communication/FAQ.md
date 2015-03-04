@@ -22,8 +22,9 @@ C’est une différence fondamentale qui permet la publication dans un espace à
 C’est une nouvelle façon de hiérarchiser et présenter l’information, qui permet de nouvelles formes de narrations.
 
 ######Wænd permet un travail cartographique collaboratif puissant.  
-Wænd est aussi résolument orientée vers la cartographie collaborative : les utilisateurs peuvent contribuer à des carte pré-existantes en y ajoutant leur propre couches de données.  
-Ceci ouvre la voie à la mise en relation d’informations jusqu’alors isolées les unes des autres. C’est toute la puissance de la cartographie qui devient accessible à tous. 
+Wænd est résolument orientée vers la cartographie collaborative : vous pouvez contribuer à des carte pré-existantes en y ajoutant vos propre couches de données.  
+Ceci ouvre la voie à la mise en relation d’informations jusqu’alors isolées les unes des autres.  
+C’est toute la puissance de la cartographie qui devient accessible à chacun. 
 
 
 Wænd permet de faire de la cartographie comme jamais auparavant, tout simplement.
@@ -62,8 +63,8 @@ Ce sera une plateforme dont l’usage de base sera gratuit.
 
 ##Que faites-vous des données de Wænd et sur quel mécanisme économique repose la plateforme ?
 
-Nous ne voulons pas vendre les données de nos utilisateurs. C’est d’ailleurs pour ça que nous travaillons à un modèle économique qui ne repose pas sur des investissements extérieurs qui pourraient nous brider dans cette démarche.  
-Nous sommes conscient de la nature de Wænd et de l’usage qui pourrait en être fait en terme d’utilisation de données ; nous souhaitons vous assurer que nous n’irons pas dans ce sens : vous restez propriétaires de vos données.
+Nous ne voulons pas vendre les données de nos utilisateurs. C’est d’ailleurs pour cela que nous travaillons à un modèle économique qui ne repose pas sur des investissements extérieurs qui pourraient nous brider dans cette démarche.  
+Nous sommes conscient de la nature de Wænd et de l’usage qui pourrait en être fait en terme d’utilisation de données ; nous souhaitons vous assurer que nous n’irons pas dans ce sens : vous restez et resterez propriétaires de vos données.
 
 Pour subvenir aux besoins de la plateforme, nous réfléchissons entre autre à des solutions telles que la vente de fonctionnalités spécifiques et la vente de services liés à la plateforme.
 
@@ -72,7 +73,7 @@ Pour subvenir aux besoins de la plateforme, nous réfléchissons entre autre à 
 
 Wænd viens de wænd, wand et wend.
  
-On trouve que ça sonne bien, que ça a du sens, et nous sommes très content d’avoir un e dans l’a dans notre nom.  
+Nous trouvons que ça sonne bien, que ça a du sens, et nous sommes très content d’avoir un e dans l’a dans notre nom.  
 Ce n’est pas toujours évident à repérer sur le clavier, mais nous trouvons que c’est assez beau.
 
 *Wænd* : [Old Eng], "de la sorte"  
@@ -92,7 +93,7 @@ A completer
 ##Quelle sont les relations entre Wænd et les autres plateforme de cartographie en ligne (OSM, MapBox etc.) ?
 
 Nous faisons partie du même secteur et avons globalement les même perspectives en terme de licence d’utilisation, de mise à disposition de technologie, et le même souhait de rendre accessible la création cartographique.  
-Nous ne sommes pas en concurrence, les services proposés par chacun sont complémentaires.
+Nous ne sommes pas en concurrence, les services proposés sont complémentaires.
 Nous utilisons certains composants développés par MapBox et des technologies misent au point par OSM et OpenLayers.
 
 
