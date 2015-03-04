@@ -1,10 +1,44 @@
 ## Qu’est ce que Wænd ?
 Wænd est une plateforme web de publication cartographique.
 
-Très ouverte en terme de fonctionnalités, la plateforme Wænd est couplée à un mécanisme de socialité dédié permettant de publier des cartes collaboratives de toute nature.   
+Très ouverte en terme de fonctionnalités, la plateforme Wænd est couplée à un mécanisme de socialité dédié permettant de publier des cartes collaboratives de toute nature. 
+
+Les cartes peuvent être constituées par des éléments classiques de la cartographie (points, lignes, polygones), mais aussi par du texte, des images, du son, de la vidéo etc.
+  
 
 Son champs d’application est extrêmement varié, allant de la recherche académique aux arts numériques, en passant par le secteur social et la société civile.
 
+
+## Concrètement, comment ca fonctionne ?
+
+La plateforme repose sur trois types d’éléments :
+ 
+- l’entité géographique (point, ligne, polygone, image, son, vidéo etc…)
+- la couche d’entités, qui fonctionne comme un ensemble thématique d’entités.
+- la carte, qui est une compilation publiée de différentes couches d’entités.
+
+Le mécanisme de socialité permet en outre d’ajouter une couche d’entité aux cartes publiées par d’autres utilisateurs afin d’y contribuer.
+
+
+
+> 	Tentative d'illustration
+
+> 	Pour illustrer le fonctionnement de la plateforme, nous prendrons un exemple -assez simpliste- de deux utilisateurs qui cartographient des choses différentes mais qui pourraient être mises en relation. 
+
+> 	L’utilisateur A (Alain), naturaliste, recense les lieux d’habitat du [Cricetus cricetus](http://fr.wikipedia.org/wiki/Hamster_d%27Europe) en Belgique, ainsi que les zones naturelles protégées. 
+
+> 	L’utilisateur B (Bart), passionné d’ornithologie, recense les sites de nidification de rapaces dans le Limbourg. 
+
+> 	Au fur et à mesure de ses relevés, Alain ajoute ses observations de terrains dans la couche « habitat du Cricetus cricetus en Belgique » qu’il a créé.
+> 	Il fait de même avec les zones protégées, dans une couche « zone naturelles protégées ».
+
+> 	Il décide de publier son travail dans une carte qui compile ses deux ensembles d’informations.
+
+> 	Bart, qui a recensé beaucoup de nids dans sa région, voit la carte d’Alain et s’apperçoit qu’il pourrait y avoir un lien entre la répartition des rapaces et celles des Cricetus cricetus. 
+
+> 	Il ajoute alors son ensemble « Limburg roofvogels » à la carte d’Alain. Ce dernier, bien qu’un peu surpris au premier abord, voit finalement la chose d’un bon oeil en s’apercevant de la corrélation.
+
+Nous vous invitons à consulter la documentation pour une description plus détaillée des différentes fonctionnalités de la plateforme.
 
 ## Qu’est ce qui fait la différence entre Wænd et les autre plateforme de cartographie en ligne ? Pourquoi aurai-je envie d’utiliser Wænd?
 
