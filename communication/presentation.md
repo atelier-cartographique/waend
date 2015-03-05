@@ -80,7 +80,7 @@ Une application de cartographie collaborative en ligne peut servir à :
 
 ##Wænd, le fruit d'une recherche de longue date.
 
-Nous développons des applications cartographique depuis un certain temps, et souhaitons rassembler une plateforme qui réunisse tout ce qui nous semble pertinent à ce sujet, sur un plan technique, graphique et typographique, et collaboratif.  
+Nous sommes actifs dans le domaine de la cartographie digitale et imprimée depuis un certain temps, et souhaitons rassembler sur une plateforme complète tout ce qui nous semble pertinent à ce sujet, sur un plan technique, collaboratif, graphique et typographique.  
 Et amusant.  
 Car Wænd entend bien accueillir des usages cartographiques inattendus. 
 
@@ -99,7 +99,7 @@ Nous sommes conscient de la nature de Wænd et de l’usage qui pourrait être f
 Pour subvenir aux besoins de la plateforme, nous travaillons à la mise en place de solutions telles que la vente de fonctionnalités spécifiques et la vente de services liés à la plateforme.
 
 
-##Origine du nom "Wænd" ?
+##Origine du nom "Wænd"
 
 Wænd vient de wænd, wand et wend.
  
