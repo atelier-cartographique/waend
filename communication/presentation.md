@@ -37,7 +37,7 @@ Ce sont des choix éditoriaux importants qui orientent fortement la lecture de l
 
 ######___
 
-Pour une description plus détaillée des différentes fonctionnalités de la plateforme, et notament des subtilités liées au mécanisme de socialité, nous vous invitons à lire la documentation.
+Pour une description plus détaillée des différentes fonctionnalités de la plateforme, et notamment des subtilités liées au mécanisme de socialité, nous vous invitons à lire la documentation.
 
 ## Spécificités
 
@@ -130,7 +130,7 @@ Nous utilisons certains composants développés par MapBox et des technologies m
 ##Code source ouvert et développement participatif
 
 Le code source de la plateforme est disponible en ligne, et ouvert à des contributions extérieures.  
-Nous considérons qu'il est pertinent d'utiliser une licence libre pour le logiciel d'un tel projet, afin d'ouvrir la plateforme à des collaborations spontannées et favoriser l'apparition de nouvelles fonctionnalités et améliorations.
+Nous considérons qu'il est pertinent d'utiliser une licence libre pour le logiciel d'un tel projet, afin d'ouvrir la plateforme à des collaborations spontanées et favoriser l'apparition de nouvelles fonctionnalités et améliorations.
 
 
 ##Un framework modulable et adaptable à des besoins spécifiques
