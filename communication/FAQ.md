@@ -11,15 +11,15 @@ Son champs d’application est extrêmement varié, allant de la recherche acad�
 
 ## Concrètement, comment ca fonctionne ?
 
-La plateforme repose sur trois types d’éléments :
+La plateforme repose sur trois types d'objets :
  
 - l’entité géographique (point, ligne, polygone, image, son, vidéo etc…)
-- la couche d’entités, qui fonctionne comme un ensemble thématique.
-- la carte, qui est une compilation publiée de différentes couches d’entités.
+- la couche thématique, qui fonctionne comme un ensemble d’entités.
+- la carte, qui est une compilation publiée de différentes couches thématiques.
 
-Il est à noter que les couches d'entités restent privées tant qu'elles ne sont pas publiées dans une carte.
+Il est à noter que les couches thématiques restent privées tant qu'elles ne sont pas publiées dans une carte.
 
-Le mécanisme de socialité permet en outre d’ajouter une couche d’entité aux cartes publiées par d’autres utilisateurs afin d’y contribuer.
+Le mécanisme de socialité permet en outre d’ajouter une couche thématique aux cartes publiées par d’autres utilisateurs afin d’y contribuer.
 
 
 
@@ -31,12 +31,12 @@ Le mécanisme de socialité permet en outre d’ajouter une couche d’entité a
 > 
 > 	L’utilisateur B (Bart), passionné d’ornithologie, recense les sites de nidification de rapaces dans le Limbourg. 
 
-> 	Au fur et à mesure de ses relevés, Alain ajoute ses observations de terrains dans la couche « habitat du Cricetus cricetus en Belgique » qu’il a créé.
+> 	Au fur et à mesure de ses relevés, Alain ajoute ses observations de terrains dans la couche « habitat du Cricetus cricetus en Belgique » qu’il a créée.
 
 
 > 	Il décide de montrer son travail en publiant une carte simple, avec sa couche « habitat du Cricetus cricetus en Belgique ».
 
-> 	Bart, qui a recensé beaucoup de nids dans sa région, voit la carte d’Alain et s’apperçoit qu’il pourrait y avoir un lien entre la répartition des rapaces et celles des Cricetus cricetus. 
+> 	Bart, qui a recensé beaucoup de nids dans sa région, voit la carte d’Alain et s’aperçoit qu’il pourrait y avoir un lien entre la répartition des rapaces et celles des Cricetus cricetus. 
 
 > 	Il ajoute alors son ensemble « Roofvogel nesten in Limburg » à la carte d’Alain. Ce dernier, bien qu’un peu surpris au premier abord, voit finalement la chose d’un bon oeil en s’apercevant de la corrélation.
 
@@ -44,7 +44,7 @@ Le mécanisme de socialité permet en outre d’ajouter une couche d’entité a
 
 Nous vous invitons à consulter la documentation pour une description plus détaillée des différentes fonctionnalités de la plateforme, et notament des subtilités liées au mécanisme de socialité.
 
-## Qu’est ce qui fait la différence entre Wænd et les autre plateforme de cartographie en ligne ? Pourquoi aurai-je envie d’utiliser Wænd?
+## Qu’est ce qui fait la différence entre Wænd et les autres plateformes de cartographie en ligne ? Pourquoi aurais-je envie d’utiliser Wænd?
 
 ######Sur Wænd, tout est possible.
 
@@ -90,7 +90,7 @@ Une application de cartographie collaborative en ligne peut servir à :
 
 Nous développons des applications cartographique depuis un certain temps, et avons envie de faire une plateforme qui réunisse tout ce qui nous excite à ce sujet, sur un plan technique, graphique et typographique, et collaboratif.  
 Et amusant.  
-Car Wænd entend bien accueillir des usages cartographique inattendus. 
+Car Wænd entend bien accueillir des usages cartographiques inattendus. 
 
 
 ##Quand Wænd sera disponible et à quel prix ?
@@ -102,16 +102,16 @@ Ce sera une plateforme dont l’usage de base sera gratuit.
 ##Que faites-vous des données de Wænd et sur quel mécanisme économique repose la plateforme ?
 
 Nous ne voulons pas vendre les données de nos utilisateurs. C’est d’ailleurs pour cela que nous travaillons à un modèle économique qui ne repose pas sur des investissements extérieurs qui pourraient nous brider dans cette démarche.  
-Nous sommes conscient de la nature de Wænd et de l’usage qui pourrait en être fait en terme d’utilisation de données ; nous souhaitons vous assurer que nous n’irons pas dans ce sens : vous restez et resterez propriétaires de vos données.
+Nous sommes conscient de la nature de Wænd et de l’usage qui pourrait en être fait des données des utilisateurs; nous souhaitons vous assurer que nous n’irons pas dans ce sens : vous restez et resterez propriétaires de vos données.
 
 Pour subvenir aux besoins de la plateforme, nous réfléchissons entre autre à des solutions telles que la vente de fonctionnalités spécifiques et la vente de services liés à la plateforme.
 
 
 ##Pourquoi ça s’appelle Wænd ?
 
-Wænd viens de wænd, wand et wend.
+Wænd vient de wænd, wand et wend.
  
-Nous trouvons que ça sonne bien, que ça a du sens, et nous sommes très content d’avoir un e dans l’a dans notre nom.  
+Nous trouvons que ça sonne bien, que ça a du sens, et nous sommes très contents d’avoir un e dans l’a dans notre nom.  
 Ce n’est pas toujours évident à repérer sur le clavier, mais nous trouvons que c’est assez beau.
 
 *Wænd* : [Old Eng], "de la sorte"  
@@ -128,7 +128,7 @@ Exemple "*Wænd þu þa hlafes, þæt heo ne forbeornen*" soit "*La femme dit au
 
 A completer
 
-##Quelle sont les relations entre Wænd et les autres plateforme de cartographie en ligne (OSM, MapBox etc.) ?
+##Quelle sont les relations entre Wænd et les autres plateformes de cartographie en ligne (OSM, MapBox etc.) ?
 
 Nous faisons partie du même secteur et avons globalement les même perspectives en terme de licence d’utilisation, de mise à disposition de technologie, et le même souhait de rendre accessible la création cartographique.  
 Nous ne sommes pas en concurrence, les services proposés sont complémentaires.
@@ -137,14 +137,15 @@ Nous utilisons certains composants développés par MapBox et des technologies m
 
 ##Je suis intéressé/e à participer au développement de Wænd, comment puis-je faire ?
 
-C’est avec grand plaisir que nous recevrons vos propositions et contributions, le dépôt du projet est disponible sur GitHub, et vos commits sont les bienvenus !
+C’est avec grand plaisir que nous recevrons vos propositions et contributions. Le dépôt du projet est disponible sur GitHub, et vos contributions sont les bienvenus !
 
 
 ##Ma compagnie -ou moi-même- souhaite utiliser Wænd, mais avec des besoins spécifiques. Comment cela peut il se passer ?
 
 Si il s’agit de traitement spécifique de données et que vous avez les compétences pour le faire, vous pouvez développer votre propre module au sein du framework de la plateforme pour répondre à vos besoins. 
 
-Si vous ne pouvez pas le faire vous-même ou qu’il s’agit de quelque chose de plus complexe, vous pouvez prendre contact avec nous pour en discuter plus en détail, il y aura toujours une solution envisageable.
+Si vous ne pouvez pas le faire vous-même ou qu’il s’agit de quelque chose de plus complexe, vous pouvez prendre contact avec nous pour en discuter plus en détail.  
+Il y aura toujours une solution envisageable.
 
 
 ##Il parait que Wænd fait des lasagnes, c’est vrai ?
