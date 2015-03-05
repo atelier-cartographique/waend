@@ -78,7 +78,7 @@ Une application de cartographie collaborative en ligne peut servir à :
 - etc.
 
 
-##Wænd, le fruit d'une recherche de longue date.
+##Des compétences variées au service d'une plateforme innovante
 
 Nous sommes actifs dans le domaine de la cartographie digitale et imprimée depuis un certain temps, et souhaitons rassembler sur une plateforme complète tout ce qui nous semble pertinent à ce sujet, sur un plan technique, collaboratif, graphique et typographique.  
 Et amusant.  
