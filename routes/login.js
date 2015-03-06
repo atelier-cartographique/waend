@@ -41,7 +41,7 @@ function register (req, res) {
 
     auth.register(email, password)
         .then(function(){
-            res.redirect('/login', {email:email});
+            res.render('    login', {email:email});
         })
         .catch(function(err){
             res.status(500).render('registerFailed', {

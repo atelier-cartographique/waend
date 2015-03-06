@@ -21,6 +21,7 @@
     "morgan": "~1.0.0",
     "node-ft": "0.0.9",
     "node-uuid": "^1.4.2",
+    "npm-zepto": "^1.1.7",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
     "pg": "^3.4.1",
