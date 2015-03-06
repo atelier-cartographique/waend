@@ -8,6 +8,22 @@ Les cartes peuvent être constituées par des éléments classiques de la cartog
 
 Son champs d’application est extrêmement varié, allant de la recherche académique aux arts numériques, en passant par le secteur social et la société civile.
 
+##Pourquoi ça s’appelle Wænd ?
+
+Wænd vient de wænd, wand et wend.
+ 
+Nous trouvons que ça sonne bien, que ça a du sens, et nous sommes très contents d’avoir un e dans l’a dans notre nom.  
+Ce n’est pas toujours évident à repérer sur le clavier, mais nous trouvons que c’est assez beau.
+
+*Wænd* : [Old Eng], "de la sorte"  
+Exemple "*Wænd þu þa hlafes, þæt heo ne forbeornen*" soit "*La femme dit au roi : Retourne les cakes, de la sorte à ce qu'ils ne brûlent pas*"  
+→ https://t.co/kFpMkWixuw  
+→ http://s30.postimg.org/r71o3o8m9/waend.png
+
+*Wand* : [Eng] baguette magique
+
+*Wend* : "*to proceed on*" Old English wendan "*to turn, direct, go; convert, translate*" from Proto-Germanic **wanjan*
+
 
 ## Concrètement, comment ca fonctionne ?
 
@@ -121,23 +137,6 @@ Nous ne voulons pas vendre les données de nos utilisateurs. C’est d’ailleur
 Nous sommes conscient de la nature de Wænd et de l’usage qui pourrait en être fait des données des utilisateurs; nous souhaitons vous assurer que nous n’irons pas dans ce sens : vous restez et resterez propriétaires de vos données.
 
 Pour subvenir aux besoins de la plateforme, nous réfléchissons entre autre à des solutions telles que la vente de fonctionnalités spécifiques et la vente de services liés à la plateforme.
-
-
-##Pourquoi ça s’appelle Wænd ?
-
-Wænd vient de wænd, wand et wend.
- 
-Nous trouvons que ça sonne bien, que ça a du sens, et nous sommes très contents d’avoir un e dans l’a dans notre nom.  
-Ce n’est pas toujours évident à repérer sur le clavier, mais nous trouvons que c’est assez beau.
-
-*Wænd* : [Old Eng], "de la sorte"  
-Exemple "*Wænd þu þa hlafes, þæt heo ne forbeornen*" soit "*La femme dit au roi : Retourne les cakes, de la sorte à ce qu'ils ne brûlent pas*"  
-→ https://t.co/kFpMkWixuw  
-→ http://s30.postimg.org/r71o3o8m9/waend.png
-
-*Wand* : [Eng] baguette magique
-
-*Wend* : "*to proceed on*" Old English wendan "*to turn, direct, go; convert, translate*" from Proto-Germanic **wanjan*
 
 
 ##Sur quelle technologie est conçu Wænd?
