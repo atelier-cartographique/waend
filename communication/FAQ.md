@@ -11,7 +11,12 @@ Son champs d’application est extrêmement varié, allant de la recherche acad�
 
 ## Concrètement, comment ca fonctionne ?
 
-La plateforme repose sur trois types d'objets :
+La plateforme repose sur deux grand mécanismes : la création de cartes, et le volet collaboratif.
+
+
+######Création de cartes
+
+Le mécanisme de création de carte repose sur trois types d'objets :
  
 - l’entité géographique (point, ligne, polygone, image, son, vidéo etc…)
 - la couche thématique, qui fonctionne comme un ensemble d’entités.
@@ -19,8 +24,19 @@ La plateforme repose sur trois types d'objets :
 
 Il est à noter que les couches thématiques restent privées tant qu'elles ne sont pas publiées dans une carte.
 
-Le mécanisme de socialité permet en outre d’ajouter une couche thématique aux cartes publiées par d’autres utilisateurs afin d’y contribuer.
+######Collaboration et socialité
 
+Le mécanisme de socialité s'appuie sur quatre fonctionnalités : 
+
+- La possibilité d’ajouter une couche thématique à n'importe quelles cartes publiées par d’autres utilisateurs afin d’y contribuer. 
+- Par défaut, cette nouvelle couche n'est pas visible, elle est "éteinte". C'est le créateur de la carte qui la rendra visible. Cette fonctionnalité permet de prémunir l'utilisateur du vandalisme potentiel que pourrait subir ses cartes.
+- Chaque carte possède par défaut une "couche de discussion", permettant aux différents contributeurs d'annoter la carte ou d'argumenter leur contribution. Cette couche particulière joue un peu le même rôle que l'espace de discussions entre contributeurs d'articles sur Wikipedia.
+- Un système de notification en direct permet à l'utilisateur de suivre les modifications apportées aux cartes auxquelles il contribue.
+
+Le créateur d'une carte possède des droits particuliers, comme de pouvoir définir le lieu d'arrivée sur la carte et son niveau de zoom, de ré-ordonner les couches thématiques et de décider de leur visibilité.  
+Ce sont des choix éditoriaux importants qui orientent fortement la lecture de la carte.
+
+######___
 
 
 > 	Tentative d'illustration
