@@ -11,14 +11,13 @@
 
 
 var Terminal = require('../lib/Terminal'),
-    Shell = require('../lib/Shell'),
     readline = require('readline');
 
 
 var Console = Terminal.extend({
 
-    initialize: function () {
-        this.shell = new Shell(this);
+    capabilities: {
+        'tty': {}
     },
 
     write: function (fragment) {

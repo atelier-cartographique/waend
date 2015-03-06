@@ -11,6 +11,7 @@
 
 var O = require('../../lib/object').Object,
     Context = require('./Context'),
+    User = require('./User'),
     Root = require('./Root'),
     Group = require('./Group'),
     Layer = require('./Layer'),
@@ -19,14 +20,15 @@ var O = require('../../lib/object').Object,
 
 
 var SHELL = 0,
-    GROUP = 1,
-    LAYER = 2,
-    FEATURE = 3;
+    USER = 1,
+    GROUP = 2,
+    LAYER = 3,
+    FEATURE = 4;
 
 var Shell = O.extend({
 
     initialize: function (terminal) {
-        this.contexts = new Array(4);
+        this.contexts = new Array(5);
         this.contexts[SHELL] = new Root({shell:this});
         this.currentContext = SHELL;
         this.terminal = terminal;
@@ -57,33 +59,62 @@ var Shell = O.extend({
             this.clearContexts();
         }
         else if(1 === pathComps.length){
-            this.loadGroup(pathComps);
+            this.loadUser(pathComps);
         }
         else if(2 === pathComps.length){
-            this.loadLayer(pathComps);
+            this.loadGroup(pathComps);
         }
         else if(3 === pathComps.length){
+            this.loadLayer(pathComps);
+        }
+        else if(4 === pathComps.length){
             this.loadFeature(pathComps);
         }
     },
 
-    loadGroup: function (path) {
-        var groupName = path[0],
+    getUserId: function (userName) {
+        if('me' === userName){
+            if(this.user){
+                return this.user.id;
+            }
+            throw (new Error("you're not logged in"));
+        }
+        return userName;
+    },
+
+    loadUser: function (path) {
+        var userName = this.getUserId(path[0]),
             bind = Bind.get(),
+            userData = bind.create('user', userName);
+
+        this.contexts[USER] = new User({shell:this, data:userData});
+        this.currentContext = USER;
+        this.clearContext();
+    },
+
+    loadGroup: function (path) {
+        var userName = this.getUserId(path[0]),
+            groupName = path[1],
+            bind = Bind.get(),
+            userData = bind.create('user', userName),
             groupData = bind.create('group', groupName);
 
+        this.contexts[USER] = new User({shell:this, data:userData});
         this.contexts[GROUP] = new Group({shell:this, data:groupData});
         this.currentContext = GROUP;
         this.clearContext();
     },
 
     loadLayer: function (path) {
-        var groupName = path[0],
-            layerName = path[1],
+        var userName = this.getUserId(path[0]),
+            groupName = path[1],
+            layerName = path[2],
             bind = Bind.get(),
+            userData = bind.create('user', userName),
             groupData = bind.create('group', groupName),
             layerData = bind.create('layer', layerName);
 
+        this.contexts[USER] = new User({shell:this, data:userData});
         this.contexts[GROUP] = new Group({shell:this, data:groupData});
         this.contexts[LAYER] = new Layer({shell:this, data:layerData});
         this.currentContext = LAYER;
@@ -91,14 +122,17 @@ var Shell = O.extend({
     },
 
     loadFeature: function (path) {
-        var groupName = path[0],
-            layerName = path[1],
-            featureName = path[2],
+        var userName = this.getUserId(path[0]),
+            groupName = path[1],
+            layerName = path[2],
+            featureName = path[3],
             bind = Bind.get(),
+            userData = bind.create('user', userName),
             groupData = bind.create('group', groupName),
             layerData = bind.create('layer', layerName),
             featureData = bind.create('feature', featureName);
 
+        this.contexts[USER] = new User({shell:this, data:userData});
         this.contexts[GROUP] = new Group({shell:this, data:groupData});
         this.contexts[LAYER] = new Layer({shell:this, data:layerData});
         this.contexts[FEATURE] = new Feature({shell:this, data:featureData});

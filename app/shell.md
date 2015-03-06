@@ -18,6 +18,16 @@ Here they are presented in order, from root to leaf.
 - login/logout
 - switchContext
 
+### user
+
+- list (list groups connected to this user)
+- search (search groups)
+- create (create a new user)
+- edit
+- get / set
+
+
+
 ### group
 
 - list
