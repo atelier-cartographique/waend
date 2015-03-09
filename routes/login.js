@@ -14,7 +14,7 @@ var _ = require('underscore'),
     Token = require('../lib/token');
 
 var authOptions = { 
-    failureRedirect: '/login' 
+    failureRedirect: '/login?failed=1',
 };
 var authenticate = passport.authenticate('local', authOptions);
 
@@ -60,7 +60,7 @@ module.exports = exports = function(router, app){
     
 
     // POSTs
-    router.post('/login', authenticate, postLogin);
+    router.post('/login',  authenticate, postLogin);
     router.post('/register', register);
 };
 

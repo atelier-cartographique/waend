@@ -11,25 +11,25 @@
 var _ = require('underscore');
 var express = require('express');
 
-var routes = ['login', 'config', 'api'];
+var routes = ['login', 'api'];
 
 module.exports = exports = function(app){
 
-	var router = express.Router();
-	_.each(routes, function(route){
-		require('./'+route)(router, app);
-	});
+    var router = express.Router();
+    _.each(routes, function(route){
+        require('./'+route)(router, app);
+    });
 
-	/* GET home page. */
-	router.get('/*', function(req, res) {
-		if (req.isAuthenticated()) { 
-	  		res.render('index');
-		}
-		else{
-			res.redirect('/login');
-		}
-	});
+    /* GET home page. */
+    router.get('/', function(req, res) {
+        if (req.isAuthenticated()) { 
+            res.render('index');
+        }
+        else{
+            res.redirect('/login');
+        }
+    });
 
-	app.use('/', router);
+    app.use('/', router);
 
 };

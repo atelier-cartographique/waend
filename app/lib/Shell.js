@@ -10,6 +10,8 @@
 
 
 var O = require('../../lib/object').Object,
+    _ = require('underscore'),
+    Promise = require("bluebird"),
     Context = require('./Context'),
     User = require('./User'),
     Root = require('./Root'),
@@ -25,6 +27,15 @@ var SHELL = 0,
     LAYER = 3,
     FEATURE = 4;
 
+function ShellError () {
+    if(arguments.length > 0){
+        console.error.apply(console, arguments);
+    }
+};
+
+ShellError.prototype = Object.create(Error.prototype);
+
+
 var Shell = O.extend({
 
     initialize: function (terminal) {
@@ -37,11 +48,19 @@ var Shell = O.extend({
     },
 
     exec: function (argv) {
+        var self = this;
         try{
-            this.contexts[this.currentContext].exec(argv);
+            var context = this.contexts[this.currentContext];
+            context.exec.apply(context, argv)
+                .then(function(code, data){
+                    self.emit('return', 0, data);
+                })
+                .catch(function(err){
+                    self.emit('return', -1, err);
+                });
         }
         catch(err){
-            this.emit('error', err);
+            self.emit('return', -1, new ShellError(err));
         }
     },
 
@@ -52,23 +71,23 @@ var Shell = O.extend({
         }
     },
 
-    switchContext: function (path) {
-        var pathComps = path.split('/');
+    switchContext: function (pathComps) {
         if(0 === pathComps.length){
             this.currentContext = SHELL;
             this.clearContexts();
+            return Promise.resolve(0, 'shell');
         }
         else if(1 === pathComps.length){
-            this.loadUser(pathComps);
+            return this.loadUser(pathComps);
         }
         else if(2 === pathComps.length){
-            this.loadGroup(pathComps);
+            return this.loadGroup(pathComps);
         }
         else if(3 === pathComps.length){
-            this.loadLayer(pathComps);
+            return this.loadLayer(pathComps);
         }
         else if(4 === pathComps.length){
-            this.loadFeature(pathComps);
+            return this.loadFeature(pathComps);
         }
     },
 
@@ -82,62 +101,151 @@ var Shell = O.extend({
         return userName;
     },
 
-    loadUser: function (path) {
-        var userName = this.getUserId(path[0]),
-            bind = Bind.get(),
-            userData = bind.create('user', userName);
+    setUser: function (userId) {
+        console.log('shell.setUser', userId);
+        var self = this,
+            bind = Bind.get();
 
-        this.contexts[USER] = new User({shell:this, data:userData});
-        this.currentContext = USER;
-        this.clearContext();
+        var prm = bind.getUser(userId)
+            .then(function(userData){
+                self.contexts[USER] = new User({
+                    shell:self, 
+                    data:userData, 
+                    parent:self.contexts[SHELL]
+                });
+                self.currentContext = USER;
+                self.clearContexts();
+                return Promise.resolve(self);
+            })
+            .catch(function(err){
+                console.error('failed to switch context', err);
+            });
+
+        return prm;
+    },
+
+    setGroup: function (groupId) {
+        var self = this,
+            user = self.contexts[USER].data,
+            bind = Bind.get();
+
+        console.log('shell.setGroup', groupId);
+        var prm = bind.getGroup(user.id, groupId)
+            .then(function(groupData){
+                self.contexts[GROUP] = new Group({
+                    shell:self, 
+                    data:groupData, 
+                    parent:self.contexts[USER]
+                });
+                self.currentContext = GROUP;
+                self.clearContexts();
+                return Promise.resolve(self);
+            })
+            .catch(function(err){
+                console.error('failed to switch context', err);
+            });
+            
+        return prm;
+    },
+
+    setLayer: function (layerId) {
+        console.log('shell.setLayer', layerId);
+        var self = this,
+            user = self.contexts[USER].data,
+            group = self.contexts[GROUP].data,
+            bind = Bind.get();
+
+        var prm = bind.getLayer(user.id, group.id, layerId)
+            .then(function(layerData){
+                self.contexts[LAYER] = new Layer({
+                    shell:self, 
+                    data:layerData, 
+                    parent:self.contexts[GROUP]
+                });
+                self.currentContext = LAYER;
+                self.clearContexts();
+                return Promise.resolve(self);
+            })
+            .catch(function(err){
+                console.error('failed to switch context', err);
+            });
+            
+        return prm;
+    },
+
+    setFeature: function (featureId) {
+        console.log('shell.setFeature', featureId);
+        var self = this,
+            user = self.contexts[USER].data,
+            group = self.contexts[GROUP].data,
+            layer = self.contexts[LAYER].data,
+            bind = Bind.get();
+
+        var prm = bind.getFeature(user.id, group.id, layer.id, featureId)
+            .then(function(featureData){
+                self.contexts[FEATURE] = new Feature({
+                    shell:self, 
+                    data:featureData, 
+                    parent:self.contexts[LAYER]
+                });
+                self.currentContext = FEATURE;
+                self.clearContexts();
+                return Promise.resolve(self);
+            })
+            .catch(function(err){
+                console.error('failed to switch context', err);
+            });
+            
+        return prm;
+    },
+
+    loadUser: function (path) {
+        console.log('shell.loadUser', path);
+        var userName = this.getUserId(path[0]);
+        
+        return this.setUser(userName);
     },
 
     loadGroup: function (path) {
-        var userName = this.getUserId(path[0]),
+        console.log('shell.loadGroup', path);
+        var self = this,
+            userName = this.getUserId(path[0]),
             groupName = path[1],
-            bind = Bind.get(),
-            userData = bind.create('user', userName),
-            groupData = bind.create('group', groupName);
+            getGroup = _.bind(_.partial(self.setGroup, groupName), self);
 
-        this.contexts[USER] = new User({shell:this, data:userData});
-        this.contexts[GROUP] = new Group({shell:this, data:groupData});
-        this.currentContext = GROUP;
-        this.clearContext();
+        return self.setUser(userName)
+            .then(getGroup);
     },
 
     loadLayer: function (path) {
-        var userName = this.getUserId(path[0]),
+        console.log('shell.loadLayer', path);
+        var self = this,
+            userName = this.getUserId(path[0]),
             groupName = path[1],
             layerName = path[2],
-            bind = Bind.get(),
-            userData = bind.create('user', userName),
-            groupData = bind.create('group', groupName),
-            layerData = bind.create('layer', layerName);
+            getGroup = _.bind(_.partial(self.setGroup, groupName), self),
+            getLayer = _.bind(_.partial(self.setLayer, layerName), self);
 
-        this.contexts[USER] = new User({shell:this, data:userData});
-        this.contexts[GROUP] = new Group({shell:this, data:groupData});
-        this.contexts[LAYER] = new Layer({shell:this, data:layerData});
-        this.currentContext = LAYER;
-        this.clearContext();
+        return this.setUser(userName)
+            .then(getGroup)
+            .then(getLayer);
     },
 
     loadFeature: function (path) {
-        var userName = this.getUserId(path[0]),
+        console.log('shell.loadFeature', path);
+        var self = this,
+            userName = this.getUserId(path[0]),
             groupName = path[1],
             layerName = path[2],
             featureName = path[3],
-            bind = Bind.get(),
-            userData = bind.create('user', userName),
-            groupData = bind.create('group', groupName),
-            layerData = bind.create('layer', layerName),
-            featureData = bind.create('feature', featureName);
-
-        this.contexts[USER] = new User({shell:this, data:userData});
-        this.contexts[GROUP] = new Group({shell:this, data:groupData});
-        this.contexts[LAYER] = new Layer({shell:this, data:layerData});
-        this.contexts[FEATURE] = new Feature({shell:this, data:featureData});
-        this.currentContext = FEATURE;
-        this.clearContext();
+            getGroup = _.bind(_.partial(self.setGroup, groupName), self),
+            getLayer = _.bind(_.partial(self.setLayer, layerName), self),
+            getFeature = _.bind(_.partial(self.setFeature, featureName), self);
+        
+        return this.setUser(userName)
+            .then(getGroup)
+            .then(getLayer)
+            .then(getFeature);
     },
 
 });

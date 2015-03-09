@@ -12,6 +12,8 @@
 
 var Terminal = require('../lib/Terminal');
 
+var document = window.document;
+
 
 function WebCommand (options) {
     this.cmd = options.cmd;
@@ -54,7 +56,15 @@ var WebConsole = Terminal.extend({
         this.input.addEventListener('keypress', this.handleInput.bind(this), false);
     },
 
+    setTitle: function (title) {
+        this.title.innerHTML = title;
+    },
+
     start: function () {
+        this.title = document.createElement('div');
+        this.title.setAttribute('class','wc-title');
+        this.container.appendChild(this.title);
+        this.setTitle('/wænd');
         this.insertInput();
     },
 

@@ -18,25 +18,33 @@ function listGroups () {
 
 };
 
-function searchGroups (term) {
+function setAttr (key, val) {
+    var self = this,
+        shell = self.shell,
+        terminal = shell.terminal;
 
+    self.data.once('sync', function(){
+        terminal.write('set '+ key+' to '+val);
+    });
+    self.data.set(key,val);
+    return self.conclusion();
 };
 
-function createUser (email, password) {
-
-};
-
-function editUser () {
-
+function getAttr (key) {
+    var self = this,
+        shell = self.shell,
+        terminal = shell.terminal;
+        
+    terminal.write(key+' => '+self.data.get(key));
+    return self.conclusion();
 };
 
 var User = Context.extend({
     name: 'user',
     commands:{
-        list: listGroups,
-        search: searchGroups,
-        create: createUser,
-        edit: editUser
+        'list': listGroups,
+        'set': setAttr,
+        'get': getAttr
     }
 });
 

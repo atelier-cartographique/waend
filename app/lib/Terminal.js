@@ -33,6 +33,9 @@ var Terminal = O.extend({
 
     commandLineTokens: function (cl) {
         var args = cl.match(argsRe);
+        if (!args) {
+            args = [];
+        };
         var cleanedArgs = [];
         for(var i = 0; i < args.length; i++){
             cleanedArgs.push(args[i].replace(/"/g,""));
@@ -42,7 +45,8 @@ var Terminal = O.extend({
 
     start: function () { throw (new Error('Not Implemented')); },
     write: function () { throw (new Error('Not Implemented')); },
-    makeCommand: function () { throw (new Error('Not Implemented')); }
+    makeCommand: function () { throw (new Error('Not Implemented')); },
+    setTitle: function () { throw (new Error('Not Implemented')); }
 
 });
 

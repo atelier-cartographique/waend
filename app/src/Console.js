@@ -20,6 +20,10 @@ var Console = Terminal.extend({
         'tty': {}
     },
 
+    setTitle: function (title) {
+        this.rl.setPrompt(title+'@wænd> ');
+    },
+
     write: function (fragment) {
         console.log(fragment);
     },
@@ -37,24 +41,30 @@ var Console = Terminal.extend({
     },
 
     start: function () {
-        var rl = readline.createInterface({
+        this.rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
 
-        rl.setPrompt('wænd> ');
+        this.rl.setPrompt('@wænd> ');
 
         var self = this;
         
-        rl.on('line', function(line) {
+        self.rl.on('line', function(line) {
             var toks = self.commandLineTokens(line.trim());
             if(toks.length > 0){
+                self.shell.once('return', function(status, data){
+                    self.rl.prompt();
+                });
                 self.emit('input', toks);
             }
-            rl.prompt();
+            else{
+                self.rl.prompt();
+            }
+            
         });
 
-        rl.on('close', function() {
+        self.rl.on('close', function() {
             console.log('Bye');
             process.exit(0);
         });
@@ -63,7 +73,7 @@ var Console = Terminal.extend({
             console.error(err.toString());
         });
 
-        rl.prompt();
+        self.rl.prompt();
     }
 });
 
