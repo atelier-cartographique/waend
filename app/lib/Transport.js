@@ -67,7 +67,7 @@ function transportHTTP () {
                     cbError = options.listeners.error.callback,
                     ctx = options.listeners.load.context;
                 if(res.statusCode >= 400){
-                    cbError.apply(ctx, [null, {response:data}]);
+                    cbError.apply(ctx, [null, {statusText:new Error(data)}]);
                 }
                 else{
                     cbSuccess.apply(ctx, [null, {response:data}]);
@@ -89,7 +89,7 @@ function transportHTTP () {
             'headers': headers
         };
 
-        //console.log('reqOptions', reqOptions);
+        ////console.log('reqOptions', reqOptions);
 
         var req = http.request(reqOptions, handleResponse);
         req.on('error', function(err) {
@@ -124,7 +124,7 @@ var Transport = O.extend({
                 reject(xhr.statusText);
             };
             var successHandler = function (evt, xhr) {
-                //console.log('transport.get.success', evt, xhr);
+                ////console.log('transport.get.success', evt, xhr);
                 if(getOptions.parse){
                     resolve(getOptions.parse(xhr.response));
                 }
@@ -160,7 +160,7 @@ var Transport = O.extend({
                 reject(xhr.statusText);
             };
             var successHandler = function (evt, xhr) {
-                //console.log('transport.get.success', evt, xhr);
+                ////console.log('transport.get.success', evt, xhr);
                 if(postOptions.parse){
                     resolve(postOptions.parse(xhr.response));
                 }
@@ -175,11 +175,11 @@ var Transport = O.extend({
                 body = postOptions.body;
             }
             else{
-                body = JSON.stringify(postOptions.body);
+                body = ('toJSON' in postOptions.body) ? postOptions.body.toJSON() : JSON.stringify(postOptions.body);
             }
-            
+            //console.log(body);
             var headers = _.defaults(_.extend({}, postOptions.headers), {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json; charset="utf-8"',
                 'Content-Length': body.length
             });
 

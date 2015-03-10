@@ -25,21 +25,25 @@ var Model = O.extend({
     },
 
     get: function (prop) {
-        return this.data[prop];
+        return this.data.properties[prop];
     },
 
     getData: function () {
-        return JSON.parse(JSON.stringify(this.data));
+        return JSON.parse(JSON.stringify(this.data.properties));
     },
 
     set: function (key, val) {
-        this.data[key] = val;
+        this.data.properties[key] = val;
         this.emit('change', this);
     },
 
     setData: function (data) {
-        this.data = data;
+        this.data.properties = data;
         this.emit('change', this);
+    },
+
+    toJSON: function () {
+        return JSON.stringify(this.data);
     }
 
 });

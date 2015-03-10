@@ -69,7 +69,7 @@ var DB = O.extend({
         self._db[url] = model;
         model.on('change', function(){
             self.transport
-                .put(url, {'body': model.data })
+                .put(API_URL + url, {'body': model })
                 .then(function(){
                     model.emit('sync', model);
                 });

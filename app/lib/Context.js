@@ -32,28 +32,35 @@ var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
 
 
 function changeContext (path) {
-    var pathCompsRef = ospath.normalize(path).split('/');
-    var pathComps = ospath.normalize(path).split('/');
-    if(pathComps.length > 0 && pathComps[0].length < 1){
-        pathCompsRef.shift();
-        pathComps.shift();
-    }
-    var current = this.current();
-    console.log('changeContext', pathCompsRef, current);
-    for (var i = 0; i < pathCompsRef.length; i++) {
-        var comp = pathCompsRef[i];
-        if(dotdot === comp){
-            current.pop();
+    var path = ospath.normalize(path),
+        isAbsolute = ospath.isAbsolute ? ospath.isAbsolute(path) : '/' === path[0],
+        pathComps = path.split('/'),
+        ctxPath = [];
+
+    if(isAbsolute){
+        if(path.length > 1){
             pathComps.shift();
+            ctxPath = pathComps;
         }
-        else{
-            break;
-        }
-    };
+    }
+    else{
+        var pathCompsRef = path.split('/');
+        var current = this.current();
+        for (var i = 0; i < pathCompsRef.length; i++) {
+            var comp = pathCompsRef[i];
+            if(dotdot === comp){
+                current.pop();
+                pathComps.shift();
+            }
+            else{
+                break;
+            }
+        };
+        ctxPath = current.concat(pathComps);
+    }
 
     var terminal = this.shell.terminal;
     var self = this;
-    var ctxPath = current.concat(pathComps);
     var titleType = titleTypes[ctxPath.length];
     var title = '['+ titleType + ']';
     return this.shell.switchContext(ctxPath)
@@ -81,7 +88,7 @@ var Context = O.extend({
         this.commands['cc'] = changeContext;
         this.commands['pwd'] = printCurrentContext;
 
-        console.log('New Context:', this.name);
+        //console.log('New Context:', this.name);
     },
 
     /**
@@ -99,7 +106,7 @@ var Context = O.extend({
     },
 
     current: function (ctx, memo) {
-        console.log('context.current', ctx, memo);
+        //console.log('context.current', ctx, memo);
         if(!ctx){
             ctx = this;
             memo = [];

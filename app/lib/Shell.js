@@ -102,7 +102,7 @@ var Shell = O.extend({
     },
 
     setUser: function (userId) {
-        console.log('shell.setUser', userId);
+        //console.log('shell.setUser', userId);
         var self = this,
             bind = Bind.get();
 
@@ -129,7 +129,7 @@ var Shell = O.extend({
             user = self.contexts[USER].data,
             bind = Bind.get();
 
-        console.log('shell.setGroup', groupId);
+        //console.log('shell.setGroup', groupId);
         var prm = bind.getGroup(user.id, groupId)
             .then(function(groupData){
                 self.contexts[GROUP] = new Group({
@@ -149,7 +149,7 @@ var Shell = O.extend({
     },
 
     setLayer: function (layerId) {
-        console.log('shell.setLayer', layerId);
+        //console.log('shell.setLayer', layerId);
         var self = this,
             user = self.contexts[USER].data,
             group = self.contexts[GROUP].data,
@@ -174,7 +174,7 @@ var Shell = O.extend({
     },
 
     setFeature: function (featureId) {
-        console.log('shell.setFeature', featureId);
+        //console.log('shell.setFeature', featureId);
         var self = this,
             user = self.contexts[USER].data,
             group = self.contexts[GROUP].data,
@@ -200,14 +200,14 @@ var Shell = O.extend({
     },
 
     loadUser: function (path) {
-        console.log('shell.loadUser', path);
+        //console.log('shell.loadUser', path);
         var userName = this.getUserId(path[0]);
         
         return this.setUser(userName);
     },
 
     loadGroup: function (path) {
-        console.log('shell.loadGroup', path);
+        //console.log('shell.loadGroup', path);
         var self = this,
             userName = this.getUserId(path[0]),
             groupName = path[1],
@@ -218,7 +218,7 @@ var Shell = O.extend({
     },
 
     loadLayer: function (path) {
-        console.log('shell.loadLayer', path);
+        //console.log('shell.loadLayer', path);
         var self = this,
             userName = this.getUserId(path[0]),
             groupName = path[1],
@@ -232,7 +232,7 @@ var Shell = O.extend({
     },
 
     loadFeature: function (path) {
-        console.log('shell.loadFeature', path);
+        //console.log('shell.loadFeature', path);
         var self = this,
             userName = this.getUserId(path[0]),
             groupName = path[1],

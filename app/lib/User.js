@@ -24,7 +24,7 @@ function setAttr (key, val) {
         terminal = shell.terminal;
 
     self.data.once('sync', function(){
-        terminal.write('set '+ key+' to '+val);
+        terminal.write('set '+ key +' to '+val);
     });
     self.data.set(key,val);
     return self.conclusion();
