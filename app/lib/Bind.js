@@ -86,6 +86,13 @@ var DB = O.extend({
 });
 
 
+function objectifyResponse (response) {
+    if('string' === typeof response) {
+        return JSON.parse(response);
+    }
+    return response;
+};
+
 var Bind = O.extend({
 
     initialize: function (options) {
@@ -96,7 +103,7 @@ var Bind = O.extend({
     getMe: function () {
         var db = this.db;
         var pr = function (response) {
-            var u = new User(JSON.parse(response)),
+            var u = new User(objectifyResponse(response)),
                 url = '/user/'+u.id;
 
             db.set(url, u);
@@ -115,7 +122,7 @@ var Bind = O.extend({
             return Promise.resolve(db.get(path));
         }
         var pr = function (response) {
-            var u = new User(JSON.parse(response));
+            var u = new User(objectifyResponse(response));
             db.set(path, u);
             return u;
         };
@@ -130,7 +137,7 @@ var Bind = O.extend({
             return Promise.resolve(db.get(path));
         }
         var pr = function (response) {
-            var g = new Group(JSON.parse(response));
+            var g = new Group(objectifyResponse(response));
             db.set(path, g);
             return g;
         };

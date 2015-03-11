@@ -20,27 +20,33 @@ function transportXHR () {
     return function (options) {
         var xhr = new XMLHttpRequest();
         
-        var headers = options.headers || {};
-        for(var header in headers) {
-            xhr.setRequestHeader(header, headers[header]);
-        }
+        var headers = _.omit(options.headers || {}, 'Connection', 'Content-Length');
 
         var listeners = options.listeners || {};
         for(var listener in listeners){
-            var cb = listeners[listeners].callback;
-            var ctx = listeners[listeners].context;
+            var cb = listeners[listener].callback;
+            var ctx = listeners[listener].context;
             var wrapper = function(evt){
                 cb.apply(ctx, [evt, xhr]);
             };
-            xhr.on(listener, wrapper, false);
+            xhr.addEventListener(listener, wrapper, false);
         }
 
         xhr.open(options.verb, options.url, true);
 
+        for(var header in headers) {
+            try{
+                xhr.setRequestHeader(header, headers[header]);
+            }
+            catch(err){
+                console.log('transportXHR setHeader', err);
+            }
+        }
+
         if('beforeSend' in options){
             options.beforeSend(xhr);
         }
-        xrh.responseType = "json";
+        xhr.responseType = "json";
         xhr.send(options.body);
         return xhr;
     };
@@ -107,11 +113,12 @@ function transportHTTP () {
 var Transport = O.extend({
 
     initialize: function () {
-        if(process) {
-            this.transport = transportHTTP();
-        }
-        else{
+        try{
+            var www = window;
             this.transport = transportXHR();
+        }
+        catch(err){
+            this.transport = transportHTTP();
         }
     },
 

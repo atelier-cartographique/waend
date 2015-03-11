@@ -1,5 +1,5 @@
 /*
- * app/lib/WebConsole.js
+ * app/src/WebConsole.js
  *     
  * 
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
@@ -46,7 +46,7 @@ var WebConsole = Terminal.extend({
         this.container = container;
         this.lines = [];
         this.history = [];
-    };
+    },
 
     insertInput: function () {
         this.input = document.createElement('input');
@@ -71,7 +71,7 @@ var WebConsole = Terminal.extend({
     handleInput: function (event) {
         if(13 === event.which || 13 === event.keyCode) {
             var input = this.input,
-                val = input.value.trim()
+                val = input.value.trim(),
                 toks = this.commandLineTokens(val);
             
             this.emit('input', toks);
@@ -79,7 +79,7 @@ var WebConsole = Terminal.extend({
             this.history.push(val);
             this.insertInput();
         }
-    }
+    },
 
     write: function (fragment) {
         var element = document.createElement('div');
