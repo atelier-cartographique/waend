@@ -11,11 +11,7 @@
 'use strict';
 
 var _ = require('underscore'),
-    querystring = require('querystring'),
-    Context = require('./Context'),
-    Transport = require('./Transport'),
-    Bind = require('./Bind'),
-    config = require('../../config');
+    Context = require('./Context');
 
 function processResult(terminal, result) {
     if(!result){
@@ -45,27 +41,6 @@ var Root = Context.extend({
                 terminal = this.shell.terminal;
 
             return bind.searchGroup(term).then(_.partial(processResult, terminal));
-        },
-
-        login: function (username, password) {
-            var transport = new Transport(),
-                shell = this.shell,
-                terminal = shell.terminal;
-
-            return transport.post(config.public.loginUrl, {
-                'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
-                'body': querystring.stringify({
-                    'username': username,
-                    'password': password
-                })
-            }).then(function(){
-                return Bind.get()
-                    .getMe()
-                    .then(function(user){
-                        shell.user = user;
-                        terminal.write('OK login '+ user.id);
-                });
-            });
         },
 
         help: function(){

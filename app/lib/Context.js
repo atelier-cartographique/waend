@@ -12,72 +12,14 @@
 var _ = require('underscore'),
     ospath = require('path'),
     Promise = require("bluebird"),
-    O = require('../../lib/object').Object;
+    O = require('../../lib/object').Object,
+    commands = require('./commands');
 
-
-
-var dotdot = '..';
-var dot = '.';
-
-
-
-/**
- * change context (cc) shall be available in all contexts
- * it will be injected in the base context constructor
- *
- * this will be executed in the context of Context :)
- */
-
-var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
-
-
-function changeContext (path) {
-    var path = ospath.normalize(path),
-        isAbsolute = ospath.isAbsolute ? ospath.isAbsolute(path) : '/' === path[0],
-        pathComps = path.split('/'),
-        ctxPath = [];
-
-    if(isAbsolute){
-        if(path.length > 1){
-            pathComps.shift();
-            ctxPath = pathComps;
-        }
-    }
-    else{
-        var pathCompsRef = path.split('/');
-        var current = this.current();
-        for (var i = 0; i < pathCompsRef.length; i++) {
-            var comp = pathCompsRef[i];
-            if(dotdot === comp){
-                current.pop();
-                pathComps.shift();
-            }
-            else{
-                break;
-            }
-        };
-        ctxPath = current.concat(pathComps);
-    }
-
-    var terminal = this.shell.terminal;
-    var self = this;
-    var titleType = titleTypes[ctxPath.length];
-    var title = '['+ titleType + ']';
-    return this.shell.switchContext(ctxPath)
-        .then(function(){
-            terminal.setTitle(title);
-            return self.conclusion();
-        });
-};
-
-function printCurrentContext () {
-    var terminal = this.shell.terminal;
-    var current = this.current();
-    terminal.write('/' + current.join('/'));
-    return this.conclusion();
-};
 
 var Context = O.extend({
+
+
+    commands: {},
 
     constructor: function (options) {
         this.shell = options.shell;
@@ -85,10 +27,7 @@ var Context = O.extend({
         this.parent = options.parent;
         O.apply(this, arguments);
 
-        this.commands['cc'] = changeContext;
-        this.commands['pwd'] = printCurrentContext;
-
-        //console.log('New Context:', this.name);
+        _.defaults(this.commands, commands);
     },
 
     /**
@@ -102,7 +41,8 @@ var Context = O.extend({
             throw (new Error("command not found: "+cmd));
         }
 
-        return this.commands[cmd].apply(this, args);
+        var ret = this.commands[cmd].apply(this, args);
+        return ret;
     },
 
     current: function (ctx, memo) {
@@ -121,7 +61,7 @@ var Context = O.extend({
     },
 
 
-    conclusion: function (ret) {
+    end: function (ret) {
         return Promise.resolve(0, ret);
     }
 

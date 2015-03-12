@@ -64,24 +64,39 @@ var DB = O.extend({
         this.transport = t;
     },
 
-    set: function (url, model) {
-        var self = this;
-        self._db[url] = model;
-        model.on('change', function(){
+    record: function (url, model) {
+        this._db[model.id] = {
+            'model': model,
+            'url': url
+        };
+        // TODO subscribe to notifications about it
+    },
+
+    update: function (model) {
+        var self = this,
+            db = this._db,
+            record = db[model.id],
+            url = record.url;
+        
+        var resolver = function (resolve, reject) {
             self.transport
                 .put(API_URL + url, {'body': model })
-                .then(function(){
-                    model.emit('sync', model);
-                });
-        });
+                    .then(function(){
+                        record.model = model;
+                        db[model.id] = record;
+                        resolve(model);
+                    })
+                    .catch(reject);
+        };
+        return (new Promise(resolver));
     },
 
-    has: function (url) {
-        return (url in this._db);
+    has: function (id) {
+        return (id in this._db);
     },
 
-    get: function (url) {
-        return this._db[url];
+    get: function (id) {
+        return this._db[id].model;
     },
 });
 
@@ -100,13 +115,18 @@ var Bind = O.extend({
         this.db = new DB(this.transport);
     },
 
+    update: function (model) {
+        return this.db.update(model);
+    },
+
     getMe: function () {
-        var db = this.db;
+        var db = this.db,
+            binder = this;
         var pr = function (response) {
-            var u = new User(objectifyResponse(response)),
+            var u = new User(binder, objectifyResponse(response)),
                 url = '/user/'+u.id;
 
-            db.set(url, u);
+            db.record(url, u);
             return u;
         };
 
@@ -116,14 +136,15 @@ var Bind = O.extend({
 
     getUser: function (userId) {
         var db = this.db,
-            path = '/user/'+userId;
+            path = '/user/'+userId,
+            binder = this;
 
-        if(db.has(path)){
-            return Promise.resolve(db.get(path));
+        if(db.has(userId)){
+            return Promise.resolve(db.get(userId));
         }
         var pr = function (response) {
-            var u = new User(objectifyResponse(response));
-            db.set(path, u);
+            var u = new User(binder, objectifyResponse(response));
+            db.record(path, u);
             return u;
         };
         var url = API_URL+path;
@@ -132,13 +153,14 @@ var Bind = O.extend({
 
     getGroup: function (userId, groupId) {
         var db = this.db,
+            binder = this,
             path = '/user/'+userId+'/group/'+groupId;
-        if(db.has(path)){
-            return Promise.resolve(db.get(path));
+        if(db.has(groupId)){
+            return Promise.resolve(db.get(groupId));
         }
         var pr = function (response) {
-            var g = new Group(objectifyResponse(response));
-            db.set(path, g);
+            var g = new Group(binder, objectifyResponse(response));
+            db.record(path, g);
             return g;
         };
         var url = API_URL+path;

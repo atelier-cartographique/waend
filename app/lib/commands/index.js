@@ -1,0 +1,27 @@
+/*
+ * app/lib/commands/index.js
+ *     
+ * 
+ * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
+ * 
+ * License in LICENSE file at the root of the repository.
+ *
+ */
+
+
+
+var commandModules = [
+    require('./login'),
+    require('./changeContext'),
+    require('./printCurrentContext'),
+    require('./setAttribute'),
+    require('./getAttribute')
+    ];
+
+
+for (var idx = 0 ; idx < commandModules.length; idx++) {
+    var command = commandModules[idx];
+
+    module.exports[command.name] = command.command;
+}
+

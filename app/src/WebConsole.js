@@ -54,6 +54,7 @@ var WebConsole = Terminal.extend({
         this.input.setAttribute('type', 'text');
         this.container.appendChild(this.input);
         this.input.addEventListener('keypress', this.handleInput.bind(this), false);
+        this.input.focus();
     },
 
     setTitle: function (title) {
@@ -70,14 +71,26 @@ var WebConsole = Terminal.extend({
 
     handleInput: function (event) {
         if(13 === event.which || 13 === event.keyCode) {
-            var input = this.input,
+            var self = this,
+                input = self.input,
                 val = input.value.trim(),
-                toks = this.commandLineTokens(val);
+                toks = self.commandLineTokens(val);
             
-            this.emit('input', toks);
-            input.removeEventListener('keypress', this.handleInput.bind(this), false);
-            this.history.push(val);
-            this.insertInput();
+            input.removeEventListener('keypress', self.handleInput.bind(self), false);
+            input.setAttribute('class', 'wc-input wc-pending');
+            
+            self.shell.exec(toks)
+                .then(function(){
+                    console.log.apply(console, arguments);
+                })
+                .catch(function(err){
+                    console.error(err.toString());
+                })
+                .finally(function(){
+                    input.setAttribute('class', 'wc-input wc-inactive');
+                    self.history.push(val);
+                    self.insertInput();
+                });
         }
     },
 

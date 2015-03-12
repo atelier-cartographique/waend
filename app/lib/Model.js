@@ -14,7 +14,8 @@ var O = require('../../lib/object').Object,
 
 
 var Model = O.extend({
-    constructor: function(data) {
+    constructor: function(binder, data) {
+        this.binder = binder;
         this.data = data;
         this.id = data.id; // read-only: TODO objectpropertize accordingly
         O.apply(this, [data]);
@@ -34,12 +35,12 @@ var Model = O.extend({
 
     set: function (key, val) {
         this.data.properties[key] = val;
-        this.emit('change', this);
+        return this.binder.update(this);
     },
 
     setData: function (data) {
         this.data.properties = data;
-        this.emit('change', this);
+        return this.binder.update(this);
     },
 
     toJSON: function () {

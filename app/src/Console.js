@@ -53,10 +53,16 @@ var Console = Terminal.extend({
         self.rl.on('line', function(line) {
             var toks = self.commandLineTokens(line.trim());
             if(toks.length > 0){
-                self.shell.once('return', function(status, data){
-                    self.rl.prompt();
-                });
-                self.emit('input', toks);
+                self.shell.exec(toks)
+                    .then(function(){
+                        // console.log.apply(console, arguments);
+                    })
+                    .catch(function(err){
+                        console.error(err.toString());
+                    })
+                    .finally(function(){
+                        self.rl.prompt();
+                    });
             }
             else{
                 self.rl.prompt();

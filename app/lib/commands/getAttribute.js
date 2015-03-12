@@ -1,5 +1,5 @@
 /*
- * app/lib/User.js
+ * app/lib/commands/getAttribute.js
  *     
  * 
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
@@ -8,16 +8,6 @@
  *
  */
 
-'use strict';
-
-var Context = require('./Context'),
-    Bind = require('./Bind');
-
-
-function listGroups () {
-
-};
-
 
 function getAttr (key) {
     var self = this,
@@ -25,15 +15,11 @@ function getAttr (key) {
         terminal = shell.terminal;
         
     terminal.write(key+' => '+self.data.get(key));
-    return self.conclusion();
+    return self.end();
 };
 
-var User = Context.extend({
-    name: 'user',
-    commands:{
-        'list': listGroups
-    }
-});
 
-
-module.exports = exports = User;
+module.exports = exports = {
+    name: 'get',
+    command: getAttr
+};

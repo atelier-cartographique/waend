@@ -51,16 +51,10 @@ var Shell = O.extend({
         var self = this;
         try{
             var context = this.contexts[this.currentContext];
-            context.exec.apply(context, argv)
-                .then(function(code, data){
-                    self.emit('return', 0, data);
-                })
-                .catch(function(err){
-                    self.emit('return', -1, err);
-                });
+            return context.exec.apply(context, argv);
         }
         catch(err){
-            self.emit('return', -1, new ShellError(err));
+            return Promise.reject(new ShellError(err));
         }
     },
 
