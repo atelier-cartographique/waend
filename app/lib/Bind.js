@@ -64,10 +64,10 @@ var DB = O.extend({
         this.transport = t;
     },
 
-    record: function (url, model) {
+    record: function (path, model) {
         this._db[model.id] = {
             'model': model,
-            'url': url
+            'path': path
         };
         // TODO subscribe to notifications about it
     },
@@ -76,11 +76,11 @@ var DB = O.extend({
         var self = this,
             db = this._db,
             record = db[model.id],
-            url = record.url;
+            path = record.path;
         
         var resolver = function (resolve, reject) {
             self.transport
-                .put(API_URL + url, {'body': model })
+                .put(API_URL + path, {'body': model })
                     .then(function(){
                         record.model = model;
                         db[model.id] = record;
@@ -89,6 +89,10 @@ var DB = O.extend({
                     .catch(reject);
         };
         return (new Promise(resolver));
+    },
+
+    set: function (path, data) {
+
     },
 
     has: function (id) {
@@ -168,11 +172,53 @@ var Bind = O.extend({
     },
 
     getLayer: function (userId, groupId, layerId) {
-
+        var db = this.db,
+            binder = this,
+            path = '/user/'+userId+'/group/'+groupId+'/layer/'+layerId;
+        if(db.has(layerId)){
+            return Promise.resolve(db.get(layerId));
+        }
+        var pr = function (response) {
+            var l = new Layer(binder, objectifyResponse(response));
+            db.record(path, g);
+            return l;
+        };
+        var url = API_URL+path;
+        return this.transport.get(url, {parse: pr});
     },
 
     getFeature: function (userId, groupId, layerId, featureId) {
+        var db = this.db,
+            binder = this,
+            path = '/user/'+userId+'/group/'+groupId+'/layer/'+layerId+'/feature/'+featureId;
+        if(db.has(featureId)){
+            return Promise.resolve(db.get(featureId));
+        }
+        var pr = function (response) {
+            var f = new Feature(binder, objectifyResponse(response));
+            db.record(path, f);
+            return f;
+        };
+        var url = API_URL+path;
+        return this.transport.get(url, {parse: pr});
+    },
 
+    setGroup: function (userId, data) {
+        var db = this.db,
+            binder = this,
+            path = '/user/'+userId+'/group/';
+
+        var pr = function (response) {
+            var g = new Group(binder, objectifyResponse(response));
+            db.record(path + g.id, g);
+            return g;
+        };
+
+        var url = API_URL+path;
+        return this.transport.post(url, {
+            parse: pr,
+            body: data
+        });
     },
 
 });

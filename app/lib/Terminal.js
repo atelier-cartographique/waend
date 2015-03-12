@@ -45,6 +45,7 @@ var Terminal = O.extend({
 
     start: function () { throw (new Error('Not Implemented')); },
     write: function () { throw (new Error('Not Implemented')); },
+    read: function () { throw (new Error('Not Implemented')); },
     makeCommand: function () { throw (new Error('Not Implemented')); },
     setTitle: function () { throw (new Error('Not Implemented')); }
 

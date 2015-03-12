@@ -54,7 +54,8 @@ var Shell = O.extend({
             return context.exec.apply(context, argv);
         }
         catch(err){
-            return Promise.reject(new ShellError(err));
+            err = err || new ShellError('unknown error');
+            return Promise.reject(err);
         }
     },
 

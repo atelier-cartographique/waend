@@ -12,10 +12,13 @@
 
 var commandModules = [
     require('./login'),
+    require('./echo'),
+    require('./read'),
     require('./changeContext'),
     require('./printCurrentContext'),
     require('./setAttribute'),
-    require('./getAttribute')
+    require('./getAttribute'),
+    require('./create'),
     ];
 
 

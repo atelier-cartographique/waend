@@ -11,6 +11,7 @@
 
 
 var Terminal = require('../lib/Terminal'),
+    Promise = require("bluebird"),
     readline = require('readline');
 
 
@@ -21,7 +22,8 @@ var Console = Terminal.extend({
     },
 
     setTitle: function (title) {
-        this.rl.setPrompt(title+'@wænd> ');
+        this.title = title || this.title;
+        this.rl.setPrompt(this.title + this.prompt);
     },
 
     write: function (fragment) {
@@ -40,17 +42,38 @@ var Console = Terminal.extend({
         return (options.text + l);
     },
 
+    read: function (prompt) {
+        var self = this;
+        self.reading = true;
+        prompt = prompt || ': ';
+        this.rl.setPrompt(prompt);
+
+        var resolver = function (resolve, reject) {
+            self.rl.on('line', function(line) {
+                resolve(line);
+                self.reading = false;
+                self.setTitle();
+                self.rl.prompt();
+            });
+        };
+
+        return (new Promise(resolver));
+    },
+
     start: function () {
+        this.title = '';
+        this.prompt = '@wænd> ';
         this.rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
 
-        this.rl.setPrompt('@wænd> ');
+        this.rl.setPrompt(this.title + this.prompt);
 
         var self = this;
         
         self.rl.on('line', function(line) {
+            if(self.reading){return;}
             var toks = self.commandLineTokens(line.trim());
             if(toks.length > 0){
                 self.shell.exec(toks)

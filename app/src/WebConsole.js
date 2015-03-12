@@ -35,6 +35,10 @@ WebCommand.prototype.toDomFragment = function () {
 };
 
 
+function isKeyReturnEvent (event) {
+    return (13 === event.which || 13 === event.keyCode);
+};
+
 var WebConsole = Terminal.extend({
 
 
@@ -48,12 +52,13 @@ var WebConsole = Terminal.extend({
         this.history = [];
     },
 
-    insertInput: function () {
+    insertInput: function (listener) {
+        listener = listener || this.handleInput.bind(this);
         this.input = document.createElement('input');
         this.input.setAttribute('class', 'wc-input');
         this.input.setAttribute('type', 'text');
         this.container.appendChild(this.input);
-        this.input.addEventListener('keypress', this.handleInput.bind(this), false);
+        this.input.addEventListener('keypress', listener, false);
         this.input.focus();
     },
 
@@ -70,13 +75,12 @@ var WebConsole = Terminal.extend({
     },
 
     handleInput: function (event) {
-        if(13 === event.which || 13 === event.keyCode) {
+        if(isKeyReturnEvent(event)) {
             var self = this,
                 input = self.input,
                 val = input.value.trim(),
                 toks = self.commandLineTokens(val);
             
-            input.removeEventListener('keypress', self.handleInput.bind(self), false);
             input.setAttribute('class', 'wc-input wc-pending');
             
             self.shell.exec(toks)
@@ -84,7 +88,7 @@ var WebConsole = Terminal.extend({
                     console.log.apply(console, arguments);
                 })
                 .catch(function(err){
-                    console.error(err.toString());
+                    console.error(err);
                 })
                 .finally(function(){
                     input.setAttribute('class', 'wc-input wc-inactive');
@@ -92,6 +96,22 @@ var WebConsole = Terminal.extend({
                     self.insertInput();
                 });
         }
+    },
+
+    read: function (prompt) {
+        var self = this;
+        var resolver = function (resolve, reject) {
+            var handler = function (event) {
+                if(isKeyReturnEvent(event)) {
+                    var input = self.input,
+                        val = input.value.trim();
+                        resolve(val);
+                }
+            };
+            self.insertInput(handler);
+        };
+
+        return (new Promise(resolver));
     },
 
     write: function (fragment) {

@@ -9,12 +9,20 @@
  */
 
 
-function getAttr (key) {
+function getAttr () {
     var self = this,
         shell = self.shell,
         terminal = shell.terminal;
-        
-    terminal.write(key+' => '+self.data.get(key));
+    if(arguments.length === 1){
+        terminal.write(key+' => '+self.data.get(arguments[0]));
+    }
+    else{
+        var data = self.data.getData();
+        for(var key in data){
+            terminal.write(key+' => '+ JSON.stringify(data[key]));
+        }
+    }
+
     return self.end();
 };
 
