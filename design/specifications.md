@@ -103,7 +103,15 @@ The navigation tree is pretty basic:
 	- insert key / value
 
 
-## Interface relations with CLI & GUI
+## Interface main elements
 
-As said above, the command line interface is the root mecanism to run the platform, and it generates the GUI at the same time. 
+- Map view port  
+- Interaction zone with the plateform
+	- Command line prompt (keyboard)
+	- Result (clickable elements)
+	- Associated contextual help (clickable commands / =buttons)
+	- back to Command line prompt (keyboard)
+
+- Verbose / progress bar when collapsed
+
 
