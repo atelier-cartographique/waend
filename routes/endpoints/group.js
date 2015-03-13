@@ -49,6 +49,13 @@ module.exports = exports = base.RequestHandler.extend({
                 url: 'user/:user_id/group/:group_id',
                 permissions: ['isAuthenticated', 'isUser', 'isGroupOwner']
             },
+
+            attach: {
+                verb: 'post',
+                handler: 'attach',
+                url: 'user/:user_id/group/:group_id/attach/',
+                permissions: ['isAuthenticated']
+            },
         },
 
         searchGroups: function(request, response){
@@ -130,6 +137,29 @@ module.exports = exports = base.RequestHandler.extend({
                 });
         },
 
+        attach: function(request, response){
+            var body = request.body,
+                layerId = body.layer_id,
+                userId = request.user.id;
+
+            cache.client()
+                .get('layer', layerId)
+                .then(function(layer){
+                    if(layer.user_id !== userId){
+                        return response.status(403).send('Not Your Layer');
+                    }
+                    cache.client()
+                        .set('composition', body)
+                        .then(function(){
+                            response.status(201).end();
+                        });
+                })
+                .catch(function(err){
+                    response.status(500).send(err);
+                });
+
+        },
+
         layer: function(request, response) {
 
         },
@@ -142,9 +172,6 @@ module.exports = exports = base.RequestHandler.extend({
 
         },
 
-        attach: function(request, response){
-            
-        },
 
         detach: function(request, response){
             

@@ -212,6 +212,25 @@ var Bind = O.extend({
         return this.transport.get(url, {parse: pr});
     },
 
+    getLayers: function (userId, groupId, page) {
+        var db = this.db,
+            binder = this,
+            path = '/user/'+userId+'/group/'+groupId+'/layer/';
+
+        var pr = function (response) {
+            var data = objectifyResponse(response);
+            var ret = [];
+            for(var i = 0; i < data.results.length; i++){
+                var l = new Layer(binder, data.results[i]);
+                db.record(path+l.id, l);
+                ret.push(l);
+            }
+            return ret;
+        };
+        var url = API_URL+path;
+        return this.transport.get(url, {parse: pr});
+    },
+
     getFeature: function (userId, groupId, layerId, featureId) {
         var db = this.db,
             binder = this,
@@ -263,6 +282,22 @@ var Bind = O.extend({
             body: data
         });
     },
+
+
+    attachLayerToGroup: function (guid, groupId, layerId) {
+        var db = this.db,
+            binder = this,
+            path = '/user/'+guid+'/group/'+groupId+'/attach/',
+            data = {
+                'layer_id': layerId,
+                'group_id': groupId
+            };
+
+        var url = API_URL+path;
+        return this.transport.post(url, {
+            'body': data
+        });
+    }
 
 });
 

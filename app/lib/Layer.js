@@ -11,13 +11,15 @@
 'use strict';
 
 var Context = require('./Context'),
-    Bind = require('./Bind');
+    attach = require('./commands/layer/attach');
 
 
 
 var Layer = Context.extend({
     name: 'group',
-    commands:{}
+    commands:{
+        attach: attach.command
+    }
 });
 
 

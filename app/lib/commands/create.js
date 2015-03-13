@@ -95,6 +95,9 @@ function iCreate () {
         terminal.read()
             .then(function(input){
                 cType = parseInt(input);
+                if(!cType){
+                    return reject('Invalid Value');
+                }
                 if(cType <= 0){
                     return reject('Invalid Value');
                 }

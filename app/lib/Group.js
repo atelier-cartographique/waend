@@ -11,13 +11,16 @@
 'use strict';
 
 var Context = require('./Context'),
-    Bind = require('./Bind');
+    Bind = require('./Bind'),
+    listLayers = require('./commands/group/listLayers');
 
 
 
 var Group = Context.extend({
     name: 'group',
-    commands:{}
+    commands:{
+        'll': listLayers.command
+    }
 });
 
 

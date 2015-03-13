@@ -11,7 +11,7 @@
 var _ = require('underscore'),
     ospath = require('path'),
     Promise = require("bluebird"),
-    O = require('../../../lib/object').Object;
+    Bind = require("../Bind");
 
 
 
@@ -54,7 +54,14 @@ function cc (path) {
     var titleType = titleTypes[ctxPath.length];
     var title = '['+ titleType + ']';
     if(ctxPath.length > 0){
-        title += '[' + _.last(ctxPath) + ']';
+        var id = _.last(ctxPath);
+        if(Bind.get().db.has(id)){
+            var model = Bind.get().db.get(id);
+            if(model.get('name')){
+                id = id+']['+model.get('name');
+            }
+        }
+        title += '[' + id + ']';
     }
     terminal.write('');
     return this.shell.switchContext(ctxPath)
