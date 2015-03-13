@@ -107,7 +107,13 @@ var DB = O.extend({
 
 function objectifyResponse (response) {
     if('string' === typeof response) {
-        return JSON.parse(response);
+        try{
+            return JSON.parse(response);
+        }
+        catch(err){
+            console.error(err);
+            throw (err);
+        }
     }
     return response;
 };
@@ -171,6 +177,25 @@ var Bind = O.extend({
         return this.transport.get(url, {parse: pr});
     },
 
+    getGroups: function (userId, page) {
+        var db = this.db,
+            binder = this,
+            path = '/user/'+userId+'/group/';
+
+        var pr = function (response) {
+            var data = objectifyResponse(response);
+            var ret = [];
+            for(var i = 0; i < data.results.length; i++){
+                var g = new Group(binder, data.results[i]);
+                db.record(path+g.id, g);
+                ret.push(g);
+            }
+            return ret;
+        };
+        var url = API_URL+path;
+        return this.transport.get(url, {parse: pr});
+    },
+
     getLayer: function (userId, groupId, layerId) {
         var db = this.db,
             binder = this,
@@ -210,6 +235,24 @@ var Bind = O.extend({
 
         var pr = function (response) {
             var g = new Group(binder, objectifyResponse(response));
+            db.record(path + g.id, g);
+            return g;
+        };
+
+        var url = API_URL+path;
+        return this.transport.post(url, {
+            parse: pr,
+            body: data
+        });
+    },
+
+    setLayer: function (userId, groupId, data) {
+        var db = this.db,
+            binder = this,
+            path = '/user/'+userId+'/group/'+groupId+'/layer/';
+
+        var pr = function (response) {
+            var g = new Layer(binder, objectifyResponse(response));
             db.record(path + g.id, g);
             return g;
         };

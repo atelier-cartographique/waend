@@ -30,7 +30,11 @@ function login (username, password) {
             .getMe()
             .then(function(user){
                 shell.user = user;
-                terminal.write('OK login '+ user.id);
+                var cmd = terminal.makeCommand({
+                    'args': ['cc', '/' + user.id],
+                    'text': 'my context'
+                })
+                terminal.write('OK login ', cmd);
         });
     });
 };

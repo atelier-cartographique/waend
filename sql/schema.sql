@@ -48,7 +48,6 @@ CREATE TABLE layers
 (
   id char(36) PRIMARY KEY,
   user_id char(36) NOT NULL,
-  type char(1) NOT NULL,
   properties json NOT NULL
 );
 
@@ -84,8 +83,7 @@ CREATE TABLE compositions
 (
   id char(36) PRIMARY KEY,
   layer_id char(36) NOT NULL,
-  group_id char(36) NOT NULL,
-  sort_order integer
+  group_id char(36) NOT NULL
 );
 
 

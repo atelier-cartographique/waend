@@ -53,6 +53,9 @@ function cc (path) {
     var self = this;
     var titleType = titleTypes[ctxPath.length];
     var title = '['+ titleType + ']';
+    if(ctxPath.length > 0){
+        title += '[' + _.last(ctxPath) + ']';
+    }
     terminal.write('');
     return this.shell.switchContext(ctxPath)
         .then(function(){

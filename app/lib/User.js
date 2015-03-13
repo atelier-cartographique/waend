@@ -11,27 +11,14 @@
 'use strict';
 
 var Context = require('./Context'),
-    Bind = require('./Bind');
+    Bind = require('./Bind'),
+    listGroups = require('./commands/user/listGroups');
 
-
-function listGroups () {
-
-};
-
-
-function getAttr (key) {
-    var self = this,
-        shell = self.shell,
-        terminal = shell.terminal;
-        
-    terminal.write(key+' => '+self.data.get(key));
-    return self.conclusion();
-};
 
 var User = Context.extend({
     name: 'user',
     commands:{
-        'list': listGroups
+        'lg': listGroups.command
     }
 });
 

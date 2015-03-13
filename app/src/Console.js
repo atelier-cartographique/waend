@@ -26,19 +26,17 @@ var Console = Terminal.extend({
         this.rl.setPrompt(this.title + this.prompt);
     },
 
-    write: function (fragment) {
-        console.log(fragment);
+    write: function () {
+        var line = ''
+        for(var i=0; i < arguments.length; i++){
+            var fragment = arguments[i];
+            line += fragment + ' ';
+        }
+        console.log(line);
     },
 
     makeCommand: function (options) {
-        var l = ' => ['+options.cmd;
-        if('args' in options){
-            for(var i = 0; i < options.args.length; i++){
-                l += ' '+options.args[i];
-            }
-        }
-        l += ']';
-
+        var l = ' => [' + options.args.join(' ') + ']';
         return (options.text + l);
     },
 

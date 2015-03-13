@@ -22,7 +22,7 @@ function processResult(terminal, result) {
         for(var i = 0; i < result.length; i++){
             var path = '/' + result.user_id + '/' + result.id;
             var line = terminal.makeCommand({
-                cmd: 'switchContext',
+                cmd: 'cc',
                 args: [path],
                 text: (result.properties.name | result.id)
             });

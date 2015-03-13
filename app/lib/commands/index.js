@@ -11,6 +11,7 @@
 
 
 var commandModules = [
+    require('./listCommands'),
     require('./login'),
     require('./echo'),
     require('./read'),

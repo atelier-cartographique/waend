@@ -94,7 +94,10 @@ module.exports.RequestHandler = object.Object.extend({
             pageSize = request.params.page_size || PAGE_SIZE
             offset = pageSize * page,
             len = result.length,
-            pResult = result.slice(offset, offset + page);
+            pResult = result.slice(offset, offset + pageSize);
+
+        // console.log('base.paginate', offset, offset + page);
+        // console.log(pResult);
 
         response.status(200).send({
             page: page,

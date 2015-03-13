@@ -14,16 +14,6 @@ var _ = require('underscore'),
     base = require('./base'),
     cache = require('../../lib/cache');
 
-function increment(a){
-    a = a + 1;
-    return a;
-};
-
-function decrement(a){
-    a = a - 1;
-    return a;
-};
-
 module.exports = exports = base.RequestHandler.extend({
 
         endpoints: {
@@ -31,6 +21,12 @@ module.exports = exports = base.RequestHandler.extend({
                 verb: 'get',
                 handler: 'searchGroups',
                 url: 'group/:term'
+            },
+
+            list: {
+                verb: 'get',
+                handler: 'list',
+                url: 'user/:user_id/group/'
             },
 
             get: {
@@ -78,8 +74,37 @@ module.exports = exports = base.RequestHandler.extend({
                 });
         },
 
+        list: function (request, response) {
+            var self = this,
+                listPrivate = false;
+            if(request.user 
+                && (request.user.id === request.params.user_id)) {
+                listPrivate = true;
+            }
+            cache.client()
+                .getMaps(request.params.user_id)
+                .then(function(results){
+                    // console.log('groups.list results', results);
+                    if(!!listPrivate){
+                        self.paginate(results, request, response);
+                    }
+                    else{
+                        var data = _.filter(results, function(g){ return (0 === g.status_flag);});
+                        // console.log('groups.list public', data);
+                        self.paginate(data, request, response);
+                    }
+                })
+                .catch(function(err){
+                    console.error('groups.list error', err);
+                    response.status(500).send(err);
+                });
+        },
+
         post: function (request, response) {
-            var body = request.body;
+            var body = _.extend(request.body, {
+                    'user_id': request.user.id
+                });
+
             cache.client()
                 .set('group', body)
                 .then(function(data){
@@ -91,7 +116,10 @@ module.exports = exports = base.RequestHandler.extend({
         },
 
         put: function (request, response) {
-            var body = request.body;
+            var body = _.extend(request.body, {
+                    'user_id': request.user.id,
+                    'id': request.params.group_id
+                });
             cache.client()
                 .set('group', body)
                 .then(function(data){
