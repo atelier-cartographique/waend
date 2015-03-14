@@ -38,7 +38,7 @@ function createGroup (uid, term, resolve, reject) {
                                 args: ['cc', '/'+uid+'/'+model.id],
                                 text: (model.get('name') || model.id)
                             });
-                            term.write('move in group ', cmd);
+                            term.write('created group ', cmd);
                             resolve();
                         });
                 });
@@ -61,7 +61,7 @@ function createLayer (uid, gid, term, resolve, reject) {
                         args: ['cc', '/'+uid+'/'+gid+'/'+model.id],
                         text: (model.get('name') || model.id)
                     });
-                    term.write('move in layer ', cmd);
+                    term.write('created layer ', cmd);
                     resolve();
                 });
         })

@@ -8,12 +8,14 @@
  *
  */
 
+var _ = require('underscore');
 
 
 function echo () {
     var self = this,
-        terminal = shell.terminal;
-    terminal.write.apply(terminal, arguments);
+        terminal = self.shell.terminal,
+        args = _.toArray(arguments);
+    terminal.write(args.join(' '));
     return self.end();
 };
 

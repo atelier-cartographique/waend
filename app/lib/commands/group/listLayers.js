@@ -27,9 +27,9 @@ function listLayers () {
                     var layer = layers[i];
                     var cmd = terminal.makeCommand({
                         'args': ['cc', '/'+userId+'/'+groupId+'/'+layer.id],
-                        'text': (layer.get('name') || layer.id)
+                        'text': layer.id
                     });
-                    terminal.write(': ', cmd);
+                    terminal.write(cmd, ' ', layer.get('name') || '');
                 }
                 resolve();
             })

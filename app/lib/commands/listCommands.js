@@ -15,7 +15,7 @@ function listCommands () {
         commands = self.commands,
         terminal = self.shell.terminal;
     for(var k in commands){
-        terminal.write('=>', k);
+        terminal.write(k);
     }
     return self.end();
 };

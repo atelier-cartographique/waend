@@ -62,7 +62,7 @@ var WebConsole = Terminal.extend({
     },
 
     initialize: function (container) {
-        this.container = container;
+        this.root = container;
         this.lines = [];
         this.history = [];
     },
@@ -84,9 +84,18 @@ var WebConsole = Terminal.extend({
     start: function () {
         this.title = document.createElement('div');
         this.title.setAttribute('class','wc-title');
-        this.container.appendChild(this.title);
+        this.root.appendChild(this.title);
+        this.container = document.createElement('div');
+        this.container.setAttribute('class', 'wc-lines');
+        this.root.appendChild(this.container);
         this.setTitle('/wænd');
         this.insertInput();
+        var self = this;
+        self.container.addEventListener('click', function(e){
+            if(self.input){
+                self.input.focus();
+            }
+        });
     },
 
     handleInput: function (event) {
@@ -95,6 +104,9 @@ var WebConsole = Terminal.extend({
                 input = self.input,
                 val = input.value.trim(),
                 toks = self.commandLineTokens(val);
+            if(val.length === 0){
+                return self.insertInput();
+            }
             
             input.setAttribute('class', 'wc-input wc-pending');
             
@@ -103,7 +115,9 @@ var WebConsole = Terminal.extend({
                     console.log.apply(console, arguments);
                 })
                 .catch(function(err){
-                    console.error(err);
+                    if(err.toString){
+                        self.write(err.toString());
+                    }
                 })
                 .finally(function(){
                     input.setAttribute('class', 'wc-input wc-inactive');

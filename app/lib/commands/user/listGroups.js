@@ -24,9 +24,9 @@ function listGroups () {
                     var group = groups[i];
                     var cmd = terminal.makeCommand({
                         'args': ['cc', '/'+userId+'/'+group.id],
-                        'text': (group.get('name') || group.id)
+                        'text': group.id
                     });
-                    terminal.write(': ', cmd);
+                    terminal.write(cmd, ' ', group.get('name') || '');
                 }
                 resolve();
             })
