@@ -28,7 +28,8 @@ It listens to model changes and calls back all the views connected to it to re-r
 
 
 
-var O = require('../../lib/object').Object,
+var _ = require('underscore'),
+    O = require('../../lib/object').Object,
     Transport = require('./Transport'),
     Model = require('./Model'),
     config = require('../../config'),
@@ -91,9 +92,6 @@ var DB = O.extend({
         return (new Promise(resolver));
     },
 
-    set: function (path, data) {
-
-    },
 
     has: function (id) {
         return (id in this._db);
@@ -102,6 +100,17 @@ var DB = O.extend({
     get: function (id) {
         return this._db[id].model;
     },
+
+    lookupKey: function (prefix) {
+        var pat = new RegExp('^'+prefix+'.*');
+        var result = [];
+        _.each(this._db, function(val, key){
+            if(key.match(pat)){
+                result.push(this.get(key));
+            }
+        }, this);
+        return result;
+    }
 });
 
 
@@ -297,6 +306,18 @@ var Bind = O.extend({
         return this.transport.post(url, {
             'body': data
         });
+    },
+
+    matchKeyAsync: function (prefix) {
+        var res = this.db.lookupKey(prefix);
+        if(res.length > 0){
+            return Promise.resolve(res);
+        }
+        return Promise.reject('No Match');
+    },
+
+    matchKey: function (prefix) {
+        return this.db.lookupKey(prefix);
     }
 
 });

@@ -25,7 +25,8 @@ function cc (path) {
     var path = ospath.normalize(path),
         isAbsolute = ospath.isAbsolute ? ospath.isAbsolute(path) : '/' === path[0],
         pathComps = path.split('/'),
-        ctxPath = [];
+        ctxPath = [],
+        terminal = this.shell.terminal;;
 
     if(isAbsolute){
         if(path.length > 1){
@@ -49,7 +50,18 @@ function cc (path) {
         ctxPath = current.concat(pathComps);
     }
 
-    var terminal = this.shell.terminal;
+    for (var i = ctxPath.length - 1; i >= 0; i--) {
+        var match = Bind.get().matchKey(ctxPath[i]);
+        if(match.length === 1){
+            ctxPath[i] = match[0].id;
+        }
+        else{
+            if('me' !== ctxPath[i]){
+                terminal.write('have '+ match.length +' match for '+ ctxPath[i]);
+            }
+        }
+    };
+
     var self = this;
     var titleType = titleTypes[ctxPath.length];
     var title = '['+ titleType + ']';
