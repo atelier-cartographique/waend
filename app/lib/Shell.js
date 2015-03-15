@@ -18,7 +18,8 @@ var O = require('../../lib/object').Object,
     Group = require('./Group'),
     Layer = require('./Layer'),
     Feature = require('./Feature'),
-    Bind = require('./Bind');
+    Bind = require('./Bind'),
+    region = require('./Region');
 
 
 var SHELL = 0,

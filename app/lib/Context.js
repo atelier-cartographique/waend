@@ -62,7 +62,11 @@ var Context = O.extend({
 
 
     end: function (ret) {
-        return Promise.resolve(0, ret);
+        return Promise.resolve(ret);
+    },
+
+    endWithError: function (err) {
+        return Promise.reject(err);
     }
 
 });

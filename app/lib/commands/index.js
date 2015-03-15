@@ -20,6 +20,7 @@ var commandModules = [
     require('./setAttribute'),
     require('./getAttribute'),
     require('./create'),
+    require('./region')
     ];
 
 
