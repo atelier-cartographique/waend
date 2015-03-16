@@ -128,13 +128,13 @@ var WebConsole = Terminal.extend({
         }
     },
 
-    input: function (prompt) {
+    input: function (fdin, prompt) {
         var self = this;
         var handler = function (event) {
             if(isKeyReturnEvent(event)) {
                 var input = self._inputField,
                     val = input.value.trim();
-                    self.shell.stdin.write(val);
+                    fdin.write(val);
             }
         };
         self.insertInput(handler);

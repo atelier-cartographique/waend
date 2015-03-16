@@ -107,7 +107,7 @@ var Shell = O.extend({
 
         for (var i = 0; i < n; i++) {
             var sys = {
-                'stdin': this.stdin,
+                'stdin': (new Stream()),
                 'stdout': (new Stream()),
                 'stderr': (new Stream())
             };
@@ -169,6 +169,11 @@ var Shell = O.extend({
 
     exec: function (cl) {
         var cls = cl.trim().split('|');
+        // shall be called, but not doing it exposes weaknesses, which is good at this stage
+        // this.stdin.dump();
+        // this.stdout.dump();
+        // this.stderr.dump();
+
         if(1 == cls.length){
             return this.execOne(cls[0]);
         }

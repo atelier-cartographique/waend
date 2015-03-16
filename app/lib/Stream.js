@@ -53,7 +53,8 @@ var Stream = O.extend({
                 var self = this;
                 var resolver = function (resolve, reject) {
                     self.once('data', function(){
-                        resolve.apply(self, arguments);
+                        var entry = self._entries.shift();
+                        resolve.apply(self, entry);
                     });
                 };
                 return (new Promise(resolver));

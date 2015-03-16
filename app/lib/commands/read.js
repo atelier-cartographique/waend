@@ -17,7 +17,7 @@ function read () {
         stdin = self.sys.stdin,
         stdout = self.sys.stdout;
     var res = function(resolve, reject){
-        shell.terminal.input();
+        shell.terminal.input(stdin);
         stdin.read()
             .then(function(line){
                 stdout.write(line);

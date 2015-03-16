@@ -40,14 +40,14 @@ var Console = Terminal.extend({
         return (options.text + l);
     },
 
-    input: function (prompt) {
+    input: function (fdin, prompt) {
         var self = this;
         self.reading = true;
         prompt = prompt || ': ';
         this.rl.setPrompt(prompt);
 
         self.rl.on('line', function(line) {
-            self.shell.stdin(line);
+            fdin.write(line);
             self.reading = false;
             self.setTitle();
             self.rl.prompt();

@@ -14,12 +14,13 @@ var querystring = require('querystring'),
     config = require('../../../config');
 
 function login (username, password) {
-    var transport = new Transport(),
-        shell = this.shell,
-        stdout = this.sys.stdout,
-        stdin = this.sys.stdin,
+    var self = this;
+        transport = new Transport(),
+        shell = self.shell,
+        stdout = self.sys.stdout,
+        stdin = self.sys.stdin,
         terminal = shell.terminal,
-        binder = this.binder;
+        binder = self.binder;
 
 
     var remoteLogin = function (username, password) {
@@ -48,7 +49,7 @@ function login (username, password) {
     }
 
     stdout.write('password:');
-    terminal.input();
+    terminal.input(stdin);
     return stdin.read().then(function(pwd){
         return remoteLogin(username, pwd);
     });

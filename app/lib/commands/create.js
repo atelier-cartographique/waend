@@ -15,12 +15,14 @@ var Promise = require('bluebird');
 function createGroup (uid, ctx, resolve, reject) {
     var binder = ctx.binder,
         stdout = ctx.sys.stdout,
+        stdin = ctx.sys.stdin,
         terminal = ctx.shell.terminal;
 
+    stdout.write('select a status');
     stdout.write('1 : public');
     stdout.write('2 : private');
 
-    terminal.input();
+    terminal.input(stdin);
     stdin.read()
         .then(function(input){
             var pp = parseInt(input);
@@ -28,7 +30,7 @@ function createGroup (uid, ctx, resolve, reject) {
                 return reject('Not a valid value');
             }
             stdout.write('enter a name');
-            shell.terminal.input();
+            shell.terminal.input(stdin);
             stdin.read()
                 .then(function(name){
                     var data = {
@@ -50,13 +52,14 @@ function createGroup (uid, ctx, resolve, reject) {
         .catch(reject);
 };
 
-function createLayer (uid, gid, shell, resolve, reject) {
+function createLayer (uid, gid, ctx, resolve, reject) {
     var binder = ctx.binder,
         stdout = ctx.sys.stdout,
+        stdin = ctx.sys.stdin,
         terminal = ctx.shell.terminal;
 
     stdout.write('enter a name');
-    terminal.input();
+    terminal.input(stdin);
     stdin.read()
         .then(function(name){
             var data = {
@@ -100,7 +103,7 @@ function iCreate () {
     var cType = 0;
 
     var resolver = function (resolve, reject) {
-        terminal.input();
+        terminal.input(stdin);
         stdin.read()
             .then(function(input){
                 cType = parseInt(input);
