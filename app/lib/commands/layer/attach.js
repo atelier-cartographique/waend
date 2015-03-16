@@ -9,8 +9,7 @@
  */
 
 
-var Promise = require('bluebird'),
-    Bind = require('../../Bind');
+var Promise = require('bluebird');
 
 function attach (guid, gid) {
     if(!!guid && !!gid){
@@ -21,12 +20,12 @@ function attach (guid, gid) {
             return Promise.reject('path argument not implemented yet');
         }
         else{ // we assume it's a group id
-            var db = Bind.get().db;
+            var db = this.binder.db;
             if(db.has(guid)){
                 var group = db.get(guid),
                     gid = group.id,
                     guid = group.get('user_id');
-                return Bind.get().attachLayerToGroup(guid, gid, this.data.id);
+                return this.binder.attachLayerToGroup(guid, gid, this.data.id);
             }
             return Promise.reject('Cannot link to a group you did not visit during this session');
         }

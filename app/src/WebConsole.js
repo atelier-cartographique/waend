@@ -96,21 +96,22 @@ var WebConsole = Terminal.extend({
                 self.input.focus();
             }
         });
+        self.shell.stdout.on('data', self.write, self);
+        self.shell.stderr.on('data', self.writeError, self);
     },
 
     handleInput: function (event) {
         if(isKeyReturnEvent(event)) {
             var self = this,
                 input = self.input,
-                val = input.value.trim(),
-                toks = self.commandLineTokens(val);
+                val = input.value.trim();
             if(val.length === 0){
                 return self.insertInput();
             }
             
             input.setAttribute('class', 'wc-input wc-pending');
             
-            self.shell.exec(toks)
+            self.shell.exec(val)
                 .then(function(){
                     console.log.apply(console, arguments);
                 })
@@ -127,20 +128,16 @@ var WebConsole = Terminal.extend({
         }
     },
 
-    read: function (prompt) {
+    input: function (prompt) {
         var self = this;
-        var resolver = function (resolve, reject) {
-            var handler = function (event) {
-                if(isKeyReturnEvent(event)) {
-                    var input = self.input,
-                        val = input.value.trim();
-                        resolve(val);
-                }
-            };
-            self.insertInput(handler);
+        var handler = function (event) {
+            if(isKeyReturnEvent(event)) {
+                var input = self.input,
+                    val = input.value.trim();
+                    self.shell.stdin.write(val);
+            }
         };
-
-        return (new Promise(resolver));
+        self.insertInput(handler);
     },
 
     write: function () {
@@ -154,6 +151,22 @@ var WebConsole = Terminal.extend({
             else{
                 var textElement = document.createTextNode(fragment.toString());
                 element.appendChild(textElement);
+            }
+        }
+        this.container.appendChild(element);
+    },
+
+    writeError: function () {
+        var element = document.createElement('div');
+        element.setAttribute('class', 'wc-line wc-error');
+        for(var i=0; i < arguments.length; i++){
+            var fragment = arguments[i];
+            try{
+                var textElement = document.createTextNode(fragment.toString());
+                element.appendChild(textElement);
+            }
+            catch(err){
+                console.error('wc.writeError', err);
             }
         }
         this.container.appendChild(element);

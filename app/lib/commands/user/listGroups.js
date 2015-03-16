@@ -9,16 +9,18 @@
  */
 
 
-var Bind = require('../../Bind'),
-    Promise = require("bluebird");
+var Promise = require("bluebird");
 
 function listGroups () {
     var self = this,
         userId = self.data.id,
+        shell = self.shell,
+        stdout = self.sys.stdout,
+        binder = self.binder,
         terminal = self.shell.terminal;
+
     var res = function(resolve, reject){
-        Bind.get()
-            .getGroups(userId)
+        binder.getGroups(userId)
             .then(function(groups){
                 for(var i = 0; i < groups.length; i++){
                     var group = groups[i];
@@ -26,7 +28,7 @@ function listGroups () {
                         'args': ['cc', '/'+userId+'/'+group.id],
                         'text': group.id
                     });
-                    terminal.write(cmd, ' ', group.get('name') || '');
+                    stdout.write(cmd, ' ', group.get('name') || '');
                 }
                 resolve();
             })

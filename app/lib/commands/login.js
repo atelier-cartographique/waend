@@ -11,13 +11,14 @@
 
 var querystring = require('querystring'),
     Transport = require('../Transport'),
-    Bind = require('../Bind'),
     config = require('../../../config');
 
 function login (username, password) {
     var transport = new Transport(),
         shell = this.shell,
-        terminal = shell.terminal;
+        stdout = this.sys.stdout,
+        terminal = shell.terminal,
+        binder = this.binder;
 
     return transport.post(config.public.loginUrl, {
         'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -26,15 +27,15 @@ function login (username, password) {
             'password': password
         })
     }).then(function(){
-        return Bind.get()
-            .getMe()
+        return binder.getMe()
             .then(function(user){
                 shell.user = user;
                 var cmd = terminal.makeCommand({
                     'args': ['cc', '/' + user.id],
                     'text': 'my context'
                 })
-                terminal.write('OK login ', cmd);
+                stdout.write('OK login ', cmd);
+                return user;
         });
     });
 };

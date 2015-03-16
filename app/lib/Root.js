@@ -13,20 +13,21 @@
 var _ = require('underscore'),
     Context = require('./Context');
 
-function processResult(terminal, result) {
+function processResult(shell, result) {
+    var stdout = shell.stdout;
     if(!result){
-        terminal.write('No result found');
+        stdout.write('No result found');
         return this.conclusion();
     }
     else{
         for(var i = 0; i < result.length; i++){
             var path = '/' + result.user_id + '/' + result.id;
-            var line = terminal.makeCommand({
+            var line = shell.terminal.makeCommand({
                 cmd: 'cc',
                 args: [path],
                 text: (result.properties.name | result.id)
             });
-            terminal.write(line);
+            stdout.write(line);
         }
     }
 };
@@ -40,13 +41,13 @@ var Root = Context.extend({
             var bind = Bind.get(),
                 terminal = this.shell.terminal;
 
-            return bind.searchGroup(term).then(_.partial(processResult, terminal));
+            return bind.searchGroup(term).then(_.partial(processResult, shell));
         },
 
         help: function(){
-            var terminal = this.shell.terminal;
-            terminal.write('hello, not yet written');
-            terminal.write('feel free to help :)');
+            var stdout = this.shell.stdout;
+            stdout.write('hello, not yet written');
+            stdout.write('feel free to help :)');
             return this.conclusion();
         },
     }

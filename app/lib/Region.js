@@ -31,7 +31,10 @@ var Geometry = ol.geom.Geometry,
     supportedFormat = {};
 
 _.each(supportedFormatNames, function(name){
-    supportedFormat[name] = new (ol.format[name])();
+    var f = new (ol.format[name])();
+    if(f.writeGeometry){
+        supportedFormat[name] = f;
+    }
 });
 
 function Extent ( extent ) { // whether from an OL extent or an Extent
@@ -93,14 +96,14 @@ var extentPointMethods = [
 
 _.each(extentMethods, function(methodName) {
     Extent.prototype[methodName] = function () {
-        var args = _.toArray(arguments).slice(1);
+        var args = _.toArray(arguments);
         return ol.extent[methodName].apply(ol.extent, [this.extent].concat(args));
     };
 });
 
 _.each(extentExtentMethods, function(methodName) {
     Extent.prototype[methodName] = function () {
-        var args = _.toArray(arguments).slice(1),
+        var args = _.toArray(arguments),
             ext2 = new Extent(args.shift());
         return ol.extent[methodName].apply(ol.extent, [this.extent, ext2.extent].concat(args));
     };
@@ -108,9 +111,19 @@ _.each(extentExtentMethods, function(methodName) {
 
 _.each(extentPointMethods, function(methodName) {
     Extent.prototype[methodName] = function () {
-        var args = _.toArray(arguments).slice(1);
+        var args = _.toArray(arguments);
         var coords = ol.extent[methodName].apply(ol.extent, [this.extent].concat(args));
         return (new ol.geom.Point(coords));
+    };
+
+    Extent.prototype[methodName+ 'Format'] = function () {
+        var args = _.toArray(arguments);
+        var opt_format = args.pop();
+        var format = supportedFormat[opt_format]
+        var coords = ol.extent[methodName].apply(ol.extent, [this.extent].concat(args));
+        var pt = new ol.geom.Point(coords);
+        var str = format.writeGeometry(pt);
+        return (str);
     };
 });
 

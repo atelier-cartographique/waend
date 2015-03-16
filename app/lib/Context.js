@@ -13,6 +13,7 @@ var _ = require('underscore'),
     ospath = require('path'),
     Promise = require("bluebird"),
     O = require('../../lib/object').Object,
+    Bind = require('./Bind'),
     commands = require('./commands');
 
 
@@ -35,11 +36,15 @@ var Context = O.extend({
      */
     exec: function () {
         var args =  _.toArray(arguments),
+            sys = args.shift(),
             cmd = args.shift();
 
         if(!(cmd in this.commands)){
             throw (new Error("command not found: "+cmd));
         }
+
+        this.sys = sys;
+        this.binder = Bind.get();
 
         var ret = this.commands[cmd].apply(this, args);
         return ret;

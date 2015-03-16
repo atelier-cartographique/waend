@@ -11,15 +11,14 @@
 
 function getAttr () {
     var self = this,
-        shell = self.shell,
-        terminal = shell.terminal;
+        sys = self.sys;
     if(arguments.length === 1){
-        terminal.write(key+' => '+self.data.get(arguments[0]));
+        sys.stdout.write('"'+ key +'" : '+ JSON.stringify(self.data.get(arguments[0])));
     }
     else{
         var data = self.data.getData();
         for(var key in data){
-            terminal.write(key+' => '+ JSON.stringify(data[key]));
+            sys.stdout.write('"'+ key+'" : '+ JSON.stringify(data[key]));
         }
     }
 

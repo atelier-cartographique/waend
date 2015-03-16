@@ -11,9 +11,12 @@
 var db = require('../Bind').get().db;
 
 function pcc () {
-    var terminal = this.shell.terminal;
-    var current = this.current();
-    var crt = [];
+    var shell = this.shell,
+        terminal = shell.terminal,
+        current = this.current(),
+        stdout = this.sys.stdout,
+        crt = [];
+
     for(var i=0; i < current.length; i++){
         var m = db.get(current[i]);
         var s = current.slice(0, i+1);
@@ -25,10 +28,10 @@ function pcc () {
         crt.push(cmd);
     }
     if(crt.length > 0){
-        terminal.write.apply(terminal, crt);
+        stdout.write.apply(shell.stdout, crt);
     }
     else{
-        terminal.write('/');
+        stdout.write('/');
     }
     return this.end();
 };

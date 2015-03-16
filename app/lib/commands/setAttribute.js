@@ -11,11 +11,7 @@
 
 
 function setAttr (key, val) {
-    var self = this,
-        shell = self.shell,
-        terminal = shell.terminal;
-    terminal.write('');
-    return self.data.set(key, val);
+    return this.data.set(key, JSON.parse(val));
 };
 
 

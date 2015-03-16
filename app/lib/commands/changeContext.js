@@ -26,7 +26,10 @@ function cc (path) {
         isAbsolute = ospath.isAbsolute ? ospath.isAbsolute(path) : '/' === path[0],
         pathComps = path.split('/'),
         ctxPath = [],
-        terminal = this.shell.terminal;;
+        shell = this.shell,
+        terminal = this.shell.terminal,
+        stdout = this.sys.stdout,
+        stderr = this.sys.stderr;
 
     if(isAbsolute){
         if(path.length > 1){
@@ -57,7 +60,7 @@ function cc (path) {
         }
         else{
             if('me' !== ctxPath[i]){
-                terminal.write('have '+ match.length +' match for '+ ctxPath[i]);
+                stderr.write('have '+ match.length +' match for '+ ctxPath[i]);
             }
         }
     };
@@ -75,7 +78,6 @@ function cc (path) {
         }
         title += '[' + id + ']';
     }
-    terminal.write('');
     return this.shell.switchContext(ctxPath)
         .then(function(){
             terminal.setTitle(title);

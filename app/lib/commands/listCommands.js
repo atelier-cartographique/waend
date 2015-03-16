@@ -11,13 +11,11 @@
 
 
 function listCommands () {
-    var self = this,
-        commands = self.commands,
-        terminal = self.shell.terminal;
+    var commands = this.commands;
     for(var k in commands){
-        terminal.write(k);
+        this.sys.stdout.write(k);
     }
-    return self.end();
+    return this.end();
 };
 
 

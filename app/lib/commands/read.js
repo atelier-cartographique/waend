@@ -13,11 +13,14 @@ var Promise = require("bluebird");
 
 function read () {
     var self = this,
-        terminal = self.shell.terminal;
+        shell = self.shell,
+        stdin = self.sys.stdin,
+        stdout = self.sys.stdout;
     var res = function(resolve, reject){
-        terminal.read()
+        shell.terminal.input();
+        stdin.read()
             .then(function(line){
-                terminal.write(line);
+                stdout.write(line);
                 resolve();
             })
             .catch(reject);

@@ -24,25 +24,36 @@ function setRegion (north, east, south, west) {
     ];
 
     region.push(extent);
-    terminal.write(region.get());
-    return self.end();
+    return self.end(region.get());
 };
 
 
 function getRegion () {
-    var self = this,
-        terminal = self.shell.terminal;
-
-    terminal.write(region.get());
-    return self.end();
+    var r = this.sys.stdout.write(region.get());
+    return this.end(r);
 };
 
 function popRegion () {
-    var self = this,
-        terminal = self.shell.terminal;
+    var r = region.pop();
+    return this.end(r);
+};
 
-    terminal.write(region.pop());
-    return self.end();
+function getCenter (opt_format) {
+    var r = region.get(),
+        format = opt_format || 'WKT',
+        center = r.getCenterFormat(format);
+    return this.end(center);
+};
+
+function printRegion (opt_format) {
+    var r = region.get(),
+        NE = r.getTopRight().getCoordinates(),
+        SW = r.getBottomLeft().getCoordinates();
+    this.sys.stdout.write('North ', NE[1]);
+    this.sys.stdout.write('East ', NE[0]);
+    this.sys.stdout.write('South ', SW[1]);
+    this.sys.stdout.write('West ', SW[0]);
+    return this.end();
 };
 
 function regionCommand () {
@@ -57,6 +68,12 @@ function regionCommand () {
     }
     else if('pop' === action){
         return popRegion.apply(this, args);
+    }
+    else if('center' === action){
+        return getCenter.apply(this, args);
+    }
+    else if('print' === action){
+        return printRegion.apply(this, args);
     }
     return this.endWithError('not a valid action');
 };

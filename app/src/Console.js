@@ -40,22 +40,18 @@ var Console = Terminal.extend({
         return (options.text + l);
     },
 
-    read: function (prompt) {
+    input: function (prompt) {
         var self = this;
         self.reading = true;
         prompt = prompt || ': ';
         this.rl.setPrompt(prompt);
 
-        var resolver = function (resolve, reject) {
-            self.rl.on('line', function(line) {
-                resolve(line);
-                self.reading = false;
-                self.setTitle();
-                self.rl.prompt();
-            });
-        };
-
-        return (new Promise(resolver));
+        self.rl.on('line', function(line) {
+            self.shell.stdin(line);
+            self.reading = false;
+            self.setTitle();
+            self.rl.prompt();
+        });
     },
 
     start: function () {
@@ -70,11 +66,12 @@ var Console = Terminal.extend({
 
         var self = this;
         
+        
         self.rl.on('line', function(line) {
             if(self.reading){return;}
-            var toks = self.commandLineTokens(line.trim());
-            if(toks.length > 0){
-                self.shell.exec(toks)
+            var cl = line.trim();
+            if(cl.length > 0){
+                self.shell.exec(cl)
                     .then(function(){
                         // console.log.apply(console, arguments);
                     })
@@ -96,8 +93,9 @@ var Console = Terminal.extend({
             process.exit(0);
         });
 
-        self.shell.on('error', function(err){
-            console.error(err.toString());
+        self.shell.stdout('data', self.write, self);
+        self.shell.stderr('data', function(err){
+            console.error('[error]'. err.toString());
         });
 
         self.rl.prompt();

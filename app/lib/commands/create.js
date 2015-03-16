@@ -9,36 +9,40 @@
  */
 
 
-var Promise = require('bluebird'),
-    Bind = require('../Bind');
+var Promise = require('bluebird');
 
 
-function createGroup (uid, term, resolve, reject) {
-    term.write('1 : public');
-    term.write('2 : private');
+function createGroup (uid, ctx, resolve, reject) {
+    var binder = ctx.binder,
+        stdout = ctx.sys.stdout,
+        terminal = ctx.shell.terminal;
 
-    term.read()
+    stdout.write('1 : public');
+    stdout.write('2 : private');
+
+    terminal.input();
+    stdin.read()
         .then(function(input){
             var pp = parseInt(input);
             if(!pp || pp > 2){
                 return reject('Not a valid value');
             }
-            term.write('enter a name');
-            term.read()
+            stdout.write('enter a name');
+            shell.terminal.input();
+            stdin.read()
                 .then(function(name){
                     var data = {
                         user_id: uid,
                         status_flag: (pp - 1),
                         properties: {'name':name}
                     }
-                    Bind.get()
-                        .setGroup(uid, data)
+                    ctx.binder.setGroup(uid, data)
                         .then(function(model){
-                            var cmd = term.makeCommand({
+                            var cmd = terminal.makeCommand({
                                 args: ['cc', '/'+uid+'/'+model.id],
                                 text: (model.get('name') || model.id)
                             });
-                            term.write('created group ', cmd);
+                            stdout.write(cmd);
                             resolve();
                         });
                 });
@@ -46,22 +50,26 @@ function createGroup (uid, term, resolve, reject) {
         .catch(reject);
 };
 
-function createLayer (uid, gid, term, resolve, reject) {
-    term.write('enter a name');
-    term.read()
+function createLayer (uid, gid, shell, resolve, reject) {
+    var binder = ctx.binder,
+        stdout = ctx.sys.stdout,
+        terminal = ctx.shell.terminal;
+
+    stdout.write('enter a name');
+    terminal.input();
+    stdin.read()
         .then(function(name){
             var data = {
                 user_id: uid,
                 properties: {'name':name}
             }
-            Bind.get()
-                .setLayer(uid, gid, data)
+            binder.setLayer(uid, gid, data)
                 .then(function(model){
-                    var cmd = term.makeCommand({
+                    var cmd = terminal.makeCommand({
                         args: ['cc', '/'+uid+'/'+gid+'/'+model.id],
                         text: (model.get('name') || model.id)
                     });
-                    term.write('created layer ', cmd);
+                    stdout.write('created layer ', cmd);
                     resolve();
                 });
         })
@@ -69,30 +77,31 @@ function createLayer (uid, gid, term, resolve, reject) {
 };
 
 function iCreate () {
-
     var self = this,
-        shell = self.shell,
-        terminal = shell.terminal,
+        terminal = self.shell.terminal,
+        stdout = self.sys.stdout,
+        stdin = self.sys.stdin,
         current = self.current();
     
-    terminal.write('select type:');
+    stdout.write('select type:');
     if (1 === current.length) {
-        terminal.write('1 : group');
+        stdout.write('1 : group');
     }
     else if (2 === current.length) {
-        terminal.write('1 : group');
-        terminal.write('2 : layer');
+        stdout.write('1 : group');
+        stdout.write('2 : layer');
     }
     else if (3 === current.length) {
-        terminal.write('1 : group');
-        terminal.write('2 : layer');
-        terminal.write('3 : feature');
+        stdout.write('1 : group');
+        stdout.write('2 : layer');
+        stdout.write('3 : feature');
     }
 
     var cType = 0;
 
     var resolver = function (resolve, reject) {
-        terminal.read()
+        terminal.input();
+        stdin.read()
             .then(function(input){
                 cType = parseInt(input);
                 if(!cType){
@@ -108,10 +117,10 @@ function iCreate () {
                     return reject('Not Implemented');
                 }
                 if(1 === cType){
-                    createGroup(current[0], terminal, resolve, reject);
+                    createGroup(current[0], self, resolve, reject);
                 }
                 else if(2 === cType){
-                    createLayer(current[0], current[1], terminal, resolve, reject);
+                    createLayer(current[0], current[1], self, resolve, reject);
                 }
             });
     };

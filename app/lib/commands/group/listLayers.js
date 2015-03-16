@@ -9,19 +9,20 @@
  */
 
 
-var Bind = require('../../Bind'),
-    Promise = require("bluebird");
+var Promise = require("bluebird");
 
 function listLayers () {
     var self = this,
         current = self.current(),
         userId = current[0],
         groupId = current[1],
-        terminal = self.shell.terminal;
+        shell = self.shell,
+        stdout = self.sys.stdout,
+        binder = self.binder,
+        terminal = shell.terminal;
 
     var res = function(resolve, reject){
-        Bind.get()
-            .getLayers(userId, groupId)
+        binder.getLayers(userId, groupId)
             .then(function(layers){
                 for(var i = 0; i < layers.length; i++){
                     var layer = layers[i];
@@ -29,7 +30,7 @@ function listLayers () {
                         'args': ['cc', '/'+userId+'/'+groupId+'/'+layer.id],
                         'text': layer.id
                     });
-                    terminal.write(cmd, ' ', layer.get('name') || '');
+                    stdout.write(cmd, ' ', layer.get('name') || '');
                 }
                 resolve();
             })

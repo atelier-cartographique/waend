@@ -13,10 +13,11 @@ var _ = require('underscore');
 
 function echo () {
     var self = this,
-        terminal = self.shell.terminal,
-        args = _.toArray(arguments);
-    terminal.write(args.join(' '));
-    return self.end();
+        shell = self.shell,
+        args = _.toArray(arguments),
+        e = args.join(' ');
+    self.sys.stdout.write(e);
+    return self.end(e);
 };
 
 
