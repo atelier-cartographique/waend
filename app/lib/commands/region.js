@@ -29,7 +29,8 @@ function setRegion (north, east, south, west) {
 
 
 function getRegion () {
-    var r = this.sys.stdout.write(region.get());
+    var r = region.get();
+    this.sys.stdout.write(r);
     return this.end(r);
 };
 
@@ -41,7 +42,10 @@ function popRegion () {
 function getCenter (opt_format) {
     var r = region.get(),
         format = opt_format || 'WKT',
-        center = r.getCenterFormat(format);
+        center = r.getCenter();
+    if(opt_format){
+        this.sys.stdout.write(r.getCenterFormat(format));
+    }
     return this.end(center);
 };
 
@@ -54,6 +58,15 @@ function printRegion (opt_format) {
     this.sys.stdout.write('South ', SW[1]);
     this.sys.stdout.write('West ', SW[0]);
     return this.end();
+};
+
+
+function bufferRegion (arg) {
+    var r = region.get();
+
+    r.buffer(arg || 0);
+    region.set(r);
+    return this.end(r);
 };
 
 function regionCommand () {
@@ -71,6 +84,9 @@ function regionCommand () {
     }
     else if('center' === action){
         return getCenter.apply(this, args);
+    }
+    else if('buffer' === action){
+        return bufferRegion.apply(this, args);
     }
     else if('print' === action){
         return printRegion.apply(this, args);

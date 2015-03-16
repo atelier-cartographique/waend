@@ -17,26 +17,40 @@ function login (username, password) {
     var transport = new Transport(),
         shell = this.shell,
         stdout = this.sys.stdout,
+        stdin = this.sys.stdin,
         terminal = shell.terminal,
         binder = this.binder;
 
-    return transport.post(config.public.loginUrl, {
-        'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
-        'body': querystring.stringify({
-            'username': username,
-            'password': password
-        })
-    }).then(function(){
-        return binder.getMe()
-            .then(function(user){
-                shell.user = user;
-                var cmd = terminal.makeCommand({
-                    'args': ['cc', '/' + user.id],
-                    'text': 'my context'
-                })
-                stdout.write('OK login ', cmd);
-                return user;
+
+    var remoteLogin = function (username, password) {
+        return transport.post(config.public.loginUrl, {
+            'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
+            'body': querystring.stringify({
+                'username': username,
+                'password': password
+            })
+        }).then(function(){
+            return binder.getMe()
+                .then(function(user){
+                    shell.user = user;
+                    var cmd = terminal.makeCommand({
+                        'args': ['cc', '/' + user.id],
+                        'text': 'my context'
+                    })
+                    stdout.write('OK login ', cmd);
+                    return user;
+            });
         });
+    };
+
+    if (password) {
+        return remoteLogin(username, password);
+    }
+
+    stdout.write('password:');
+    terminal.input();
+    return stdin.read().then(function(pwd){
+        return remoteLogin(username, pwd);
     });
 };
 

@@ -49,8 +49,17 @@ var Stream = O.extend({
             if (entry) {
                 return Promise.resolve(entry);
             }
+            else {
+                var self = this;
+                var resolver = function (resolve, reject) {
+                    self.once('data', function(){
+                        resolve.apply(self, arguments);
+                    });
+                };
+                return (new Promise(resolver));
+            }
         }
-        return Promise.reject('nothing to read');
+        return Promise.reject('stream is closed');
     },
 
     readSync: function () {

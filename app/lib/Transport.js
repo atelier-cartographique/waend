@@ -131,7 +131,9 @@ var Transport = O.extend({
                 reject(xhr.statusText);
             };
             var successHandler = function (evt, xhr) {
-                ////console.log('transport.get.success', evt, xhr);
+                if(xhr.status >= 400){
+                    return reject(xhr.statusText);
+                }
                 if(getOptions.parse){
                     resolve(getOptions.parse(xhr.response));
                 }
@@ -167,7 +169,9 @@ var Transport = O.extend({
                 reject(xhr.statusText);
             };
             var successHandler = function (evt, xhr) {
-                ////console.log('transport.get.success', evt, xhr);
+                if(xhr.status >= 400){
+                    return reject(xhr.statusText);
+                }
                 if(postOptions.parse){
                     resolve(postOptions.parse(xhr.response));
                 }

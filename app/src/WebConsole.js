@@ -27,7 +27,7 @@ WebCommand.prototype.toString = function () {
 
 WebCommand.prototype.onClick = function () {
     var shell = this.term.shell,
-        args = this.args;
+        args = this.args.join(' ');
     var cb = function(event){
         event.preventDefault();
         shell.exec(args)
@@ -69,12 +69,12 @@ var WebConsole = Terminal.extend({
 
     insertInput: function (listener) {
         listener = listener || this.handleInput.bind(this);
-        this.input = document.createElement('input');
-        this.input.setAttribute('class', 'wc-input');
-        this.input.setAttribute('type', 'text');
-        this.container.appendChild(this.input);
-        this.input.addEventListener('keypress', listener, false);
-        this.input.focus();
+        this._inputField = document.createElement('input');
+        this._inputField.setAttribute('class', 'wc-input');
+        this._inputField.setAttribute('type', 'text');
+        this.container.appendChild(this._inputField);
+        this._inputField.addEventListener('keypress', listener, false);
+        this._inputField.focus();
     },
 
     setTitle: function (title) {
@@ -92,8 +92,8 @@ var WebConsole = Terminal.extend({
         this.insertInput();
         var self = this;
         self.container.addEventListener('click', function(e){
-            if(self.input){
-                self.input.focus();
+            if(self._inputField){
+                self._inputField.focus();
             }
         });
         self.shell.stdout.on('data', self.write, self);
@@ -103,7 +103,7 @@ var WebConsole = Terminal.extend({
     handleInput: function (event) {
         if(isKeyReturnEvent(event)) {
             var self = this,
-                input = self.input,
+                input = self._inputField,
                 val = input.value.trim();
             if(val.length === 0){
                 return self.insertInput();
@@ -132,7 +132,7 @@ var WebConsole = Terminal.extend({
         var self = this;
         var handler = function (event) {
             if(isKeyReturnEvent(event)) {
-                var input = self.input,
+                var input = self._inputField,
                     val = input.value.trim();
                     self.shell.stdin.write(val);
             }
