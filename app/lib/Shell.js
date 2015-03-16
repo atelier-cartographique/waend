@@ -103,13 +103,7 @@ var Shell = O.extend({
 
 
     makePipes: function (n) {
-        var pipes = new Array(n),
-            base = {
-                'stdin': this.stdin,
-                'stdout': this.stdout,
-                'stderr': this.stderr
-            },
-            previous = base;
+        var pipes = new Array();
 
         for (var i = 0; i < n; i++) {
             var sys = {
@@ -117,23 +111,13 @@ var Shell = O.extend({
                 'stdout': (new Stream()),
                 'stderr': (new Stream())
             };
-            _.each(previous, function(stream, name){
-                var targetStream = sys[name];
-                stream.on('data', function(data) {
-                    targetStream.write.apply(targetStream, data);
-                });
-            });
             pipes.push(sys);
-            previous = sys;
         }
-
-        _.each(previous, function(stream, name){
-            var targetStream = base[name];
-            stream.on('data', function(data) {
-                targetStream.write.apply(targetStream, data);
+        pipes.push({
+                'stdin': this.stdin,
+                'stdout': this.stdout,
+                'stderr': this.stderr
             });
-        });
-
         return pipes;
     },
 
@@ -158,14 +142,29 @@ var Shell = O.extend({
     execMany: function (cls) {
         var self = this,
             context = this._contexts[this._currentContext],
-            pipes = this.makePipes(cls.length),
-            cmds = [];
+            pipes = this.makePipes(cls.length);
 
-        return Promise.reduce(cls, function(prev, cl, index) {
-            var toks = self.commandLineTokens(cl.trim());
-            var args = [pipes[index]].concat(toks);
+        var pipeStreams = function(s, t) {
+            _.each(s, function(sourceStream, name){
+                var targetStream = t[name];
+                sourceStream.on('data', function(){
+                    targetStream.write.apply(targetStream, arguments);
+                });
+            });
+        };
+
+        return Promise.reduce(cls, function(total, item, index) {
+            var cl = cls[index].trim(),
+                toks = self.commandLineTokens(cl),
+                args = [pipes[index]].concat(toks);
+            if(index > 0){
+                _.each(['stdin', 'stdout', 'stderr'], function(name){
+                    pipes[index - 1][name].close();
+                });
+            }
+            pipeStreams(pipes[index], pipes[index + 1]);
             return context.exec.apply(context, args);
-        });
+        }, 0);
     },
 
     exec: function (cl) {

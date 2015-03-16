@@ -14,8 +14,9 @@ var _ = require('underscore');
 function echo () {
     var self = this,
         shell = self.shell,
-        args = _.toArray(arguments),
-        e = args.join(' ');
+        args = (arguments.length >  0) ? _.toArray(arguments) : self.sys.stdout.readSync(),
+        e = !!args ? args.join(' ') : '';
+
     self.sys.stdout.write(e);
     return self.end(e);
 };
