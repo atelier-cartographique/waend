@@ -49,12 +49,7 @@ module.exports = exports = base.RequestHandler.extend({
 
 
         list: function (request, response) {
-            var self = this,
-                listPrivate = false;
-            if(request.user 
-                && (request.user.id === request.params.user_id)) {
-                listPrivate = true;
-            }
+            var self = this;
             cache.client()
                 .getLayers(request.params.group_id)
                 .then(function(results){

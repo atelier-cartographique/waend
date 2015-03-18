@@ -1,5 +1,5 @@
 /*
- * app/lib/commands/setAttribute.js
+ * app/lib/commands/create.js
  *     
  * 
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
@@ -9,7 +9,8 @@
  */
 
 
-var Promise = require('bluebird');
+var Promise = require('bluebird'),
+    region = require('../Region');
 
 
 function createGroup (uid, ctx, resolve, reject) {
@@ -45,7 +46,7 @@ function createGroup (uid, ctx, resolve, reject) {
                                 text: (model.get('name') || model.id)
                             });
                             stdout.write(cmd);
-                            resolve();
+                            resolve(model);
                         });
                 });
         })
@@ -73,10 +74,37 @@ function createLayer (uid, gid, ctx, resolve, reject) {
                         text: (model.get('name') || model.id)
                     });
                     stdout.write('created layer ', cmd);
-                    resolve();
+                    resolve(model);
                 });
         })
         .catch(reject);
+};
+
+function createFeature (uid, gid, lid, ctx, resolve, reject) {
+    var binder = ctx.binder,
+        stdout = ctx.sys.stdout,
+        stdin = ctx.sys.stdin,
+        terminal = ctx.shell.terminal,
+        extent = region.get(),
+        center = extent.getCenter();
+
+        var data = {
+            user_id: uid,
+            layer_id: lid,
+            properties: {},
+            geom: JSON.parse(center.format())
+        }
+
+        return binder.setFeature(uid, gid, lid, data)
+            .then(function(model){
+                var cmd = terminal.makeCommand({
+                    args: ['cc', '/'+uid+'/'+gid+'/'+lid+'/'+model.id],
+                    text: model.id
+                });
+                stdout.write('created feature ', cmd);
+                resolve(model);
+            })
+            .catch(reject);
 };
 
 function iCreate () {
@@ -116,16 +144,16 @@ function iCreate () {
                 if(cType > 3){
                     return reject('Invalid Value');
                 }
-                if(cType > 2){
-                    return reject('Not Implemented');
-                }
                 if(1 === cType){
                     createGroup(current[0], self, resolve, reject);
                 }
                 else if(2 === cType){
                     createLayer(current[0], current[1], self, resolve, reject);
                 }
-            });
+                else if(3 === cType){
+                    createFeature(current[0], current[1], current[2], self, resolve, reject);
+                }
+            }).catch(reject);
     };
 
     return (new Promise(resolver));

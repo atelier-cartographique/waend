@@ -59,9 +59,9 @@ function cc (path) {
             ctxPath[i] = match[0].id;
         }
         else{
-            if('me' !== ctxPath[i]){
-                stderr.write('have '+ match.length +' match for '+ ctxPath[i]);
-            }
+            // if('me' !== ctxPath[i]){
+            //     stderr.write('have '+ match.length +' match for '+ ctxPath[i]);
+            // }
         }
     };
 
@@ -82,6 +82,9 @@ function cc (path) {
         .then(function(){
             terminal.setTitle(title);
             return self.end();
+        })
+        .catch(function(err){
+            return Promise.reject(err);
         });
 };
 

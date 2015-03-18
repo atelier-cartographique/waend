@@ -11,14 +11,16 @@
 'use strict';
 
 var Context = require('./Context'),
-    attach = require('./commands/layer/attach');
+    attach = require('./commands/layer/attach'),
+    listFeatures = require('./commands/layer/listFeatures');
 
 
 
 var Layer = Context.extend({
     name: 'group',
     commands:{
-        attach: attach.command
+        'attach': attach.command,
+        'lf': listFeatures.command
     }
 });
 

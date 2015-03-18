@@ -8,21 +8,28 @@
  *
  */
 
+'use strict';
+
+var _ = require('underscore');
 
 function getAttr () {
     var self = this,
-        sys = self.sys;
-    if(arguments.length === 1){
-        sys.stdout.write('"'+ key +'" : '+ JSON.stringify(self.data.get(arguments[0])));
+        args = _.toArray(arguments),
+        key = args.shift(),
+        sys = self.sys,
+        result = undefined;
+    if(key){
+        result = self.data.get(key)
+        sys.stdout.write('"'+ key +'" : '+ JSON.stringify(self.data.get(key)));
     }
     else{
         var data = self.data.getData();
+        result = data;
         for(var key in data){
             sys.stdout.write('"'+ key+'" : '+ JSON.stringify(data[key]));
         }
     }
-
-    return self.end();
+    return self.end(result);
 };
 
 

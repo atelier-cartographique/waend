@@ -33,6 +33,8 @@ var _ = require('underscore'),
     Transport = require('./Transport'),
     Model = require('./Model'),
     config = require('../../config'),
+    region = require('./Region'),
+    Geometry = require('./Geometry'),
     Promise = require("bluebird");
 
 
@@ -55,6 +57,10 @@ var Layer = Model.extend({
 
 var Feature = Model.extend({
     type: 'feature',
+
+    getGeometry: function () {
+        return Geometry.format.GeoJSON.read(this.data.geom);
+    }
 });
 
 
@@ -214,7 +220,7 @@ var Bind = O.extend({
         }
         var pr = function (response) {
             var l = new Layer(binder, objectifyResponse(response));
-            db.record(path, g);
+            db.record(path, l);
             return l;
         };
         var url = API_URL+path;
@@ -256,6 +262,32 @@ var Bind = O.extend({
         return this.transport.get(url, {parse: pr});
     },
 
+    getFeatures: function (userId, groupId, layerId, extent, page) {
+        var db = this.db,
+            binder = this,
+            path = '/user/'+userId+'/group/'+groupId+'/layer/'+layerId+'/feature/';
+
+        extent = extent || region.get();
+
+        var pr = function (response) {
+            var data = objectifyResponse(response);
+            var ret = [];
+            for(var i = 0; i < data.results.length; i++){
+                var f = new Feature(binder, data.results[i]);
+                db.record(path+f.id, f);
+                ret.push(f);
+            }
+            return ret;
+        };
+        var url = API_URL+path;
+        var options = {
+            'parse': pr,
+            'params': extent.toBounds()
+        };
+        return this.transport.get(url, options);
+    },
+
+
     setGroup: function (userId, data) {
         var db = this.db,
             binder = this,
@@ -283,6 +315,24 @@ var Bind = O.extend({
             var g = new Layer(binder, objectifyResponse(response));
             db.record(path + g.id, g);
             return g;
+        };
+
+        var url = API_URL+path;
+        return this.transport.post(url, {
+            parse: pr,
+            body: data
+        });
+    },
+
+    setFeature: function (userId, groupId, layerId, data) {
+        var db = this.db,
+            binder = this,
+            path = '/user/'+userId+'/group/'+groupId+'/layer/'+layerId+ '/feature/';
+
+        var pr = function (response) {
+            var f = new Feature(binder, objectifyResponse(response));
+            db.record(path + f.id, f);
+            return f;
         };
 
         var url = API_URL+path;

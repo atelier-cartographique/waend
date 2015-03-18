@@ -10,6 +10,7 @@
 
 
 var _ = require('underscore'),
+    querystring = require('querystring'),
     O = require('../../lib/object').Object,
     Promise = require("bluebird");
 
@@ -32,7 +33,11 @@ function transportXHR () {
             xhr.addEventListener(listener, wrapper, false);
         }
 
-        xhr.open(options.verb, options.url, true);
+        var url = options.url;
+        if('params' in options){
+            url += '?'+querystring.stringify(options.params);
+        }
+        xhr.open(options.verb, url, true);
 
         for(var header in headers) {
             try{
@@ -83,6 +88,11 @@ function transportHTTP () {
         
 
         var purl = url.parse(options.url);
+        var path = purl.path;
+        if('params' in options){
+            path += '?'+querystring.stringify(options.params);
+        }
+
         var headers = options.headers || {};
         if(httpCookie){
             headers['Cookie'] = httpCookie;
@@ -91,7 +101,7 @@ function transportHTTP () {
             'method': options.verb,
             'hostname': purl.hostname,
             'port': purl.port || 80,
-            'path': purl.path,
+            'path': path,
             'headers': headers
         };
 
@@ -150,6 +160,7 @@ var Transport = O.extend({
                     'load' : {callback:successHandler, context:undefined},
                 },
                 'headers': _.extend({}, getOptions.headers),
+                'params': getOptions.params,
                 'verb': 'GET',
                 'url': url
             };
@@ -203,6 +214,7 @@ var Transport = O.extend({
                     'load' : {callback:successHandler, context:undefined},
                 },
                 'headers': headers,
+                'params': postOptions.params,
                 'verb': verb,
                 'body': body,
                 'url': url

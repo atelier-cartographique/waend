@@ -30,8 +30,60 @@ var SHELL = 0,
     FEATURE = 4;
 
 
-var argsRe = /'[^']*'|"[^"]*"|\S+/g ;
 
+function getCliChunk (chars, start, endChar) {
+    var chunk = '';
+    for (var i = start; i < chars.length; i++) {
+        var c = chars[i];
+        if(endChar === c){
+            break;
+        }
+        chunk += c;
+    };
+    return chunk;
+};
+
+function cliSplit (str) {
+    var chars = str.trim().split(''),
+        ret = [];
+    for (var i = 0; i < chars.length; i++) {
+        var c = chars[i];
+        if ('"' === c) {
+            var chunk = getCliChunk(chars, i + 1, '"');
+            i += chunk.length + 1;
+            ret.push(chunk);
+        }
+        else if ("'" === c) {
+            var chunk = getCliChunk(chars, i + 1, "'");
+            i += chunk.length + 1;
+            ret.push(chunk);
+        }
+        else if (' ' !== c) {
+            var chunk = getCliChunk(chars, i, ' ');
+            i += chunk.length;
+            ret.push(chunk);
+        }
+    }
+
+    return ret;
+};
+
+// some tests, i keep them around for whatever reason
+// var tests = [
+//     ['cmd arg', 2],
+//     ['cmd arg0 arg1', 3],
+//     ['cmd "arg0 arg1"', 2],
+//     ['cmd \'"arg0 arg1" arg2\' arg3', 3],
+//     ['cmd "\'arg0 arg1 arg2\' arg3" arg4', 3],
+//     ['cmd "\'arg0 arg1 arg2\' arg3" "arg4 arg5"', 3],
+// ];
+
+// for (var i = 0; i < tests.length; i++) {
+//     var str = tests[i][0];
+//     var check = tests[i][1];
+//     var splitted = split(str)
+//     console.log('<'+str+'>', check, splitted.length, splitted);
+// }
 
 function ShellError () {
     if(arguments.length > 0){
@@ -90,15 +142,7 @@ var Shell = O.extend({
     },
 
     commandLineTokens: function (cl) {
-        var args = cl.match(argsRe);
-        if (!args) {
-            args = [];
-        };
-        var cleanedArgs = [];
-        for(var i = 0; i < args.length; i++){
-            cleanedArgs.push(args[i].replace(/"/g,""));
-        }
-        return cleanedArgs;
+        return cliSplit(cl);
     },
 
 
@@ -122,7 +166,8 @@ var Shell = O.extend({
     },
 
     execOne: function (cl) {
-        var toks = this.commandLineTokens(cl.trim()),
+        var self = this,
+            toks = this.commandLineTokens(cl.trim()),
             context = this._contexts[this._currentContext];
 
         try {
@@ -132,9 +177,15 @@ var Shell = O.extend({
                 'stderr': this.stderr
             };
             var args = [sys].concat(toks);
-            return context.exec.apply(context, args);
+            return context.exec
+                .apply(context, args)
+                .then(function(result){
+                    self.env.DELIVERED = result;
+                    return Promise.resolve(result);
+                });
         }
         catch (err) {
+            self.env.DELIVERED = err;
             return Promise.reject(err);
         }
     },
@@ -154,6 +205,7 @@ var Shell = O.extend({
         };
 
         return Promise.reduce(cls, function(total, item, index) {
+            self.env.DELIVERED = total;
             var cl = cls[index].trim(),
                 toks = self.commandLineTokens(cl),
                 args = [pipes[index]].concat(toks);

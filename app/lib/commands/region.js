@@ -17,9 +17,9 @@ function setRegion (north, east, south, west) {
         terminal = self.shell.terminal;
 
     var extent = [
-        parseFloat(east), 
-        parseFloat(south), 
         parseFloat(west), 
+        parseFloat(south), 
+        parseFloat(east), 
         parseFloat(north)
     ];
 
@@ -51,12 +51,12 @@ function getCenter (opt_format) {
 
 function printRegion (opt_format) {
     var r = region.get(),
-        NE = r.getTopRight().getCoordinates(),
-        SW = r.getBottomLeft().getCoordinates();
-    this.sys.stdout.write('North ', NE[1]);
-    this.sys.stdout.write('East ', NE[0]);
-    this.sys.stdout.write('South ', SW[1]);
-    this.sys.stdout.write('West ', SW[0]);
+        NW = r.getTopLeft().format('WKT'),
+        SE = r.getBottomRight().format('WKT');
+    this.sys.stdout.write('NorthWest ', NW);
+    this.sys.stdout.write('SouthEast ', SE);
+    // this.sys.stdout.write('South ', SW[1]);
+    // this.sys.stdout.write('West ', SW[0]);
     return this.end();
 };
 

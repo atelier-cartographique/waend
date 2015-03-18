@@ -8,10 +8,38 @@
  *
  */
 
+var _ = require('underscore');
 
+function setAttr () {
+    if(arguments.length === 0){return self.end();}
+    var args = _.toArray(arguments);
+        key = args.shift(),
+        env = this.shell.env;
 
-function setAttr (key, val) {
-    return this.data.set(key, JSON.parse(val));
+    if (!key) {
+        throw (new Error('No Key'));
+    }
+    else if (0 === args.length) {
+        var delivered = ('toString' in env.DELIVERED) ? env.DELIVERED.toString() : env.DELIVERED;
+        var data = JSON.parse(delivered);
+        return this.data.set(key, data);
+    }
+    else if (1 === args.length) {
+        // we first try to parse it, who knows?
+        try {
+            var data = JSON.parse(args[0].toString());
+            return this.data.set(key, data);
+        }
+        catch (err) {
+            // ok, didn't work either, make it a String.
+            return this.data.set(key, args[0].toString());
+        }
+    }
+    // finally we consider each argument to be an array item of type String
+    var data = _.map(args, function(v){
+        return v.toString();
+    });
+    return this.data.set(key, data);
 };
 
 

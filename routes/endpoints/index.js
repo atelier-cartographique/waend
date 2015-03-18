@@ -11,9 +11,7 @@
  var _ = require('underscore');
 
 var handlers = []; 
-
-var modelNames = ['user', 'layer', 'entity', 'group'];
-var modelNames = ['user', 'group', 'layer'];
+var modelNames = ['user', 'group', 'layer', 'feature'];
 
  _.each(modelNames, function(modelName){
     var RH = require('./'+modelName);

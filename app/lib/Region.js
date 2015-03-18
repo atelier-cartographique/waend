@@ -12,126 +12,13 @@
 
 
 var _ = require('underscore'),
-    O = require('../../lib/object').Object,
-    ol = require('openlayers');
-
-var Geometry = ol.geom.Geometry,
-    Polygon = ol.geom.Polygon,
-    format = ol.format,
-    supportedFormatNames = [
-    "GeoJSON", 
-    "GPX", 
-    "KML", 
-    "OSMXML", 
-    "Polyline", 
-    "TopoJSON",
-    "WKT", 
-    "GML2", "GML3", "GML"
-    ],
-    supportedFormat = {};
-
-_.each(supportedFormatNames, function(name){
-    var f = new (ol.format[name])();
-    if(f.writeGeometry){
-        supportedFormat[name] = f;
-    }
-});
-
-function Extent ( extent ) { // whether from an OL extent or an Extent
-    if (extent instanceof Extent){
-        this.extent = JSON.parse(JSON.stringify(extent.extent));
-    }
-    else {
-        this.extent = JSON.parse(JSON.stringify(extent));
-    }
-     console.log('Extent.extent', typeof this.extent);
-};
-
-Extent.prototype.clone = function () {
-    return (new Extent(this));
-};
-
-Extent.prototype.toPolygon = function () {
-    var coords = [[
-        this.getTopLeft().getCoordinates(), 
-        this.getTopRight().getCoordinates(),
-        this.getBottomRight().getCoordinates(),
-        this.getBottomLeft().getCoordinates(),
-        this.getTopLeft().getCoordinates()
-    ]];
-    return (new Polygon(coords));
-};
-
-Extent.prototype.toString = function (opt_format) {
-    opt_format = opt_format || 'WKT';
-    var format = supportedFormat[opt_format],
-        str = format.writeGeometry(this.toPolygon());
-    return str;
-};
-
-var extentMethods = [
-    'buffer',
-    'containsCoordinate',
-    'containsXY',
-    'getHeight',
-    'getWidth',
-    'isEmpty'
-];
-
-var extentExtentMethods = [
-    'containsExtent',
-    'equals',
-    'extend',
-    'intersects',
-];
-
-var extentPointMethods = [
-    'getBottomLeft',
-    'getBottomRight',
-    'getCenter',
-    'getTopLeft',
-    'getTopRight'
-    ];
-
-
-_.each(extentMethods, function(methodName) {
-    Extent.prototype[methodName] = function () {
-        var args = _.toArray(arguments);
-        return ol.extent[methodName].apply(ol.extent, [this.extent].concat(args));
-    };
-});
-
-_.each(extentExtentMethods, function(methodName) {
-    Extent.prototype[methodName] = function () {
-        var args = _.toArray(arguments),
-            ext2 = new Extent(args.shift());
-        return ol.extent[methodName].apply(ol.extent, [this.extent, ext2.extent].concat(args));
-    };
-});
-
-_.each(extentPointMethods, function(methodName) {
-    Extent.prototype[methodName] = function () {
-        var args = _.toArray(arguments);
-        var coords = ol.extent[methodName].apply(ol.extent, [this.extent].concat(args));
-        return (new ol.geom.Point(coords));
-    };
-
-    Extent.prototype[methodName+ 'Format'] = function () {
-        var args = _.toArray(arguments);
-        var opt_format = args.pop();
-        var format = supportedFormat[opt_format]
-        var coords = ol.extent[methodName].apply(ol.extent, [this.extent].concat(args));
-        var pt = new ol.geom.Point(coords);
-        var str = format.writeGeometry(pt);
-        return (str);
-    };
-});
-
+    Geometry = require('./Geometry'),
+    O = require('../../lib/object').Object;
 
 
 var Region = O.extend({
     initialize: function () {
-        this.state = [];
+        this.state = [new Geometry.Extent([-180, -90 ,180, 90])];
     },
 
     get: function () {
@@ -154,22 +41,22 @@ var Region = O.extend({
     },
 
     push: function (geom, opt_format) {
-        if (!opt_format && (geom instanceof Extent)) {
+        if (!opt_format && (geom instanceof Geometry.Extent)) {
             var extent = geom.clone();
             return this.pushExtent(extent);
         }        
-        else if (!opt_format && (geom instanceof Geometry)) {
-            var extent = new Extent(geom.getExtent());
+        else if (!opt_format && (geom instanceof Geometry.Geometry)) {
+            var extent = new Geometry.Extent(geom.getExtent());
             return this.pushExtent(extent);
         }        
-        else if (!opt_format && (geom instanceof Array)) { // we assume ol.extent type
-            var extent = new Extent(geom);
+        else if (!opt_format && _.isArray(geom)) { // we assume ol.extent type
+            var extent = new Geometry.Extent(geom);
             return this.pushExtent(extent);
         }
         else if (!!opt_format){
-            if (opt_format in supportedFormat) {
-                var gg = supportedFormat[opt_format].readGeometry(geom);
-                var extent = new Extent(gg.getExtent());
+            if (opt_format in Geometry.format) {
+                var gg = Geometry.format[opt_format].read(geom);
+                var extent = new Geometry.Extent(gg.getExtent());
                 return this.pushExtent(extent);
             }
             throw (new Error('region.push format not supported: '+ opt_format));

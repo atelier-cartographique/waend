@@ -11,13 +11,16 @@
 'use strict';
 
 var Context = require('./Context'),
-    Bind = require('./Bind');
+    Bind = require('./Bind'),
+    getGeometry = require('./commands/feature/getGeometry');
 
 
 
 var Feature = Context.extend({
     name: 'group',
-    commands:{}
+    commands:{
+        'gg' : getGeometry.command
+    }
 });
 
 

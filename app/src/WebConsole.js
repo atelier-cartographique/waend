@@ -122,6 +122,7 @@ var WebConsole = Terminal.extend({
                 })
                 .finally(function(){
                     input.setAttribute('class', 'wc-input wc-inactive');
+                    input.setAttribute('disabled', 'disabled');
                     self.history.push(val);
                     self.insertInput();
                 });
