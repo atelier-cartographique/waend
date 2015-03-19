@@ -175,16 +175,6 @@ _.each(extentPointMethods, function(methodName) {
         var coords = ol.extent[methodName].apply(ol.extent, [this.extent].concat(args));
         return (new Point(coords));
     };
-
-    Extent.prototype[methodName+ 'Format'] = function () {
-        var args = _.toArray(arguments);
-        var opt_format = args.pop();
-        var format = supportedFormat[opt_format]
-        var coords = ol.extent[methodName].apply(ol.extent, [this.extent].concat(args));
-        var pt = new Point(coords);
-        var str = format.writeGeometry(pt);
-        return (str);
-    };
 });
 
 module.exports.Geometry = Geometry;

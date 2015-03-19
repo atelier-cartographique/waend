@@ -44,7 +44,7 @@ function getCenter (opt_format) {
         format = opt_format || 'WKT',
         center = r.getCenter();
     if(opt_format){
-        this.sys.stdout.write(r.getCenterFormat(format));
+        this.sys.stdout.write(center.format(format));
     }
     return this.end(center);
 };

@@ -20,7 +20,8 @@ var O = require('../../lib/object').Object,
     Feature = require('./Feature'),
     Bind = require('./Bind'),
     Stream = require('./Stream'),
-    region = require('./Region');
+    region = require('./Region'),
+    semaphore = require('./Semaphore');
 
 
 var SHELL = 0,
@@ -237,6 +238,11 @@ var Shell = O.extend({
         for(var i = start; i < this._contexts.length; i++){
             this._contexts[i] = null;
         }
+        var path = [];
+        for(var i = 1; i < start; i++){
+            path.push(this._contexts[i].data.id);
+        }
+        semaphore.signal('shell:change:context', this._currentContext, path);
     },
 
     switchContext: function (pathComps) {
