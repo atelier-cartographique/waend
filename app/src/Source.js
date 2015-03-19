@@ -13,7 +13,6 @@
 
 var _ = require('underscore'),
     Promise = require('bluebird'),
-    util = require("util"),
     ol = require('openlayers'),
     region = require('../lib/Region'),
     Geometry = require('../lib/Geometry'),
@@ -38,11 +37,12 @@ function Source () {
 };
 
 function LayerSource (uid, gid, layer) {
+    ol.source.GeoJSON.apply(this, []);
     this.uid = uid;
     this.gid = gid;
     this.layer = layer;
 };
-util.inherits(LayerSource, ol.source.GeoJSON);
+ol.inherits(LayerSource, ol.source.GeoJSON);
 
 // implementations
 Source.prototype.updateGroup = function(userId, groupId) {
@@ -82,8 +82,8 @@ Source.prototype.loadLayers = function () {
         .getLayers(self.userId, self.groupId)
         .then(function(layers){
             self.clearLayers();
-            for (var lidx = 0; lidx < layers.length; i++) {
-                self.layers.push(new LayerSource(self.userId, self.groupId, layer));
+            for (var lidx = 0; lidx < layers.length; lidx++) {
+                self.layerSources.push(new LayerSource(self.userId, self.groupId, layers[lidx]));
             }
             return Promise.resolve();
         })
@@ -107,11 +107,13 @@ LayerSource.prototype.buildFeature = function (f) {
 
 LayerSource.prototype.update = function () {
     var self = this;
-    binder.getFeatures(self.uid, self.gid, self.layer,id)
+    binder.getFeatures(self.uid, self.gid, self.layer.id)
         .then(function(features){
             for (var i = 0; i < features.length; i++) {
-                if(!self.getFeatureById(features[i].id)){
-                    var f = self.buildFeature(features[i])
+                var feature = features[i];
+                var featureIsNew = !(self.getFeatureById(feature.id));
+                if(featureIsNew){
+                    var f = self.buildFeature(feature)
                     self.addFeature(f);
                 }
             }

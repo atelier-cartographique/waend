@@ -33,6 +33,10 @@ module.exports = exports = function(app){
     router.get('/console', function(request, response){
         response.render('console');
     });
+    router.get('/map', function(request, response){
+        response.render('map');
+    });
+
 
     app.use('/', router);
 

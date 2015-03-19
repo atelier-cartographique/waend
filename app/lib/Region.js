@@ -12,6 +12,7 @@
 
 
 var _ = require('underscore'),
+    semaphore = require('../lib/Semaphore'),
     Geometry = require('./Geometry'),
     O = require('../../lib/object').Object;
 
@@ -32,7 +33,7 @@ var Region = O.extend({
     },
 
     emitChange: function (extent) {
-        this.emit('change', extent, this);
+        semaphore.signal('region:change', extent, this);
     },
 
     pushExtent: function (extent) {

@@ -12,24 +12,35 @@
 
 
 var _ = require('underscore'),
-    util = require("util"),
     ol = require('openlayers'),
-    region = require('../lib/Region'),
     Geometry = require('../lib/Geometry'),
-    Source = require('./Source');
+    semaphore = require('../lib/Semaphore'),
+    Renderer = require('./Renderer');
 
 
 function Map () {
     ol.Map.apply(this, arguments);
+    this.renderer_ = new Renderer(this.viewport_, this);
+
+    // monitor viewport change in order to forward to the region
+    var view = this.getView();
+    view.on('change:center', this.updateRegion, this);
+    view.on('change:resolution', this.updateRegion, this);
+    view.on('change:rotation', this.updateRegion, this);
+
+    // listen to layer setup changes
+
 };
 
-util.inherits(Map, ol.Map);
+ol.inherits(Map, ol.Map);
 
 Map.prototype.updateRegion = function() {
-
+    var view = this.getView(),
+        extent = view.calculateExtent(this.getSize());
+    semaphore.signal('region:push', extent);
 };
 
 
 
-module.exports.Map = Map;
+module.exports = exports = Map;
 
