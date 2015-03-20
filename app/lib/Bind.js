@@ -144,6 +144,13 @@ var Bind = O.extend({
         return this.db.update(model);
     },
 
+    changeParent: function (parentId) {
+        if(this.db.has(parentId)){
+            var parent = this.db.get(parentId);
+            parent.emit('change');
+        }
+    },
+
     getMe: function () {
         var db = this.db,
             binder = this;
@@ -296,6 +303,7 @@ var Bind = O.extend({
         var pr = function (response) {
             var g = new Group(binder, objectifyResponse(response));
             db.record(path + g.id, g);
+            binder.changeParent(userId);
             return g;
         };
 
@@ -314,6 +322,7 @@ var Bind = O.extend({
         var pr = function (response) {
             var g = new Layer(binder, objectifyResponse(response));
             db.record(path + g.id, g);
+            binder.changeParent(groupId);
             return g;
         };
 
@@ -332,6 +341,7 @@ var Bind = O.extend({
         var pr = function (response) {
             var f = new Feature(binder, objectifyResponse(response));
             db.record(path + f.id, f);
+            binder.changeParent(layerId);
             return f;
         };
 

@@ -73,9 +73,10 @@ module.exports.RequestHandler = object.Object.extend({
     ownsGroupOrPublic: function (request, response, next) {
         var groupId = request.params.group_id,
             requestUserId = (request.user) ? request.user.id : 'x';
-
+        console.log('base.ownsGroupOrPublic', groupId);
         cache.client().get('group', groupId)
             .then(function(group){
+                console.log('base.ownsGroupOrPublic group', group);
                 if((0 === group.status_flag) 
                     || (requestUserId === group.user_id)){
                     return next();

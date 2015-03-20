@@ -34,6 +34,7 @@ function Source () {
             self.updateGroup(path[0], path[1]);
         }
     });
+
 };
 
 function LayerSource (uid, gid, layer) {
@@ -41,6 +42,11 @@ function LayerSource (uid, gid, layer) {
     this.uid = uid;
     this.gid = gid;
     this.layer = layer;
+
+    // listen to the layer to update features if some are created
+    layer.on('change', this.update, this);
+    // listen to the region
+    semaphore.on('region:change', this.update, this);
 };
 ol.inherits(LayerSource, ol.source.GeoJSON);
 

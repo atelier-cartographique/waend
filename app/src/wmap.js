@@ -22,8 +22,7 @@ function init () {
         layer = new MapLayer(),
         source = new Source(),
         map = new Map({target: 'map'});
-
-    // map.getView().setZoom(0);
+        
     wc.start();
 };
 

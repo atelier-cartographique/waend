@@ -10,7 +10,8 @@
 
 'use strict';
 
-var Terminal = require('../lib/Terminal');
+var _ = require('underscore'),
+    Terminal = require('../lib/Terminal');
 
 var document = window.document;
 
@@ -100,6 +101,21 @@ var WebConsole = Terminal.extend({
         self.shell.stderr.on('data', self.writeError, self);
     },
 
+    internalCommand: function (str) {
+        if (':' !== str[0]) {
+            return false;
+        }
+        var klassAttr = this.root.getAttribute('class') || '';
+        var klass = klassAttr.split(' ');
+        if (':fold' === str) {
+            this.root.setAttribute('class', _.uniq(klass.concat(['fold'])).join(' '));
+        }
+        else if(':unfold' === str){
+            this.root.setAttribute('class', _.without(klass, 'fold').join(' '));
+        }
+        return true;
+    },
+
     handleInput: function (event) {
         if(isKeyReturnEvent(event)) {
             var self = this,
@@ -108,7 +124,10 @@ var WebConsole = Terminal.extend({
             if(val.length === 0){
                 return self.insertInput();
             }
-            
+            if (this.internalCommand(val)) {
+                return; 
+            }
+
             input.setAttribute('class', 'wc-input wc-pending');
             
             self.shell.exec(val)

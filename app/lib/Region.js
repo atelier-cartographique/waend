@@ -20,6 +20,7 @@ var _ = require('underscore'),
 var Region = O.extend({
     initialize: function () {
         this.state = [new Geometry.Extent([-180, -90 ,180, 90])];
+        semaphore.on('region:push', this.push, this);
     },
 
     get: function () {
