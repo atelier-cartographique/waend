@@ -21,8 +21,9 @@ function init () {
         wc = new WebConsole(elementWC),
         layer = new MapLayer(),
         source = new Source(),
-        map = new Map({target: 'map'}); 
+        map = new Map({target: 'map'});
 
+    // map.getView().setZoom(0);
     wc.start();
 };
 

@@ -95,6 +95,6 @@ function regionCommand () {
 };
 
 module.exports = exports = {
-    name: 'r',
+    name: 'region',
     command: regionCommand
 };

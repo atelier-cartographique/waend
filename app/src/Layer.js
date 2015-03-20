@@ -19,6 +19,20 @@ var _ = require('underscore'),
 
 'use strict';
 
+
+var redCircle = new ol.style.Circle({
+  radius: 4,
+  fill: null,
+  stroke: new ol.style.Stroke({color: 'red', width: 2})
+});
+
+var defaultPointStyle = [ new ol.style.Style({image: redCircle })];
+
+function deafultStyle (feature, resolution) {
+  return defaultPointStyle;
+};
+
+
 var MapLayer = O.extend({
 
     initialize: function () {
@@ -36,6 +50,7 @@ var MapLayer = O.extend({
     addLayer: function (layerSource) {
         var layer = new ol.layer.Vector({
             'source': layerSource,
+            'style:': deafultStyle
         });
         this.layers.push(layer);
         semaphore.signal('layer:layer:add', layer);

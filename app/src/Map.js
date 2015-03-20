@@ -18,28 +18,53 @@ var _ = require('underscore'),
     Renderer = require('./Renderer');
 
 
-function Map () {
-    ol.Map.apply(this, arguments);
+
+function Map (options) {
+    // better have a view that is prepared
+    if(!('view' in options)){
+        options.view = new ol.View({zoom: 0});
+    }
+    
+    ol.Map.call(this, options);
     this.renderer_ = new Renderer(this.viewport_, this);
 
     // monitor viewport change in order to forward to the region
     var view = this.getView();
-    view.on('change:center', this.updateRegion, this);
-    view.on('change:resolution', this.updateRegion, this);
-    view.on('change:rotation', this.updateRegion, this);
+    view.on('change:center', this.waendUpdateRegion, this);
+    view.on('change:resolution', this.waendUpdateRegion, this);
+    view.on('change:rotation', this.waendUpdateRegion, this);
+
+    // and listen to the region to update viewport
+    semaphore.on('region:change', this.waendUpdateExtent, this);
+
 
     // listen to layer setup changes
+    semaphore.on('layer:layer:add', this.waendAddLayer, this);
+    semaphore.on('layer:layer:remove', this.waendRemoveLayer, this);
 
 };
 
 ol.inherits(Map, ol.Map);
 
-Map.prototype.updateRegion = function() {
+Map.prototype.waendUpdateExtent = function (extent) {
+    var view = this.getView();
+    view.fitExtent(extent.extent, this.getSize());
+};
+
+Map.prototype.waendUpdateRegion = function () {
     var view = this.getView(),
         extent = view.calculateExtent(this.getSize());
     semaphore.signal('region:push', extent);
 };
 
+
+Map.prototype.waendAddLayer = function (layer) {
+    this.addLayer(layer);
+};
+
+Map.prototype.waendRemoveLayer = function (layer) {
+    this.removeLayer(layer);
+};
 
 
 module.exports = exports = Map;
