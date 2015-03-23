@@ -110,6 +110,7 @@ LayerSource.prototype.buildFeature = function (f) {
         feature = new ol.Feature({
             geometry: f.getGeometry(),
             id: f.id,
+            path: [this.uid, this.gid, this.layer.id, f.id]
         });
 
     return feature;

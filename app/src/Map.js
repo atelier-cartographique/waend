@@ -47,6 +47,15 @@ function Map (options) {
         // this.listenToMe();
     }, this);
 
+    var select = new ol.interaction.Select();
+    this.addInteraction(select);
+    select.on('select', function(e) {
+        var fs = e.target.getFeatures().getArray();
+        var f = fs[0];
+        var path = f.get('path');
+        semaphore.signal('please:shell:context', path);
+    });
+
 };
 
 ol.inherits(Map, ol.Map);

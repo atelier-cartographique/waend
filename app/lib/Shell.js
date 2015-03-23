@@ -110,6 +110,8 @@ var Shell = O.extend({
 
         this.env = {};
         this.terminal = terminal;
+
+        semaphore.on('please:shell:context', this.switchContext, this);
     },
 
     initStreams: function () {
