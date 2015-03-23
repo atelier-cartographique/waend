@@ -12,7 +12,8 @@
 
 var Context = require('./Context'),
     attach = require('./commands/layer/attach'),
-    listFeatures = require('./commands/layer/listFeatures');
+    listFeatures = require('./commands/layer/listFeatures'),
+    drawLine = require('./commands/layer/drawLine');
 
 
 
@@ -20,7 +21,8 @@ var Layer = Context.extend({
     name: 'group',
     commands:{
         'attach': attach.command,
-        'lf': listFeatures.command
+        'lf': listFeatures.command,
+        'draw': drawLine.command
     }
 });
 

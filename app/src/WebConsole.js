@@ -51,6 +51,29 @@ WebCommand.prototype.toDomFragment = function () {
 };
 
 
+function Display (container) {
+    var id = _.uniqueId('wc-display-');
+    this._root = container;
+    this.node = document.createElement('div'),
+    this.node.setAttribute('id', id);
+    this.node.setAttribute('class', 'wc-display');
+    this._root.appendChild(this.node);
+};
+
+Display.prototype.end = function () {
+    if (this._ended) {
+        throw (new Error('Display Already Ended, check your event handlers :)'))
+    }
+
+    var container = this._root,
+        el = this.node;
+    console.log('wc end display', el.getAttribute('id'));
+    container.removeChild(el);
+    this._ended = true;
+};
+
+
+
 function isKeyReturnEvent (event) {
     return (13 === event.which || 13 === event.keyCode);
 };
@@ -59,7 +82,9 @@ var WebConsole = Terminal.extend({
 
 
     capabilities: {
-        'dom': {}
+        'dom': {
+            'display': 'display'
+        },
     },
 
     initialize: function (container) {
@@ -194,6 +219,10 @@ var WebConsole = Terminal.extend({
 
     makeCommand: function (options) {
         return (new WebCommand(this, options));
+    },
+
+    display: function () {
+        return (new Display(this.root));
     }
 
 });

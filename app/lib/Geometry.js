@@ -97,7 +97,6 @@ function Extent ( extent ) { // whether from an OL extent or an Extent
     else {
         this.extent = JSON.parse(JSON.stringify(extent));
     }
-     console.log('Extent.extent', typeof this.extent);
 };
 
 Extent.prototype.clone = function () {

@@ -8,12 +8,13 @@
  *
  */
 
+'use strict';
 
 var Promise = require('bluebird');
 
 function attach (guid, gid) {
     if(!!guid && !!gid){
-        return Bind.get().attachLayerToGroup(guid, gid, this.data.id);
+        return this.binder.attachLayerToGroup(guid, gid, this.data.id);
     }
     else if(!!guid){
         if(guid.split('/').length > 1){ // it's a path

@@ -38,7 +38,10 @@ function Source () {
 };
 
 function LayerSource (uid, gid, layer) {
-    ol.source.GeoJSON.apply(this, []);
+    var options = {
+        'projection': 'EPSG:4326'
+    }
+    ol.source.GeoJSON.call(this, options);
     this.uid = uid;
     this.gid = gid;
     this.layer = layer;
