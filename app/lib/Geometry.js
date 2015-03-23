@@ -50,9 +50,9 @@ _.each(supportedFormatNames, function(name){
     var f = new (ol.format[name])();
     if(f.writeGeometry 
         && f.readGeometry){
-        supportedFormat[name] = {
+        supportedFormat[name] = _.extend(f,{
             read: function () {
-                var geom = f.readGeometry.apply(f, arguments),
+                var geom = this.readGeometry.apply(this, arguments),
                     geomType = geom.getType();
                 if ('Point' === geomType) {
                     return (new Point(geom.getCoordinates()));
@@ -67,9 +67,9 @@ _.each(supportedFormatNames, function(name){
             },
 
             write: function () {
-                return f.writeGeometry.apply(f, arguments);
+                return this.writeGeometry.apply(this, arguments);
             }
-        };
+        });
     }
 });
 

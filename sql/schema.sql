@@ -37,7 +37,7 @@ CREATE TABLE spreads
   layer_id char(36) NOT NULL,
   user_id char(36) NOT NULL,
   properties json NOT NULL,
-  geom geometry(MultiPolygon,4326) NOT NULL
+  geom geometry(Polygon,4326) NOT NULL
 );
 
 -- Table: layers
