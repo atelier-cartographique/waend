@@ -24,6 +24,7 @@ function init () {
         map = new Map({target: 'map'});
         
     wc.start();
+    wc.shell.env.map = map; // there might be a better way, but we want this result.
 };
 
 document.onreadystatechange = function () {

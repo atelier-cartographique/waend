@@ -81,6 +81,11 @@ function formatGeometry (opt_format) {
     return str;
 };
 
+function toGeoJSON () {
+    var gjStr = formatGeometry.call(this);
+    return JSON.parse(gjStr);
+};
+
 Point.prototype.format = formatGeometry;
 LineString.prototype.format = formatGeometry;
 Polygon.prototype.format = formatGeometry;
@@ -88,6 +93,10 @@ Polygon.prototype.format = formatGeometry;
 Point.prototype.toString = formatGeometry;
 LineString.prototype.toString = formatGeometry;
 Polygon.prototype.toString = formatGeometry;
+
+Point.prototype.toGeoJSON = toGeoJSON;
+LineString.prototype.toGeoJSON = toGeoJSON;
+Polygon.prototype.toGeoJSON = toGeoJSON;
 
 
 function Extent ( extent ) { // whether from an OL extent or an Extent

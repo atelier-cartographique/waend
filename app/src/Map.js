@@ -37,6 +37,8 @@ function Map (options) {
     semaphore.on('layer:layer:add', this.waendAddLayer, this);
     semaphore.on('layer:layer:remove', this.waendRemoveLayer, this);
 
+    semaphore.on('please:map:render', this.render, this);
+
     // this.updateQueue = new Queue();
     this.updateMutex = new Mutex();
 
@@ -44,7 +46,7 @@ function Map (options) {
         this.listenToWaend();
         // this.listenToMe();
     }, this);
-    
+
 };
 
 ol.inherits(Map, ol.Map);

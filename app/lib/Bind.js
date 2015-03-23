@@ -72,11 +72,16 @@ var DB = O.extend({
     },
 
     record: function (path, model) {
-        this._db[model.id] = {
-            'model': model,
-            'path': path
-        };
-        // TODO subscribe to notifications about it
+        if (model.id in this._db) {
+            this._db[model.id].model._updateData(model.data);
+        }
+        else {
+            this._db[model.id] = {
+                'model': model,
+                'path': path
+            };
+            // TODO subscribe to notifications about it
+        }
     },
 
     update: function (model) {
@@ -147,6 +152,7 @@ var Bind = O.extend({
     changeParent: function (parentId) {
         if(this.db.has(parentId)){
             var parent = this.db.get(parentId);
+            console.log('binder.changeParent', parent.id);
             parent.emit('change');
         }
     },

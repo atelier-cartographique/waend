@@ -48,6 +48,7 @@ function LayerSource (uid, gid, layer) {
 
     // listen to the layer to update features if some are created
     layer.on('change', this.update, this);
+    console.log('LayerSource listen to layer', layer.id);
     // listen to the region
     semaphore.on('region:change', this.update, this);
 };

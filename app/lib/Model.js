@@ -9,7 +9,8 @@
  */
 
 
-var O = require('../../lib/object').Object,
+var _ = require('underscore'),
+    O = require('../../lib/object').Object,
     Promise = require("bluebird");
 
 
@@ -45,6 +46,14 @@ var Model = O.extend({
 
     toJSON: function () {
         return JSON.stringify(this.data);
+    },
+
+    _updateData: function (data, silent) {
+        var changed = _.isEqual(data, this.data);
+        this.data = data;
+        if (!silent && changed) {
+            this.emit('change');
+        }
     }
 
 });

@@ -12,6 +12,7 @@
 
 var _ = require('underscore'),
     Promise = require('bluebird'),
+    Geometry = require('../../Geometry'),
     paper = require('../../../vendors/paper');
 
 
@@ -30,14 +31,16 @@ function drawLine () {
     var self = this,
         shell = self.shell,
         terminal = shell.terminal,
+        map = shell.env.map,
         display = terminal.display();
 
     setupCanvas(display.node);
 
     var resolver = function (resolve, reject) {
-        // http://paperjs.org/examples/path-simplification/
-        var path;
-        var tool = new paper.Tool();
+
+        var path, 
+            points =[],
+            tool = new paper.Tool();
         
         var onMouseDown = function (event) {
             path = new paper.Path({
@@ -53,10 +56,20 @@ function drawLine () {
 
         var onMouseUp = function (event) {
             var segmentCount = path.segments.length;
-            path.simplify(10);
             console.log(path);
             var polyLineOrGon = undefined; // TODO populate
-
+            if (path.closed) {
+                console.log('errr not implemted');
+            }
+            else {
+                polyLineOrGon = new Geometry.LineString([]);
+                var segments = path.segments;
+                for (var i = 0; i < segments.length; i++) {
+                    var s = segments[i],
+                        pixel = [s.point.x, s.point.y];
+                    polyLineOrGon.appendCoordinate(map.getCoordinateFromPixel(pixel));
+                }
+            }
 
             tool.off('mousedown', onMouseDown);
             tool.off('mousedrag', onMouseDrag);
