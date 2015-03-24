@@ -69,7 +69,6 @@ Display.prototype.end = function () {
 
     var container = this._root,
         el = this.node;
-    console.log('wc end display', el.getAttribute('id'));
     container.removeChild(el);
     this._ended = true;
 };

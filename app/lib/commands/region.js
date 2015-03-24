@@ -14,6 +14,7 @@ var _ = require('underscore'),
 
 function setRegion (north, east, south, west) {
     var self = this,
+        env = self.shell.env,
         terminal = self.shell.terminal;
 
     var extent = [
@@ -22,6 +23,12 @@ function setRegion (north, east, south, west) {
         parseFloat(east), 
         parseFloat(north)
     ];
+
+    if ((0 === arguments.length) 
+        && env.DELIVERED 
+        && env.DELIVERED.getExtent) {
+            extent = env.DELIVERED.getExtent();
+    }
 
     region.push(extent);
     return self.end(region.get());

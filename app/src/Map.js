@@ -68,40 +68,16 @@ Map.prototype.listenToWaend = function () {
     this.onChangeRegionKey = semaphore.on('region:change', this.waendUpdateExtent, this);
 };
 
-// Map.prototype.listenToMe = function () {
-//     this.onChangeViewKey = this.once('moveend', this.waendUpdateRegion, this);
-//     // this.onChangeRegionKey = semaphore.once('region:change', this.waendUpdateExtent, this);
-// };
-
 Map.prototype.unlistenToWaend = function () {
     this.unByKey(this.onChangeViewKey);
     semaphore.off(this.onChangeRegionKey);
 };
 
-// Map.prototype.wrapViewUpdate = function () {
-//     var args = _.toArray(arguments),
-//         fn = args.shift(),
-//         ctx = args.shift();
-
-//     var wrapped = function () {
-//         console.log('Map.wrapViewUpdate', _.uniqueId());
-//         fn.apply(ctx, arguments);
-//     };
-
-//     this.updateQueue
-//         // .push(this.unlistenToWaend, this)
-//         .push(wrapped, ctx, args)
-//         .push(this.listenToWaend, this);
-// };
 
 Map.prototype.waendUpdateExtent = function (extent) {
     var view = this.getView(),
         size = this.getSize();
-    // view.fitExtent(extent.extent, this.getSize());
-    // this.wrapViewUpdate(view.fitExtent, view, extent.extent, this.getSize());
-    // this.updateQueue
-    //     .push(view.fitExtent, view, [extent.extent, this.getSize()])
-    //     .push(this.listenToWaend, this);
+
     this.updateMutex
         .get()
         .then(function(release){
@@ -114,11 +90,7 @@ Map.prototype.waendUpdateExtent = function (extent) {
 Map.prototype.waendUpdateRegion = function () {
     var view = this.getView(),
         extent = view.calculateExtent(this.getSize());
-    // semaphore.signal('region:push', extent);
-    // this.wrapViewUpdate(semaphore.signal, semaphore, 'region:push', extent);
-    // this.updateQueue
-    //     .push(semaphore.signal, semaphore, ['region:push', extent])
-    //     .push(this.listenToMe, this);
+
     this.updateMutex
         .get()
         .then(function(release){

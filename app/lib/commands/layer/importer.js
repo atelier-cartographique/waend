@@ -39,7 +39,7 @@ function create (binder, uid, gid, lid, feature) {
             'properties': props,
             'geom': geom
         }
-        return binder.setFeature(uid, gid, lid, data);
+        return binder.setFeature(uid, gid, lid, data, true);
     }
     console.write('importer unsupported geom type', geomType);
     return Promise.resolve();

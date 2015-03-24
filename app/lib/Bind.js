@@ -339,7 +339,7 @@ var Bind = O.extend({
         });
     },
 
-    setFeature: function (userId, groupId, layerId, data) {
+    setFeature: function (userId, groupId, layerId, data, batch) {
         var db = this.db,
             binder = this,
             path = '/user/'+userId+'/group/'+groupId+'/layer/'+layerId+ '/feature/';
@@ -352,6 +352,11 @@ var Bind = O.extend({
         };
 
         var url = API_URL+path;
+        if (!!batch) {
+            return this.transport.post(url, {
+                body: data
+            });
+        }
         return this.transport.post(url, {
             parse: pr,
             body: data
