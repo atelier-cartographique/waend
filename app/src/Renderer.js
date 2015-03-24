@@ -31,4 +31,5 @@ util.inherits(WebGLRenderer, ol.renderer.webgl.Map);
 
 
 module.exports = exports = CanvasRenderer;
+// module.exports = exports = WebGLRenderer;
 

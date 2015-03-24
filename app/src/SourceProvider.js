@@ -1,5 +1,5 @@
 /*
- * app/src/Source.js
+ * app/src/SourceProvider.js
  *     
  * 
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
@@ -25,7 +25,7 @@ var binder = Bind.get();
 
 
 // declarations
-function Source () {
+function SourceProvider () {
     var self = this;
     self.layerSources = [];
 
@@ -37,7 +37,7 @@ function Source () {
 
 };
 
-function LayerSource (uid, gid, layer) {
+function Source (uid, gid, layer) {
     var options = {
         'projection': 'EPSG:4326'
     }
@@ -48,14 +48,13 @@ function LayerSource (uid, gid, layer) {
 
     // listen to the layer to update features if some are created
     layer.on('change', this.update, this);
-    console.log('LayerSource listen to layer', layer.id);
     // listen to the region
     semaphore.on('region:change', this.update, this);
 };
-ol.inherits(LayerSource, ol.source.GeoJSON);
+ol.inherits(Source, ol.source.GeoJSON);
 
 // implementations
-Source.prototype.updateGroup = function(userId, groupId) {
+SourceProvider.prototype.updateGroup = function(userId, groupId) {
     var self = this;
     if (self.groupId === groupId) {
         return;
@@ -71,7 +70,7 @@ Source.prototype.updateGroup = function(userId, groupId) {
 };
 
 
-Source.prototype.clearLayers = function () {
+SourceProvider.prototype.clearLayers = function () {
     _.each(this.layerSources, function(layer){
         layer.clear();
     }, this);
@@ -79,44 +78,47 @@ Source.prototype.clearLayers = function () {
 };
 
 
-Source.prototype.updateLayers = function () {
+SourceProvider.prototype.updateLayers = function () {
     _.each(this.layerSources, function(layer){
         layer.update();
     }, this);
 };
 
 
-Source.prototype.loadLayers = function () {
+SourceProvider.prototype.loadLayers = function () {
     var self = this;
     return binder
         .getLayers(self.userId, self.groupId)
         .then(function(layers){
             self.clearLayers();
             for (var lidx = 0; lidx < layers.length; lidx++) {
-                self.layerSources.push(new LayerSource(self.userId, self.groupId, layers[lidx]));
+                self.layerSources.push(new Source(self.userId, self.groupId, layers[lidx]));
             }
             return Promise.resolve();
         })
         .catch(console.error.bind(console));
 };
 
-Source.prototype.getSources = function () {
+SourceProvider.prototype.getSources = function () {
     return this.layerSources;
 };
 
 
-LayerSource.prototype.buildFeature = function (f) {
+Source.prototype.buildFeature = function (f) {
     var geom = f.getGeometry(),
+        data = f.getData(),
         feature = new ol.Feature({
             geometry: f.getGeometry(),
             id: f.id,
             path: [this.uid, this.gid, this.layer.id, f.id]
         });
-
+    _.each(data, function(val, key){
+        feature.set(key, val);
+    });
     return feature;
 };
 
-LayerSource.prototype.update = function () {
+Source.prototype.update = function () {
     var self = this;
     binder.getFeatures(self.uid, self.gid, self.layer.id)
         .then(function(features){
@@ -133,4 +135,4 @@ LayerSource.prototype.update = function () {
 };
 
 
-module.exports = exports = Source;
+module.exports = exports = SourceProvider;

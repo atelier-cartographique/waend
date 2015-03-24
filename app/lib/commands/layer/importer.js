@@ -26,6 +26,7 @@ function setupDropZone (container) {
 
 function create (binder, uid, gid, lid, feature) {
     var olGeom = feature.getGeometry();
+    var props = _.omit(feature.getProperties(), 'geometry', 'id');
     var geomType = olGeom.getType();
     if(('Point' === geomType) 
         || ('LineString' === geomType) 
@@ -35,7 +36,7 @@ function create (binder, uid, gid, lid, feature) {
         var data = {
             'user_id': uid,
             'layer_id': lid,
-            'properties': {},
+            'properties': props,
             'geom': geom
         }
         return binder.setFeature(uid, gid, lid, data);
@@ -83,7 +84,7 @@ function importer () {
 
             var creator = function (evt) {
                 var geojson = evt.target.result,
-                    features = Geometry.format.GeoJSON.readFeatures(geojson);;
+                    features = Geometry.format.GeoJSON.readFeatures(geojson);
 
                 Promise.reduce(features, function(total, item, index){
                         var feature = features[index];

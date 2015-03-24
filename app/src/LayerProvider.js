@@ -1,5 +1,5 @@
 /*
- * app/src/Layer.js
+ * app/src/LayerProvider.js
  *     
  * 
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
@@ -33,7 +33,7 @@ function deafultStyle (feature, resolution) {
 };
 
 
-var MapLayer = O.extend({
+var LayerProvider = O.extend({
 
     initialize: function () {
         this.layers = [];
@@ -67,4 +67,4 @@ var MapLayer = O.extend({
 });
 
 
-module.exports = exports = MapLayer;
+module.exports = exports = LayerProvider;

@@ -50,12 +50,15 @@ function Map (options) {
     var select = new ol.interaction.Select();
     this.addInteraction(select);
     select.on('select', function(e) {
-        var fs = e.target.getFeatures().getArray();
-        var f = fs[0];
-        var path = f.get('path');
-        semaphore.signal('please:shell:context', path);
+        if (e.target.getFeatures().getLength() > 0) {
+            var fs = e.target.getFeatures().getArray(),
+                f = fs[0],
+                path = '/' + f.get('path').join('/'),
+                cl = 'cc ' + path ;
+            semaphore.signal('please:terminal:run', cl);
+            semaphore.signal('please:terminal:run', 'get');
+        }
     });
-
 };
 
 ol.inherits(Map, ol.Map);

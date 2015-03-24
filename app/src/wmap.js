@@ -11,16 +11,16 @@
 
 
 var WebConsole = require('./WebConsole'),
-    MapLayer = require('./Layer'),
-    Source = require('./Source'),
+    LayerProvider = require('./LayerProvider'),
+    SourceProvider = require('./SourceProvider'),
     Map = require('./Map');
 
 
 function init () {
     var elementWC = document.querySelector('#wc'),
         wc = new WebConsole(elementWC),
-        layer = new MapLayer(),
-        source = new Source(),
+        layer = new LayerProvider(),
+        source = new SourceProvider(),
         map = new Map({target: 'map'});
         
     wc.start();

@@ -11,7 +11,9 @@
 'use strict';
 
 var _ = require('underscore'),
-    Terminal = require('../lib/Terminal');
+    Terminal = require('../lib/Terminal'),
+    semaphore = require('../lib/Semaphore'),
+    Mutex = require('../lib/Mutex');
 
 var document = window.document;
 
@@ -91,6 +93,7 @@ var WebConsole = Terminal.extend({
         this.root = container;
         this.lines = [];
         this.history = [];
+        this.commandMutex = new Mutex();
     },
 
     insertInput: function (listener) {
@@ -124,6 +127,8 @@ var WebConsole = Terminal.extend({
         });
         self.shell.stdout.on('data', self.write, self);
         self.shell.stderr.on('data', self.writeError, self);
+
+        semaphore.on('please:terminal:run', this.runCommand, this);
     },
 
     internalCommand: function (str) {
@@ -141,6 +146,38 @@ var WebConsole = Terminal.extend({
         return true;
     },
 
+    runCommand: function (val) {
+        var self = this,
+            input = self._inputField;
+
+        self.commandMutex
+            .get()
+            .then(function(unlock){
+                input.setAttribute('class', 'wc-input wc-pending');
+                self.shell.exec(val)
+                    .then(function(){
+                        console.log.apply(console, arguments);
+                    })
+                    .catch(function(err){
+                        if(err.toString){
+                            self.write(err.toString());
+                        }
+                    })
+                    .finally(function(){
+                        input.setAttribute('class', 'wc-input wc-inactive');
+                        input.setAttribute('disabled', 'disabled');
+                        self.history.push(val);
+                        self.insertInput();
+                        unlock();
+                    });
+            })
+            .catch(function(){
+                _.defer(function(){
+                    self.runCommand(val);
+                });
+            });
+    },
+
     handleInput: function (event) {
         if(isKeyReturnEvent(event)) {
             var self = this,
@@ -153,23 +190,7 @@ var WebConsole = Terminal.extend({
                 return; 
             }
 
-            input.setAttribute('class', 'wc-input wc-pending');
-            
-            self.shell.exec(val)
-                .then(function(){
-                    console.log.apply(console, arguments);
-                })
-                .catch(function(err){
-                    if(err.toString){
-                        self.write(err.toString());
-                    }
-                })
-                .finally(function(){
-                    input.setAttribute('class', 'wc-input wc-inactive');
-                    input.setAttribute('disabled', 'disabled');
-                    self.history.push(val);
-                    self.insertInput();
-                });
+            this.runCommand(val);
         }
     },
 
