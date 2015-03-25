@@ -1,5 +1,8 @@
 #Layout & interface Specifications
 
+First draft of layout / interface specifications  
+Can evolve a lot !
+
 ## General idea : CLI + GUI
 
 The interface is based on both command line interface (CLI) and graphical user interface (GUI).
@@ -32,36 +35,45 @@ The navigation tree is pretty basic:
 - Wænd : root level
 - User : yes, user level
 - Group : a map, created from layer(s), by a user
-- Layer : a set of feature(a)
+- Layer : a set of feature(s)
 - Feature : the most basic element (a point on a map, an image etc.)
 
+Access control is partialy based on context.
 
 ## Interface needs per contexts
 
-#### everywhere
-- login/logout
-- search in context + display result
-- change context (go to user, to group, to layer, to feature)
+#### everywhere or somewhere
+
+- logout
+- notifications
 - help (? contextual)
 
-#### Wænd
 
-- search user / search group + display result
-- go to result element / change context + zoom on element region
+#### Wænd
+- login / register
+	- --> login & go to user context
+- search group & display result
+	- --> display results & link to element
+- go to result element
+	- --> change context & zoom on group region
 
 
 #### Wænd/user
 
-- list created groups 
-- list subscribed groups
-- go to a listed group / change context + zoom on group region 
-- create a group + pre-required key | value
-	- set public / private
-	- set name
-	- set description
-	- set bounding box & zoom
-	- set background map (WMS, mapbox etc. / default = none)
-	- automatic creation of discussion layer
+- created groups 
+	- --> list created groups & link + "create a new group" link
+- subscribed groups
+	- --> list subscribed groups & link
+- go to a listed group
+	- --> change context & zoom on group region 
+- create a group 
+	- --> create a group + pre-required key | value + automatic creation of discussion layer
+		- key | value are : 
+		- set public / private
+		- set name
+		- set description
+		- set bounding box & zoom
+- delete user + warning 
 
 
 #### Wænd/user/group
@@ -71,14 +83,16 @@ The navigation tree is pretty basic:
 	- set name
 	- set description
 	- set bounding box & zoom
-	- set background map (WMS, mapbox etc. / default = none)
 - list layers (group legend)
 - go to list element
 - subscribe to a group	
 - unsuscribe from a group
 - display notifications from subscribed groups
-- attach layer to the group + 
+- attach layer to the group 
 - dettach layer from the group
+- re-order layers
+- set layer visible / invisible
+- delete groupe + warning
 
 #### Wænd/user/map/layer
 
@@ -92,6 +106,7 @@ The navigation tree is pretty basic:
 - add feature to layer
 - attach to a group
 - dettach from a group
+- delete layer + warning
 
 
 #### Wænd/user/map/layer/feature
@@ -101,6 +116,7 @@ The navigation tree is pretty basic:
 	- set description
 	- set styles (override layer style)
 	- insert key / value
+- delete feature
 
 
 ## Interface main elements
@@ -112,7 +128,7 @@ The navigation tree is pretty basic:
 	- Associated contextual help (clickable commands / =buttons)
 	- back to Command line prompt (keyboard)
 
-- Verbose / progress bar when collapsed
+- Verbose / progress bar when collapsed (?)
 
 
 ## Types of commands in the app

@@ -1,7 +1,16 @@
-#HOW TO USE `KEY | VALUE` SYSTEM IN WÆND
+#Working with your datas and Wænd
+
+1. Introduction to `KEY | VALUE` system in Wænd
+2. Add some style to your datas
+	1. Layer style with CLI 
+	2. Feature styles
+	3. Advanced styling with Renderer (to be written)
+
+##Introduction to `KEY | VALUE` system in Wænd
 
 
-You can use Wænd without using the `key | value` system, however, if you would like to make a deeper use of your datas or publish them with some custom styles, you might be interrested on that part.
+You can use Wænd without using the `key | value` system.  
+However, if you would like to make a deeper use of your datas or publish them with some custom styles, you might be interrested on that part.
 
 The principle is that you can give specific characteristics to each group, layer or feature you've created. 
 
@@ -50,17 +59,15 @@ As this `key | value` concept can look a bit abstract at first, let's have an ex
 
 
 
-#STYLES in WÆND
+##Add some style to your datas
 
-
-
-There is three ways to set the visual aspect of your elements.  
+There are three ways to set the visual aspect of your elements.  
 
 - At a layer level  
 - At a feature level  
 - By coding your own layer renderer
 
-##LAYER STYLE 
+###LAYER STYLE with CLI
 
 By setting the layer style, you set the overall style for that layer. 
 
@@ -125,11 +132,11 @@ Advanced :
 * lineDashOffset = value
 
 
-##FEATURE STYLES
+###FEATURE STYLES
 
 By setting a feature style, you can override the layer style for that specific feature.
 
-###POINT
+####POINT
 
 	point_type | value
 	
@@ -145,11 +152,11 @@ values :
 USES OF KEYS | VALUES BY POINT / FEATURE TYPE
 
 
-####ALL : 
+#####ALL : 
 	zoomable | boolean 
 	default = true
 
-####CIRCLE : 
+#####CIRCLE : 
 
 Default point in Wænd. 
 If no values are defined, the default circle is rendered. 
@@ -159,10 +166,10 @@ If no values are defined, the default circle is rendered.
 	fillStyle / strokeStyle / setLineDash /lineWidth
 
 
-####SYMBOL : 
+#####SYMBOL : 
 
 
-####PICTOGRAM : 
+#####PICTOGRAM : 
 
 if type | pictogram is selected, Wænd will render the point as a pre-defined pictogram. This rendered item displays  two initials and a label. 
 If no initials or label are defined, it will use the first word of the name value.
@@ -174,7 +181,7 @@ If no initials or label are defined, it will use the first word of the name valu
 	font ?
 
 
-####TEXT : 
+#####TEXT : 
 
 if type | text is selected, you can display text on your map. 
 It will render the text from the « text » key.
@@ -186,4 +193,4 @@ If a width is defined, the text will adapt to that width.
 
 
 
-####IMAGE : 
+#####IMAGE : 
