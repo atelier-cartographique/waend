@@ -1,9 +1,9 @@
 /*
  * app/src/Worker.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -15,18 +15,18 @@ var _ = require('underscore'),
     O = require('../../lib/object').Object;
 
 function messageHandler (event) {
+    // debugger;
     var data = event.data,
         name = data.name,
         args = data.args || [];
-
-    if (name && (name in self)) {
-        self.name.apply(self, args);
+    if (name && (name in workerContext.waend)) {
+        workerContext.waend[name].apply(workerContext, args);
     }
-};
+}
 
 function emit () {
     var args = [];
-    
+
     if(0 === arguments.length) {
         return;
     }
@@ -35,8 +35,9 @@ function emit () {
         args.push(arguments[i]);
     }
 
-    self.postMessage(args);
-};
+    workerContext.postMessage(args);
+}
+
 
 
 var WWorker = O.extend({
@@ -46,17 +47,25 @@ var WWorker = O.extend({
         this.locals = locals;
     },
 
-    wrapBody: function (argsString) {
-        // TODO, insert locals
-
+    wrapBody: function () {
         var body = [
-            'self.addEventListener("message", '+ messageHandler.toString() + ');',
-            emit.toString(),
-            'var __main = (',
-            this.fn.toString(),
-            ');',
-            '__main.apply(self, JSON.parse('+ argsString +'));'
+            'var workerContext = this.self;',
+            'workerContext.waend = {}'
             ];
+        for (var k in this.locals) {
+            try{
+                body.push( 'workerContext.waend["' + k + '"] = ' + this.locals[k].toString() +';');
+            }
+            catch (err) {
+                console.log('could not load local in worker', k, err);
+            }
+        }
+
+        body = body.concat([
+            'workerContext.addEventListener("message", '+ messageHandler.toString() + ');',
+            'workerContext.waend.emit = ' + emit.toString() + ';',
+            '('+ this.fn.toString() + ')(workerContext.waend);'
+        ]);
 
         return body.join('\n');
     },
@@ -71,8 +80,7 @@ var WWorker = O.extend({
     },
 
     start: function() {
-        var args = JSON.stringify(_.toArray(arguments)),
-            body = this.wrapBody(args);
+        var body = this.wrapBody();
 
     // http://stackoverflow.com/questions/10343913/how-to-create-a-web-worker-from-a-string#10372280
         var URL = window.URL || window.webkitURL;
@@ -80,7 +88,7 @@ var WWorker = O.extend({
 
         try {
             blob = new Blob([body], {type: 'application/javascript'});
-        } 
+        }
         catch (err) { // Backwards-compatibility
             var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
             blob = new BlobBuilder();
@@ -103,4 +111,3 @@ var WWorker = O.extend({
 });
 
 module.exports = exports = WWorker;
-

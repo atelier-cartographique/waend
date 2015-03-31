@@ -13,7 +13,7 @@
 var WebConsole = require('./WebConsole'),
     LayerProvider = require('./LayerProvider'),
     SourceProvider = require('./SourceProvider'),
-    Map = require('./ThreeMap');
+    WMap = require('./WaendMap');
 
 
 function init () {
@@ -22,10 +22,10 @@ function init () {
         wc = new WebConsole(elementWC),
         layer = new LayerProvider(),
         source = new SourceProvider(),
-        map = new Map(elementMap);
+        wmap = new WMap({'root':elementMap});
         
     wc.start();
-    wc.shell.env.map = map; // there might be a better way, but we want this result.
+    wc.shell.env.map = wmap; // there might be a better way, but we want this result.
 };
 
 document.onreadystatechange = function () {

@@ -1,9 +1,9 @@
 /*
  * app/src/Renderer.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -12,15 +12,13 @@
 
 
 var _ = require('underscore'),
-    util = require("util"),
-    ol = require('openlayers'),
-    Geometry = require('../lib/Geometry'),
+    ol3 = require('openlayers'),
     semaphore = require('../lib/Semaphore'),
     W = require('./Worker');
 
 
-function Painter (view, layerIndex) {
-    this.context = view.contexts[layerIndex];
+function Painter (view, layerId) {
+    this.context = view.getContext(layerId);
     this.transform = view.transform;
     this.view = view;
 }
@@ -30,7 +28,7 @@ Painter.prototype.clear = function () {
 };
 
 Painter.prototype.mapPoint = function (p) {
-    return this.transform.mapPoint(p);
+    return this.transform.mapVec2(p);
 };
 
 // graphic state
@@ -91,42 +89,50 @@ Painter.prototype.draw = function (instruction, coordinates) {
 };
 
 
-
-
 /**
  *
  * options:
  * view => View
+ * projection => {forward()}
  */
 function CanvasRenderer (options) {
+    this.layer = options.layer;
     this.view = options.view;
     this.proj = options.projection;
-    this.painter = new Painter(view, options.layerIndex);
+    this.painter = new Painter(this.view, this.layer.id);
+
+    semaphore.on('map:update', this.render, this);
+}
+
+CanvasRenderer.prototype.transformFn = function () {
+    var forward = this.proj.forward;
+    var tfn = function (coords) {
+        var ret = forward(coords);
+        return ret;
+    };
+    return ol3.proj.createTransformFromCoordinateTransform(tfn);
 };
 
 
-
-
-
-CanvasRenderer.prototype.render = function (features, program) {
-    var worker = new W(program);
+CanvasRenderer.prototype.render = function () {
+    var worker = new W(this.layer.getProgram()),
+        features = this.layer.getFeatures();
 
     worker.on('draw', this.painter.draw, this.painter);
     worker.on('set', this.painter.set, this.painter);
-
+    worker.start();
     this.painter.clear();
     for (var i = 0; i < features.length; i++) {
         var f = features[i],
-            geom = f.getGeometry().applyTransform(this.proj.forward),
+            geom = f.getGeometry(),
             geomType = geom.getType().toLowerCase(),
-            props = f.getProperties(),
-            coordinates = geom.getCoordinates();
+            props = _.omit(f.getProperties(), 'geometry');
 
-        worker.post(geomType, coordinates, props);
+        geom.applyTransform(this.transformFn());
+        worker.post(geomType, geom.getCoordinates(), props);
     }
 
 };
 
 
 module.exports = exports = CanvasRenderer;
-

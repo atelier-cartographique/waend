@@ -15,9 +15,9 @@ var _ = require('underscore'),
     O = require('../../lib/object').Object,
     ol = require('openlayers'),
     Geometry = require('../lib/Geometry'),
-    semaphore = require('../lib/Semaphore');
+    semaphore = require('../lib/Semaphore'),
+    waendLayerProgram = require('./Program');
 
-'use strict';
 
 
 var redCircle = new ol.style.Circle({
@@ -48,6 +48,17 @@ var LayerProvider = O.extend({
     },
 
     addLayer: function (layerSource) {
+        var programSrc = layerSource.layer.get('program'),
+            program;
+        if (programSrc) {
+            program = new Function(programSrc);
+        }
+        else {
+            program = waendLayerProgram;
+        }
+        layerSource.getProgram = function () {
+            return program;
+        };
         this.layers.push(layerSource);
         semaphore.signal('layer:layer:add', layerSource);
     },
