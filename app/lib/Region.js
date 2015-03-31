@@ -16,11 +16,16 @@ var _ = require('underscore'),
     Geometry = require('./Geometry'),
     O = require('../../lib/object').Object;
 
+var WORLD_EXTENT = new Geometry.Extent([-180, -90 ,180, 90]);
 
 var Region = O.extend({
     initialize: function () {
-        this.state = [new Geometry.Extent([-180, -90 ,180, 90])];
+        this.state = [WORLD_EXTENT.clone()];
         semaphore.on('region:push', this.push, this);
+    },
+
+    getWorldExtent: function () {
+        return WORLD_EXTENT.clone();
     },
 
     get: function () {

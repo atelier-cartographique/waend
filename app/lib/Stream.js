@@ -60,7 +60,7 @@ var Stream = O.extend({
                 return (new Promise(resolver));
             }
         }
-        return Promise.reject('stream is closed');
+        // return Promise.reject('stream is closed');
     },
 
     readSync: function () {

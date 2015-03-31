@@ -20,15 +20,16 @@
     "morgan": "~1.0.0",
     "node-ft": "0.0.9",
     "node-uuid": "^1.4.2",
+    "openlayers": "atelier-cartographique/ol3",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
     "pg": "^3.4.1",
+    "proj4": "^2.3.5",
     "redis": "^0.12.1",
     "rtree": "^1.4.2",
     "sockjs": "^0.3.9",
     "static-favicon": "~1.0.0",
     "underscore": "*",
-    "wellknown": "^0.3.1",
-    "openlayers": "atelier-cartographique/ol3"
+    "wellknown": "^0.3.1"
   }
 }

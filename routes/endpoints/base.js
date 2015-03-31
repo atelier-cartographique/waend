@@ -91,8 +91,8 @@ module.exports.RequestHandler = object.Object.extend({
 
 
     paginate: function (result, request, response) {
-        var page = request.query.page || DEFAULT_PAGE,
-            pageSize = request.query.page_size || PAGE_SIZE
+        var page = parseInt(request.query.page) || DEFAULT_PAGE,
+            pageSize = parseInt(request.query.page_size) || PAGE_SIZE
             offset = pageSize * page,
             len = result.length,
             pResult = result.slice(offset, offset + pageSize);

@@ -67,6 +67,9 @@ var Context = O.extend({
 
 
     end: function (ret) {
+        if (_.isFunction(ret)) { // we assume fn(resolve, reject)
+            return (new Promise(ret));
+        }
         return Promise.resolve(ret);
     },
 

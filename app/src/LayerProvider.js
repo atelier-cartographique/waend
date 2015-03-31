@@ -48,12 +48,8 @@ var LayerProvider = O.extend({
     },
 
     addLayer: function (layerSource) {
-        var layer = new ol.layer.Vector({
-            'source': layerSource,
-            'style:': deafultStyle
-        });
-        this.layers.push(layer);
-        semaphore.signal('layer:layer:add', layer);
+        this.layers.push(layerSource);
+        semaphore.signal('layer:layer:add', layerSource);
     },
 
     update: function (sources) {

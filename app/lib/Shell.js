@@ -156,15 +156,23 @@ var Shell = O.extend({
             var sys = {
                 'stdin': (new Stream()),
                 'stdout': (new Stream()),
-                'stderr': (new Stream())
+                'stderr': this.stderr
             };
             pipes.push(sys);
         }
-        pipes.push({
-                'stdin': this.stdin,
-                'stdout': this.stdout,
-                'stderr': this.stderr
-            });
+
+        var concentrator = {
+            'stdin': (new Stream()),
+            'stdout': (new Stream()),
+            'stderr': this.stderr
+        };
+
+        pipes.push(concentrator);
+
+        concentrator.stdin.on('data', function(){
+            this.stdout.write.apply(this.stdout, arguments);
+        }, this);
+
         return pipes;
     },
 
@@ -199,12 +207,26 @@ var Shell = O.extend({
             pipes = this.makePipes(cls.length);
 
         var pipeStreams = function(s, t) {
-            _.each(s, function(sourceStream, name){
-                var targetStream = t[name];
-                sourceStream.on('data', function(){
-                    targetStream.write.apply(targetStream, arguments);
-                });
+
+            s.stdout.on('data', function(){
+                t.stdin.write.apply(t.stdin, arguments);
             });
+
+            s.stdin.on('data', function(){
+                t.stdout.write.apply(t.stdout, arguments);
+            });
+
+            // var directions = [
+            //     ['stdout', 'stdin'],
+            // ];
+
+            // _.each(directions, function(stdnames){
+            //     var sourceStream = s[stdnames[0]],
+            //         targetStream = t[stdnames[1]];
+            //     sourceStream.on('data', function(){
+            //         targetStream.write.apply(targetStream, arguments);
+            //     });
+            // });
         };
 
         return Promise.reduce(cls, function(total, item, index) {
@@ -212,11 +234,11 @@ var Shell = O.extend({
             var cl = cls[index].trim(),
                 toks = self.commandLineTokens(cl),
                 args = [pipes[index]].concat(toks);
-            if(index > 0){
-                _.each(['stdin', 'stdout', 'stderr'], function(name){
-                    pipes[index - 1][name].close();
-                });
-            }
+            // if(index > 0){
+            //     _.each(['stdin', 'stdout', 'stderr'], function(name){
+            //         pipes[index - 1][name].close();
+            //     });
+            // }
             pipeStreams(pipes[index], pipes[index + 1]);
             return context.exec.apply(context, args);
         }, 0);

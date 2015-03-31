@@ -13,15 +13,16 @@
 var WebConsole = require('./WebConsole'),
     LayerProvider = require('./LayerProvider'),
     SourceProvider = require('./SourceProvider'),
-    Map = require('./Map');
+    Map = require('./ThreeMap');
 
 
 function init () {
     var elementWC = document.querySelector('#wc'),
+        elementMap = document.querySelector('#map'),
         wc = new WebConsole(elementWC),
         layer = new LayerProvider(),
         source = new SourceProvider(),
-        map = new Map({target: 'map'});
+        map = new Map(elementMap);
         
     wc.start();
     wc.shell.env.map = map; // there might be a better way, but we want this result.

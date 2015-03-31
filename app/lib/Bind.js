@@ -143,6 +143,7 @@ var Bind = O.extend({
     initialize: function (options) {
         this.transport = new Transport();
         this.db = new DB(this.transport);
+        this.featurePages = {};
     },
 
     update: function (model) {
@@ -275,27 +276,91 @@ var Bind = O.extend({
         return this.transport.get(url, {parse: pr});
     },
 
-    getFeatures: function (userId, groupId, layerId, extent, page) {
-        var db = this.db,
+    setFeaturePage: function (path, data) {
+        if (!(path in this.featurePages)) {
+            this.featurePages[path] = new Array(data.pageCount);
+        }
+        var ids = [];
+        for (var i = 0; i < data.results.length; i++) {
+            var mdata = data.results[i];
+            ids.push(mdata.id);
+        }
+        this.featurePages[path][data.page] = ids;
+    },
+
+    hasFeaturePage: function (path, page) {
+        return ((path in this.featurePages) 
+                && (page < this.featurePages[path].length) 
+                && (_.isArray(this.featurePages[path][page])));
+    },
+
+    getFeaturePage: function (path, page) {
+        var pages = this.featurePages[path],
+            row = pages[page]
+            ret = [];
+
+        for (var i = 0; i < row.length; i++) {
+            ret.push(this.db.get(row[i]));
+        }
+
+        return ret;
+    },
+
+    getFeatureAllPages: function (path) {
+        var pages = this.featurePages[path],
+            ret = [];
+
+        for (var p = 0; p < pages.length; p++) {
+            var row = pages[p];
+            if(_.isArray(row)) {
+                for (var i = 0; i < row.length; i++) {
+                    ret.push(this.db.get(row[i]));
+                }
+            }
+        }
+
+        return ret;
+    },
+
+    getFeatures: function (userId, groupId, layerId, page) {
+        var self = this,
+            db = this.db,
             binder = this,
             path = '/user/'+userId+'/group/'+groupId+'/layer/'+layerId+'/feature/';
 
-        extent = extent || region.get();
+        if (page) {
+            if(this.hasFeaturePage(path, page)) {
+                return Promise.resolve(this.getFeaturePage(path, page));
+            }
+        }
+        else if (this.hasFeaturePage(path, 0)) { // we're loading, retrieve what we can
+            return Promise.resolve(this.getFeatureAllPages(path));
+        }
+
+        page = page || 0;
+        
 
         var pr = function (response) {
-            var data = objectifyResponse(response);
-            var ret = [];
+            var data = objectifyResponse(response),
+                ret = [];
             for(var i = 0; i < data.results.length; i++){
                 var f = new Feature(binder, data.results[i]);
                 db.record(path+f.id, f);
                 ret.push(f);
+            }
+            self.setFeaturePage(path, data);
+            var nextPage = data.page + 1;
+            if (nextPage < data.pageCount) {
+                _.defer(function(){
+                    self.getFeatures(userId, groupId, layerId, nextPage);
+                });
             }
             return ret;
         };
         var url = API_URL+path;
         var options = {
             'parse': pr,
-            'params': extent.toBounds()
+            'params': _.extend({'page': page}, region.getWorldExtent().toBounds())
         };
         return this.transport.get(url, options);
     },

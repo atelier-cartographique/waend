@@ -21,7 +21,8 @@ var commandModules = [
     require('./getAttribute'),
     require('./create'),
     require('./region'),
-    require('./zoom')
+    require('./zoom'),
+    require('./filter')
     ];
 
 
