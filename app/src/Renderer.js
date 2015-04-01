@@ -12,82 +12,9 @@
 
 
 var _ = require('underscore'),
-    ol3 = require('openlayers'),
     semaphore = require('../lib/Semaphore'),
-    W = require('./Worker');
-
-
-function Painter (view, layerId) {
-    this.context = view.getContext(layerId);
-    this.transform = view.transform;
-    this.view = view;
-}
-
-Painter.prototype.clear = function () {
-    this.context.clearRect(0, 0, this.view.size.width, this.view.size.height);
-};
-
-Painter.prototype.mapPoint = function (p) {
-    return this.transform.mapVec2(p);
-};
-
-// graphic state
-Painter.prototype.set = function (prop, value) {
-    this.context[prop] = value;
-};
-
-Painter.prototype.drawPolygon = function (coordinates) {
-    this.context.beginPath();
-    for(var i = 0; i < coordinates.length; i++) {
-        var ring = coordinates[i];
-        for(var ii = 0; ii < ring.length; ii++) {
-            var p = this.mapPoint(ring[ii]);
-            if(0 === ii){
-                this.context.moveTo(p[0], p[1]);
-            }
-            else{
-                this.context.lineTo(p[0], p[1]);
-            }
-        }
-    }
-    this.context.closePath();
-    this.context.stroke();
-    this.context.fill();
-};
-
-Painter.prototype.drawLine = function (coordinates) {
-    this.context.beginPath();
-    for(var i = 0; i < coordinates.length; i++) {
-        var p = this.mapPoint(coordinates[i]);
-        if(0 === i){
-            this.context.moveTo(p[0], p[1]);
-        }
-        else{
-            this.context.lineTo(p[0], p[1]);
-        }
-    }
-    this.context.closePath();
-    this.context.stroke();
-};
-
-Painter.prototype.draw = function (instruction, coordinates) {
-
-    if ('polygon' === instruction) {
-        this.drawPolygon(coordinates);
-    }
-    else if ('line' === instruction) {
-        this.drawLine(coordinates);
-    }
-    else {
-        var args = _.toArray(arguments),
-            method = args.shift();
-        if (method && (method in this.context)) {
-            this.context[method].apply(this.context, args);
-        }
-    }
-
-};
-
+    W = require('./Worker'),
+    Painter = require('./Painter');
 
 /**
  *
@@ -100,38 +27,90 @@ function CanvasRenderer (options) {
     this.view = options.view;
     this.proj = options.projection;
     this.painter = new Painter(this.view, this.layer.id);
-
+    this.initWorker();
+    this.features = {};
     semaphore.on('map:update', this.render, this);
 }
 
-CanvasRenderer.prototype.transformFn = function () {
-    var forward = this.proj.forward;
-    var tfn = function (coords) {
-        var ret = forward(coords);
-        return ret;
-    };
-    return ol3.proj.createTransformFromCoordinateTransform(tfn);
-};
-
-
-CanvasRenderer.prototype.render = function () {
-    var worker = new W(this.layer.getProgram()),
-        features = this.layer.getFeatures();
-
+CanvasRenderer.prototype.initWorker = function () {
+    var worker = new W(this.layer.getProgram());
     worker.on('draw', this.painter.draw, this.painter);
     worker.on('set', this.painter.set, this.painter);
     worker.start();
+    this.worker = worker;
+};
+
+
+CanvasRenderer.prototype.polygonTransform = function (coordinates) {
+    for (var i = 0; i < coordinates.length; i++) {
+        var ringLength = coordinates[i].length;
+        for (var ii = 0; ii < ringLength; ii++) {
+            coordinates[i][ii] = this.proj.forward(coordinates[i][ii]);
+        }
+    }
+};
+
+CanvasRenderer.prototype.lineTransform = function (coordinates) {
+    for (var i = 0; i < coordinates.length; i++) {
+        coordinates[i] = this.proj.forward(coordinates[i]);
+    }
+};
+
+CanvasRenderer.prototype.renderFeature = function (feature) {
+    if (feature.id in this.features) {
+        return;
+    }
+    this.features[feature.id] = true;
+    var geom = feature.getGeometry(),
+        geomType = geom.getType().toLowerCase(),
+        props = _.omit(feature.getProperties(), 'geometry'),
+        coordinates = geom.getCoordinates();
+
+    try {
+        this[geomType+'Transform'](coordinates);
+        this.worker.post(geomType, coordinates, props);
+    }
+    catch (err) {
+        this.features[feature.id] = false;
+    }
+};
+
+CanvasRenderer.prototype.drawGrid = function () {
+    var n = 10000, s = 10;
+    for (var i = -n; i < (n + 1); i += (n/s)) {
+        this.painter.drawLine([[i, -n], [i, n]]);
+        this.painter.drawLine([[n, -i], [n, i]]);
+    }
+};
+
+CanvasRenderer.prototype.render = function () {
+    var worker = this.worker,
+        features = this.layer.getFeatures();
+
     this.painter.clear();
+    this.drawGrid();
+    this.features = {};
     for (var i = 0; i < features.length; i++) {
         var f = features[i],
             geom = f.getGeometry(),
             geomType = geom.getType().toLowerCase(),
-            props = _.omit(f.getProperties(), 'geometry');
+            props = _.omit(f.getProperties(), 'geometry'),
+            coordinates = geom.getCoordinates();
 
-        geom.applyTransform(this.transformFn());
-        worker.post(geomType, geom.getCoordinates(), props);
+        try {
+            this[geomType+'Transform'](coordinates);
+            worker.post(geomType, coordinates, props);
+        }
+        catch (err) {
+            this.features[f.id] = false;
+        }
+        this.features[f.id] = true;
     }
 
+};
+
+CanvasRenderer.prototype.stop = function () {
+    this.worker.stop();
 };
 
 

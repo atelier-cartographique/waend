@@ -1,9 +1,9 @@
 /*
  * routes/endpoints/user.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2014  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -72,7 +72,8 @@ module.exports = exports = base.RequestHandler.extend({
 
         get: function(request, response) {
             cache.client()
-                .get('group', request.params.group_id)
+                // .get('group', request.params.group_id)
+                .getGroup(request.params.group_id)
                 .then(function(data){
                     response.send(data);
                 })
@@ -84,7 +85,7 @@ module.exports = exports = base.RequestHandler.extend({
         list: function (request, response) {
             var self = this,
                 listPrivate = false;
-            if(request.user 
+            if(request.user
                 && (request.user.id === request.params.user_id)) {
                 listPrivate = true;
             }
@@ -174,10 +175,10 @@ module.exports = exports = base.RequestHandler.extend({
 
 
         detach: function(request, response){
-            
+
         },
 
         moveLayer: function(request, response){
-            
+
         }
     });

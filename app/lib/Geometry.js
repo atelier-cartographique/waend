@@ -1,9 +1,9 @@
 /*
  * app/lib/Region.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -18,13 +18,13 @@ var _ = require('underscore'),
 var Geometry = ol.geom.Geometry,
     format = ol.format,
     supportedFormatNames = [
-    "GeoJSON", 
-    "GPX", 
-    "KML", 
-    "OSMXML", 
-    "Polyline", 
+    "GeoJSON",
+    "GPX",
+    "KML",
+    "OSMXML",
+    "Polyline",
     "TopoJSON",
-    "WKT", 
+    "WKT",
     "GML2", "GML3", "GML"
     ],
     supportedFormat = {};
@@ -32,23 +32,23 @@ var Geometry = ol.geom.Geometry,
 
 function Point () {
     ol.geom.Point.apply(this, arguments);
-};
+}
 util.inherits(Point, ol.geom.Point);
 
 function LineString () {
     ol.geom.LineString.apply(this, arguments);
-};
+}
 util.inherits(LineString, ol.geom.LineString);
 
 function Polygon () {
     ol.geom.Polygon.apply(this, arguments);
-};
+}
 util.inherits(Polygon, ol.geom.Polygon);
 
 
 _.each(supportedFormatNames, function(name){
     var f = new (ol.format[name])();
-    if(f.writeGeometry 
+    if(f.writeGeometry
         && f.readGeometry){
         supportedFormat[name] = _.extend(f,{
             read: function () {
@@ -114,7 +114,7 @@ Extent.prototype.clone = function () {
 
 Extent.prototype.toPolygon = function () {
     var coords = [[
-        this.getTopLeft().getCoordinates(), 
+        this.getTopLeft().getCoordinates(),
         this.getTopRight().getCoordinates(),
         this.getBottomRight().getCoordinates(),
         this.getBottomLeft().getCoordinates(),

@@ -1,9 +1,9 @@
 /*
  * app/src/SourceProvider.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -35,22 +35,23 @@ function SourceProvider () {
         }
     });
 
-};
+}
 
 function Source (uid, gid, layer) {
     var options = {
         'projection': 'EPSG:4326'
-    }
+    };
     ol.source.GeoJSON.call(this, options);
     this.uid = uid;
     this.gid = gid;
+    this.id = layer.id;
     this.layer = layer;
 
     // listen to the layer to update features if some are created
     layer.on('change', this.update, this);
     // listen to the region
     semaphore.on('region:change', this.update, this);
-};
+}
 ol.inherits(Source, ol.source.GeoJSON);
 
 // implementations
@@ -126,7 +127,7 @@ Source.prototype.update = function () {
                 var feature = features[i];
                 var featureIsNew = !(self.getFeatureById(feature.id));
                 if(featureIsNew){
-                    var f = self.buildFeature(feature)
+                    var f = self.buildFeature(feature);
                     self.addFeature(f);
                 }
             }

@@ -1,17 +1,18 @@
 /*
  * app/lib/Shell.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
 
+ 'use strict';
 
 var O = require('../../lib/object').Object,
     _ = require('underscore'),
-    Promise = require("bluebird"),
+    Promise = require('bluebird'),
     Context = require('./Context'),
     User = require('./User'),
     Root = require('./Root'),
@@ -40,34 +41,34 @@ function getCliChunk (chars, start, endChar) {
             break;
         }
         chunk += c;
-    };
+    }
     return chunk;
-};
+}
 
 function cliSplit (str) {
     var chars = str.trim().split(''),
         ret = [];
     for (var i = 0; i < chars.length; i++) {
-        var c = chars[i];
+        var c = chars[i], chunk;
         if ('"' === c) {
-            var chunk = getCliChunk(chars, i + 1, '"');
+            chunk = getCliChunk(chars, i + 1, '"');
             i += chunk.length + 1;
             ret.push(chunk);
         }
         else if ("'" === c) {
-            var chunk = getCliChunk(chars, i + 1, "'");
+            chunk = getCliChunk(chars, i + 1, "'");
             i += chunk.length + 1;
             ret.push(chunk);
         }
         else if (' ' !== c) {
-            var chunk = getCliChunk(chars, i, ' ');
+            chunk = getCliChunk(chars, i, ' ');
             i += chunk.length;
             ret.push(chunk);
         }
     }
 
     return ret;
-};
+}
 
 // some tests, i keep them around for whatever reason
 // var tests = [
@@ -90,7 +91,7 @@ function ShellError () {
     if(arguments.length > 0){
         console.error.apply(console, arguments);
     }
-};
+}
 
 ShellError.prototype = Object.create(Error.prototype);
 
@@ -115,7 +116,7 @@ var Shell = O.extend({
     },
 
     initStreams: function () {
-        
+
         var streams = {
             stdin: new Stream(),
             stdout: new Stream(),
@@ -127,19 +128,19 @@ var Shell = O.extend({
                 return streams.stdin;
             },
         }, defaultDescriptor));
-        
+
         Object.defineProperty(this, 'stdout', _.defaults({
             get: function(){
                 return streams.stdout;
             },
         }, defaultDescriptor));
-        
+
         Object.defineProperty(this, 'stderr', _.defaults({
             get: function(){
                 return streams.stderr;
             },
         }, defaultDescriptor));
-        
+
         this._streams = streams;
 
     },
@@ -150,7 +151,7 @@ var Shell = O.extend({
 
 
     makePipes: function (n) {
-        var pipes = new Array();
+        var pipes = [];
 
         for (var i = 0; i < n; i++) {
             var sys = {
@@ -258,12 +259,12 @@ var Shell = O.extend({
     },
 
     clearContexts: function () {
-        var start = this._currentContext + 1;
-        for(var i = start; i < this._contexts.length; i++){
+        var start = this._currentContext + 1, i;
+        for(i = start; i < this._contexts.length; i++){
             this._contexts[i] = null;
         }
         var path = [];
-        for(var i = 1; i < start; i++){
+        for(i = 1; i < start; i++){
             path.push(this._contexts[i].data.id);
         }
         semaphore.signal('shell:change:context', this._currentContext, path);
@@ -307,8 +308,8 @@ var Shell = O.extend({
         var prm = bind.getUser(userId)
             .then(function(userData){
                 self._contexts[USER] = new User({
-                    shell:self, 
-                    data:userData, 
+                    shell:self,
+                    data:userData,
                     parent:self._contexts[SHELL]
                 });
                 self._currentContext = USER;
@@ -331,8 +332,8 @@ var Shell = O.extend({
         var prm = bind.getGroup(user.id, groupId)
             .then(function(groupData){
                 self._contexts[GROUP] = new Group({
-                    shell:self, 
-                    data:groupData, 
+                    shell:self,
+                    data:groupData,
                     parent:self._contexts[USER]
                 });
                 self._currentContext = GROUP;
@@ -342,7 +343,7 @@ var Shell = O.extend({
             .catch(function(err){
                 console.error('failed to switch context', err);
             });
-            
+
         return prm;
     },
 
@@ -356,8 +357,8 @@ var Shell = O.extend({
         var prm = bind.getLayer(user.id, group.id, layerId)
             .then(function(layerData){
                 self._contexts[LAYER] = new Layer({
-                    shell:self, 
-                    data:layerData, 
+                    shell:self,
+                    data:layerData,
                     parent:self._contexts[GROUP]
                 });
                 self._currentContext = LAYER;
@@ -367,7 +368,7 @@ var Shell = O.extend({
             .catch(function(err){
                 console.error('failed to switch context', err);
             });
-            
+
         return prm;
     },
 
@@ -382,8 +383,8 @@ var Shell = O.extend({
         var prm = bind.getFeature(user.id, group.id, layer.id, featureId)
             .then(function(featureData){
                 self._contexts[FEATURE] = new Feature({
-                    shell:self, 
-                    data:featureData, 
+                    shell:self,
+                    data:featureData,
                     parent:self._contexts[LAYER]
                 });
                 self._currentContext = FEATURE;
@@ -393,14 +394,14 @@ var Shell = O.extend({
             .catch(function(err){
                 console.error('failed to switch context', err);
             });
-            
+
         return prm;
     },
 
     loadUser: function (path) {
         //console.log('shell.loadUser', path);
         var userName = this.getUserId(path[0]);
-        
+
         return this.setUser(userName);
     },
 
@@ -439,7 +440,7 @@ var Shell = O.extend({
             getGroup = _.bind(_.partial(self.setGroup, groupName), self),
             getLayer = _.bind(_.partial(self.setLayer, layerName), self),
             getFeature = _.bind(_.partial(self.setFeature, featureName), self);
-        
+
         return this.setUser(userName)
             .then(getGroup)
             .then(getLayer)

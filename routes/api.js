@@ -1,9 +1,9 @@
 /*
  * routes/api.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2014  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -26,14 +26,14 @@ function listHandlers(){
     });
 
     return ret;
-};
+}
 
 
 function service(req, res){
     res.json(listHandlers());
 }
 
-module.exports = exports = function(router, app){   
+module.exports = exports = function(router, app){
 
     router.get(root, service);
 
@@ -48,7 +48,7 @@ module.exports = exports = function(router, app){
                 routing = router[endpoint.verb],
                 endpointUrl = root + endpoint.url,
                 endpointHandler = _.bind(handler[endpoint.handler], handler);
-            
+
             args.push(endpointUrl);
             if('permissions' in endpoint){
                 for(var pidx = 0; pidx < endpoint.permissions.length; pidx++){

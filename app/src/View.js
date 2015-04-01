@@ -1,9 +1,9 @@
 /*
  * app/src/View.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -20,13 +20,65 @@ var document = window.document;
 
 function View (options) {
     this.root = options.root;
+    this.extent = options.extent;
     this.transform = new Transform();
     this.layers = [];
     this.canvas = [];
     this.contexts = [];
 
-    var rect = this.root.getBoundingClientRect();
+    var rect = this.getRect();
     this.size = _.pick(rect, 'width', 'height');
+    this.setTransform();
+}
+
+
+View.prototype.getRect = function () {
+    return this.root.getBoundingClientRect();
+};
+
+View.prototype.translate = function (dx, dy) {
+    this.transform.translate(dx, dy);
+    return this;
+};
+
+View.prototype.scale = function (sx, sy) {
+    this.transform.translate(sx, sy);
+    return this;
+};
+
+View.prototype.setExtent = function (extent) {
+    this.extent = extent;
+    this.setTransform();
+    semaphore.signal('view:change', this);
+};
+
+View.prototype.setTransform = function () {
+    var extent = this.extent,
+        rect = this.getRect(),
+        halfSize = [rect.width/2, rect.height/2],
+        sx = this.size.width / extent.getWidth(),
+        sy = this.size.height / extent.getHeight(),
+        s = (sx < sy) ? sx : sy,
+        center = extent.getCenter().getCoordinates();
+    var t = new Transform();
+    t.translate(halfSize[0], halfSize[1]);
+    t.translate(-center[0], -center[1]);
+    t.scale(s, -s, {'x': halfSize[0], 'y':halfSize[1]});
+    this.transform.reset(t);
+};
+
+View.prototype.getProjectedPointOnView = function (x, y) {
+    var v = [x,y],
+        inv = this.transform.inverse();
+    inv.mapVec2(v);
+    return v;
+};
+
+
+View.prototype.getViewPointProjected = function (x, y) {
+    var v = [x,y];
+    this.transform.mapVec2(v);
+    return v;
 };
 
 
@@ -84,7 +136,24 @@ View.prototype.addLayer = function (layer) {
     return this;
 };
 
+View.prototype.removeLayer = function (layer) {
+    if(!!(this.getLayer(layer.id))){
+        this.layers = _.reject(this.layers, function (l) {
+            return (l.id === layer.id);
+        });
+        this.contexts = _.reject(this.contexts, function(c) {
+            return (c.id === layer.id);
+        });
+
+        var canvasElement = document.getElementById(layer.id);
+        this.root.removeChild(canvasElement);
+        this.canvas = _.reject(this.canvas, function (c) {
+            return (c.id === layer.id);
+        });
+        return this;
+    }
+};
+
 
 
 module.exports = exports = View;
-

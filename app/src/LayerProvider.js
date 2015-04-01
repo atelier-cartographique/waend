@@ -1,9 +1,9 @@
 /*
  * app/src/LayerProvider.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -13,24 +13,10 @@
 
 var _ = require('underscore'),
     O = require('../../lib/object').Object,
-    ol = require('openlayers'),
     Geometry = require('../lib/Geometry'),
     semaphore = require('../lib/Semaphore'),
     waendLayerProgram = require('./Program');
 
-
-
-var redCircle = new ol.style.Circle({
-  radius: 4,
-  fill: null,
-  stroke: new ol.style.Stroke({color: 'red', width: 2})
-});
-
-var defaultPointStyle = [ new ol.style.Style({image: redCircle })];
-
-function deafultStyle (feature, resolution) {
-  return defaultPointStyle;
-};
 
 
 var LayerProvider = O.extend({

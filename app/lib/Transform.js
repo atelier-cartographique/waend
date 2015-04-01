@@ -1,11 +1,11 @@
 /**
  *
- * lib/Transform.js 
- * 
+ * lib/Transform.js
+ *
  * author: Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * date: 2012-04-16
- * 
+ *
  */
 
 
@@ -15,19 +15,19 @@
 function Matrix () {
     this.padding = -1;
     this.m = this.new_m_();
-};
+}
 
 /**
 * Transformation
 */
 function Transform () {
-    this.m = new Matrix(); 
-};
+    this.m = new Matrix();
+}
 
 /**
-* 
+*
 * shortcuts
-* 
+*
 * */
 
 function transform (){
@@ -119,7 +119,7 @@ Matrix.prototype.minors = function(m) {
     var minor23 = this.determinant2(m[1][1], m[1][2], m[3][1], m[3][2]) ;
     var minor31 = this.determinant2(m[1][2], m[1][3], m[2][2], m[2][3]) ;
     var minor32 = this.determinant2(m[1][1], m[1][3], m[2][1], m[2][3]) ;
-    var minor33 = this.determinant2(m[1][1], m[1][2], m[2][1], m[2][3]) ; 
+    var minor33 = this.determinant2(m[1][1], m[1][2], m[2][1], m[2][3]) ;
     var padding = -1;
     return  [[padding],
             [padding, minor11,minor12,minor13],
@@ -152,7 +152,7 @@ Matrix.prototype.inverse = function() {
     // we assume that the matrix is always invertible, so wrong but restful :)
     // well, it would throw an division by 0 exception a bit later, thats it
     var m = this.adjugate(this.cofactors(this.minors(this.m)));
-    
+
     var inverse = new Matrix();
     for (var x = 1; x<4; ++x)
     {
@@ -165,7 +165,20 @@ Matrix.prototype.inverse = function() {
 };
 
 
-// ??
+
+
+// get you an [a b c d e f] matrix
+Transform.prototype.flatMatrix = function () {
+    var fm = new Array(6);
+    fm[0] = this.M(11);
+    fm[1] = this.M(12);
+    fm[2] = this.M(21);
+    fm[3] = this.M(22);
+    fm[4] = this.M(31);
+    fm[5] = this.M(32);
+    return fm;
+};
+
 Transform.prototype.M = function(p){
     var s = p.toString();
     var a = parseInt(s[0]);
@@ -220,28 +233,21 @@ Transform.prototype.currentTranslate = function(){
 /**
 * Resets the translation of the matrix to the given x and y
 * or 0, 0 if no points were provided. Returns itself
-* 
+*
 * @param x int
 * @param y int
 * @returns {Transform}
 */
-Transform.prototype.resetTranslate = function(x,y) {            
+Transform.prototype.resetTranslate = function(x,y) {
     this.m.m[3][1] = x || 0;
     this.m.m[3][2] = y || 0;
     return this;
 };
 
 /**
-* Shortcut for resetTranslate
-*/
-Transform.prototype.reset_translate = function(x,y){
-    return this.resetTranslate(x,y);
-};
-
-/**
-* Scales with given scale on x-axis and 
+* Scales with given scale on x-axis and
 * given scale on y-axis, around given origin
-* 
+*
 * If no sy is provided the scale will be proportional
 * @param sx Number
 * @param sy Number
@@ -250,7 +256,7 @@ Transform.prototype.reset_translate = function(x,y){
 */
 Transform.prototype.scale = function(sx, sy, origin) {
     var scaleMat = new Matrix();
-    if(origin != undefined)
+    if(origin !== undefined)
     {
         var tr1 = new Matrix();
         tr1.m[3][1] = -origin.x;

@@ -1,9 +1,9 @@
 /*
  * app/src/Map.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -29,7 +29,7 @@ function Map (options) {
             projection: 'EPSG:4326'
         });
     }
-    
+
     ol.Map.call(this, options);
     this.renderer_ = new Renderer(this.viewport_, this);
 
@@ -59,7 +59,7 @@ function Map (options) {
             semaphore.signal('please:terminal:run', 'get');
         }
     });
-};
+}
 
 ol.inherits(Map, ol.Map);
 
@@ -111,4 +111,3 @@ Map.prototype.waendRemoveLayer = function (layer) {
 
 
 module.exports = exports = Map;
-

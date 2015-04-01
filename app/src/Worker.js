@@ -101,6 +101,10 @@ var WWorker = O.extend({
         this.w.postMessage({});
     },
 
+    stop: function () {
+        this.w.terminate();
+    },
+
     onMessageHandler: function () {
         var self = this;
         var handler = function (event) {

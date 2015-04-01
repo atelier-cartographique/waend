@@ -1,14 +1,14 @@
 /*
  * app/lib/Bind.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
 
 
-This module takes care of keeping track of views 
+This module takes care of keeping track of views
 attached to model instances.
 
 {
@@ -71,14 +71,39 @@ var DB = O.extend({
         this.transport = t;
     },
 
-    record: function (path, model) {
+    makePath: function (comps) {
+        var cl = comps.length;
+        if (1 === cl) {
+            return '/user/' + comps[0];
+        }
+        else if (2 === cl) {
+            return '/user/' + comps[0] + '/group/' + comps[1];
+        }
+        else if (3 === cl) {
+            return '/user/' + comps[0] + '/group/' + comps[1] + '/layer/' + comps[2];
+        }
+        else if (4 === cl) {
+            return '/user/' + comps[0] + '/group/' + comps[1] + '/layer/' + comps[2] + '/feature/' + comps[3];
+        }
+        throw (new Error('wrong number of comps'));
+    },
+
+    getParent: function (comps) {
+        return _.last(comps, 2)[0];
+    },
+
+    record: function (comps, model) {
         if (model.id in this._db) {
-            this._db[model.id].model._updateData(model.data);
+            var rec = this._db[model.id];
+            rec.model._updateData(model.data);
+            rec.comps = comps;
+            rec.parent = this.getParent(comps);
         }
         else {
             this._db[model.id] = {
                 'model': model,
-                'path': path
+                'comps': comps,
+                'parent': this.getParent(comps)
             };
             // TODO subscribe to notifications about it
         }
@@ -88,8 +113,8 @@ var DB = O.extend({
         var self = this,
             db = this._db,
             record = db[model.id],
-            path = record.path;
-        
+            path = this.makePath(record.comps);
+
         var resolver = function (resolve, reject) {
             self.transport
                 .put(API_URL + path, {'body': model })
@@ -121,6 +146,11 @@ var DB = O.extend({
             }
         }, this);
         return result;
+    },
+
+    lookup: function (predicate) {
+        var result = _.pluck(_.filter(this._db, predicate, this), 'model');
+        return result;
     }
 });
 
@@ -136,7 +166,7 @@ function objectifyResponse (response) {
         }
     }
     return response;
-};
+}
 
 var Bind = O.extend({
 
@@ -153,7 +183,7 @@ var Bind = O.extend({
     changeParent: function (parentId) {
         if(this.db.has(parentId)){
             var parent = this.db.get(parentId);
-            console.log('binder.changeParent', parent.id);
+            // console.log('binder.changeParent', parent.id);
             parent.emit('change');
         }
     },
@@ -162,10 +192,8 @@ var Bind = O.extend({
         var db = this.db,
             binder = this;
         var pr = function (response) {
-            var u = new User(binder, objectifyResponse(response)),
-                url = '/user/'+u.id;
-
-            db.record(url, u);
+            var u = new User(binder, objectifyResponse(response));;
+            db.record([u.id], u);
             return u;
         };
 
@@ -183,7 +211,7 @@ var Bind = O.extend({
         }
         var pr = function (response) {
             var u = new User(binder, objectifyResponse(response));
-            db.record(path, u);
+            db.record([userId], u);
             return u;
         };
         var url = API_URL+path;
@@ -198,15 +226,33 @@ var Bind = O.extend({
             return Promise.resolve(db.get(groupId));
         }
         var pr = function (response) {
-            var g = new Group(binder, objectifyResponse(response));
-            db.record(path, g);
+            var groupData = objectifyResponse(response),
+                g = new Group(binder, _.omit(groupData.group, 'layers')),
+                layers = groupData.group.layers;
+
+            db.record([userId, groupId], g);
+
+            for (var i = 0; i < layers.length; i++) {
+                var layer = layers[i],
+                    l = new Layer(binder, _.omit(layer, 'features')),
+                    features = layer.features;
+
+                db.record([userId, groupId, layer.id], l);
+
+                for (var j = 0; j < features.length; j++) {
+                    var feature = features[j],
+                        f = new Feature(binder, feature);
+
+                    db.record([userId, groupId, layer.id, feature.id], f);
+                }
+            }
             return g;
         };
         var url = API_URL+path;
         return this.transport.get(url, {parse: pr});
     },
 
-    getGroups: function (userId, page) {
+    getGroups: function (userId) {
         var db = this.db,
             binder = this,
             path = '/user/'+userId+'/group/';
@@ -216,7 +262,8 @@ var Bind = O.extend({
             var ret = [];
             for(var i = 0; i < data.results.length; i++){
                 var g = new Group(binder, data.results[i]);
-                db.record(path+g.id, g);
+                // we do not record here, it would prevent deep loading a group
+                // db.record(path+g.id, g);
                 ret.push(g);
             }
             return ret;
@@ -234,30 +281,18 @@ var Bind = O.extend({
         }
         var pr = function (response) {
             var l = new Layer(binder, objectifyResponse(response));
-            db.record(path, l);
+            db.record([userId, groupId, layerId], l);
             return l;
         };
         var url = API_URL+path;
         return this.transport.get(url, {parse: pr});
     },
 
-    getLayers: function (userId, groupId, page) {
-        var db = this.db,
-            binder = this,
-            path = '/user/'+userId+'/group/'+groupId+'/layer/';
+    getLayers: function (userId, groupId) {
+        return Promise.resolve(this.db.lookup(function(rec, key){
+            return (rec.parent === groupId);
+        }));
 
-        var pr = function (response) {
-            var data = objectifyResponse(response);
-            var ret = [];
-            for(var i = 0; i < data.results.length; i++){
-                var l = new Layer(binder, data.results[i]);
-                db.record(path+l.id, l);
-                ret.push(l);
-            }
-            return ret;
-        };
-        var url = API_URL+path;
-        return this.transport.get(url, {parse: pr});
     },
 
     getFeature: function (userId, groupId, layerId, featureId) {
@@ -269,100 +304,17 @@ var Bind = O.extend({
         }
         var pr = function (response) {
             var f = new Feature(binder, objectifyResponse(response));
-            db.record(path, f);
+            db.record([userId, groupId, layerId, featureId], f);
             return f;
         };
         var url = API_URL+path;
         return this.transport.get(url, {parse: pr});
     },
 
-    setFeaturePage: function (path, data) {
-        if (!(path in this.featurePages)) {
-            this.featurePages[path] = new Array(data.pageCount);
-        }
-        var ids = [];
-        for (var i = 0; i < data.results.length; i++) {
-            var mdata = data.results[i];
-            ids.push(mdata.id);
-        }
-        this.featurePages[path][data.page] = ids;
-    },
-
-    hasFeaturePage: function (path, page) {
-        return ((path in this.featurePages) 
-                && (page < this.featurePages[path].length) 
-                && (_.isArray(this.featurePages[path][page])));
-    },
-
-    getFeaturePage: function (path, page) {
-        var pages = this.featurePages[path],
-            row = pages[page]
-            ret = [];
-
-        for (var i = 0; i < row.length; i++) {
-            ret.push(this.db.get(row[i]));
-        }
-
-        return ret;
-    },
-
-    getFeatureAllPages: function (path) {
-        var pages = this.featurePages[path],
-            ret = [];
-
-        for (var p = 0; p < pages.length; p++) {
-            var row = pages[p];
-            if(_.isArray(row)) {
-                for (var i = 0; i < row.length; i++) {
-                    ret.push(this.db.get(row[i]));
-                }
-            }
-        }
-
-        return ret;
-    },
-
     getFeatures: function (userId, groupId, layerId, page) {
-        var self = this,
-            db = this.db,
-            binder = this,
-            path = '/user/'+userId+'/group/'+groupId+'/layer/'+layerId+'/feature/';
-
-        if (page) {
-            if(this.hasFeaturePage(path, page)) {
-                return Promise.resolve(this.getFeaturePage(path, page));
-            }
-        }
-        else if (this.hasFeaturePage(path, 0)) { // we're loading, retrieve what we can
-            return Promise.resolve(this.getFeatureAllPages(path));
-        }
-
-        page = page || 0;
-        
-
-        var pr = function (response) {
-            var data = objectifyResponse(response),
-                ret = [];
-            for(var i = 0; i < data.results.length; i++){
-                var f = new Feature(binder, data.results[i]);
-                db.record(path+f.id, f);
-                ret.push(f);
-            }
-            self.setFeaturePage(path, data);
-            var nextPage = data.page + 1;
-            if (nextPage < data.pageCount) {
-                _.defer(function(){
-                    self.getFeatures(userId, groupId, layerId, nextPage);
-                });
-            }
-            return ret;
-        };
-        var url = API_URL+path;
-        var options = {
-            'parse': pr,
-            'params': _.extend({'page': page}, region.getWorldExtent().toBounds())
-        };
-        return this.transport.get(url, options);
+        return Promise.resolve(this.db.lookup(function(rec, key){
+            return (rec.parent === layerId);
+        }));
     },
 
 
@@ -373,7 +325,7 @@ var Bind = O.extend({
 
         var pr = function (response) {
             var g = new Group(binder, objectifyResponse(response));
-            db.record(path + g.id, g);
+            db.record([userId, g.id], g);
             binder.changeParent(userId);
             return g;
         };
@@ -392,7 +344,7 @@ var Bind = O.extend({
 
         var pr = function (response) {
             var g = new Layer(binder, objectifyResponse(response));
-            db.record(path + g.id, g);
+            db.record([userId, groupId, g.id], g);
             binder.changeParent(groupId);
             return g;
         };
@@ -411,7 +363,7 @@ var Bind = O.extend({
 
         var pr = function (response) {
             var f = new Feature(binder, objectifyResponse(response));
-            db.record(path + f.id, f);
+            db.record([userId, groupId, layerId, f.id], f);
             binder.changeParent(layerId);
             return f;
         };
