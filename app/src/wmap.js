@@ -1,9 +1,9 @@
 /*
  * app/src/wmap.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -23,13 +23,13 @@ function init () {
         layer = new LayerProvider(),
         source = new SourceProvider(),
         wmap = new WMap({'root':elementMap});
-        
+
     wc.start();
     wc.shell.env.map = wmap; // there might be a better way, but we want this result.
-};
+}
 
 document.onreadystatechange = function () {
     if (document.readyState == "interactive") {
         init();
     }
-}
+};

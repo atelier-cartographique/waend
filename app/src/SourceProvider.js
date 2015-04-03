@@ -19,7 +19,6 @@ var _ = require('underscore'),
     semaphore = require('../lib/Semaphore'),
     Bind = require('../lib/Bind');
 
-'use strict';
 
 var binder = Bind.get();
 
@@ -50,7 +49,7 @@ function Source (uid, gid, layer) {
     // listen to the layer to update features if some are created
     layer.on('change', this.update, this);
     // listen to the region
-    semaphore.on('region:change', this.update, this);
+    // semaphore.on('region:change', this.update, this);
 }
 ol.inherits(Source, ol.source.GeoJSON);
 

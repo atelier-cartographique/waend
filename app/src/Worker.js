@@ -14,30 +14,6 @@
 var _ = require('underscore'),
     O = require('../../lib/object').Object;
 
-function messageHandler (event) {
-    // debugger;
-    var data = event.data,
-        name = data.name,
-        args = data.args || [];
-    if (name && (name in workerContext.waend)) {
-        workerContext.waend[name].apply(workerContext, args);
-    }
-}
-
-function emit () {
-    var args = [];
-
-    if(0 === arguments.length) {
-        return;
-    }
-
-    for (var i = 0; i < arguments.length; i++) {
-        args.push(arguments[i]);
-    }
-
-    workerContext.postMessage(args);
-}
-
 
 
 var WWorker = O.extend({
@@ -49,8 +25,7 @@ var WWorker = O.extend({
 
     wrapBody: function () {
         var body = [
-            'var workerContext = this.self;',
-            'workerContext.waend = {}'
+            'importScripts("http://waend.local/bin/libworker.js");'
             ];
         for (var k in this.locals) {
             try{
@@ -62,9 +37,7 @@ var WWorker = O.extend({
         }
 
         body = body.concat([
-            'workerContext.addEventListener("message", '+ messageHandler.toString() + ');',
-            'workerContext.waend.emit = ' + emit.toString() + ';',
-            '('+ this.fn.toString() + ')(workerContext.waend);'
+            '('+ this.fn.toString() + ')(waend);'
         ]);
 
         return body.join('\n');
@@ -98,6 +71,7 @@ var WWorker = O.extend({
 
         this.w = new Worker(URL.createObjectURL(blob));
         this.w.addEventListener('message', this.onMessageHandler(), false);
+        this.w.addEventListener('error', this.onErrorHandler(), false);
         this.w.postMessage({});
     },
 
@@ -112,6 +86,14 @@ var WWorker = O.extend({
         };
         return handler;
     },
+
+    onErrorHandler: function () {
+        var self = this;
+        var handler = function (event) {
+            console.error(event);
+        };
+        return handler;
+    }
 });
 
 module.exports = exports = WWorker;

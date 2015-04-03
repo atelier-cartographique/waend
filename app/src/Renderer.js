@@ -34,27 +34,29 @@ function CanvasRenderer (options) {
 
 CanvasRenderer.prototype.initWorker = function () {
     var worker = new W(this.layer.getProgram());
-    worker.on('draw', this.painter.draw, this.painter);
-    worker.on('set', this.painter.set, this.painter);
+    for (var pk in this.painter.handlers) {
+        var method = this.painter[this.painter.handlers[pk]];
+        worker.on(pk, method, this.painter);
+    }
     worker.start();
     this.worker = worker;
 };
 
-
-CanvasRenderer.prototype.polygonTransform = function (coordinates) {
-    for (var i = 0; i < coordinates.length; i++) {
-        var ringLength = coordinates[i].length;
-        for (var ii = 0; ii < ringLength; ii++) {
-            coordinates[i][ii] = this.proj.forward(coordinates[i][ii]);
-        }
-    }
-};
-
-CanvasRenderer.prototype.lineTransform = function (coordinates) {
-    for (var i = 0; i < coordinates.length; i++) {
-        coordinates[i] = this.proj.forward(coordinates[i]);
-    }
-};
+//
+// CanvasRenderer.prototype.polygonTransform = function (coordinates) {
+//     for (var i = 0; i < coordinates.length; i++) {
+//         var ringLength = coordinates[i].length;
+//         for (var ii = 0; ii < ringLength; ii++) {
+//             coordinates[i][ii] = this.proj.forward(coordinates[i][ii]);
+//         }
+//     }
+// };
+//
+// CanvasRenderer.prototype.lineTransform = function (coordinates) {
+//     for (var i = 0; i < coordinates.length; i++) {
+//         coordinates[i] = this.proj.forward(coordinates[i]);
+//     }
+// };
 
 CanvasRenderer.prototype.renderFeature = function (feature) {
     if (feature.id in this.features) {
@@ -67,7 +69,7 @@ CanvasRenderer.prototype.renderFeature = function (feature) {
         coordinates = geom.getCoordinates();
 
     try {
-        this[geomType+'Transform'](coordinates);
+        // this[geomType+'Transform'](coordinates);
         this.worker.post(geomType, coordinates, props);
     }
     catch (err) {
@@ -85,10 +87,17 @@ CanvasRenderer.prototype.drawGrid = function () {
 
 CanvasRenderer.prototype.render = function () {
     var worker = this.worker,
-        features = this.layer.getFeatures();
+        pExtent = this.view.extent,
+        projectedMin = pExtent.getBottomLeft().getCoordinates(),
+        projectedMax = pExtent.getTopRight().getCoordinates(),
+        min = this.proj.inverse(projectedMin),
+        max = this.proj.inverse(projectedMax),
+        extent = min.concat(max),
+        features = this.layer.rBush_.getInExtent(extent);
+        // features = this.layer.getFeatures();
 
     this.painter.clear();
-    this.drawGrid();
+    // this.drawGrid();
     this.features = {};
     for (var i = 0; i < features.length; i++) {
         var f = features[i],
@@ -98,7 +107,7 @@ CanvasRenderer.prototype.render = function () {
             coordinates = geom.getCoordinates();
 
         try {
-            this[geomType+'Transform'](coordinates);
+            // this[geomType+'Transform'](coordinates);
             worker.post(geomType, coordinates, props);
         }
         catch (err) {

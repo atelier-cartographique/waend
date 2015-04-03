@@ -1,9 +1,9 @@
 /*
  * app/src/WebConsole.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -22,7 +22,7 @@ function WebCommand (term, options) {
     this.term = term;
     this.args = options.args;
     this.text = options.text;
-};
+}
 
 WebCommand.prototype.toString = function () {
     return this.text.toString();
@@ -186,7 +186,7 @@ var WebConsole = Terminal.extend({
                 return self.insertInput();
             }
             if (this.internalCommand(val)) {
-                return; 
+                return;
             }
 
             this.runCommand(val);
