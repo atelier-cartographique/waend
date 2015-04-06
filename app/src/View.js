@@ -60,6 +60,20 @@ View.prototype.setTransform = function () {
         sy = this.size.height / Math.abs(extent.getHeight()),
         s = (sx < sy) ? sx : sy,
         center = extent.getCenter().getCoordinates();
+    if (sx < sy) {
+        // adjust extent height
+        var newHeight = Math.abs(extent.getHeight()) * this.size.height / this.size.width,
+            adjH = newHeight / 2;
+        extent.extent[1] = center[1] - adjH;
+        extent.extent[3] = center[1] + adjH;
+    }
+    else {
+        // adjust extent width
+        var newWidth = Math.abs(extent.getWidth()) * this.size.width / this.size.height,
+            adjW = newWidth / 2;
+        extent.extent[0] = center[0] - adjW;
+        extent.extent[2] = center[0] + adjW;
+    }
     var t = new Transform();
     t.translate(halfSize[0], halfSize[1]);
     t.translate(-center[0], -center[1]);

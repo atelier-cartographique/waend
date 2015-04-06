@@ -24,7 +24,8 @@ var commandModules = [
     require('./zoom'),
     require('./pan'),
     require('./filter'),
-    require('./drawLine')
+    require('./drawLine'),
+    require('./navigate')
     ];
 
 

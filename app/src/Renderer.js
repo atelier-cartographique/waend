@@ -44,10 +44,11 @@ CanvasRenderer.prototype.initWorker = function () {
 
 
 CanvasRenderer.prototype.renderFeature = function (feature) {
-    if (feature.id in this.features) {
+    var id = feature.getId();
+    if (id in this.features) {
         return;
     }
-    this.features[feature.id] = true;
+    this.features[id] = true;
     var geom = feature.getGeometry(),
         geomType = geom.getType().toLowerCase(),
         props = _.omit(feature.getProperties(), 'geometry'),

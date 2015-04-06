@@ -1,9 +1,9 @@
 /*
  * app/lib/Model.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -24,6 +24,10 @@ var Model = O.extend({
 
     isNew: function () {
         return !('id' in this.data);
+    },
+
+    has: function (prop) {
+        return (prop in this.data.properties);
     },
 
     get: function (prop) {

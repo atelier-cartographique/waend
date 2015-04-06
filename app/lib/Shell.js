@@ -320,9 +320,14 @@ var Shell = O.extend({
             path.push(this._contexts[i].data.id);
         }
         semaphore.signal('shell:change:context', this._currentContext, path);
+        for (var i = 0; i < this.postSwitchCallbacks.length; i++) {
+            var cb = this.postSwitchCallbacks[i];
+            cb();
+        }
     },
 
     switchContext: function (pathComps) {
+        this.postSwitchCallbacks = [];
         if(0 === pathComps.length){
             this._currentContext = SHELL;
             this.clearContexts();
@@ -389,6 +394,19 @@ var Shell = O.extend({
                     parent:self._contexts[USER]
                 });
                 self._currentContext = GROUP;
+                if (self._previousGroup !== groupId) {
+                    // here we check if a region set should happen
+                    self._previousGroup = groupId;
+                    if (groupData.has('extent')) {
+                        // it should be an array [minx, miny, maxx, maxy];
+                        var extent = groupData.get('extent');
+                        self.postSwitchCallbacks.push(function(){
+                            semaphore.once('layer:update:complete', function(){
+                                region.push(extent);
+                            });
+                        });
+                    }
+                }
                 self.clearContexts();
                 return Promise.resolve(self);
             })

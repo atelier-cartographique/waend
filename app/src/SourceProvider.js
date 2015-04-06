@@ -115,6 +115,7 @@ Source.prototype.buildFeature = function (f) {
     _.each(data, function(val, key){
         feature.set(key, val);
     });
+    feature.setId(f.id);
     return feature;
 };
 

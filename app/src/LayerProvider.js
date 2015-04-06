@@ -50,10 +50,12 @@ var LayerProvider = O.extend({
     },
 
     update: function (sources) {
+        semaphore.signal('layer:update:start', this);
         this.clearLayers();
         _.each(sources, function(source){
             this.addLayer(source);
         }, this);
+        semaphore.signal('layer:update:complete', this);
     },
 
 

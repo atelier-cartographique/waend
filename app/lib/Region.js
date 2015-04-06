@@ -43,7 +43,7 @@ var Region = O.extend({
     },
 
     pushExtent: function (extent) {
-        this.state.push(extent);
+        this.state.push(extent.normalize());
         return this.emitChange(extent);
     },
 

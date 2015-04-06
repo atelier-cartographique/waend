@@ -136,6 +136,21 @@ Extent.prototype.toString = function (opt_format) {
     return this.toPolygon().format(opt_format);
 };
 
+Extent.prototype.normalize = function () {
+    var tmp;
+    if (this.extent[0] > this.extent[2]) {
+        tmp = this.extent[0];
+        this.extent[0] = this.extent[2];
+        this.extent[2] = tmp;
+    }
+    if (this.extent[1] > this.extent[3]) {
+        tmp = this.extent[1];
+        this.extent[1] = this.extent[3];
+        this.extent[3] = tmp;
+    }
+    return this;
+};
+
 Extent.prototype.toBounds = function () {
     var sw = this.getBottomLeft().getCoordinates(),
         ne = this.getTopRight().getCoordinates(),

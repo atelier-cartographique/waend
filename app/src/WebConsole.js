@@ -56,15 +56,15 @@ WebCommand.prototype.toDomFragment = function () {
 function Display (container) {
     var id = _.uniqueId('wc-display-');
     this._root = container;
-    this.node = document.createElement('div'),
+    this.node = document.createElement('div');
     this.node.setAttribute('id', id);
     this.node.setAttribute('class', 'wc-display');
     this._root.appendChild(this.node);
-};
+}
 
 Display.prototype.end = function () {
     if (this._ended) {
-        throw (new Error('Display Already Ended, check your event handlers :)'))
+        throw (new Error('Display Already Ended, check your event handlers :)'));
     }
 
     var container = this._root,
@@ -77,7 +77,7 @@ Display.prototype.end = function () {
 
 function isKeyReturnEvent (event) {
     return (13 === event.which || 13 === event.keyCode);
-};
+}
 
 var WebConsole = Terminal.extend({
 
