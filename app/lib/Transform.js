@@ -9,19 +9,44 @@
  */
 
 
-'use strict';
 
 
-function Matrix () {
+function Matrix (a, b, c, d, e, f) {
     this.padding = -1;
-    this.m = this.new_m_();
+    if (arguments.length === 0) {
+        this.m = this.new_m_();
+    }
+    else if (arguments.length === 1) {
+        if (arguments[0] instanceof Matrix) {
+            this.m = this.clone_m_(arguments[0].m);
+        }
+        else if (Array.isArray(arguments[0])) {
+            // we assume flat matrix
+            this.m = Matrix.prototype.parseFlat.apply(this, arguments[0]);
+        }
+    }
+    else if (arguments.length === 6) {
+        this.m = this.parseFlat(a,b,c,d,e,f);
+    }
 }
 
 /**
 * Transformation
 */
 function Transform () {
-    this.m = new Matrix();
+    if (arguments.length > 0) {
+        if (arguments[0] instanceof Transform) {
+            this.m = arguments[0].m.clone();
+        }
+        else {
+            var mx = new Matrix();
+            Matrix.apply(mx, arguments);
+            this.m = mx;
+        }
+    }
+    else {
+        this.m = new Matrix();
+    }
 }
 
 /**
@@ -32,25 +57,25 @@ function Transform () {
 
 function transform (){
     return new Transform();
-};
+}
 
 function scale (sx, sy, origin){
    if(sy === undefined){
        sy = sx;
     }
-    var T = new Transform;
+    var T = new Transform();
     T.scale(sx, sy, origin);
     return T;
-};
+}
 
 function translate (tx, ty){
    if(ty === undefined){
        ty = 0;
     }
-    var T = new Transform;
+    var T = new Transform();
     T.translate(tx, ty);
     return T;
-};
+}
 
 
 
@@ -63,16 +88,22 @@ Matrix.prototype.new_m_ = function(){
 };
 
 Matrix.prototype.clone_m_ = function(m){
-        var clone = this.new_m_();
-        for (var x = 1; x<4; ++x)
-        {
-                for (var y = 1; y<4; ++y)
-                {
-                        clone[x][y] = m[x][y];
-                }
-        }
-        return clone;
-    };
+    return Array.apply(null, m);
+};
+
+Matrix.prototype.clone = function () {
+    var mx = new Matrix();
+    mx.m = this.clone_m_(this.m);
+    return mx;
+};
+
+Matrix.prototype.parseFlat = function(a, b, c, d, e, f){
+    return [[this.padding],
+        [this.padding, a,b,0],
+        [this.padding, c,d,0],
+        [this.padding, e,f,1]];
+};
+
 
     /**
     * Multiplies matrix with given matrix and returns resulting matrix
@@ -284,12 +315,11 @@ Transform.prototype.scale = function(sx, sy, origin) {
 
 Transform.prototype.getScale = function(){
     return [this.m.m[1][1], this.m.m[2][2]];
-},
+};
 
 Transform.prototype.resetScale = function(){
     this.m.m[1][1] = 1;
     this.m.m[2][2] = 1;
-
     return this;
 };
 
@@ -311,7 +341,7 @@ Transform.prototype.mapVec2 = function(v) {
 Transform.prototype.mapCoordinates = function(coordinates) {
     for (var i = coordinates.length - 1; i >= 0; i--) {
         this.mapVec2(coordinates[i]);
-    };
+    }
     return coordinates;
 };
 

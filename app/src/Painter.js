@@ -8,7 +8,7 @@
  *
  */
 
-'use strict';
+// 'use strict';
 
 
 var _ = require('underscore'),
@@ -27,7 +27,8 @@ function Painter (view, layerId) {
 Painter.prototype.handlers = {
     'draw': 'draw',
     'set': 'set',
-    'clip': 'clip'
+    'clip': 'clip',
+    'context': 'rawContext'
 };
 
 
@@ -126,6 +127,47 @@ Painter.prototype.draw = function (instruction, coordinates) {
         if (method && (method in this.context)) {
             this.context[method].apply(this.context, args);
         }
+    }
+
+};
+
+Painter.prototype.rawContext = function () {
+    var args = _.toArray(arguments),
+        method = args.shift(),
+        p0, p1, p2;
+
+    switch (method) {
+        case 'beginPath':
+            this.context.beginPath();
+            break;
+        case 'moveTo':
+            this.context.moveTo.apply(this.context,
+                this.transform.mapVec2([args[0], args[1]]));
+            break;
+        case 'lineTo':
+            this.context.lineTo.apply(this.context,
+                this.transform.mapVec2([args[0], args[1]]));
+            break;
+        case 'bezierCurveTo':
+            p0 = this.transform.mapVec2([args[0], args[1]]);
+            p1 = this.transform.mapVec2([args[2], args[3]]);
+            p2 = this.transform.mapVec2([args[4], args[5]]);
+            this.context.bezierCurveTo(p0[0], p0[1], p1[0], p1[1], p2[0], p2[1]);
+            break;
+        case 'quadraticCurveTo':
+            p0 = this.transform.mapVec2([args[0], args[1]]);
+            p1 = this.transform.mapVec2([args[2], args[3]]);
+            this.context.quadraticCurveTo(p0[0], p0[1], p1[0], p1[1]);
+            break;
+        case 'closePath':
+            this.context.closePath();
+            break;
+        case 'stroke':
+            this.context.stroke();
+            break;
+        case 'fill':
+            this.context.fill();
+            break;
     }
 
 };

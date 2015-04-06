@@ -1,9 +1,9 @@
 /*
  * app/lib/Region.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -16,7 +16,7 @@ var _ = require('underscore'),
     Geometry = require('./Geometry'),
     O = require('../../lib/object').Object;
 
-var WORLD_EXTENT = new Geometry.Extent([-180, -90 ,180, 90]);
+var WORLD_EXTENT = new Geometry.Extent([-179.9, -85 ,179.9, 85]);
 
 var Region = O.extend({
     initialize: function () {
@@ -51,11 +51,11 @@ var Region = O.extend({
         if (!opt_format && (geom instanceof Geometry.Extent)) {
             var extent = geom.clone();
             return this.pushExtent(extent);
-        }        
+        }
         else if (!opt_format && (geom instanceof Geometry.Geometry)) {
             var extent = new Geometry.Extent(geom.getExtent());
             return this.pushExtent(extent);
-        }        
+        }
         else if (!opt_format && _.isArray(geom)) { // we assume ol.extent type
             var extent = new Geometry.Extent(geom);
             return this.pushExtent(extent);
@@ -76,4 +76,3 @@ var Region = O.extend({
 var region = new Region();
 
 module.exports = exports = region;
-

@@ -1,19 +1,19 @@
 /*
  * app/lib/commands/layer/drawLine.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
 
-'use strict';
+// 'use strict';
 
 var _ = require('underscore'),
     Promise = require('bluebird'),
-    Geometry = require('../../Geometry'),
-    paper = require('../../../vendors/paper');
+    Geometry = require('../Geometry'),
+    paper = require('../../vendors/paper');
 
 
 function setupCanvas (container) {
@@ -25,7 +25,7 @@ function setupCanvas (container) {
     container.appendChild(canvas);
     paper.setup(canvas);
     paper.view.draw();
-};
+}
 
 function drawLine () {
     var self = this,
@@ -38,10 +38,10 @@ function drawLine () {
 
     var resolver = function (resolve, reject) {
 
-        var path, 
+        var path,
             points =[],
             tool = new paper.Tool();
-        
+
         var onMouseDown = function (event) {
             path = new paper.Path({
                 segments: [event.point],
@@ -57,7 +57,7 @@ function drawLine () {
         var onMouseUp = function (event) {
             var segmentCount = path.segments.length;
             console.log(path);
-            var polyLineOrGon = undefined; // TODO populate
+            var polyLineOrGon; // TODO populate
             if (path.closed) {
                 console.log('errr not implemted');
             }
@@ -86,10 +86,10 @@ function drawLine () {
     };
 
     return (new Promise(resolver));
-};
+}
 
 
 module.exports = exports = {
-    name: 'line',
+    name: 'draw',
     command: drawLine
 };

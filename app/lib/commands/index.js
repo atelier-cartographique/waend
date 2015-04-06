@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/index.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -22,7 +22,9 @@ var commandModules = [
     require('./create'),
     require('./region'),
     require('./zoom'),
-    require('./filter')
+    require('./pan'),
+    require('./filter'),
+    require('./drawLine')
     ];
 
 
@@ -31,4 +33,3 @@ for (var idx = 0 ; idx < commandModules.length; idx++) {
 
     module.exports[command.name] = command.command;
 }
-

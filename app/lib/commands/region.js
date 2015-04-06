@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/region.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -18,33 +18,33 @@ function setRegion (north, east, south, west) {
         terminal = self.shell.terminal;
 
     var extent = [
-        parseFloat(west), 
-        parseFloat(south), 
-        parseFloat(east), 
+        parseFloat(west),
+        parseFloat(south),
+        parseFloat(east),
         parseFloat(north)
     ];
 
-    if ((0 === arguments.length) 
-        && env.DELIVERED 
+    if ((0 === arguments.length)
+        && env.DELIVERED
         && env.DELIVERED.getExtent) {
             extent = env.DELIVERED.getExtent();
     }
 
     region.push(extent);
     return self.end(region.get());
-};
+}
 
 
 function getRegion () {
     var r = region.get();
     this.sys.stdout.write(r);
     return this.end(r);
-};
+}
 
 function popRegion () {
     var r = region.pop();
     return this.end(r);
-};
+}
 
 function getCenter (opt_format) {
     var r = region.get(),
@@ -54,7 +54,7 @@ function getCenter (opt_format) {
         this.sys.stdout.write(center.format(format));
     }
     return this.end(center);
-};
+}
 
 function printRegion (opt_format) {
     var r = region.get(),
@@ -65,7 +65,7 @@ function printRegion (opt_format) {
     // this.sys.stdout.write('South ', SW[1]);
     // this.sys.stdout.write('West ', SW[0]);
     return this.end();
-};
+}
 
 
 function bufferRegion (arg) {
@@ -74,7 +74,7 @@ function bufferRegion (arg) {
     r.buffer(arg || 0);
     region.set(r);
     return this.end(r);
-};
+}
 
 function regionCommand () {
     var args = _.toArray(arguments),
@@ -99,7 +99,7 @@ function regionCommand () {
         return printRegion.apply(this, args);
     }
     return this.endWithError('not a valid action');
-};
+}
 
 module.exports = exports = {
     name: 'region',

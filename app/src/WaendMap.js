@@ -87,4 +87,12 @@ Map.prototype.waendRemoveLayer = function (layer) {
 };
 
 
+Map.prototype.getCoordinateFromPixel = function (pixel) {
+    var v = Array.apply(null, pixel),
+        inverse = this.view.transform.inverse(),
+        tv = inverse.mapVec2(v);
+
+    return this.projection.inverse(tv);
+};
+
 module.exports = exports = Map;

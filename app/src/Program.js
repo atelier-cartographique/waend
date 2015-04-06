@@ -11,14 +11,13 @@
 
 function Program (ctx) {
 
-    ctx.linestring = function (coordinates, props) {
-        ctx.lineTransform(coordinates);
+    ctx.linestring = function (coordinates, props, fm) {
+        ctx.lineProject(coordinates);
         ctx.emit('draw', 'line', coordinates);
     };
 
-
-    ctx.polygon = function (coordinates, props) {
-        ctx.polygonTransform(coordinates);
+    var hatchedPolygon = function (coordinates, props, fm) {
+        ctx.polygonProject(coordinates);
         var p = new ctx.Geometry.Polygon(coordinates);
         var extent = p.getExtentObject(),
             hatchLen = 24,
@@ -52,6 +51,23 @@ function Program (ctx) {
         ctx.emit('clip', 'begin', coordinates);
         ctx.emit('draw', 'line', patternCoordinates);
         ctx.emit('clip', 'end');
+    };
+
+    var textedPolygon = function (coordinates, props, fm) {
+        ctx.polygonProject(coordinates);
+        var T = new ctx.Transform(fm);
+        // ctx.polygonTransform(T, coordinates);
+        var p = new ctx.Geometry.Polygon(coordinates);
+        ctx.drawTextInPolygon(T, p, props.text, props.fontsize);
+    };
+
+    ctx.polygon = function (coordinates, props, fm) {
+        if ('text' in props) {
+            textedPolygon(coordinates, props, fm);
+        }
+        else {
+            hatchedPolygon(coordinates, props, fm);
+        }
     };
 }
 
