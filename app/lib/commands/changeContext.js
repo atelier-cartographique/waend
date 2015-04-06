@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/chnageContext.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -13,16 +13,12 @@ var _ = require('underscore'),
     Promise = require("bluebird"),
     Bind = require("../Bind");
 
-
-
 var dotdot = '..';
 var dot = '.';
-
 var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
 
-
-function cc (path) {
-    var path = ospath.normalize(path),
+function cc (opt_path) {
+    var path = ospath.normalize(opt_path),
         isAbsolute = ospath.isAbsolute ? ospath.isAbsolute(path) : '/' === path[0],
         pathComps = path.split('/'),
         ctxPath = [],
@@ -49,7 +45,7 @@ function cc (path) {
             else{
                 break;
             }
-        };
+        }
         ctxPath = current.concat(pathComps);
     }
 
@@ -63,7 +59,7 @@ function cc (path) {
             //     stderr.write('have '+ match.length +' match for '+ ctxPath[i]);
             // }
         }
-    };
+    }
 
     var self = this;
     var titleType = titleTypes[ctxPath.length];
@@ -78,7 +74,7 @@ function cc (path) {
         }
         title += '[' + id + ']';
     }
-    return this.shell.switchContext(ctxPath)
+    return this.shell.historyPushContext(ctxPath)
         .then(function(){
             terminal.setTitle(title);
             return self.end();
@@ -86,7 +82,7 @@ function cc (path) {
         .catch(function(err){
             return Promise.reject(err);
         });
-};
+}
 
 module.exports = exports = {
     name: 'cc',

@@ -1,9 +1,9 @@
 /*
  * routes/index.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2014  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -22,7 +22,7 @@ module.exports = exports = function(app){
 
     /* GET home page. */
     router.get('/', function(req, res) {
-        if (req.isAuthenticated()) { 
+        if (req.isAuthenticated()) {
             res.render('index');
         }
         else{
@@ -33,7 +33,7 @@ module.exports = exports = function(app){
     router.get('/console', function(request, response){
         response.render('console');
     });
-    router.get('/map', function(request, response){
+    router.get('/map*', function(request, response){
         response.render('map');
     });
 

@@ -31,6 +31,8 @@ var SHELL = 0,
     LAYER = 3,
     FEATURE = 4;
 
+var hasHistory = ((typeof window !== 'undefined') && window.history && window.history.pushState);
+var FRAGMENT_ROOT = '/map/';
 
 
 function getCliChunk (chars, start, endChar) {
@@ -113,6 +115,56 @@ var Shell = O.extend({
         this.terminal = terminal;
 
         semaphore.on('please:shell:context', this.switchContext, this);
+        if (typeof window !== 'undefined') {
+            this.initHistory();
+        }
+    },
+
+
+    initHistory: function () {
+        if (hasHistory) {
+            var self = this;
+            var popStateCallback = function () {
+                self.historyPopContext.apply(self, arguments);
+            };
+            window.onpopstate = popStateCallback;
+        }
+
+        // backbone based
+        var trailingSlash = /\/$/;
+        var routeStripper = /^[#\/]|\s+$/g;
+        var fragment = window.location.pathname;
+        var root = FRAGMENT_ROOT.replace(trailingSlash, '');
+        if (!fragment.indexOf(root)) {
+            fragment = fragment.substr(root.length);
+        }
+        fragment.replace(routeStripper, '');
+        var path = fragment.split('/');
+        if(path[0].length === 0) {
+            path = path.slice(1);
+        }
+        if ((fragment.length > 0) && (path.length > 0)) {
+            this.historyPushContext(path);
+        }
+    },
+
+    historyPopContext: function (event) {
+        if (event.state) {
+            this.switchContext(event.state);
+        }
+    },
+
+    historyPushContext: function (opt_path, opt_title) {
+        if (hasHistory) {
+            var trailingSlash = /\/$/;
+            var root = FRAGMENT_ROOT;
+            window.history.pushState(
+                opt_path,
+                opt_title || '',
+                root + opt_path.join('/')
+            );
+        }
+        return this.switchContext(opt_path);
     },
 
     initStreams: function () {
