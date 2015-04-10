@@ -47,6 +47,25 @@ View.prototype.scale = function (sx, sy) {
 };
 
 View.prototype.setExtent = function (extent) {
+    var rect = this.getRect(),
+        sx = rect.width / Math.abs(extent.getWidth()),
+        sy = rect.height / Math.abs(extent.getHeight()),
+        s = (sx < sy) ? sx : sy,
+        center = extent.getCenter().getCoordinates();
+    if (sx < sy) {
+        // adjust extent height
+        var newHeight = rect.height * (1/s),
+            adjH = newHeight / 2;
+        extent.extent[1] = center[1] - adjH;
+        extent.extent[3] = center[1] + adjH;
+    }
+    else {
+        // adjust extent width
+        var newWidth = rect.width * (1/s),
+            adjW = newWidth / 2;
+        extent.extent[0] = center[0] - adjW;
+        extent.extent[2] = center[0] + adjW;
+    }
     this.extent = extent;
     this.setTransform();
     semaphore.signal('view:change', this);
@@ -56,28 +75,16 @@ View.prototype.setTransform = function () {
     var extent = this.extent,
         rect = this.getRect(),
         halfSize = [rect.width/2, rect.height/2],
-        sx = this.size.width / Math.abs(extent.getWidth()),
-        sy = this.size.height / Math.abs(extent.getHeight()),
+        sx = rect.width / Math.abs(extent.getWidth()),
+        sy = rect.height / Math.abs(extent.getHeight()),
         s = (sx < sy) ? sx : sy,
-        center = extent.getCenter().getCoordinates();
-    if (sx < sy) {
-        // adjust extent height
-        var newHeight = Math.abs(extent.getHeight()) * this.size.height / this.size.width,
-            adjH = newHeight / 2;
-        extent.extent[1] = center[1] - adjH;
-        extent.extent[3] = center[1] + adjH;
-    }
-    else {
-        // adjust extent width
-        var newWidth = Math.abs(extent.getWidth()) * this.size.width / this.size.height,
-            adjW = newWidth / 2;
-        extent.extent[0] = center[0] - adjW;
-        extent.extent[2] = center[0] + adjW;
-    }
+        is = (1/s),
+        center = extent.getCenter().getCoordinates(),
+        tcx = (halfSize[0] * is) - center[0],
+        tcy = ((halfSize[1] * is) - center[1]) - Math.abs(extent.getHeight());
     var t = new Transform();
-    t.translate(halfSize[0], halfSize[1]);
-    t.translate(-center[0], -center[1]);
-    t.scale(s, -s, {'x': halfSize[0], 'y':halfSize[1]});
+    t.translate(tcx, tcy);
+    t.scale(s, -s, {'x': tcx, 'y': tcy});
     this.transform.reset(t);
 };
 

@@ -57,6 +57,20 @@ Painter.prototype.mapPoint = function (p) {
     return this.transform.mapVec2(p);
 };
 
+Painter.prototype.save = function () {
+    this.context.save();
+};
+
+Painter.prototype.restore = function () {
+    this.context.restore();
+};
+
+Painter.prototype.wrap = function (f, ctx) {
+    this.save();
+    f.call(ctx, this);
+    this.restore();
+};
+
 // graphic state
 Painter.prototype.set = function (prop, value) {
     this.context[prop] = value;

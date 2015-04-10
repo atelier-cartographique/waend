@@ -83,7 +83,6 @@ Text.prototype.draw = function (fontsz, segments, offset) {
             g = gc[iii];
             sa = g.advanceWidth * scale;
             if ((cx + sa) < nx) {
-                console.log(cx, cy, sa);
                 paths.push(getPath.apply(g, [cx, cy, fontsz]));
                 cx += sa;
                 gOffset += 1;

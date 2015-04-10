@@ -75,7 +75,17 @@ CanvasRenderer.prototype.render = function () {
         // features = this.layer.getFeatures();
 
     this.painter.clear();
-    // this.drawGrid();
+    // I keep it here just in case transformations get tricky again
+    // this.painter.wrap(function(p){
+    //     p.set('strokeStyle', 'blue');
+    //     p.drawPolygon([[
+    //         pExtent.getBottomLeft().getCoordinates(),
+    //         pExtent.getTopLeft().getCoordinates(),
+    //         pExtent.getTopRight().getCoordinates(),
+    //         pExtent.getBottomRight().getCoordinates(),
+    //     ]], ['closePath', 'stroke']);
+    // });
+
     this.features = {};
     for (var i = 0; i < features.length; i++) {
         var f = features[i],

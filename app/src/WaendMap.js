@@ -8,7 +8,7 @@
  *
  */
 
-'use strict';
+// 'use strict';
 
 
 var _ = require('underscore'),
@@ -91,7 +91,7 @@ Map.prototype.getCoordinateFromPixel = function (pixel) {
     var v = Array.apply(null, pixel),
         inverse = this.view.transform.inverse(),
         tv = inverse.mapVec2(v);
-
+    console.log('map.getCoordinateFromPixel', v, inverse.flatMatrix(), tv);
     return this.projection.inverse(tv);
 };
 
