@@ -1,14 +1,14 @@
 /*
  * app/lib/commands/layer/importer.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
 
-'use strict';
+// 'use strict';
 
 var _ = require('underscore'),
     Promise = require('bluebird'),
@@ -22,14 +22,14 @@ function setupDropZone (container) {
     dropbox.backgroundColor = 'transparent';
     container.appendChild(dropbox);
     return dropbox;
-};
+}
 
 function create (binder, uid, gid, lid, feature) {
     var olGeom = feature.getGeometry();
     var props = _.omit(feature.getProperties(), 'geometry', 'id');
     var geomType = olGeom.getType();
-    if(('Point' === geomType) 
-        || ('LineString' === geomType) 
+    if(('Point' === geomType)
+        || ('LineString' === geomType)
         || ('Polygon' === geomType)) {
 
         var geom = JSON.parse(Geometry.format.GeoJSON.write(olGeom));
@@ -38,12 +38,12 @@ function create (binder, uid, gid, lid, feature) {
             'layer_id': lid,
             'properties': props,
             'geom': geom
-        }
+        };
         return binder.setFeature(uid, gid, lid, data, true);
     }
     console.write('importer unsupported geom type', geomType);
     return Promise.resolve();
-};
+}
 
 function importer () {
     var self = this,
@@ -109,7 +109,7 @@ function importer () {
     };
 
     return (new Promise(resolver));
-};
+}
 
 
 module.exports = exports = {

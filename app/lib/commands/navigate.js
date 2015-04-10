@@ -101,16 +101,16 @@ function navigate () {
             var key = event.witch || event.keyCode;
             switch (key) {
                 case 38:
-                    navNorth();
-                    break;
-                case 40:
                     navSouth();
                     break;
+                case 40:
+                    navNorth();
+                    break;
                 case 37:
-                    navWest();
+                    navEast();
                     break;
                 case 39:
-                    navEast();
+                    navWest();
                     break;
                 case 73: // i
                     zoomIn();

@@ -45,7 +45,7 @@ CanvasRenderer.prototype.initWorker = function () {
 
 CanvasRenderer.prototype.renderFeature = function (feature) {
     var id = feature.getId();
-    if (id in this.features) {
+    if ((id in this.features) && this.features[id]) {
         return;
     }
     this.features[id] = true;
@@ -100,7 +100,7 @@ CanvasRenderer.prototype.render = function () {
         catch (err) {
             self.features[f.id] = false;
         }
-        self.features[f.id] = true;
+        // self.features[f.id] = true;
     };
 
     // this.features = {};
@@ -121,7 +121,7 @@ CanvasRenderer.prototype.render = function () {
     //     this.features[f.id] = true;
     // }
 
-    this.layer.forEachFeatureInExtent(rf);
+    this.layer.forEachFeatureInExtent(extent, rf);
 };
 
 CanvasRenderer.prototype.stop = function () {
