@@ -154,6 +154,7 @@ View.prototype.addLayer = function (layer) {
     }
     var canvas = this.createCanvas(layer.id);
     var contextIndex = this.createContext(layer.id, canvas);
+    this.layers.push(layer);
     return this;
 };
 
