@@ -21,7 +21,7 @@
     "morgan": "~1.0.0",
     "node-ft": "0.0.9",
     "node-uuid": "^1.4.2",
-    "openlayers": "atelier-cartographique/ol3",
+    "openlayers": "*",
     "opentype.js": "^0.4.6",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",

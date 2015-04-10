@@ -64,14 +64,15 @@ CanvasRenderer.prototype.renderFeature = function (feature) {
 };
 
 CanvasRenderer.prototype.render = function () {
-    var worker = this.worker,
+    var self = this,
+        worker = this.worker,
         pExtent = this.view.extent,
         projectedMin = pExtent.getBottomLeft().getCoordinates(),
         projectedMax = pExtent.getTopRight().getCoordinates(),
         min = this.proj.inverse(projectedMin),
         max = this.proj.inverse(projectedMax),
-        extent = min.concat(max),
-        features = this.layer.rBush_.getInExtent(extent);
+        extent = min.concat(max);
+        // features = this.layer.rBush_.getInExtent(extent);
         // features = this.layer.getFeatures();
 
     this.painter.clear();
@@ -86,24 +87,41 @@ CanvasRenderer.prototype.render = function () {
     //     ]], ['closePath', 'stroke']);
     // });
 
-    this.features = {};
-    for (var i = 0; i < features.length; i++) {
-        var f = features[i],
-            geom = f.getGeometry(),
+    var rf = function (f) {
+        var geom = f.getGeometry(),
             geomType = geom.getType().toLowerCase(),
             props = _.omit(f.getProperties(), 'geometry'),
             coordinates = geom.getCoordinates();
 
         try {
             // this[geomType+'Transform'](coordinates);
-            worker.post(geomType, coordinates, props, this.view.transform.flatMatrix());
+            worker.post(geomType, coordinates, props, self.view.transform.flatMatrix());
         }
         catch (err) {
-            this.features[f.id] = false;
+            self.features[f.id] = false;
         }
-        this.features[f.id] = true;
-    }
+        self.features[f.id] = true;
+    };
 
+    // this.features = {};
+    // for (var i = 0; i < features.length; i++) {
+    //     var f = features[i],
+    //         geom = f.getGeometry(),
+    //         geomType = geom.getType().toLowerCase(),
+    //         props = _.omit(f.getProperties(), 'geometry'),
+    //         coordinates = geom.getCoordinates();
+    //
+    //     try {
+    //         // this[geomType+'Transform'](coordinates);
+    //         worker.post(geomType, coordinates, props, this.view.transform.flatMatrix());
+    //     }
+    //     catch (err) {
+    //         this.features[f.id] = false;
+    //     }
+    //     this.features[f.id] = true;
+    // }
+
+    this.layer.forEachFeatureInExtent(rf);
 };
 
 CanvasRenderer.prototype.stop = function () {
