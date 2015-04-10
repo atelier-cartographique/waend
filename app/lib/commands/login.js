@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/login.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -14,7 +14,7 @@ var querystring = require('querystring'),
     config = require('../../../config');
 
 function login (username, password) {
-    var self = this;
+    var self = this,
         transport = new Transport(),
         shell = self.shell,
         stdout = self.sys.stdout,
@@ -35,9 +35,11 @@ function login (username, password) {
                 .then(function(user){
                     shell.user = user;
                     var cmd = terminal.makeCommand({
-                        'args': ['cc', '/' + user.id],
+                        'args': [
+                            'cc /' + user.id,
+                            'lg'],
                         'text': 'my context'
-                    })
+                    });
                     stdout.write('OK login ', cmd);
                     return user;
             });

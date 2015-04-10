@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/group/listFeatures.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -28,7 +28,10 @@ function listFeatures () {
                 for(var i = 0; i < features.length; i++){
                     var feature = features[i];
                     var cmd = terminal.makeCommand({
-                        'args': ['cc', '/'+userId+'/'+groupId+'/'+layerId+'/'+feature.id],
+                        'args': [
+                            'cc /'+userId+'/'+groupId+'/'+layerId+'/'+feature.id,
+                            'gg | region set'
+                            ],
                         'text': feature.id
                     });
                     stdout.write(cmd, ' ', feature.get('name') || '');

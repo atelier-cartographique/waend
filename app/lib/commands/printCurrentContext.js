@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/printCurrentContext.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -21,7 +21,7 @@ function pcc () {
         var m = db.get(current[i]);
         var s = current.slice(0, i+1);
         var cmd = terminal.makeCommand({
-            args:['cc', '/'+s.join('/')],
+            args:['cc /'+s.join('/')],
             text: (m.get('name') || current[i])
         });
         crt.push('/');
@@ -41,4 +41,3 @@ module.exports = exports = {
     name: 'pcc',
     command: pcc
 };
-

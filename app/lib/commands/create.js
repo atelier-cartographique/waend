@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/create.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -38,11 +38,11 @@ function createGroup (uid, ctx, resolve, reject) {
                         user_id: uid,
                         status_flag: (pp - 1),
                         properties: {'name':name}
-                    }
+                    };
                     ctx.binder.setGroup(uid, data)
                         .then(function(model){
                             var cmd = terminal.makeCommand({
-                                args: ['cc', '/'+uid+'/'+model.id],
+                                args: ['cc /'+uid+'/'+model.id],
                                 text: (model.get('name') || model.id)
                             });
                             stdout.write(cmd);
@@ -51,7 +51,7 @@ function createGroup (uid, ctx, resolve, reject) {
                 });
         })
         .catch(reject);
-};
+}
 
 function createLayer (uid, gid, ctx, resolve, reject) {
     var binder = ctx.binder,
@@ -70,7 +70,7 @@ function createLayer (uid, gid, ctx, resolve, reject) {
             binder.setLayer(uid, gid, data)
                 .then(function(model){
                     var cmd = terminal.makeCommand({
-                        args: ['cc', '/'+uid+'/'+gid+'/'+model.id],
+                        args: ['cc /'+uid+'/'+gid+'/'+model.id],
                         text: (model.get('name') || model.id)
                     });
                     stdout.write('created layer ', cmd);
@@ -78,7 +78,7 @@ function createLayer (uid, gid, ctx, resolve, reject) {
                 });
         })
         .catch(reject);
-};
+}
 
 function createFeature (uid, gid, lid, ctx, resolve, reject) {
     var binder = ctx.binder,
@@ -98,7 +98,7 @@ function createFeature (uid, gid, lid, ctx, resolve, reject) {
         return binder.setFeature(uid, gid, lid, data)
             .then(function(model){
                 var cmd = terminal.makeCommand({
-                    args: ['cc', '/'+uid+'/'+gid+'/'+lid+'/'+model.id],
+                    args: ['cc /'+uid+'/'+gid+'/'+lid+'/'+model.id],
                     text: model.id
                 });
                 stdout.write('created feature ', cmd);
@@ -113,7 +113,7 @@ function iCreate () {
         stdout = self.sys.stdout,
         stdin = self.sys.stdin,
         current = self.current();
-    
+
     stdout.write('select type:');
     if (1 === current.length) {
         stdout.write('1 : group');

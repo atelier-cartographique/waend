@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/user/listGroups.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -25,7 +25,11 @@ function listGroups () {
                 for(var i = 0; i < groups.length; i++){
                     var group = groups[i];
                     var cmd = terminal.makeCommand({
-                        'args': ['cc', '/'+userId+'/'+group.id],
+                        'args': [
+                            'cc /'+userId+'/'+group.id,
+                            'get',
+                            'll'
+                            ],
                         'text': group.id
                     });
                     stdout.write(cmd, ' ', group.get('name') || '');

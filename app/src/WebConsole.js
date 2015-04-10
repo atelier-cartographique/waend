@@ -8,12 +8,13 @@
  *
  */
 
-'use strict';
+// 'use strict';
 
 var _ = require('underscore'),
     Terminal = require('../lib/Terminal'),
     semaphore = require('../lib/Semaphore'),
-    Mutex = require('../lib/Mutex');
+    Mutex = require('../lib/Mutex'),
+    Promise = require('bluebird');
 
 var document = window.document;
 
@@ -30,13 +31,22 @@ WebCommand.prototype.toString = function () {
 
 WebCommand.prototype.onClick = function () {
     var shell = this.term.shell,
-        args = this.args.join(' ');
+        args = this.args;
     var cb = function(event){
         event.preventDefault();
-        shell.exec(args)
-            .catch(function(err){
-                console.error(err);
-            });
+        // _.each(args, function(arg){
+        //     shell.exec(arg)
+        //         .catch(function(err){
+        //             console.error(err);
+        //         });
+        // });
+        Promise.reduce(args, function(t,i, index){
+            var arg = args[index];
+            return shell.exec(arg);
+        }, 0)
+        .catch(function(err){
+            console.error(err);
+        });
     };
     return cb;
 };

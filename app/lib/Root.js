@@ -1,9 +1,9 @@
 /*
  * app/lib/Root.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -17,14 +17,13 @@ function processResult(shell, result) {
     var stdout = shell.stdout;
     if(!result){
         stdout.write('No result found');
-        return this.conclusion();
+        return this.end();
     }
     else{
         for(var i = 0; i < result.length; i++){
             var path = '/' + result.user_id + '/' + result.id;
             var line = shell.terminal.makeCommand({
-                cmd: 'cc',
-                args: [path],
+                args: ['cc '+path],
                 text: (result.properties.name | result.id)
             });
             stdout.write(line);
@@ -48,7 +47,7 @@ var Root = Context.extend({
             var stdout = this.shell.stdout;
             stdout.write('hello, not yet written');
             stdout.write('feel free to help :)');
-            return this.conclusion();
+            return this.end();
         },
     }
 });

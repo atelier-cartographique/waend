@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/layer/createFeature.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -37,9 +37,9 @@ function createFeature (sGeom) {
                 throw (new Error('not a geometry'));
             }
         }
-        catch (err) { 
+        catch (err) {
             try { // env
-                if (env.DELIVERED 
+                if (env.DELIVERED
                     && env.DELIVERED.toGeoJSON) {
                     geom = env.DELIVERED.toGeoJSON();
                 }
@@ -59,18 +59,18 @@ function createFeature (sGeom) {
         'layer_id': lid,
         'properties': {},
         'geom': geom
-    }
+    };
 
     return binder.setFeature(uid, gid, lid, data)
         .then(function(model){
             var cmd = terminal.makeCommand({
-                args: ['cc', '/'+uid+'/'+gid+'/'+lid+'/'+model.id],
+                args: ['cc /'+uid+'/'+gid+'/'+lid+'/'+model.id],
                 text: model.id
             });
             stdout.write('created feature ', cmd);
             return self.end(model);
         });
-};
+}
 
 
 
