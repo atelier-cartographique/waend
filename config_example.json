@@ -4,7 +4,7 @@
         "user"     : "pierre",
         "password" : "plokplok",
         "database" : "waend"
-      
+
     },
     "cache": {
         "redis": {
@@ -16,14 +16,9 @@
         "port": 8000,
         "viewEngine" : "ejs",
         "views" : "/home/pierre/System/src/waend/views",
-        "static" : "/home/pierre/System/src/waend/static"
     },
     "public":{
-        "appsUrl" : "http://waend.local/plugins/",
-        "apiUrl" : "http://waend.local/api/v1/",
-        "liveUrl" : "http://waend.local/notify",
-        "defaultLocale": "en",
-        "templateDir": "templates",
-        "apps" : ["modal", "workspace", "browser", "display"]
+        "loginUrl" : "http://waend.local/login",
+        "apiUrl" : "http://waend.local/api/v1",
     }
 }

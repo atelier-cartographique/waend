@@ -33,3 +33,15 @@ browserify app/src/libworker.js  > bin/libworker.js
 ```
 
 Hey, you're done!
+
+## run
+
+The program does not serve assets. You have to provide them through other means, here we use nginx for this pupose.
+
+Once it's set
+
+```bash
+npm start
+```
+
+got to http://your.host/register to create a new user, than enjoy http://your.host/map
