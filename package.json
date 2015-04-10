@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node scripts/server.js",
-    "prestart": "./scripts/lessc.sh style login"
+    "start": "node scripts/server.js"
   },
   "dependencies": {
     "bcrypt": "^0.8.1",
