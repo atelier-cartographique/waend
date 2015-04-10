@@ -54,18 +54,23 @@ Access control is partialy based on context.
 	- --> login & go to user context
 - search group & display result
 	- --> display results & link to element
-- go to result element
-	- --> change context & zoom on group region
+		- go to result element -> change context & zoom on group region
 
 
 #### Wænd/user
 
-- created groups 
-	- --> list created groups & link + "create a new group" link
-- subscribed groups
-	- --> list subscribed groups & link
-- go to a listed group
-	- --> change context & zoom on group region 
+- edit user 
+	- set name
+	- set description / profil text
+	- set email adress
+	- set other key values
+ 
+- if created groups --> list created groups & link + "create a new group" link
+
+- if subscribed groups --> list subscribed groups & link
+
+- when going to a listed group --> change context & zoom on group region 
+
 - create a group 
 	- --> create a group + pre-required key | value + automatic creation of discussion layer
 		- key | value are : 
@@ -73,7 +78,8 @@ Access control is partialy based on context.
 		- set name
 		- set description
 		- set bounding box & zoom
-- delete user + warning 
+
+- delete user + warning --> delete & logout + "ciao!"
 
 
 #### Wænd/user/group
@@ -143,3 +149,19 @@ Eg : "> get group1" will display group1 and the related elements (decription, la
 
 - Command with attached interactions.  
 Eg : "> create group2" will requier to set group2's description, bounding box and so on.
+
+
+## When entering Wænd
+
+### front page as a visitor
+Featured map ? random map ?
+Waend map as a Guided Tour ? 
+Search a map ?  
+login / sign-in
+
+### page at first login / without created or followed group(s)
+
+
+
+### page as user with created or followed group(s)
+
