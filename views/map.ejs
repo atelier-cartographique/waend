@@ -57,23 +57,29 @@
     }
 
     #page-title{
-        position:absolute;
-        top:0;
-        left:0;
-        right:0;
-        height:64px;
-        padding: 24px;
-        color: white;
+        position: absolute;
+        bottom: 0;
+        /*left: 0;*/
+        right: 0;
+        height: 30px;
+        padding: 10px;
+        color: #000;
+        text-shadow:
+        -1px -1px 0 #fff,
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+        1px 1px 0 #fff; 
         font-family: sans-serif;
         font-size: 28pt;
         font-weight: bold;
-        background-color: black;
-        border-bottom: 12px solid #FF00BE;
+        /* background-color: black; */
+        /* border-bottom: 12px solid #FF00BE; */
+        z-index: 1;
     }
 
     #map{
         position:absolute;
-        top:124px;
+        top:0;
         left:0;
         right:0;
         bottom: 0;
@@ -82,7 +88,7 @@
 
     #wc{
         position:absolute;
-        top:124px;
+        top:0;
         left:0;
         right:0;
         bottom: 0;
