@@ -1,9 +1,9 @@
 /*
  * app/lib/Transport.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -20,17 +20,16 @@ var _ = require('underscore'),
 function transportXHR () {
     return function (options) {
         var xhr = new XMLHttpRequest();
-        
+
         var headers = _.omit(options.headers || {}, 'Connection', 'Content-Length');
 
         var listeners = options.listeners || {};
         for(var listener in listeners){
             var cb = listeners[listener].callback;
             var ctx = listeners[listener].context;
-            var wrapper = function(evt){
+            xhr.addEventListener(listener, function(evt){
                 cb.apply(ctx, [evt, xhr]);
-            };
-            xhr.addEventListener(listener, wrapper, false);
+            }, false);
         }
 
         var url = options.url;
@@ -40,11 +39,13 @@ function transportXHR () {
         xhr.open(options.verb, url, true);
 
         for(var header in headers) {
-            try{
-                xhr.setRequestHeader(header, headers[header]);
-            }
-            catch(err){
-                console.log('transportXHR setHeader', err);
+            if(!!(headers[header])) {
+                try{
+                    xhr.setRequestHeader(header, headers[header]);
+                }
+                catch(err){
+                    console.log('transportXHR setHeader', err);
+                }
             }
         }
 
@@ -55,7 +56,7 @@ function transportXHR () {
         xhr.send(options.body);
         return xhr;
     };
-};
+}
 
 var httpCookie;
 
@@ -85,7 +86,7 @@ function transportHTTP () {
                 }
             });
         };
-        
+
 
         var purl = url.parse(options.url);
         var path = purl.path;
@@ -118,7 +119,7 @@ function transportHTTP () {
         }
         req.end();
     };
-};
+}
 
 var Transport = O.extend({
 
@@ -133,8 +134,8 @@ var Transport = O.extend({
     },
 
     get: function(url, getOptions) {
-        var transport = this.transport,
-            getOptions = getOptions || {};
+        var transport = this.transport;
+        getOptions = getOptions || {};
 
         var resolver = function (resolve, reject) {
             var errorhandler = function (evt, xhr) {
@@ -191,8 +192,8 @@ var Transport = O.extend({
                 }
             };
 
-            var body; 
-            if(postOptions.headers 
+            var body;
+            if(postOptions.headers
                 && ('Content-Type' in postOptions.headers)){
                 body = postOptions.body;
             }
@@ -238,4 +239,3 @@ var Transport = O.extend({
 
 
 module.exports = exports = Transport;
-

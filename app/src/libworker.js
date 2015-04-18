@@ -188,7 +188,8 @@ function drawTextInPolygon (T, polygon, txt, fsz) {
         startSegment = 0,
         segments = getWritableSegments(polygon, fs * 1.2, startSegment),
         t = new Text(txt), result, tOffsets = [0,0],
-        paths, p, cmd;
+        paths, p, cmd,
+        instructions = [];
 
     while (segments) {
         if( !tOffsets) {
@@ -204,33 +205,42 @@ function drawTextInPolygon (T, polygon, txt, fsz) {
             // }
             for (var i = 0; i < paths.length; i++) {
                 p = paths[i];
-                emit('context', 'beginPath');
+                // emit('context', 'beginPath');
+                instructions.push(['beginPath']);
                 for (var ii = 0; ii < p.commands.length; ii++) {
                     cmd = p.commands[ii];
                     switch (cmd.type) {
                         case 'M':
-                            emit('context', 'moveTo', cmd.x, cmd.y);
+                            // emit('context', 'moveTo', cmd.x, cmd.y);
+                            instructions.push(['moveTo', cmd.x, cmd.y]);
                             break;
                         case 'L':
-                            emit('context', 'lineTo', cmd.x, cmd.y);
+                            // emit('context', 'lineTo', cmd.x, cmd.y);
+                            instructions.push(['lineTo', cmd.x, cmd.y]);
                             break;
                         case 'C':
-                            emit('context', 'bezierCurveTo', cmd.x1, cmd.y1, cmd.x2, cmd.y2, cmd.x, cmd.y);
+                            // emit('context', 'bezierCurveTo', cmd.x1, cmd.y1, cmd.x2, cmd.y2, cmd.x, cmd.y);
+                            instructions.push(['bezierCurveTo', cmd.x1, cmd.y1, cmd.x2, cmd.y2, cmd.x, cmd.y]);
                             break;
                         case 'Q':
-                            emit('context', 'quadraticCurveTo', cmd.x1, cmd.y1, cmd.x, cmd.y);
+                            // emit('context', 'quadraticCurveTo', cmd.x1, cmd.y1, cmd.x, cmd.y);
+                            instructions.push(['quadraticCurveTo', cmd.x1, cmd.y1, cmd.x, cmd.y]);
                             break;
                         case 'Z':
-                            emit('context', 'closePath');
+                            // emit('context', 'closePath');
+                            instructions.push(['closePath']);
                             break;
                     }
                 }
-                emit('context', 'fill');
+                // emit('context', 'fill');
+                instructions.push(['fill']);
             }
         }
         startSegment += 1;
         segments = getWritableSegments(polygon, fs *  1.2, startSegment);
     }
+
+    emit('instructions', instructions);
 
 }
 

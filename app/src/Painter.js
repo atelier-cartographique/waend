@@ -28,7 +28,8 @@ Painter.prototype.handlers = {
     'draw': 'draw',
     'set': 'set',
     'clip': 'clip',
-    'context': 'rawContext'
+    'context': 'rawContext',
+    'instructions': 'processInstructions'
 };
 
 
@@ -183,8 +184,14 @@ Painter.prototype.rawContext = function () {
             this.context.fill();
             break;
     }
-
 };
+
+Painter.prototype.processInstructions = function (instructions) {
+    for (var i = 0; i < instructions.length; i++) {
+        this.rawContext.apply(this, instructions[i]);
+    }
+};
+
 
 
 module.exports = exports = Painter;

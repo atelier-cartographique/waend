@@ -11,7 +11,7 @@
 var _ = require('underscore');
 var express = require('express');
 
-var routes = ['login', 'api'];
+var routes = ['login', 'api', 'media'];
 
 module.exports = exports = function(app){
 
