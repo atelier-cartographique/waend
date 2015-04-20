@@ -26,7 +26,45 @@ function setupDropZone (container) {
 
 
 function listMedia () {
+    var self = this,
+        stdout = self.sys.stdout,
+        shell = self.shell,
+        user = shell.user,
+        terminal = shell.terminal;
 
+    if (!user) {
+        return self.endWithError('you are not logged in');
+    }
+
+    var resolver = function (resolve, reject) {
+        var transport = new Transport();
+        var success = function (data) {
+            if('medias' in data) {
+                for (var i = 0; i < data.medias.length; i++) {
+                    var m = data.medias[i];
+                    var cmd = terminal.makeCommand({
+                        'args' : ['media show ' + m],
+                        'text' : m
+                    });
+                    stdout.write(cmd);
+                }
+                resolve(data.medias);
+            }
+            else {
+                reject(new Error('empty set'));
+            }
+        };
+        var error = function (err) {
+            console.error(err);
+            reject(err);
+        };
+        transport
+            .get(MEDIA_URL + '/' + user.id)
+            .then(success)
+            .catch(error);
+    };
+
+    return (new Promise(resolver));
 }
 
 
@@ -90,8 +128,33 @@ function uploadMedia () {
 }
 
 
-function showMedia () {
+function showMedia (mediaName) {
+    var self = this,
+        shell = self.shell,
+        user = shell.user,
+        terminal = shell.terminal;
 
+    if (!user) {
+        return self.endWithError('you are not logged in');
+    }
+
+    var display = terminal.display(),
+        img = document.createElement('img');
+    display.node.appendChild(img);
+    img.setAttribute('src', MEDIA_URL + '/' +
+                            user.id + '/' +
+                            mediaName + '?size=2000');
+
+    var resolver = function (resolve) {
+        var close = function () {
+            display.end();
+            resolve(0);
+        };
+        display.node.setAttribute('tabindex', -1);
+        display.node.focus();
+        display.node.addEventListener('keydown', close, true);
+    };
+    return (new Promise(resolver));
 }
 
 function media () {
