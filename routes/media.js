@@ -128,8 +128,24 @@ function listMedia (request, response) {
 }
 
 
-function getMedia (request, response) {
+function getStep (sz) {
+    for (var i = STEPS_SZ - 1; i >= 0; i--) {
+        if (sz >= STEPS[i]) {
+            return i;
+        }
+    }
+    return STEPS_SZ - 1;
+}
 
+function getMedia (request, response) {
+    var size = ('size' in request.query) ? parseInt(request.query.size) : STEPS[0],
+        step = getStep(size),
+        userDir = path.basename(request.params.user_id),
+        mediaName = path.basename(request.params.media_name),
+        rootDir = path.join(request.config.mediaDir, userDir, mediaName);
+
+        console.log('getMedia', size, step);
+        response.sendFile(path.join(rootDir, STEPS[step] + '.png'));
 }
 
 module.exports = exports = function(router, app){
@@ -144,7 +160,7 @@ module.exports = exports = function(router, app){
             uploadMedia(request, response);
         }
         else {
-            response.status(401).end();
+            response.sendStatus(403);
         }
     });
 };
