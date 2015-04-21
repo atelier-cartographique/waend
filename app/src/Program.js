@@ -54,6 +54,7 @@ function Program (ctx) {
     };
 
     var textedPolygon = function (coordinates, props, fm) {
+        // debugger;
         ctx.polygonProject(coordinates);
         var T = new ctx.Transform(fm);
         var p = new ctx.Geometry.Polygon(coordinates);

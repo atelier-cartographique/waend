@@ -193,7 +193,7 @@ function drawTextInPolygon (T, polygon, txt, fsz) {
 
     while (segments) {
         if( !tOffsets) {
-            return;
+            break;
         }
         if (segments.length > 0) {
             result = t.draw(fs, segments, tOffsets);
