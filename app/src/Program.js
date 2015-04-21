@@ -12,12 +12,16 @@
 function Program (ctx) {
 
     ctx.linestring = function (coordinates, props, fm) {
+        var T = new ctx.Transform(fm);
         ctx.lineProject(coordinates);
+        ctx.lineTransform(T, coordinates);
         ctx.emit('draw', 'line', coordinates);
     };
 
     var hatchedPolygon = function (coordinates, props, fm) {
+        var T = new ctx.Transform(fm);
         ctx.polygonProject(coordinates);
+        ctx.polygonTransform(T, coordinates);
         var p = new ctx.Geometry.Polygon(coordinates);
         var extent = p.getExtentObject(),
             hatchLen = 24,
@@ -54,18 +58,19 @@ function Program (ctx) {
     };
 
     var textedPolygon = function (coordinates, props, fm) {
-        // debugger;
-        ctx.polygonProject(coordinates);
         var T = new ctx.Transform(fm);
+        ctx.polygonProject(coordinates);
+        ctx.polygonTransform(T, coordinates);
         var p = new ctx.Geometry.Polygon(coordinates);
-        ctx.drawTextInPolygon(T, p, props.text, props.fontsize);
+        ctx.drawTextInPolygon(p, props.text, props.fontsize);
     };
 
 
     var imagedPolygon = function (coordinates, props, fm) {
+        var T = new ctx.Transform(fm);
         ctx.polygonProject(coordinates);
-        var T = new ctx.Transform(fm),
-            p = new ctx.Geometry.Polygon(coordinates),
+        ctx.polygonTransform(T, coordinates);
+        var p = new ctx.Geometry.Polygon(coordinates),
             extent = p.getExtent();
 
         ctx.emit('image:clip', coordinates, extent, props.image);

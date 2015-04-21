@@ -56,10 +56,10 @@ Painter.prototype.resetClip = function () {
 Painter.prototype.clear = function () {
     this.context.clearRect(0, 0, this.view.size.width, this.view.size.height);
 };
-
-Painter.prototype.mapPoint = function (p) {
-    return this.transform.mapVec2(p);
-};
+//
+// Painter.prototype.mapPoint = function (p) {
+//     return this.transform.mapVec2(p);
+// };
 
 Painter.prototype.save = function () {
     this.context.save();
@@ -101,7 +101,7 @@ Painter.prototype.drawPolygon = function (coordinates, ends) {
     for(var i = 0; i < coordinates.length; i++) {
         var ring = coordinates[i];
         for(var ii = 0; ii < ring.length; ii++) {
-            var p = this.mapPoint(ring[ii]);
+            var p = ring[ii];
             if(0 === ii){
                 this.context.moveTo(p[0], p[1]);
             }
@@ -119,8 +119,8 @@ Painter.prototype.imageClip = function (coordinates, extent, imagePath) {
     var self = this,
         img = document.createElement('img'),
         url = MEDIA_URL + '/' + imagePath,
-        sw = this.mapPoint([extent[0], extent[1]]),
-        ne = this.mapPoint([extent[2], extent[3]]),
+        sw = [extent[0], extent[1]],
+        ne = [extent[2], extent[3]],
         width = Math.abs(ne[0] - sw[0]),
         height = Math.abs(ne[1] - sw[1]);
 
@@ -143,7 +143,7 @@ Painter.prototype.drawLine = function (coordinates) {
     // console.log('painter.line', coordinates[0]);
     this.context.beginPath();
     for(var i = 0; i < coordinates.length; i++) {
-        var p = this.mapPoint(coordinates[i]);
+        var p = coordinates[i];
         if(0 === i){
             this.context.moveTo(p[0], p[1]);
         }
@@ -183,22 +183,20 @@ Painter.prototype.rawContext = function () {
             this.context.beginPath();
             break;
         case 'moveTo':
-            this.context.moveTo.apply(this.context,
-                this.transform.mapVec2([args[0], args[1]]));
+            this.context.moveTo.apply(this.context, [args[0], args[1]]);
             break;
         case 'lineTo':
-            this.context.lineTo.apply(this.context,
-                this.transform.mapVec2([args[0], args[1]]));
+            this.context.lineTo.apply(this.context, [args[0], args[1]]);
             break;
         case 'bezierCurveTo':
-            p0 = this.transform.mapVec2([args[0], args[1]]);
-            p1 = this.transform.mapVec2([args[2], args[3]]);
-            p2 = this.transform.mapVec2([args[4], args[5]]);
+            p0 = [args[0], args[1]];
+            p1 = [args[2], args[3]];
+            p2 = [args[4], args[5]];
             this.context.bezierCurveTo(p0[0], p0[1], p1[0], p1[1], p2[0], p2[1]);
             break;
         case 'quadraticCurveTo':
-            p0 = this.transform.mapVec2([args[0], args[1]]);
-            p1 = this.transform.mapVec2([args[2], args[3]]);
+            p0 = [args[0], args[1]];
+            p1 = [args[2], args[3]];
             this.context.quadraticCurveTo(p0[0], p0[1], p1[0], p1[1]);
             break;
         case 'closePath':

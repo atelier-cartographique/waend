@@ -182,9 +182,8 @@ function getWritableSegments (p, lineHeight, start) {
     return segments;
 }
 
-function drawTextInPolygon (T, polygon, txt, fsz) {
+function drawTextInPolygon (polygon, txt, fsz) {
     var fs = fsz || 100,
-        scale = Math.abs(T.inverse().getScale()[1]),
         startSegment = 0,
         segments = getWritableSegments(polygon, fs * 1.2, startSegment),
         t = new Text(txt), result, tOffsets = [0,0],
