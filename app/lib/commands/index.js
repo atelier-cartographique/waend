@@ -28,6 +28,7 @@ var commandModules = [
     require('./navigate'),
     require('./media'),
     require('./select'),
+    require('./close'),
     ];
 
 

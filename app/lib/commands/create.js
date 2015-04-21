@@ -66,7 +66,7 @@ function createLayer (uid, gid, ctx, resolve, reject) {
             var data = {
                 user_id: uid,
                 properties: {'name':name}
-            }
+            };
             binder.setLayer(uid, gid, data)
                 .then(function(model){
                     var cmd = terminal.makeCommand({
@@ -93,7 +93,7 @@ function createFeature (uid, gid, lid, ctx, resolve, reject) {
             layer_id: lid,
             properties: {},
             geom: JSON.parse(center.format())
-        }
+        };
 
         return binder.setFeature(uid, gid, lid, data)
             .then(function(model){
@@ -105,7 +105,7 @@ function createFeature (uid, gid, lid, ctx, resolve, reject) {
                 resolve(model);
             })
             .catch(reject);
-};
+}
 
 function iCreate () {
     var self = this,
@@ -157,7 +157,7 @@ function iCreate () {
     };
 
     return (new Promise(resolver));
-};
+}
 
 
 module.exports = exports = {
