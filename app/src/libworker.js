@@ -182,12 +182,35 @@ function getWritableSegments (p, lineHeight, start) {
     return segments;
 }
 
-function drawTextInPolygon (polygon, txt, fsz) {
+
+function transformCommand (tfn, cmd) {
+    var p0, p1, p2;
+    switch (cmd.type) {
+        case 'M':
+            return ['moveTo'].concat(tfn([cmd.x, cmd.y]));
+        case 'L':
+            return ['lineTo'].concat(tfn([cmd.x, cmd.y]));
+        case 'C':
+            p0 = tfn([cmd.x1, cmd.y1]);
+            p1 = tfn([cmd.x2, cmd.y2]);
+            p2 = tfn([cmd.x, cmd.y]);
+            return ['bezierCurveTo', p0[0], p0[1], p1[0], p1[1], p2[0], p2[1]];
+        case 'Q':
+            p0 = tfn([cmd.x1, cmd.y1]);
+            p1 = tfn([cmd.x, cmd.y]);
+            return ['quadraticCurveTo', p0[0], p0[1], p1[0], p1[1]];
+        case 'Z':
+            return ['closePath'];
+    }
+}
+
+function drawTextInPolygon (T, polygon, txt, fsz) {
     var fs = fsz || 100,
         startSegment = 0,
         segments = getWritableSegments(polygon, fs * 1.2, startSegment),
         t = new Text(txt), result, tOffsets = [0,0],
         paths, p, cmd,
+        tfn = T.mapVec2Fn(),
         instructions = [];
 
     while (segments) {
@@ -206,24 +229,7 @@ function drawTextInPolygon (polygon, txt, fsz) {
                 p = paths[i];
                 instructions.push(['beginPath']);
                 for (var ii = 0; ii < p.commands.length; ii++) {
-                    cmd = p.commands[ii];
-                    switch (cmd.type) {
-                        case 'M':
-                            instructions.push(['moveTo', cmd.x, cmd.y]);
-                            break;
-                        case 'L':
-                            instructions.push(['lineTo', cmd.x, cmd.y]);
-                            break;
-                        case 'C':
-                            instructions.push(['bezierCurveTo', cmd.x1, cmd.y1, cmd.x2, cmd.y2, cmd.x, cmd.y]);
-                            break;
-                        case 'Q':
-                            instructions.push(['quadraticCurveTo', cmd.x1, cmd.y1, cmd.x, cmd.y]);
-                            break;
-                        case 'Z':
-                            instructions.push(['closePath']);
-                            break;
-                    }
+                    instructions.push(transformCommand(tfn, p.commands[ii]));
                 }
                 instructions.push(['fill']);
             }

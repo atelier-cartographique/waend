@@ -116,6 +116,10 @@ Source.prototype.buildFeature = function (f) {
         feature.set(key, val);
     });
     feature.setId(f.id);
+    f.on('set', function(key, val){
+        feature.set(key, val);
+    });
+    feature.feature = f;
     return feature;
 };
 

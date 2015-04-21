@@ -40,6 +40,7 @@ var Model = O.extend({
 
     set: function (key, val) {
         this.data.properties[key] = val;
+        this.emit('set', key, val);
         return this.binder.update(this);
     },
 
@@ -56,7 +57,7 @@ var Model = O.extend({
         var changed = _.isEqual(data, this.data);
         this.data = data;
         if (!silent && changed) {
-            this.emit('change');
+            this.emit('change', data);
         }
     }
 

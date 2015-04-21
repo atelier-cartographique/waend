@@ -42,11 +42,15 @@ function listMedia () {
             if('medias' in data) {
                 for (var i = 0; i < data.medias.length; i++) {
                     var m = data.medias[i];
-                    var cmd = terminal.makeCommand({
+                    var cmd0 = terminal.makeCommand({
                         'args' : ['media show ' + m],
                         'text' : m
                     });
-                    stdout.write(cmd);
+                    var cmd1 = terminal.makeCommand({
+                        'args' : ['set image ' + user.id+'/'+m],
+                        'text' : 'attach to current feature'
+                    });
+                    stdout.write(cmd0, cmd1);
                 }
                 resolve(data.medias);
             }

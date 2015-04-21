@@ -127,7 +127,8 @@ Painter.prototype.imageClip = function (coordinates, extent, imagePath) {
     var complete = function () {
         self.context.save();
         self.drawPolygon(coordinates, ['clip']);
-        self.context.drawImage(img, sw[0], ne[1], width, height);
+        self.context.drawImage(img, sw[0], sw[1], width, height);
+        // self.drawPolygon(coordinates, ['stroke']);
         self.context.restore();
     };
     img.src = url + '?size=' + Math.max(width, height);

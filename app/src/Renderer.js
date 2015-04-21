@@ -54,8 +54,11 @@ CanvasRenderer.prototype.renderFeature = function (feature) {
         props = _.omit(feature.getProperties(), 'geometry'),
         coordinates = geom.getCoordinates();
 
+    feature.feature.on('set', function(key, val){
+        this.render();
+    }, this);
+
     try {
-        // this[geomType+'Transform'](coordinates);
         this.worker.post(geomType, coordinates, props, this.view.transform.flatMatrix());
     }
     catch (err) {

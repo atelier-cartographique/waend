@@ -388,6 +388,21 @@ Transform.prototype.mapVec2 = function(v) {
     return v;
 };
 
+Transform.prototype.mapVec2Fn = function() {
+    var m11 = this.M(11),
+        m21 = this.M(21),
+        m31 = this.M(31),
+        m12 = this.M(12),
+        m22 = this.M(22),
+        m32 = this.M(32);
+    return function (v) {
+        v[0] = (v[0] * m11) + (v[1] * m21) + m31;
+        v[1] = (v[0] * m12) + (v[1] * m22) + m32;
+        return v;
+    };
+};
+
+
 
 /**
  * an array of vec2s [[x,y], [x,y], ...]

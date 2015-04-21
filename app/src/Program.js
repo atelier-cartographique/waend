@@ -60,9 +60,8 @@ function Program (ctx) {
     var textedPolygon = function (coordinates, props, fm) {
         var T = new ctx.Transform(fm);
         ctx.polygonProject(coordinates);
-        ctx.polygonTransform(T, coordinates);
         var p = new ctx.Geometry.Polygon(coordinates);
-        ctx.drawTextInPolygon(p, props.text, props.fontsize);
+        ctx.drawTextInPolygon(T, p, props.text, props.fontsize);
     };
 
 
