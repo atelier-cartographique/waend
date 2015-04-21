@@ -24,6 +24,8 @@ function Painter (view, layerId) {
     semaphore.on('view:change', this.resetTransform, this);
     this.resetTransform();
     this.resetClip();
+
+    this.context.globalCompositeOperation = 'multiply';
 }
 
 Painter.prototype.handlers = {
