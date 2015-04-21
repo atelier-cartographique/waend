@@ -8,7 +8,7 @@
  *
  */
 
-'use strict';
+// 'use strict';
 
 
 var _ = require('underscore'),
@@ -111,6 +111,18 @@ View.prototype.getLayer = function (layerId) {
         return null;
     }
     return this.layers[idx];
+};
+
+View.prototype.getFeaturesAt = function (coordinate) {
+    var features = [];
+    for (var i = 0; i < this.layers.length; i++) {
+        var lyr = this.layers[i],
+            fts = lyr.getFeaturesAtCoordinate(coordinate);
+        if (fts) {
+            features = features.concat(fts);
+        }
+    }
+    return features;
 };
 
 View.prototype.getContext = function (layerId) {

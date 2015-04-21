@@ -34,12 +34,6 @@ WebCommand.prototype.onClick = function () {
         args = this.args;
     var cb = function(event){
         event.preventDefault();
-        // _.each(args, function(arg){
-        //     shell.exec(arg)
-        //         .catch(function(err){
-        //             console.error(err);
-        //         });
-        // });
         Promise.reduce(args, function(t,i, index){
             var arg = args[index];
             return shell.exec(arg);

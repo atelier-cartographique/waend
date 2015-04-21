@@ -91,8 +91,12 @@ Map.prototype.getCoordinateFromPixel = function (pixel) {
     var v = Array.apply(null, pixel),
         inverse = this.view.transform.inverse(),
         tv = inverse.mapVec2(v);
-    console.log('map.getCoordinateFromPixel', v, inverse.flatMatrix(), tv);
+    // console.log('map.getCoordinateFromPixel', v, inverse.flatMatrix(), tv);
     return this.projection.inverse(tv);
+};
+
+Map.prototype.getFeaturesAt = function (coordinate) {
+    return this.view.getFeaturesAt(coordinate);
 };
 
 module.exports = exports = Map;

@@ -12,8 +12,10 @@
 
 
 var _ = require('underscore'),
+    config = require('../../config'),
     semaphore = require('../lib/Semaphore');
 
+var MEDIA_URL = config.public.mediaUrl;
 
 function Painter (view, layerId) {
     this.context = view.getContext(layerId);
@@ -29,6 +31,7 @@ Painter.prototype.handlers = {
     'set': 'set',
     'clip': 'clip',
     'context': 'rawContext',
+    'image:clip': 'imageClip',
     'instructions': 'processInstructions'
 };
 
@@ -109,6 +112,30 @@ Painter.prototype.drawPolygon = function (coordinates, ends) {
     }
     for (var e = 0; e < ends.length; e++) {
         this.context[ends[e]]();
+    }
+};
+
+Painter.prototype.imageClip = function (coordinates, extent, imagePath) {
+    var self = this,
+        img = document.createElement('img'),
+        url = MEDIA_URL + '/' + imagePath,
+        sw = this.mapPoint([extent[0], extent[1]]),
+        ne = this.mapPoint([extent[2], extent[3]]),
+        width = Math.abs(ne[0] - sw[0]),
+        height = Math.abs(ne[1] - sw[1]);
+
+    var complete = function () {
+        self.context.save();
+        self.drawPolygon(coordinates, ['clip']);
+        self.context.drawImage(img, sw[0], ne[1], width, height);
+        self.context.restore();
+    };
+    img.src = url + '?size=' + Math.max(width, height);
+    if (img.complete) {
+        complete();
+    }
+    else {
+        img.addEventListener('load', complete, false);
     }
 };
 

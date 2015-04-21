@@ -72,20 +72,8 @@ CanvasRenderer.prototype.render = function () {
         min = this.proj.inverse(projectedMin),
         max = this.proj.inverse(projectedMax),
         extent = min.concat(max);
-        // features = this.layer.rBush_.getInExtent(extent);
-        // features = this.layer.getFeatures();
 
     this.painter.clear();
-    // I keep it here just in case transformations get tricky again
-    // this.painter.wrap(function(p){
-    //     p.set('strokeStyle', 'blue');
-    //     p.drawPolygon([[
-    //         pExtent.getBottomLeft().getCoordinates(),
-    //         pExtent.getTopLeft().getCoordinates(),
-    //         pExtent.getTopRight().getCoordinates(),
-    //         pExtent.getBottomRight().getCoordinates(),
-    //     ]], ['closePath', 'stroke']);
-    // });
 
     var rf = function (f) {
         var geom = f.getGeometry(),
@@ -94,32 +82,12 @@ CanvasRenderer.prototype.render = function () {
             coordinates = geom.getCoordinates();
 
         try {
-            // this[geomType+'Transform'](coordinates);
             worker.post(geomType, coordinates, props, self.view.transform.flatMatrix());
         }
         catch (err) {
             self.features[f.id] = false;
         }
-        // self.features[f.id] = true;
     };
-
-    // this.features = {};
-    // for (var i = 0; i < features.length; i++) {
-    //     var f = features[i],
-    //         geom = f.getGeometry(),
-    //         geomType = geom.getType().toLowerCase(),
-    //         props = _.omit(f.getProperties(), 'geometry'),
-    //         coordinates = geom.getCoordinates();
-    //
-    //     try {
-    //         // this[geomType+'Transform'](coordinates);
-    //         worker.post(geomType, coordinates, props, this.view.transform.flatMatrix());
-    //     }
-    //     catch (err) {
-    //         this.features[f.id] = false;
-    //     }
-    //     this.features[f.id] = true;
-    // }
 
     this.layer.forEachFeatureInExtent(extent, rf);
 };

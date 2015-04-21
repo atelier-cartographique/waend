@@ -56,13 +56,25 @@ function Program (ctx) {
     var textedPolygon = function (coordinates, props, fm) {
         ctx.polygonProject(coordinates);
         var T = new ctx.Transform(fm);
-        // ctx.polygonTransform(T, coordinates);
         var p = new ctx.Geometry.Polygon(coordinates);
         ctx.drawTextInPolygon(T, p, props.text, props.fontsize);
     };
 
+
+    var imagedPolygon = function (coordinates, props, fm) {
+        ctx.polygonProject(coordinates);
+        var T = new ctx.Transform(fm),
+            p = new ctx.Geometry.Polygon(coordinates),
+            extent = p.getExtent();
+
+        ctx.emit('image:clip', coordinates, extent, props.image);
+    };
+
     ctx.polygon = function (coordinates, props, fm) {
-        if ('text' in props) {
+        if ('image' in props) {
+            imagedPolygon(coordinates, props, fm);
+        }
+        else if ('text' in props) {
             textedPolygon(coordinates, props, fm);
         }
         else {

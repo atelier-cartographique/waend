@@ -27,6 +27,7 @@ var commandModules = [
     require('./drawLine'),
     require('./navigate'),
     require('./media'),
+    require('./select'),
     ];
 
 
