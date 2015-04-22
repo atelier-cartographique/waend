@@ -15,10 +15,12 @@
     "server":{
         "port": 8000,
         "viewEngine" : "ejs",
-        "views" : "/home/pierre/System/src/waend/views",
+        "mediaDir" : "/home/pierre/System/var/waend/media",
+        "views" : "/home/pierre/System/src/waend/views"
     },
     "public":{
         "loginUrl" : "http://waend.local/login",
         "apiUrl" : "http://waend.local/api/v1",
+        "mediaUrl" : "http://waend.local/media"
     }
 }
