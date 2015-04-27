@@ -48,6 +48,7 @@ function create (binder, uid, gid, lid, feature) {
 function importer () {
     var self = this,
         shell = self.shell,
+        binder = self.binder,
         terminal = shell.terminal,
         map = shell.env.map,
         current = self.current(),
