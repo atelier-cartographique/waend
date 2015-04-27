@@ -17,7 +17,8 @@ function createGroup (uid, ctx, resolve, reject) {
     var binder = ctx.binder,
         stdout = ctx.sys.stdout,
         stdin = ctx.sys.stdin,
-        terminal = ctx.shell.terminal;
+        shell = ctx.shell,
+        terminal = shell.terminal;
 
     stdout.write('select a status');
     stdout.write('1 : public');
