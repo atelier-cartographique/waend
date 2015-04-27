@@ -12,9 +12,10 @@
 
 
 var _ = require('underscore'),
+    config = require('../../config'),
     O = require('../../lib/object').Object;
 
-
+var BIN_URL = config.public.binUrl;
 
 var WWorker = O.extend({
 
@@ -25,7 +26,7 @@ var WWorker = O.extend({
 
     wrapBody: function () {
         var body = [
-            'importScripts("http://waend.local/bin/libworker.js");'
+            'importScripts("' + BIN_URL + '/libworker.js");'
             ];
         for (var k in this.locals) {
             try{

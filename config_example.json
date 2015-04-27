@@ -21,6 +21,7 @@
     "public":{
         "loginUrl" : "http://waend.local/login",
         "apiUrl" : "http://waend.local/api/v1",
-        "mediaUrl" : "http://waend.local/media"
+        "mediaUrl" : "http://waend.local/media",
+        "binUrl" : "http://waend.local/bin"
     }
 }
