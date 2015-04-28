@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/setAttribute.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -20,9 +20,9 @@ function setAttr () {
         throw (new Error('No Key'));
     }
     else if (0 === args.length) {
-        var delivered = ('toString' in env.DELIVERED) ? env.DELIVERED.toString() : env.DELIVERED;
-        var data = JSON.parse(delivered);
-        return this.data.set(key, data);
+        var delivered = ('toJSON' in env.DELIVERED) ? env.DELIVERED.toJSON() : env.DELIVERED;
+        // var data = JSON.parse(delivered);
+        return this.data.set(key, delivered);
     }
     else if (1 === args.length) {
         // we first try to parse it, who knows?
@@ -40,7 +40,7 @@ function setAttr () {
         return v.toString();
     });
     return this.data.set(key, data);
-};
+}
 
 
 module.exports = exports = {

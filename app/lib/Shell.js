@@ -8,7 +8,7 @@
  *
  */
 
- 'use strict';
+ // 'use strict';
 
 var O = require('../../lib/object').Object,
     _ = require('underscore'),
@@ -320,7 +320,7 @@ var Shell = O.extend({
             path.push(this._contexts[i].data.id);
         }
         semaphore.signal('shell:change:context', this._currentContext, path);
-        for (var i = 0; i < this.postSwitchCallbacks.length; i++) {
+        for (i = 0; i < this.postSwitchCallbacks.length; i++) {
             var cb = this.postSwitchCallbacks[i];
             cb();
         }

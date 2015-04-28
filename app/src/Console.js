@@ -1,9 +1,9 @@
 /*
  * app/lib/Console.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -27,7 +27,7 @@ var Console = Terminal.extend({
     },
 
     write: function () {
-        var line = ''
+        var line = '';
         for(var i=0; i < arguments.length; i++){
             var fragment = arguments[i];
             line += fragment + ' ';
@@ -65,8 +65,8 @@ var Console = Terminal.extend({
         this.rl.setPrompt(this.title + this.prompt);
 
         var self = this;
-        
-        
+
+
         self.rl.on('line', function(line) {
             if(self.reading){return;}
             var cl = line.trim();
@@ -85,7 +85,7 @@ var Console = Terminal.extend({
             else{
                 self.rl.prompt();
             }
-            
+
         });
 
         self.rl.on('close', function() {

@@ -64,7 +64,7 @@ function printRegion (opt_format) {
     this.sys.stdout.write('SouthEast ', SE);
     // this.sys.stdout.write('South ', SW[1]);
     // this.sys.stdout.write('West ', SW[0]);
-    return this.end();
+    return this.end(r.extent);
 }
 
 

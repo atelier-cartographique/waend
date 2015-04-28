@@ -14,6 +14,7 @@ var _ = require('underscore'),
     Terminal = require('../lib/Terminal'),
     semaphore = require('../lib/Semaphore'),
     Mutex = require('../lib/Mutex'),
+    buttons = require('./Buttons'),
     Promise = require('bluebird');
 
 var document = window.document;
@@ -30,13 +31,13 @@ WebCommand.prototype.toString = function () {
 };
 
 WebCommand.prototype.onClick = function () {
-    var shell = this.term.shell,
+    var term = this.term,
         args = this.args;
     var cb = function(event){
         event.preventDefault();
         Promise.reduce(args, function(t,i, index){
             var arg = args[index];
-            return shell.exec(arg);
+            return term.runCommand(arg);
         }, 0)
         .catch(function(err){
             console.error(err);
@@ -101,6 +102,10 @@ var WebConsole = Terminal.extend({
 
     insertInput: function (listener) {
         listener = listener || this.handleInput.bind(this);
+        var oldInput = this._inputField;
+        if (oldInput) {
+            this.container.removeChild(oldInput);
+        }
         this._inputField = document.createElement('input');
         this._inputField.setAttribute('class', 'wc-input');
         this._inputField.setAttribute('type', 'text');
@@ -113,21 +118,100 @@ var WebConsole = Terminal.extend({
         this.title.innerHTML = title;
     },
 
-    start: function () {
-        this.title = document.createElement('div');
-        this.title.setAttribute('class','wc-title');
-        this.root.appendChild(this.title);
-        this.container = document.createElement('div');
-        this.container.setAttribute('class', 'wc-lines');
-        this.root.appendChild(this.container);
-        this.setTitle('/wænd');
-        this.insertInput();
+    setButtons: function () {
         var self = this;
-        self.container.addEventListener('click', function(e){
-            if(self._inputField){
-                self._inputField.focus();
+        var cmdHandler = function () {
+            var group = arguments[0],
+                name = arguments[1],
+                cmds = buttons[group][name];
+            return function () {
+                for (var i = 0; i < cmds.length; i++) {
+                    self.runCommand(cmds[i]);
+                }
+            };
+        };
+
+        self.buttonsContainer = document.createElement('div');
+        self.buttonsContainer.setAttribute('class','wc-buttons');
+        self.root.appendChild(self.buttonsContainer);
+
+        var groupKeys = _.keys(buttons);
+        var groups = {};
+        for (var gi = 0; gi < groupKeys.length; gi++) {
+            var gn = groupKeys[gi],
+                buttonKeys = _.keys(buttons[gn]),
+                groupElement = document.createElement('div');
+
+            groupElement.setAttribute('class','wc-buttons-group wc-inactive');
+            groupElement.appendChild(document.createTextNode(gn));
+            self.buttonsContainer.appendChild(groupElement);
+
+            groups[gn] = groupElement;
+
+            for (bi = 0 ; bi < buttonKeys.length; bi++) {
+                var bn = buttonKeys[bi],
+                    buttonElement = document.createElement('div');
+
+                buttonElement.setAttribute('class','wc-button');
+                buttonElement.appendChild(document.createTextNode(bn));
+                buttonElement.addEventListener('click', cmdHandler(gn, bn));
+                groupElement.appendChild(buttonElement);
+            }
+        }
+
+        semaphore.on('shell:change:context', function(sctx){
+            for (var gi = 0; gi < groupKeys.length; gi++) {
+                var gn = groupKeys[gi],
+                    elem = groups[gn];
+                if (elem) {
+                    elem.setAttribute('class', 'wc-buttons-group wc-inactive');
+                }
+            }
+            if (1 === sctx) {
+                if (groups.user) {
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-active');
+                }
+            }
+            else if (2 === sctx) {
+                if (groups.group) {
+                    groups.group.setAttribute('class', 'wc-buttons-group wc-active');
+                }
+            }
+            else if (3 === sctx) {
+                if (groups.layer) {
+                    groups.layer.setAttribute('class', 'wc-buttons-group wc-active');
+                }
+            }
+            else if (4 === sctx) {
+                if (groups.feature) {
+                    groups.feature.setAttribute('class', 'wc-buttons-group wc-active');
+                }
             }
         });
+    },
+
+    start: function () {
+        this.title = document.createElement('div');
+        this.container = document.createElement('div');
+        this.pages = document.createElement('div');
+
+        this.container.setAttribute('class', 'wc-container');
+        this.title.setAttribute('class','wc-title');
+        this.pages.setAttribute('class', 'wc-pages');
+
+        this.root.appendChild(this.title);
+        this.root.appendChild(this.container);
+        this.root.appendChild(this.pages);
+
+        this.setTitle('/wænd');
+        this.insertInput();
+        this.setButtons();
+        var self = this;
+        // self.container.addEventListener('click', function(e){
+        //     if(self._inputField){
+        //         self._inputField.focus();
+        //     }
+        // });
         self.shell.stdout.on('data', self.write, self);
         self.shell.stderr.on('data', self.writeError, self);
 
@@ -157,6 +241,7 @@ var WebConsole = Terminal.extend({
             .get()
             .then(function(unlock){
                 input.setAttribute('class', 'wc-input wc-pending');
+                self.pageStart(val);
                 self.shell.exec(val)
                     .then(function(){
                         console.log.apply(console, arguments);
@@ -167,9 +252,10 @@ var WebConsole = Terminal.extend({
                         }
                     })
                     .finally(function(){
-                        input.setAttribute('class', 'wc-input wc-inactive');
-                        input.setAttribute('disabled', 'disabled');
+                        // input.setAttribute('class', 'wc-input wc-inactive');
+                        // input.setAttribute('disabled', 'disabled');
                         self.history.push(val);
+                        // self.pageEnd();
                         self.insertInput();
                         unlock();
                     });
@@ -180,6 +266,31 @@ var WebConsole = Terminal.extend({
                 });
             });
     },
+
+    pageStart: function (cmd) {
+        var page = document.createElement('div'),
+            title = document.createElement('div');
+
+        page.setAttribute('class', 'wc-page wc-active');
+        title.setAttribute('class', 'wc-page-title');
+        title.appendChild(document.createTextNode(cmd));
+        page.appendChild(title);
+
+        if (this.currentPage) {
+            var cp = this.currentPage;
+            cp.addEventListener('transitionend', function(){
+                cp.setAttribute('class', 'hidden');
+            }, false);
+            cp.setAttribute('class', 'wc-page wc-inactive');
+        }
+
+        this.currentPage = page;
+        this.pages.appendChild(page);
+    },
+
+    // pageEnd: function () {
+    //
+    // },
 
     handleInput: function (event) {
         if(isKeyReturnEvent(event)) {
@@ -222,7 +333,7 @@ var WebConsole = Terminal.extend({
                 element.appendChild(textElement);
             }
         }
-        this.container.appendChild(element);
+        this.currentPage.appendChild(element);
     },
 
     writeError: function () {

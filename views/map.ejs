@@ -3,7 +3,7 @@
 <head>
     <title>wænd</title>
     <style type="text/css">
-    /* http://meyerweb.com/eric/tools/css/reset/ 
+    /* http://meyerweb.com/eric/tools/css/reset/
        v2.0 | 20110126
        License: none (public domain)
     */
@@ -17,8 +17,8 @@
     dl, dt, dd, ol, ul, li,
     fieldset, form, label, legend,
     table, caption, tbody, tfoot, thead, tr, th, td,
-    article, aside, canvas, details, embed, 
-    figure, figcaption, footer, header, hgroup, 
+    article, aside, canvas, details, embed,
+    figure, figcaption, footer, header, hgroup,
     menu, nav, output, ruby, section, summary,
     time, mark, audio, video {
         margin: 0;
@@ -29,7 +29,7 @@
         vertical-align: baseline;
     }
     /* HTML5 display-role reset for older browsers */
-    article, aside, details, figcaption, figure, 
+    article, aside, details, figcaption, figure,
     footer, header, hgroup, menu, nav, section {
         display: block;
     }
@@ -58,10 +58,11 @@
             -1px -1px 0 #fff,
             1px -1px 0 #fff,
             -1px 1px 0 #fff,
-            1px 1px 0 #fff; 
+            1px 1px 0 #fff;
     }
 
     #page-title{
+        display:none;
         position: absolute;
         bottom: 0;
         /*left: 0;*/
@@ -79,7 +80,7 @@
 
     #map{
         position:absolute;
-        top:40px;
+        top:0;
         left:0;
         right:0;
         bottom: 0;
@@ -92,8 +93,8 @@
         left:0;
         right:0;
         bottom: 0;
-        padding: 24px;
-        padding-top: 38px;
+        /*padding: 24px;
+        padding-top: 38px;*/
         font-family: monospace;
         background-color: transparent;
     }
@@ -118,45 +119,103 @@
 
     .wc-title{
         position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        height: 30px;
-        padding: 5px 24px;
+        top: 12px;
+        /*right: 0;*/
+        left: 12px;
+        /*height: 30px;*/
+        /*padding: 5px 24px;*/
         font-size: 12pt;
         color: #FF00BE;
-        background: #fff;
-        border-bottom: 2px solid black;
-        padding-bottom: 6px;
-        margin-bottom: 6px;
+        /*background: #fff;
+        border-bottom: 2px solid black;*/
+        /*padding-bottom: 6px;
+        margin-bottom: 6px;*/
     }
 
-    .wc-lines{
+    .wc-pages{
         position: absolute;
-        top:45px;
-        bottom: 24px;
-        left:24px;
-        right: 24px;
-        overflow-y: auto;
+        width: 60%;
+        max-height: 50%;
+        overflow: auto;
+        bottom: 48px;
+        left:48px;
         background-color: transparent;
+    }
+
+    .wc-page {
+        opacity: 1;
+        width: 100%;
+        overflow-y: hidden;
+    }
+
+    .wc-page-title {
+        font-weight: bold;
+        font-size: 150%;
+        color: grey;
+        margin-bottom: .5em;
+    }
+
+    .wc-page.wc-inactive {
+        opacity: 0;
+        transform: translateX(-50%);
+        transition-property: opacity, transform;
+        transition-duration: 1s;
     }
 
     .wc-input{
+        position: absolute;
+        bottom: 12px;
+        left:48px;
         border: 0;
+        border-top: 1px solid grey;
         font-weight: bold;
         font-size: 10pt;
         background-color: transparent;
-        width: 100%;
+        width: 60%;
         text-shadow:
             -1px -1px 0 #fff,
             1px -1px 0 #fff,
             -1px 1px 0 #fff,
-            1px 1px 0 #fff; 
+            1px 1px 0 #fff;
     }
 
-    .wc-inactive {
+    .wc-input.wc-inactive {
         color:#252525;
+        /*display: none;*/
     }
+
+    .wc-buttons {
+        position: absolute;
+        font-size: 150%;
+        bottom: 12px;
+        right: 12px;
+        text-align: right;
+        z-index: 123;
+    }
+
+    .wc-buttons-group {
+        font-weight: bold;
+    }
+
+
+    .wc-buttons-group.wc-active {
+        opacity: 1;
+    }
+
+    .wc-buttons-group.wc-inactive {
+        opacity: .1;
+    }
+
+    .wc-button {
+        cursor: pointer;
+        font-weight: normal;
+        border-bottom: 1px solid transparent;
+    }
+
+    .wc-button:hover {
+        border-bottom: 1px solid blue;
+    }
+
 
     .wc-pending{
         color: #2B71FF;
@@ -175,13 +234,16 @@
         border-bottom: 1px solid;
     }
 
+    .hidden {
+        display: none;
+    }
 
     </style>
     <script src="/bin/wmap.js"></script>
 
 </head>
 <body>
-    <div id="page-title">wænd</div>
+    <!-- <div id="page-title">wænd</div> -->
     <div id="map"></div>
     <div id="wc" class=""></div>
 </body>
