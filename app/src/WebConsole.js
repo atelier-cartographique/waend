@@ -26,6 +26,7 @@ function WebCommand (term, options) {
     this.term = term;
     this.args = options.args;
     this.text = options.text;
+    this.fragment = options.fragment;
 }
 
 WebCommand.prototype.toString = function () {
@@ -49,6 +50,10 @@ WebCommand.prototype.onClick = function () {
 };
 
 WebCommand.prototype.toDomFragment = function () {
+    if (this.fragment) {
+        this.fragment.addEventListener('click', this.onClick(), false);
+        return this.fragment;
+    }
     var element = document.createElement('a'),
         textElement = document.createTextNode(this.text.toString());
     element.setAttribute('href', '#');

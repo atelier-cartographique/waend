@@ -30,7 +30,8 @@ function listMedia () {
         stdout = self.sys.stdout,
         shell = self.shell,
         user = shell.user,
-        terminal = shell.terminal;
+        terminal = shell.terminal,
+        document = window.document;
 
     if (!user) {
         return self.endWithError('you are not logged in');
@@ -42,15 +43,26 @@ function listMedia () {
             if('medias' in data) {
                 for (var i = 0; i < data.medias.length; i++) {
                     var m = data.medias[i];
+                    var imageUrl = MEDIA_URL + '/' + user.id+'/'+m + '?size=200';
+                    var wrapper = document.createElement('div');
+                    var style = [
+                        'width:200px;',
+                        'height:200px;',
+                        'background-position: center center;',
+                        'background-size: cover;',
+                        'background-repeat: no-repeat;',
+                        'background-image:url("'+imageUrl+'")'
+                    ];
+                    wrapper.setAttribute('style', style.join(''));
                     var cmd0 = terminal.makeCommand({
                         'args' : ['media show ' + m],
-                        'text' : m
+                        'fragment' : wrapper
                     });
-                    var cmd1 = terminal.makeCommand({
-                        'args' : ['set image ' + user.id+'/'+m],
-                        'text' : 'attach to current feature'
-                    });
-                    stdout.write(cmd0, cmd1);
+                    // var cmd1 = terminal.makeCommand({
+                    //     'args' : ['set image ' + user.id+'/'+m],
+                    //     'text' : 'attach to current feature'
+                    // });
+                    stdout.write(cmd0);
                 }
                 resolve(data.medias);
             }
@@ -143,20 +155,36 @@ function showMedia (mediaName) {
     }
 
     var display = terminal.display(),
-        img = document.createElement('img');
-    display.node.appendChild(img);
-    img.setAttribute('src', MEDIA_URL + '/' +
-                            user.id + '/' +
-                            mediaName + '?size=2000');
+        mediaId = user.id + '/' + mediaName,
+        mediaUrl = MEDIA_URL + '/' + mediaId + '?size=2000',
+        wrapper = document.createElement('div'),
+        // img = document.createElement('img'),
+        closer = document.createElement('div');
+
+    wrapper.setAttribute('class', 'media-wrapper');
+    closer.setAttribute('class', 'media-close');
+    // img.setAttribute('class', 'media-img');
+
+
+    wrapper.setAttribute('style', 'background-image:url("'+mediaUrl+'");');
+
+    closer.innerHTML = ' close ';
+    // img.setAttribute('src', MEDIA_URL + '/' +
+    //                         mediaId + '?size=2000');
+
+    // wrapper.appendChild(img);
+    wrapper.appendChild(closer);
+    display.node.appendChild(wrapper);
 
     var resolver = function (resolve) {
         var close = function () {
             display.end();
             resolve(0);
         };
-        display.node.setAttribute('tabindex', -1);
-        display.node.focus();
-        display.node.addEventListener('keydown', close, true);
+        closer.addEventListener('click', close, false);
+        // display.node.setAttribute('tabindex', -1);
+        // display.node.focus();
+        // display.node.addEventListener('keydown', close, true);
     };
     return (new Promise(resolver));
 }
