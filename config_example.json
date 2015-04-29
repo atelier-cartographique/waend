@@ -19,6 +19,7 @@
         "views" : "/home/pierre/System/src/waend/views"
     },
     "public":{
+        "baseUrl": "http://waend.local",
         "loginUrl" : "http://waend.local/login",
         "apiUrl" : "http://waend.local/api/v1",
         "mediaUrl" : "http://waend.local/media",
