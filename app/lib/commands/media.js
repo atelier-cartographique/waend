@@ -87,9 +87,13 @@ function listMedia () {
 function uploadMedia () {
     var self = this,
         shell = self.shell,
+        stdout = shell.stdout,
         terminal = shell.terminal,
         display = terminal.display(),
         dropbox = setupDropZone(display.node);
+
+    stdout.write('Drag and Drop your media on the map to upload it');
+    stdout.write('Many formats are supported so, please try !');
 
         var resolver = function (resolve, reject) {
             var dragenter = function (e) {
