@@ -21,7 +21,6 @@ var userButtons = {
 
 
 var groupButtons = {
-    'print legend' : ['get | ll'],
     'list layers' : ['ll'],
     'create layer': ['ic'],
     'set map extent': ['region print | set extent']
