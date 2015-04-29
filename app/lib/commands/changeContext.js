@@ -15,7 +15,6 @@ var _ = require('underscore'),
 
 var dotdot = '..';
 var dot = '.';
-var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
 
 function cc (opt_path) {
     var path = ospath.normalize(opt_path),
@@ -62,22 +61,11 @@ function cc (opt_path) {
     }
 
     var self = this;
-    var titleType = titleTypes[ctxPath.length];
-    var title = '['+ titleType + ']';
-    if(ctxPath.length > 0){
-        var id = _.last(ctxPath);
-        if(Bind.get().db.has(id)){
-            var model = Bind.get().db.get(id);
-            if(model.get('name')){
-                id = id+']['+model.get('name');
-            }
-        }
-        title += '[' + id + ']';
-    }
+
     return this.shell.historyPushContext(ctxPath)
         .then(function(){
-            terminal.setTitle(title);
-            return self.end();
+            // terminal.setTitle(title);
+            return self.end(ctxPath);
         })
         .catch(function(err){
             return Promise.reject(err);

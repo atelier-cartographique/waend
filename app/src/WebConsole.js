@@ -11,6 +11,7 @@
 // 'use strict';
 
 var _ = require('underscore'),
+    Bind = require('../lib/Bind'),
     Terminal = require('../lib/Terminal'),
     semaphore = require('../lib/Semaphore'),
     Mutex = require('../lib/Mutex'),
@@ -19,6 +20,7 @@ var _ = require('underscore'),
 
 var document = window.document;
 
+var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
 
 function WebCommand (term, options) {
     this.term = term;
@@ -114,8 +116,23 @@ var WebConsole = Terminal.extend({
         this._inputField.focus();
     },
 
-    setTitle: function (title) {
-        this.title.innerHTML = title;
+    setTitle: function () {
+        var title = this.title;
+        while (title.firstChild) {
+            title.removeChild(title.firstChild);
+        }
+        var element = document.createElement('div');
+        for(var i=0; i < arguments.length; i++){
+            var fragment = arguments[i];
+            if(fragment instanceof WebCommand){
+                element.appendChild(fragment.toDomFragment());
+            }
+            else{
+                var textElement = document.createTextNode(fragment.toString());
+                element.appendChild(textElement);
+            }
+        }
+        title.appendChild(element);
     },
 
     setButtons: function () {
@@ -159,7 +176,7 @@ var WebConsole = Terminal.extend({
             }
         }
 
-        semaphore.on('shell:change:context', function(sctx){
+        semaphore.on('shell:change:context', function(sctx, ctxPath){
             for (var gi = 0; gi < groupKeys.length; gi++) {
                 var gn = groupKeys[gi],
                     elem = groups[gn];
@@ -187,7 +204,31 @@ var WebConsole = Terminal.extend({
                     groups.feature.setAttribute('class', 'wc-buttons-group wc-active');
                 }
             }
-        });
+
+            var titleType = titleTypes[ctxPath.length];
+            var names = new Array(ctxPath.length);
+            var titleComps = ['('+titleType+')'];
+            if(ctxPath.length > 0){
+                for (var pidx = 0; pidx < ctxPath.length; pidx++) {
+                    var id = ctxPath[pidx];
+                    if (Bind.get().db.has(id)) {
+                        var model = Bind.get().db.get(id);
+                        if (model.get('name')) {
+                            names[pidx] = model.get('name');
+                        }
+                        else {
+                            names[pidx] = id;
+                        }
+                    }
+
+                    titleComps.push(this.makeCommand({
+                        'args': ['cc /' + ctxPath.slice(0, pidx + 1).join('/')],
+                        'text': '  > ' + names[pidx]
+                    }));
+                }
+            }
+            this.setTitle.apply(this, titleComps);
+        }, this);
     },
 
     start: function () {
