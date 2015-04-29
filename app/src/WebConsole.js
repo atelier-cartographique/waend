@@ -270,13 +270,16 @@ var WebConsole = Terminal.extend({
             mapBlock = document.createElement('div'),
             nav = document.createElement('div'),
             select = document.createElement('div');
+            drawZoom = document.createElement('div');
 
         nav.innerHTML = 'navigate';
         select.innerHTML = 'select';
+        drawZoom.innerHTML = 'draw zoom';
 
         mapBlock.setAttribute('class', 'wc-mapblock');
         nav.setAttribute('class', 'wc-nav');
         select.setAttribute('class', 'wc-select');
+        drawZoom.setAttribute('class', 'wc-draw-zoom');
 
         nav.addEventListener('click', function(){
             self.runCommand('navigate');
@@ -284,9 +287,13 @@ var WebConsole = Terminal.extend({
         select.addEventListener('click', function(){
             self.runCommand('select');
         }, false);
+        drawZoom.addEventListener('click', function(){
+            self.runCommand('draw | region set');
+        }, false);
 
         mapBlock.appendChild(nav);
         mapBlock.appendChild(select);
+        mapBlock.appendChild(drawZoom);
         self.root.appendChild(mapBlock);
     },
 
