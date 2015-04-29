@@ -12,7 +12,9 @@
 var workerContext = self;
 
 //< OL3 helpers
-workerContext.window = {};
+workerContext.window = {
+    'location' : workerContext.location
+};
 workerContext.window.document = {
     'implementation':{
         'createDocument': function () { return true; }
@@ -213,32 +215,36 @@ function drawTextInPolygon (T, polygon, txt, fsz) {
         tfn = T.mapVec2Fn(),
         instructions = [];
 
-    while (segments) {
-        if( !tOffsets) {
-            break;
-        }
-        if (segments.length > 0) {
-            result = t.draw(fs, segments, tOffsets);
-            tOffsets = result[0];
-            paths = result[1];
-
-            // for (var s = 0; s < segments.length; s++) {
-            //     emit('draw', 'line', segments[s]);
-            // }
-            for (var i = 0; i < paths.length; i++) {
-                p = paths[i];
-                instructions.push(['beginPath']);
-                for (var ii = 0; ii < p.commands.length; ii++) {
-                    instructions.push(transformCommand(tfn, p.commands[ii]));
-                }
-                instructions.push(['fill']);
+    var proceed = function () {
+        while (segments) {
+            if( !tOffsets) {
+                break;
             }
-        }
-        startSegment += 1;
-        segments = getWritableSegments(polygon, fs *  1.2, startSegment);
-    }
+            if (segments.length > 0) {
+                result = t.draw(fs, segments, tOffsets);
+                tOffsets = result[0];
+                paths = result[1];
 
-    emit('instructions', instructions);
+                // for (var s = 0; s < segments.length; s++) {
+                //     emit('draw', 'line', segments[s]);
+                // }
+                for (var i = 0; i < paths.length; i++) {
+                    p = paths[i];
+                    instructions.push(['beginPath']);
+                    for (var ii = 0; ii < p.commands.length; ii++) {
+                        instructions.push(transformCommand(tfn, p.commands[ii]));
+                    }
+                    instructions.push(['fill']);
+                }
+            }
+            startSegment += 1;
+            segments = getWritableSegments(polygon, fs *  1.2, startSegment);
+        }
+
+        emit('instructions', instructions);
+    };
+
+    t.whenReady(proceed);
 
 }
 

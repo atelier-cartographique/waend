@@ -11,10 +11,9 @@
 var Hyph = require('hypher'),
     en = require('hyphenation.en-us'),
     hyph = new Hyph(en),
-    Font = require('./Font'),
-    defaultFont = Font.select('default');
+    Font = require('./Font');
 
-function Text (str) {
+function Text (str, fontName) {
     var strs = str.split(' ');
     this.clusters = [];
     for (var i = 0; i < strs.length; i++) {
@@ -26,9 +25,29 @@ function Text (str) {
             this.clusters.push(hc[c]);
         }
     }
-
-    this.font = defaultFont;
+    this._pendings = [];
+    fontName = fontName || 'default';
+    Font.select(fontName, function (f) {
+        this.font = f;
+        this.ready = true;
+        for (var i = 0; i < this._pendings.length; i++) {
+            var pending = this._pendings[i],
+                fn = pending[0],
+                ctx = pending[1];
+            fn.call(ctx, this);
+        }
+        this._pendings = [];
+    }, this);
 }
+
+Text.prototype.whenReady = function (fn, ctx) {
+    if(!this.ready) {
+        this._pendings.push([fn, ctx]);
+    }
+    else {
+        fn.call(ctx, this);
+    }
+};
 
 /*
 opentype.js getPath flips Ys, it's fair. but as long as we flip the viewport to
@@ -65,6 +84,10 @@ function getPath (x, y, fontSize) {
 // font size & horizontal segments
 // a hyper basic text composer
 Text.prototype.draw = function (fontsz, segments, offset) {
+    if (!this.font) {
+        console.warn('Text.prototype.draw NoFont');
+        return [null, []];
+    }
     var csIdx = 0, cs = segments[csIdx],
         gcs, gc,
         cx = cs[0][0],
