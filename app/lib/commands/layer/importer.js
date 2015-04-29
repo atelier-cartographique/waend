@@ -48,6 +48,7 @@ function create (binder, uid, gid, lid, feature) {
 function importer () {
     var self = this,
         shell = self.shell,
+        stdout = shell.stdout,
         binder = self.binder,
         terminal = shell.terminal,
         map = shell.env.map,
@@ -56,6 +57,15 @@ function importer () {
         gid = current[1],
         lid = current[2],
         display = terminal.display();
+
+    stdout.write('drag and drop your GeoJSON file on map to import it');
+    stdout.write('IMPORTANT :');
+    stdout.write('Wænd currently does not support');
+    stdout.write('multilines and multipolygons');
+    stdout.write('nor points -yeah!-');
+    stdout.write('Projection should be EPGS:4326 - WGS84');
+
+
 
     var dropbox = setupDropZone(display.node);
 
