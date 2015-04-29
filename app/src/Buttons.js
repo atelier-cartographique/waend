@@ -11,15 +11,18 @@
 
 var userButtons = {
     'login' : ['login'],
+    'register' : ['register'],
     'logout' : ['logout'],
     'list maps': ['lg'],
     'create map': ['ic'],
+    'upload media': ['media upload'],
     'list medias': ['media list']
 };
 
 
 var groupButtons = {
-'list layers' : ['ll'],
+    'print legend' : ['get | ll'],
+    'list layers' : ['ll'],
     'create layer': ['ic'],
     'set map extent': ['region print | set extent']
 };
@@ -28,7 +31,7 @@ var groupButtons = {
 var layerButtons = {
     'list features': ['lf'],
     'add line': ['draw | create'],
-    'add polygon': ['draw | close | create'],
+    'add zone': ['draw | close | create'],
     'add text': ['draw | close | create | cc | edit | set text'],
     'add image': ['draw | close | create | cc | media pick | set image'],
     'import data': ['import']
