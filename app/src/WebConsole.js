@@ -408,8 +408,9 @@ var WebConsole = Terminal.extend({
                 element.appendChild(fragment.toDomFragment());
             }
             else{
-                var textElement = document.createTextNode(fragment.toString());
-                element.appendChild(textElement);
+                // var textElement = document.createTextNode(fragment.toString());
+                // element.appendChild(textElement);
+                element.innerHTML = fragment.toString();
             }
         }
         this.currentPage.appendChild(element);
