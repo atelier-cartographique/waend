@@ -252,6 +252,7 @@ var WebConsole = Terminal.extend({
         this.setTitle('/wænd');
         this.insertInput();
         this.setButtons();
+        this.setMapBlock();
         var self = this;
         // self.container.addEventListener('click', function(e){
         //     if(self._inputField){
@@ -262,6 +263,31 @@ var WebConsole = Terminal.extend({
         self.shell.stderr.on('data', self.writeError, self);
 
         semaphore.on('please:terminal:run', this.runCommand, this);
+    },
+
+    setMapBlock: function () {
+        var self = this,
+            mapBlock = document.createElement('div'),
+            nav = document.createElement('div'),
+            select = document.createElement('div');
+
+        nav.innerHTML = 'navigate';
+        select.innerHTML = 'select';
+
+        mapBlock.setAttribute('class', 'wc-mapblock');
+        nav.setAttribute('class', 'wc-nav');
+        select.setAttribute('class', 'wc-select');
+
+        nav.addEventListener('click', function(){
+            self.runCommand('navigate');
+        }, false);
+        select.addEventListener('click', function(){
+            self.runCommand('select');
+        }, false);
+
+        mapBlock.appendChild(nav);
+        mapBlock.appendChild(select);
+        self.root.appendChild(mapBlock);
     },
 
     internalCommand: function (str) {

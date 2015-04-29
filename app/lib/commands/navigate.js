@@ -40,19 +40,17 @@ function transformRegion (T, opt_extent) {
 function navigate () {
     var self = this,
         shell = self.shell,
+        stdout = shell.stdout,
         terminal = shell.terminal,
         map = shell.env.map,
         helpBlock = window.document.createElement('div');
         display = terminal.display();
 
-    helpBlock.setAttribute('class', 'navigate-help');
-    helpBlock.innerHTML = [
-        '<span>zoom in [i]</span>',
-        '<span>zoom out [o]</span>',
-        '<span>pan with arrow keys</span>'
-    ].join('');
-    display.node.appendChild(helpBlock);
-
+    stdout.write('zoom in with [i]');
+    stdout.write('zoom out with [o]');
+    stdout.write('pan with arrow keys');
+    stdout.write('any other key exits navigate mode');
+    
     var navNorth = function () {
         var T = new Transform(),
             extent = region.get(),
