@@ -30,11 +30,14 @@ function setupCanvas (container) {
 function drawLine () {
     var self = this,
         shell = self.shell,
+        stdout = shell.stdout,
         terminal = shell.terminal,
         map = shell.env.map,
         display = terminal.display();
 
     setupCanvas(display.node);
+
+    stdout.write('click and hold on map to draw');
 
     var resolver = function (resolve, reject) {
 
