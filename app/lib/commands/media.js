@@ -179,7 +179,7 @@ function showMedia (mediaName) {
     var resolver = function (resolve) {
         var close = function () {
             display.end();
-            resolve(0);
+            resolve(mediaId);
         };
         closer.addEventListener('click', close, false);
         // display.node.setAttribute('tabindex', -1);

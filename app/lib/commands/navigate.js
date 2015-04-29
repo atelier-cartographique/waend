@@ -42,7 +42,16 @@ function navigate () {
         shell = self.shell,
         terminal = shell.terminal,
         map = shell.env.map,
+        helpBlock = window.document.createElement('div');
         display = terminal.display();
+
+    helpBlock.setAttribute('class', 'navigate-help');
+    helpBlock.innerHTML = [
+        '<span>zoom in [i]</span>',
+        '<span>zoom out [o]</span>',
+        '<span>pan with arrow keys</span>'
+    ].join('');
+    display.node.appendChild(helpBlock);
 
     var navNorth = function () {
         var T = new Transform(),
