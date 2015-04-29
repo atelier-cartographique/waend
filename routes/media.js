@@ -120,7 +120,7 @@ function listMedia (request, response) {
 
     var success = function (err, files) {
         if (err) {
-            response.status(404).end();
+            return response.status(404).end();
         }
         response.send({'medias': files});
     };
