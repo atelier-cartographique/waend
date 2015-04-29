@@ -24,17 +24,23 @@ function Program (ctx) {
         ctx.polygonTransform(T, coordinates);
         var p = new ctx.Geometry.Polygon(coordinates);
         var extent = p.getExtentObject(),
-            hatchLen = 24,
+            hatchLen = ('hn' in props) ? props.hn : 24,
             height = extent.getHeight(),
-            step = height / hatchLen,
             bottomLeft = extent.getBottomLeft().getCoordinates(),
             topRight = extent.getTopRight().getCoordinates(),
             left = bottomLeft[0],
             right = topRight[0],
             patternCoordinates = [],
+            strokeColor = ('color' in props) ? props.color: '#000',
+            step = height / hatchLen,
             turnFlag = false;
 
         patternCoordinates.push([left, bottomLeft[1]]);
+
+        if ('step' in props) {
+            step = props.step;
+            hatchLen = height / step;
+        }
 
         for (i = 0; i < hatchLen; i++) {
           var y = bottomLeft[1] + (i*step);
@@ -52,9 +58,12 @@ function Program (ctx) {
           }
           turnFlag = !turnFlag;
         }
+        ctx.emit('save');
+        ctx.emit('set', 'strokeStyle', strokeColor);
         ctx.emit('clip', 'begin', coordinates);
         ctx.emit('draw', 'line', patternCoordinates);
         ctx.emit('clip', 'end');
+        ctx.emit('restore');
     };
 
     var textedPolygon = function (coordinates, props, fm) {

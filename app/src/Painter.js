@@ -34,7 +34,9 @@ Painter.prototype.handlers = {
     'clip': 'clip',
     'context': 'rawContext',
     'image:clip': 'imageClip',
-    'instructions': 'processInstructions'
+    'instructions': 'processInstructions',
+    'save': 'save',
+    'restore': 'restore'
 };
 
 
