@@ -14,6 +14,8 @@ var _ = require('underscore');
 
 function getAttr () {
     var self = this,
+        shell = self.shell,
+        stdout = shell.stdout,
         args = _.toArray(arguments),
         key = args.shift(),
         sys = self.sys,
@@ -29,7 +31,17 @@ function getAttr () {
             sys.stdout.write('"'+ key+'" : '+ JSON.stringify(data[key]));
         }
     }
+
+    stdout.write('<class="hint">You can add or edit any attribute of this element</>');
+    stdout.write('<class="hint">simply by writing :</>');
+    stdout.write('<class="hint">set attribute-name attribute-value</>');
+    stdout.write('<class="hint">Eg : </>');
+    stdout.write('<class="hint">set name Brussels</>');
+    stdout.write('<class="hint">will give the name Brussels to your element</>');
+    stdout.write('<class="hint">Attributes are used to qualify your datas, like : age, height, number, etc.. </>');
+
     return self.end(result);
+
 };
 
 
