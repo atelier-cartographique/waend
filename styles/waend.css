@@ -244,11 +244,37 @@ body {
 .hidden {
   display: none;
 }
+.key-value {
+  text-shadow: 0 0 6px #fff;
+  display: inline-flex;
+  margin-bottom: 6px;
+}
+.key-value .key {
+  width: 75px;
+  text-align: right;
+  padding-right: 6px;
+  color: #c80000;
+  word-wrap: break-word;
+}
+.key-name {
+  display: inline-block !important;
+}
+.key-name .value {
+  font-size: 200%;
+}
+.key-name .key {
+  display: inline-block !important;
+}
+.key-description .value {
+  width: calc(100% - 75px - 6px);
+}
 .hint {
   font-size: 75%;
   font-style: italic;
-  letter-spacing: 0.5px;
+  letter-spacing: 0px;
   font-family: monospace;
+  text-shadow: 0px 0px 6px #fff;
+  background: rgba(255, 255, 255, 0.8);
 }
 .hint.first-hint-line {
   margin-top: 12px;
@@ -256,6 +282,7 @@ body {
 }
 .hint.hint-exemple {
   font-style: normal;
+  color: dimgrey;
 }
 .wc-title {
   position: absolute;

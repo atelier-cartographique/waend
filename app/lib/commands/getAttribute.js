@@ -22,23 +22,22 @@ function getAttr () {
         result = undefined;
     if(key){
         result = self.data.get(key)
-        sys.stdout.write('"'+ key +'" : '+ JSON.stringify(self.data.get(key)));
+        // sys.stdout.write('"'+ key +'" : '+ JSON.stringify(self.data.get(key)));
+        sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + key + '</span>' + '<span class="value">' + JSON.stringify(self.data.get(key)) + '</span>' + '</span>');
+
     }
     else{
         var data = self.data.getData();
         result = data;
         for(var key in data){
-            sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + '"'+ key +'" : ' +'</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
+            // sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + '"'+ key +'" : ' +'</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
+            sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + key + '</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
         }
     }
 
-    stdout.write('<span class="hint first-hint-line">You can add or edit any attribute of this element</span>');
-    stdout.write('<span class="hint">simply by writing :</span>');
+    stdout.write('<span class="hint first-hint-line">HINT : Add and edit attribute of this element with SET command, by typing :</span>');
     stdout.write('<span class="hint hint-exemple">set attribute-name attribute-value</span>');
-    stdout.write('<span class="hint">Eg : </span>');
-    stdout.write('<span class="hint hint-exemple">set name Brussels</span>');
-    stdout.write('<span class="hint">will give the name Brussels to your element</span>');
-    stdout.write('<span class="hint">Attributes are used to qualify your datas, like : age, height, description, etc.. </span>');
+    stdout.write('<span class="hint">NOTE : Multiple words attributes must be surrounded by " and "</span>');
 
     return self.end(result);
 
