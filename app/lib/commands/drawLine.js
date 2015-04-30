@@ -37,7 +37,7 @@ function drawLine () {
 
     setupCanvas(display.node);
 
-    stdout.write('<div class="hint">click and hold on map to draw</div>');
+    stdout.write('<span class="hint first-hint-line">click and hold on map to draw</span>');
 
     var resolver = function (resolve, reject) {
 

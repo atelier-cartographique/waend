@@ -92,8 +92,8 @@ function uploadMedia () {
         display = terminal.display(),
         dropbox = setupDropZone(display.node);
 
-    stdout.write('<div class="hint">Drag and Drop your media on the map to upload it</div>');
-    stdout.write('<div class="hint">Many formats are supported so, please try !</div>');
+    stdout.write('<span class="hint first-hint-line">Drag and Drop your media on the map to upload it</span>');
+    stdout.write('<span class="hint">Many formats are supported so, please try !</span>');
 
         var resolver = function (resolve, reject) {
             var dragenter = function (e) {

@@ -250,6 +250,13 @@ body {
   letter-spacing: 0.5px;
   font-family: monospace;
 }
+.hint.first-hint-line {
+  margin-top: 12px;
+  display: block;
+}
+.hint.hint-exemple {
+  font-style: normal;
+}
 .wc-title {
   position: absolute;
   top: 12px;

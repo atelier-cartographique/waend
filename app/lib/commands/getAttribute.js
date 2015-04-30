@@ -28,17 +28,17 @@ function getAttr () {
         var data = self.data.getData();
         result = data;
         for(var key in data){
-            sys.stdout.write('"'+ key+'" : '+ JSON.stringify(data[key]));
+            sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + '"'+ key +'" : ' +'</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
         }
     }
 
-    stdout.write('<div class="hint">You can add or edit any attribute of this element</div>');
-    stdout.write('<div class="hint">simply by writing :</div>');
-    stdout.write('<div class="hint">set attribute-name attribute-value</div>');
-    stdout.write('<div class="hint">Eg : </div>');
-    stdout.write('<div class="hint">set name Brussels</div>');
-    stdout.write('<div class="hint">will give the name Brussels to your element</div>');
-    stdout.write('<div class="hint">Attributes are used to qualify your datas, like : age, height, number, etc.. </div>');
+    stdout.write('<span class="hint first-hint-line">You can add or edit any attribute of this element</span>');
+    stdout.write('<span class="hint">simply by writing :</span>');
+    stdout.write('<span class="hint hint-exemple">set attribute-name attribute-value</span>');
+    stdout.write('<span class="hint">Eg : </span>');
+    stdout.write('<span class="hint hint-exemple">set name Brussels</span>');
+    stdout.write('<span class="hint">will give the name Brussels to your element</span>');
+    stdout.write('<span class="hint">Attributes are used to qualify your datas, like : age, height, description, etc.. </span>');
 
     return self.end(result);
 

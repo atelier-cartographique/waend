@@ -46,10 +46,10 @@ function navigate () {
         helpBlock = window.document.createElement('div');
         display = terminal.display();
 
-    stdout.write('<div class="hint">zoom in with [i]</div>');
-    stdout.write('<div class="hint">zoom out with [o]</div>');
-    stdout.write('<div class="hint">pan with arrow keys</div>');
-    stdout.write('<div class="hint">any other key exits navigate mode</div>');
+    stdout.write('<span class="hint first-hint-line">zoom in with [i]</span>');
+    stdout.write('<span class="hint">zoom out with [o]</span>');
+    stdout.write('<span class="hint">pan with arrow keys</span>');
+    stdout.write('<span class="hint">any other key exits navigate mode</span>');
     
     var navNorth = function () {
         var T = new Transform(),

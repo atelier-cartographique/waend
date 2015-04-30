@@ -58,12 +58,12 @@ function importer () {
         lid = current[2],
         display = terminal.display();
 
-    stdout.write('<div class="hint">drag and drop your GeoJSON file on map to import it</div>');
-    stdout.write('<div class="hint">IMPORTANT :</div>');
-    stdout.write('<div class="hint">Wænd currently does not support</div>');
-    stdout.write('<div class="hint">multilines and multipolygons</div>');
-    stdout.write('<div class="hint">nor points -yeah!-</div>');
-    stdout.write('<div class="hint">Projection should be EPGS:4326 - WGS84</div>');
+    stdout.write('<span class="hint first-hint-line">drag and drop your GeoJSON file on map to import it</span>');
+    stdout.write('<span class="hint">IMPORTANT :</span>');
+    stdout.write('<span class="hint">Wænd currently does not support</span>');
+    stdout.write('<span class="hint">multilines and multipolygons</span>');
+    stdout.write('<span class="hint">nor points -yeah!-</span>');
+    stdout.write('<span class="hint">Projection should be EPGS:4326 - WGS84</span>');
 
 
 
