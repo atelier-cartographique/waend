@@ -80,8 +80,10 @@ View.prototype.setTransform = function () {
         s = (sx < sy) ? sx : sy,
         is = (1/s),
         center = extent.getCenter().getCoordinates(),
-        tcx = (halfSize[0] * is) - center[0],
-        tcy = ((halfSize[1] * is) - center[1]) - Math.abs(extent.getHeight());
+        // tcx = (halfSize[0] * is) - center[0],
+        // tcy = ((halfSize[1] * is) - center[1]) - Math.abs(extent.getHeight());
+        tcx = halfSize[0]  - (center[0] * s),
+        tcy = (Math.abs(extent.getHeight()) * s) - (halfSize[1] - (center[1] * s)) ;
     var t = new Transform();
     t.translate(tcx, tcy);
     t.scale(s, -s, {'x': tcx, 'y': tcy});

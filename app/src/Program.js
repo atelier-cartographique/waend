@@ -22,16 +22,20 @@ function Program (ctx) {
         var T = new ctx.Transform(fm);
         ctx.polygonProject(coordinates);
         ctx.polygonTransform(T, coordinates);
-        var p = new ctx.Geometry.Polygon(coordinates);
-        var extent = p.getExtentObject(),
-            hatchLen = ('hn' in props) ? props.hn : 24,
-            height = 24000, //extent.getHeight(),
-            width = 24000, //extent.getWidth(),
+        var p = new ctx.Geometry.Polygon(coordinates),
+            initialExtent = p.getExtentObject(),
+            initialHeight = initialExtent.getHeight(),
+            initialWidth = initialExtent.getWidth(),
+            bufExtent = initialExtent.buffer(Math.max(initialHeight, initialWidth) / 2),
+            extent = new ctx.Geometry.Extent(bufExtent),
+            height = extent.getHeight(),
+            hatchLen = (height * (('hn' in props) ? props.hn : 24)) / initialHeight,
             center = extent.getCenter(),
             bottomLeft = extent.getBottomLeft().getCoordinates(),
             topRight = extent.getTopRight().getCoordinates(),
-            left = -12000, //bottomLeft[0],
-            right = 12000, //topRight[0],
+            start = bottomLeft[1],
+            left = bottomLeft[0],
+            right = topRight[0],
             patternCoordinates = [],
             strokeColor = ('color' in props) ? props.color: '#000',
             step = height / hatchLen,
@@ -45,7 +49,7 @@ function Program (ctx) {
         }
 
         for (i = 0; i < hatchLen; i++) {
-          var y = -12000 + (i*step);
+          var y = start + (i*step);
           if (turnFlag) {
             if (i > 0) {
               patternCoordinates.push([right, y]);
@@ -61,15 +65,16 @@ function Program (ctx) {
           turnFlag = !turnFlag;
         }
 
-        if ('rotation' in props) {
+        if ('rotation' in props && !!props.rotation) {
             var rt = new ctx.Transform(),
                 ccoords = center.getCoordinates();
             rt.rotate(props.rotation, {'x': ccoords[0], 'y': ccoords[1]});
-            console.log('rotation', props.rotation, rt.flatMatrix());
+            console.log('rotation', props.rotation, ccoords, rt.flatMatrix());
             ctx.lineTransform(rt, patternCoordinates);
         }
 
         ctx.emit('save');
+        // ctx.emit('draw', 'polygon', coordinates);
         ctx.emit('set', 'strokeStyle', strokeColor);
         ctx.emit('clip', 'begin', coordinates);
         ctx.emit('draw', 'line', patternCoordinates);

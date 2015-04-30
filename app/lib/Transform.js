@@ -9,16 +9,42 @@
  */
 
 
+function M () {
+    this._11 = 1;
+        this._12 = 0;
+            this._13 = 0;
+    this._21 = 0;
+        this._22 = 1;
+            this._23 = 0;
+    this._31 = 0;
+        this._32 = 0;
+            this._33 = 1;
+}
+
+M.prototype.clone = function () {
+    var nm = new M();
+    nm._11 = this._11;
+        nm._12 = this._12;
+            nm._13 = this._13;
+    nm._21 = this._21;
+        nm._22 = this._22;
+            nm._23 = this._23;
+    nm._31 = this._31;
+        nm._32 = this._32;
+            nm._33 = this._33;
+
+    return nm;
+};
 
 
 function Matrix (a, b, c, d, e, f) {
     this.padding = null;
     if (arguments.length === 0) {
-        this.m = this.new_m_();
+        this.m = new M();
     }
     else if (arguments.length === 1) {
         if (arguments[0] instanceof Matrix) {
-            this.m = this.clone_m_(arguments[0].m);
+            this.m = arguments[0].m.clone();
         }
         else if (Array.isArray(arguments[0])) {
             // we assume flat matrix
@@ -26,7 +52,7 @@ function Matrix (a, b, c, d, e, f) {
         }
     }
     else if (arguments.length === 6) {
-        this.m = this.parseFlat(a,b,c,d,e,f);
+        this.parseFlat(a,b,c,d,e,f);
     }
 }
 
@@ -52,82 +78,33 @@ function Transform () {
 
 //////////////////// IMPL ///////////////////////
 
-Matrix.prototype.new_m_ = function(){
-    return [[this.padding],
-        [this.padding, 1,0,0],
-        [this.padding, 0,1,0],
-        [this.padding, 0,0,1]];
-};
 
-Matrix.prototype.clone_m_ = function(m){
-    return Array.apply(null, m);
-};
 
 Matrix.prototype.clone = function () {
     var mx = new Matrix();
-    mx.m = this.clone_m_(this.m);
+    mx.m = this.m.clone();
     return mx;
 };
 
-/*
-
-11, 21, 31
-12, 22, 32
---, --, --
-*/
-Matrix.prototype.M = function(p, val){
-    var a,b;
-    switch (p) {
-        case 11:
-            a = 1;
-            b = 1;
-            break;
-        case 12:
-            a = 2;
-            b = 1;
-            break;
-        case 21:
-            a = 1;
-            b = 2;
-            break;
-        case 22:
-            a = 2;
-            b = 2;
-            break;
-        case 31:
-            a = 1;
-            b = 3;
-            break;
-        case 32:
-            a = 2;
-            b = 3;
-            break;
-    }
-    if (arguments.length === 1) {
-        return this.m[a][b];
-    }
-    else {
-        this.m[a][b] = val;
-    }
-};
 
 Matrix.prototype.parseFlat = function(a, b, c, d, e, f){
-    this.M(11, a);
-    this.M(12, b);
-    this.M(21, c);
-    this.M(22, d);
-    this.M(31, e);
-    this.M(32, f);
+    this.m = new M();
+    this.m._11 = a;
+    this.m._12 = b;
+    this.m._21 = c;
+    this.m._22 = d;
+    this.m._31 = e;
+    this.m._32 = f;
 };
 
 Matrix.prototype.flat = function(){
     var fm = new Array(6);
-    fm[0] = this.M(11);
-    fm[1] = this.M(12);
-    fm[2] = this.M(21);
-    fm[3] = this.M(22);
-    fm[4] = this.M(31);
-    fm[5] = this.M(32);
+    fm[0] = this.m._11;
+    fm[1] = this.m._12;
+    fm[2] = this.m._21;
+    fm[3] = this.m._22;
+    fm[4] = this.m._31;
+    fm[5] = this.m._32;
     return fm;
 };
 
@@ -138,28 +115,60 @@ Matrix.prototype.flat = function(){
     * @returns {Matrix}
     */
 Matrix.prototype.mul = function(o) {
-        var product = new Matrix();
+    var m = new M();
+m._11 = (this.m._11 * o.m._11) + (this.m._12 * o.m._21) + (this.m._13 * o.m._31) ;
+m._12 = (this.m._11 * o.m._12) + (this.m._12 * o.m._22) + (this.m._13 * o.m._32) ;
+m._13 = (this.m._11 * o.m._13) + (this.m._12 * o.m._23) + (this.m._13 * o.m._33) ;
+m._21 = (this.m._21 * o.m._11) + (this.m._22 * o.m._21) + (this.m._23 * o.m._31) ;
+m._22 = (this.m._21 * o.m._12) + (this.m._22 * o.m._22) + (this.m._23 * o.m._32) ;
+m._23 = (this.m._21 * o.m._13) + (this.m._22 * o.m._23) + (this.m._23 * o.m._33) ;
+m._31 = (this.m._31 * o.m._11) + (this.m._32 * o.m._21) + (this.m._33 * o.m._31) ;
+m._32 = (this.m._31 * o.m._12) + (this.m._32 * o.m._22) + (this.m._33 * o.m._32) ;
+m._33 = (this.m._31 * o.m._13) + (this.m._32 * o.m._23) + (this.m._33 * o.m._33) ;
 
-        for (var x = 1; x<4; ++x)
-        {
-            for (var y = 1; y<4; ++y)
-            {
-                    var sum = 0;
-                    for (var z = 1; z<4; ++z){
-                        sum += this.m[x][z] * o.m[z][y];
-                    }
-                    product.m[x][y] = sum;
-            }
-        }
-        this.m = product.m;
-        return this;
-    };
+//
+//     console.log('\nDOT ---------------');
+// this.print();
+// console.log(' x ');
+// o.print();
+//
+//     for (var x = 1; x < 4; ++x)
+//     {
+//         for (var y = 1; y < 4; ++y)
+//         {
+//             var sum = 0;
+//             var dbg = 'product.M( '+x+''+y+', ';
+//             for (var z = 1; z < 4; ++z){
+//                 sum += this.m[x][z] * o.m[z][y];
+//                 dbg += '(this.M('+x+''+z+') * o.M('+z+''+y+')) ';
+//                 if(z < 3) {
+//                     dbg += '+ ';
+//                 }
+//             }
+//             console.log(dbg + ')');
+//             product.m[x][y] = sum;
+//         }
+//     }
+    this.m = m;
+    // console.log(' = ');
+    // this.print();
+    return this;
+};
+
+
+Matrix.prototype.print = function () {
+    var str = [
+        this.m._11 +' '+ this.m._21+' '+this.m._31,
+        this.m._12 +' '+ this.m._22+' '+this.m._32,
+        this.m._13 +' '+ this.m._23+' '+this.m._33].join('\n');
+    console.log(str);
+};
 
 Matrix.prototype.determinant = function() {
     var min = this.minors(this.m);
-    var a = this.m[1][1] * min[1][1];
-    var b = this.m[1][2] * min[1][2];
-    var c = this.m[1][3] * min[1][3];
+    var a = this.m._11 * min._11;
+    var b = this.m._12 * min._12;
+    var c = this.m._13 * min._13;
     return (a - b + c);
 };
 
@@ -168,39 +177,36 @@ Matrix.prototype.determinant2 = function(a, b, c, d) {
 };
 
 Matrix.prototype.minors = function(m) {
-    var minor11 = this.determinant2(m[2][2], m[2][3], m[3][2], m[3][3]) ;
-    var minor12 = this.determinant2(m[2][1], m[2][3], m[3][1], m[3][3]) ;
-    var minor13 = this.determinant2(m[2][1], m[2][2], m[3][1], m[3][2]) ;
-    var minor21 = this.determinant2(m[1][2], m[1][3], m[3][2], m[3][3]) ;
-    var minor22 = this.determinant2(m[1][1], m[1][3], m[3][1], m[3][3]) ;
-    var minor23 = this.determinant2(m[1][1], m[1][2], m[3][1], m[3][2]) ;
-    var minor31 = this.determinant2(m[1][2], m[1][3], m[2][2], m[2][3]) ;
-    var minor32 = this.determinant2(m[1][1], m[1][3], m[2][1], m[2][3]) ;
-    var minor33 = this.determinant2(m[1][1], m[1][2], m[2][1], m[2][3]) ;
-    var padding = null;
-    return  [[padding],
-            [padding, minor11,minor12,minor13],
-            [padding, minor21,minor22,minor23],
-            [padding, minor31,minor32,minor33]];
+    var minor = new M();
+     minor._11 = this.determinant2(m._22, m._23, m._32, m._33) ;
+     minor._12 = this.determinant2(m._21, m._23, m._31, m._33) ;
+     minor._13 = this.determinant2(m._21, m._22, m._31, m._32) ;
+     minor._21 = this.determinant2(m._12, m._13, m._32, m._33) ;
+     minor._22 = this.determinant2(m._11, m._13, m._31, m._33) ;
+     minor._23 = this.determinant2(m._11, m._12, m._31, m._32) ;
+     minor._31 = this.determinant2(m._12, m._13, m._22, m._23) ;
+     minor._32 = this.determinant2(m._11, m._13, m._21, m._23) ;
+    minor._33 = this.determinant2(m._11, m._12, m._21, m._23) ;
+    return minor;
 };
 
 Matrix.prototype.cofactors = function(m) {
-    var c = this.clone_m_(m);
-    c[1][2] = m[1][2] * -1;
-    c[2][1] = m[2][1] * -1;
-    c[2][3] = m[2][3] * -1;
-    c[3][2] = m[3][2] * -1;
+    var c = m.clone();
+    c._12 = m._12 * -1;
+    c._21 = m._21 * -1;
+    c._23 = m._23 * -1;
+    c._32 = m._32 * -1;
     return c;
 };
 
 Matrix.prototype.adjugate = function(m) {
-    var a = this.clone_m_(m);
-    a[1][2] = m[2][1];
-    a[2][1] = m[1][2];
-    a[1][3] = m[3][1];
-    a[3][1] = m[1][3];
-    a[2][3] = m[3][2];
-    a[3][2] = m[2][3];
+    var a = m.clone();
+    a._12 = m._21;
+    a._21 = m._12;
+    a._13 = m._31;
+    a._31 = m._13;
+    a._23 = m._32;
+    a._32 = m._23;
     return a;
 };
 
@@ -211,13 +217,17 @@ Matrix.prototype.inverse = function() {
     var m = this.adjugate(this.cofactors(this.minors(this.m)));
 
     var inverse = new Matrix();
-    for (var x = 1; x<4; ++x)
-    {
-            for (var y = 1; y<4; ++y)
-            {
-                    inverse.m[x][y] = m[x][y] * (1/det);
-            }
-    }
+
+inverse.m._11 = m._11 * (1/det);
+inverse.m._12 = m._12 * (1/det);
+inverse.m._13 = m._13 * (1/det);
+inverse.m._21 = m._21 * (1/det);
+inverse.m._22 = m._22 * (1/det);
+inverse.m._23 = m._23 * (1/det);
+inverse.m._31 = m._31 * (1/det);
+inverse.m._32 = m._32 * (1/det);
+inverse.m._33 = m._33 * (1/det);
+
     return inverse;
 };
 
@@ -230,11 +240,17 @@ Transform.prototype.flatMatrix = function () {
 };
 
 Transform.prototype.M = function(){
-    return  Matrix.prototype.M.apply(this.m, arguments);
+    var key = '_' + arguments[0];
+    if(arguments.length > 1) {
+        this.m.m[key] = arguments[1];
+    }
+    else {
+        return  this.m.m[key];
+    }
 };
 
 Transform.prototype.reset = function(t){
-    this.m.m = Array.apply(Array, t.m.m);
+    this.m.m = t.m.m.clone();
     return this;
 };
 
@@ -262,8 +278,8 @@ Transform.prototype.multiply = function(t){
 
 Transform.prototype.translate = function(tx,ty) {
     var transMat = new Matrix();
-    transMat.M(31, tx);
-    transMat.M(32, ty);
+    transMat.m._31 = tx;
+    transMat.m._32 = ty;
     this.m.mul(transMat);
     return this;
 };
@@ -306,31 +322,31 @@ Transform.prototype.scale = function(sx, sy, origin) {
     if(origin !== undefined)
     {
         var tr1 = new Matrix();
-        tr1.M(31, -origin.x);
-        tr1.M(32, -origin.y);
+        tr1.m._31 = -origin.x;
+        tr1.m._32 = -origin.y;
         scaleMat.mul(tr1);
 
         var tr2 = new Matrix();
-        tr2.M(11, sx);
-        tr2.M(22, sy);
+        tr2.m._11 = sx;
+        tr2.m._22 = sy;
         scaleMat.mul(tr2);
 
         var tr3 = new Matrix();
-        tr3.M(31, origin.x);
-        tr3.M(32, origin.y);
+        tr3.m._31 = origin.x;
+        tr3.m._32 = origin.y;
         scaleMat.mul(tr3);
     }
     else
     {
-        scaleMat.M(11, sx);
-        scaleMat.M(22, sy);
+        scaleMat.m._11 = sx;
+        scaleMat.m._22 = sy;
     }
     this.m.mul(scaleMat);
     return this;
 };
 
 Transform.prototype.rotate = function (r, origin) {
-    var rGrad = (r * 3.14159 / 180.0),
+    var rGrad = (r * Math.PI / 180.0),
         cosR = Math.cos(rGrad),
         sinR = Math.sin(rGrad),
         rotMat = new Matrix ();
@@ -338,28 +354,31 @@ Transform.prototype.rotate = function (r, origin) {
     if(origin)
     {
         var tr1 = new Matrix();
-        tr1.M(31, -origin.x);
-        tr1.M(32, -origin.y);
+        tr1.m._31 = -origin.x;
+        tr1.m._32 = -origin.y;
         rotMat.mul(tr1);
+// console.log(tr1.flat());
 
         var tr2 = new Matrix();
-        tr2.M(11, cosR);
-        tr2.M(12,  sinR);
-        tr2.M(21,  -sinR);
-        tr2.M(22,  cosR);
+        tr2.m._11 = cosR;
+        tr2.m._12 =  sinR;
+        tr2.m._21 =  -sinR;
+        tr2.m._22 =  cosR;
         rotMat.mul(tr2);
+// console.log(tr2.flat());
 
         var tr3 = new Matrix();
-        tr3.M(31, origin.x);
-        tr3.M(32, origin.y);
+        tr3.m._31 = origin.x;
+        tr3.m._32 = origin.y;
         rotMat.mul(tr3);
+// console.log(tr3.flat());
     }
     else
     {
-        rotMat.m(11, cosR);
-        rotMat.m(12, sinR);
-        rotMat.m(21, -sinR);
-        rotMat.m(22, cosR);
+        rotMat.m._11 = cosR;
+        rotMat.m._12 = sinR;
+        rotMat.m._21 = -sinR;
+        rotMat.m._22 = cosR;
     }
     this.m.mul(rotMat);
 

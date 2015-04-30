@@ -100,7 +100,7 @@ Painter.prototype.clip = function (cmd, coordinates) {
 
 Painter.prototype.drawPolygon = function (coordinates, ends) {
     // console.log('painter.polygon', coordinates[0][0], ends);
-    ends = ends || ['closePath', 'stroke', 'fill'];
+    ends = ends || ['closePath', 'stroke'];
     this.context.beginPath();
     for(var i = 0; i < coordinates.length; i++) {
         var ring = coordinates[i];
