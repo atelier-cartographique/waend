@@ -133,9 +133,13 @@ table {
   font-weight: normal;
   font-style: normal;
 }
+/**** VARIABLES ****/
 body {
   background-color: #E5E5E5;
   text-shadow: 0 0 6px black;
+  letter-spacing: 1px;
+  font-size: 12pt;
+  font-family: "osp-dindin";
 }
 #page-title {
   display: none;
@@ -156,8 +160,6 @@ body {
   bottom: 0;
   /*padding: 24px;
     padding-top: 38px;*/
-
-  font-family: "osp-dindin";
   background-color: transparent;
 }
 .media-wrapper {
@@ -214,10 +216,11 @@ body {
   padding-left: 10px;
 }
 .wc-page-title {
-  font-weight: bold;
-  font-size: 150%;
-  color: grey;
-  margin-bottom: .5em;
+  font-size: 100%;
+  color: darkgrey;
+  margin-bottom: 6px;
+  font-family: monospace;
+  text-shadow: 0 0 6px white;
 }
 .wc-page.wc-inactive {
   opacity: 0;
@@ -231,16 +234,15 @@ body {
   left: 48px;
   border: 0;
   border-top: 1px solid grey;
-  font-weight: bold;
-  font-size: 10pt;
-  background-color: transparent;
+  font-size: 12pt;
+  background-color: rgba(255, 255, 255, 0.8);
   width: 60%;
-  text-shadow: 0 0 6px black;
+  text-shadow: 0 0 6px white;
+  font-family: monospace;
 }
 .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
-
 }
 .wc-pending {
   color: #2B71FF;
@@ -276,7 +278,23 @@ body {
   position: absolute;
   right: 12px;
   top: 12px;
-  text-align: right;
+  font-size: 150%;
+  color: #fff;
+  font-weight: normal;
+  letter-spacing: 2px;
+  text-align: center;
+}
+.wc-nav,
+.wc-select,
+.wc-draw-zoom {
+  cursor: pointer;
+  margin-bottom: 6px;
+  border-bottom: 1px solid transparent;
+}
+.wc-nav:hover,
+.wc-select:hover,
+.wc-draw-zoom:hover {
+  border-bottom: 1px solid blue;
 }
 .wc-buttons {
   position: absolute;

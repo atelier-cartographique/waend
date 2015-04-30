@@ -290,10 +290,10 @@ var WebConsole = Terminal.extend({
         drawZoom.addEventListener('click', function(){
             self.runCommand('draw | region set');
         }, false);
-
+        
+        mapBlock.appendChild(drawZoom);
         mapBlock.appendChild(nav);
         mapBlock.appendChild(select);
-        mapBlock.appendChild(drawZoom);
         self.root.appendChild(mapBlock);
     },
 

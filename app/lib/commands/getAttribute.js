@@ -32,13 +32,13 @@ function getAttr () {
         }
     }
 
-    stdout.write('<class="hint">You can add or edit any attribute of this element</>');
-    stdout.write('<class="hint">simply by writing :</>');
-    stdout.write('<class="hint">set attribute-name attribute-value</>');
-    stdout.write('<class="hint">Eg : </>');
-    stdout.write('<class="hint">set name Brussels</>');
-    stdout.write('<class="hint">will give the name Brussels to your element</>');
-    stdout.write('<class="hint">Attributes are used to qualify your datas, like : age, height, number, etc.. </>');
+    stdout.write('<div class="hint">You can add or edit any attribute of this element</div>');
+    stdout.write('<div class="hint">simply by writing :</div>');
+    stdout.write('<div class="hint">set attribute-name attribute-value</div>');
+    stdout.write('<div class="hint">Eg : </div>');
+    stdout.write('<div class="hint">set name Brussels</div>');
+    stdout.write('<div class="hint">will give the name Brussels to your element</div>');
+    stdout.write('<div class="hint">Attributes are used to qualify your datas, like : age, height, number, etc.. </div>');
 
     return self.end(result);
 

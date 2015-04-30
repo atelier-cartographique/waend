@@ -2,5 +2,23 @@
     position: absolute;
     right: 12px;
     top: 12px;
-    text-align: right;
+    font-size: 150%;
+    color: #fff;
+    font-weight: normal;
+    letter-spacing: 2px;
+    text-align: center;
 }
+
+.wc-nav,
+.wc-select,
+.wc-draw-zoom {
+	cursor: pointer;
+	margin-bottom: 6px;
+	border-bottom: 1px solid transparent; // to avoid glitch on over
+
+
+	&:hover {
+		border-bottom: 1px solid blue;
+	}
+}
+
