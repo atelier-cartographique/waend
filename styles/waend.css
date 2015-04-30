@@ -135,12 +135,19 @@ table {
   font-style: normal;
 }
 /**** VARIABLES ****/
+.white-text-shadow {
+  text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+}
+.dark-text-shadow {
+  text-shadow: 6px 0 6px #555555, -6px 0 6px #555555, 0 6px 6px #555555, 0 -6px 6px #555555, 1px 1px #555555, -1px -1px 0 #555555, 1px -1px 0 #555555, -1px 1px 0 #555555;
+}
 body {
   background-color: #E5E5E5;
   text-shadow: 0 0 6px black;
   letter-spacing: 1px;
   font-size: 12pt;
   font-family: "osp-dindin";
+  text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 #page-title {
   display: none;
@@ -199,7 +206,6 @@ body {
   color: darkgrey;
   margin-bottom: 6px;
   font-family: monospace;
-  text-shadow: 0 0 6px white;
 }
 .wc-page.wc-inactive {
   opacity: 0;
@@ -216,7 +222,6 @@ body {
   font-size: 12pt;
   background-color: rgba(255, 255, 255, 0.8);
   width: 60%;
-  text-shadow: 0 0 6px white;
   font-family: monospace;
 }
 .wc-input:focus {
@@ -245,7 +250,6 @@ body {
   display: none;
 }
 .key-value {
-  text-shadow: 0 0 6px #fff;
   display: inline-flex;
   margin-bottom: 6px;
 }
@@ -273,7 +277,6 @@ body {
   font-style: italic;
   letter-spacing: 0px;
   font-family: monospace;
-  text-shadow: 0px 0px 6px #fff;
 }
 .hint.first-hint-line {
   margin-top: 12px;
@@ -305,7 +308,8 @@ body {
   color: #fff;
   font-weight: normal;
   letter-spacing: 2px;
-  text-align: center;
+  text-align: right;
+  text-shadow: 6px 0 6px #555555, -6px 0 6px #555555, 0 6px 6px #555555, 0 -6px 6px #555555, 1px 1px #555555, -1px -1px 0 #555555, 1px -1px 0 #555555, -1px 1px 0 #555555;
 }
 .wc-nav,
 .wc-select,
@@ -321,15 +325,17 @@ body {
 }
 .wc-buttons {
   position: absolute;
-  font-size: 125%;
   bottom: 48px;
   right: 12px;
   text-align: right;
   z-index: 123;
+  letter-spacing: 1.5px;
+  text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-buttons-group {
   font-weight: bold;
   margin-top: 6px;
+  color: blue;
 }
 .wc-buttons-group.wc-active {
   opacity: 1;
@@ -341,6 +347,8 @@ body {
   cursor: pointer;
   font-weight: normal;
   border-bottom: 1px solid transparent;
+  font-size: 125%;
+  color: #555;
 }
 .wc-button:hover {
   border-bottom: 1px solid blue;

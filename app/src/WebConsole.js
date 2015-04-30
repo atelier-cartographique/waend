@@ -191,40 +191,40 @@ var WebConsole = Terminal.extend({
             }
             if (1 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-active');
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
                 }
             }
             else if (2 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-active');
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
                 }
                 if (groups.group) {
-                    groups.group.setAttribute('class', 'wc-buttons-group wc-active');
+                    groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
                 }
             }
             else if (3 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-active');
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
                 }
                 if (groups.group) {
-                    groups.group.setAttribute('class', 'wc-buttons-group wc-active');
+                    groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
                 }
                 if (groups.layer) {
-                    groups.layer.setAttribute('class', 'wc-buttons-group wc-active');
+                    groups.layer.setAttribute('class', 'wc-buttons-group wc-button-group-layer wc-active');
                 }
             }
             else if (4 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-active');
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
                 }
                 if (groups.group) {
-                    groups.group.setAttribute('class', 'wc-buttons-group wc-active');
+                    groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
                 }
                 if (groups.layer) {
-                    groups.layer.setAttribute('class', 'wc-buttons-group wc-active');
+                    groups.layer.setAttribute('class', 'wc-buttons-group wc-button-group-layer wc-active');
                 }
                 if (groups.feature) {
-                    groups.feature.setAttribute('class', 'wc-buttons-group wc-active');
+                    groups.feature.setAttribute('class', 'wc-buttons-group wc-button-group-feature wc-active');
                 }
             }
 
