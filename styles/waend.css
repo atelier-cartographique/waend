@@ -266,9 +266,10 @@ body {
   display: none;
 }
 .hint {
-  font-size: 80%;
+  font-size: 75%;
   font-style: italic;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
+  font-family: monospace;
 }
 .wc-title {
   position: absolute;
