@@ -35,7 +35,8 @@ function getAttr () {
         }
     }
 
-    stdout.write('<span class="hint first-hint-line">HINT : Add and edit attribute of this element with SET command, by typing :</span>');
+    stdout.write('<span class="hint first-hint-line">HINT : </span>');
+    stdout.write('<span class="hint">Add and edit attribute of this element with SET command, by typing :</span>');
     stdout.write('<span class="hint hint-exemple">set attribute-name attribute-value</span>');
     stdout.write('<span class="hint">NOTE : Multiple words attributes must be surrounded by " and "</span>');
 
