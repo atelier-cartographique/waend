@@ -12,22 +12,27 @@ var _ = require('underscore');
 
 function setAttr () {
     if(arguments.length === 0){return self.end();}
-    var args = _.toArray(arguments);
+    var args = _.toArray(arguments),
         key = args.shift(),
-        env = this.shell.env;
+        env = this.shell.env,
+        data;
 
     if (!key) {
         throw (new Error('No Key'));
     }
-    else if (0 === args.length) {
-        var delivered = ('toJSON' in env.DELIVERED) ? env.DELIVERED.toJSON() : env.DELIVERED;
-        // var data = JSON.parse(delivered);
-        return this.data.set(key, delivered);
+    else if (0 === args.length && env.DELIVERED) {
+        try {
+            var delivered = env.DELIVERED.toJSON();
+            return this.data.set(key, delivered);
+        }
+        catch (err) {
+            return this.data.set(key, env.DELIVERED);
+        }
     }
     else if (1 === args.length) {
         // we first try to parse it, who knows?
         try {
-            var data = JSON.parse(args[0].toString());
+            data = JSON.parse(args[0].toString());
             return this.data.set(key, data);
         }
         catch (err) {
@@ -35,9 +40,15 @@ function setAttr () {
             return this.data.set(key, args[0].toString());
         }
     }
-    // finally we consider each argument to be an array item of type String
-    var data = _.map(args, function(v){
-        return v.toString();
+    // finally we consider each argument to be an array item
+    data = _.map(args, function(v){
+        try {
+            var ldata = JSON.parse(v.toString());
+            return ldata;
+        }
+        catch (err) {
+            return v.toString();
+        }
     });
     return this.data.set(key, data);
 }

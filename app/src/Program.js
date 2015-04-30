@@ -25,11 +25,13 @@ function Program (ctx) {
         var p = new ctx.Geometry.Polygon(coordinates);
         var extent = p.getExtentObject(),
             hatchLen = ('hn' in props) ? props.hn : 24,
-            height = extent.getHeight(),
+            height = 24000, //extent.getHeight(),
+            width = 24000, //extent.getWidth(),
+            center = extent.getCenter(),
             bottomLeft = extent.getBottomLeft().getCoordinates(),
             topRight = extent.getTopRight().getCoordinates(),
-            left = bottomLeft[0],
-            right = topRight[0],
+            left = -12000, //bottomLeft[0],
+            right = 12000, //topRight[0],
             patternCoordinates = [],
             strokeColor = ('color' in props) ? props.color: '#000',
             step = height / hatchLen,
@@ -43,7 +45,7 @@ function Program (ctx) {
         }
 
         for (i = 0; i < hatchLen; i++) {
-          var y = bottomLeft[1] + (i*step);
+          var y = -12000 + (i*step);
           if (turnFlag) {
             if (i > 0) {
               patternCoordinates.push([right, y]);
@@ -58,6 +60,15 @@ function Program (ctx) {
           }
           turnFlag = !turnFlag;
         }
+
+        if ('rotation' in props) {
+            var rt = new ctx.Transform(),
+                ccoords = center.getCoordinates();
+            rt.rotate(props.rotation, {'x': ccoords[0], 'y': ccoords[1]});
+            console.log('rotation', props.rotation, rt.flatMatrix());
+            ctx.lineTransform(rt, patternCoordinates);
+        }
+
         ctx.emit('save');
         ctx.emit('set', 'strokeStyle', strokeColor);
         ctx.emit('clip', 'begin', coordinates);

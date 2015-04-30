@@ -162,28 +162,6 @@ body {
     padding-top: 38px;*/
   background-color: transparent;
 }
-.media-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  background-position: center center;
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-.media-close {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  color: white;
-  font-weight: bold;
-  font-size: 200%;
-  text-shadow: 0 0 6px black;
-  cursor: pointer;
-}
-.media-close:hover {
-  color: blue;
-}
 .wc-display {
   position: absolute;
   z-index: 1000;
@@ -329,4 +307,31 @@ body {
 }
 .wc-button:hover {
   border-bottom: 1px solid blue;
+}
+.media-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.media-wrapper .media-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  color: white;
+  font-weight: bold;
+  font-size: 200%;
+  text-shadow: 0 0 6px black;
+  cursor: pointer;
+}
+.media-wrapper .media-close:hover {
+  color: blue;
+}
+.media-wrapper .media-pick-item {
+  float: left;
+  margin: 22px;
+  border: 1px grey;
 }

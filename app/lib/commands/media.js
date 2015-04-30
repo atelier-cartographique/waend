@@ -162,33 +162,102 @@ function showMedia (mediaName) {
         mediaId = user.id + '/' + mediaName,
         mediaUrl = MEDIA_URL + '/' + mediaId + '?size=2000',
         wrapper = document.createElement('div'),
-        // img = document.createElement('img'),
         closer = document.createElement('div');
 
     wrapper.setAttribute('class', 'media-wrapper');
-    closer.setAttribute('class', 'media-close');
-    // img.setAttribute('class', 'media-img');
-
-
     wrapper.setAttribute('style', 'background-image:url("'+mediaUrl+'");');
-
+    closer.setAttribute('class', 'media-close');
     closer.innerHTML = ' close ';
-    // img.setAttribute('src', MEDIA_URL + '/' +
-    //                         mediaId + '?size=2000');
 
-    // wrapper.appendChild(img);
     wrapper.appendChild(closer);
     display.node.appendChild(wrapper);
 
-    var resolver = function (resolve) {
+    var resolver = function (resolve, reject) {
         var close = function () {
             display.end();
             resolve(mediaId);
         };
         closer.addEventListener('click', close, false);
-        // display.node.setAttribute('tabindex', -1);
-        // display.node.focus();
-        // display.node.addEventListener('keydown', close, true);
+    };
+
+    return (new Promise(resolver));
+}
+
+function pickMedia () {
+    var self = this,
+        shell = self.shell,
+        user = shell.user,
+        terminal = shell.terminal;
+
+    if (!user) {
+        return self.endWithError('you are not logged in');
+    }
+
+    var display = terminal.display(),
+        wrapper = document.createElement('div'),
+        closer = document.createElement('div');
+
+    wrapper.setAttribute('class', 'media-wrapper');
+    closer.setAttribute('class', 'media-close');
+    closer.innerHTML = ' close ';
+
+    wrapper.appendChild(closer);
+    display.node.appendChild(wrapper);
+
+    var resolver = function (resolve, reject) {
+
+        var picker = function (mid) {
+            return function (e) {
+                display.end();
+                resolve(mid);
+            };
+        };
+
+        var close = function () {
+            display.end();
+            reject('NothingPicked');
+        };
+
+        var success = function (data) {
+            if('medias' in data) {
+                for (var i = 0; i < data.medias.length; i++) {
+                    var m = data.medias[i];
+                    var mid = user.id+'/'+m;
+                    var imageUrl = MEDIA_URL + '/' + mid + '?size=200';
+                    var pwrapper = document.createElement('div');
+                    var style = [
+                        'width:200px;',
+                        'height:200px;',
+                        'background-position: center center;',
+                        'background-size: cover;',
+                        'background-repeat: no-repeat;',
+                        'background-image:url("'+imageUrl+'")'
+                    ];
+                    pwrapper.setAttribute('style', style.join(''));
+                    pwrapper.setAttribute('class', 'media-pick-item');
+                    pwrapper.addEventListener('click', picker(mid), false);
+
+                    wrapper.appendChild(pwrapper);
+                }
+
+            }
+            else {
+                reject(new Error('empty set'));
+            }
+        };
+
+        var error = function (err) {
+            console.error(err);
+            reject(err);
+        };
+
+        var transport = new Transport();
+        transport
+            .get(MEDIA_URL + '/' + user.id)
+            .then(success)
+            .catch(error);
+
+        closer.addEventListener('click', close, false);
     };
     return (new Promise(resolver));
 }
@@ -205,6 +274,9 @@ function media () {
     }
     else if('show' === action){
         return showMedia.apply(this, args);
+    }
+    else if('pick' === action){
+        return pickMedia.apply(this, args);
     }
     return this.endWithError('not a valid action');
 }

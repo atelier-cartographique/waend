@@ -195,16 +195,34 @@ var WebConsole = Terminal.extend({
                 }
             }
             else if (2 === sctx) {
+                if (groups.user) {
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-active');
+                }
                 if (groups.group) {
                     groups.group.setAttribute('class', 'wc-buttons-group wc-active');
                 }
             }
             else if (3 === sctx) {
+                if (groups.user) {
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-active');
+                }
+                if (groups.group) {
+                    groups.group.setAttribute('class', 'wc-buttons-group wc-active');
+                }
                 if (groups.layer) {
                     groups.layer.setAttribute('class', 'wc-buttons-group wc-active');
                 }
             }
             else if (4 === sctx) {
+                if (groups.user) {
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-active');
+                }
+                if (groups.group) {
+                    groups.group.setAttribute('class', 'wc-buttons-group wc-active');
+                }
+                if (groups.layer) {
+                    groups.layer.setAttribute('class', 'wc-buttons-group wc-active');
+                }
                 if (groups.feature) {
                     groups.feature.setAttribute('class', 'wc-buttons-group wc-active');
                 }
@@ -290,7 +308,7 @@ var WebConsole = Terminal.extend({
         drawZoom.addEventListener('click', function(){
             self.runCommand('draw | region set');
         }, false);
-        
+
         mapBlock.appendChild(drawZoom);
         mapBlock.appendChild(nav);
         mapBlock.appendChild(select);

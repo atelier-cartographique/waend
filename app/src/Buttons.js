@@ -38,6 +38,6 @@ var layerButtons = {
 
 module.exports = exports = {
     'user' : userButtons,
-    'map': groupButtons,
+    'group': groupButtons,
     'layer': layerButtons
 };
