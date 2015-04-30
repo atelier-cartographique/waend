@@ -139,7 +139,7 @@ table {
   text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .dark-text-shadow {
-  text-shadow: 6px 0 6px #555555, -6px 0 6px #555555, 0 6px 6px #555555, 0 -6px 6px #555555, 1px 1px #555555, -1px -1px 0 #555555, 1px -1px 0 #555555, -1px 1px 0 #555555;
+  text-shadow: 0 0 6px #555555, 0 0 6px #555555, 1px 1px 0px #555555, -1px -1px 0px #555555, -1px 1px 0px #555555, 1px -1px 0px #555555;
 }
 body {
   background-color: #E5E5E5;
@@ -309,7 +309,7 @@ body {
   font-weight: normal;
   letter-spacing: 2px;
   text-align: right;
-  text-shadow: 6px 0 6px #555555, -6px 0 6px #555555, 0 6px 6px #555555, 0 -6px 6px #555555, 1px 1px #555555, -1px -1px 0 #555555, 1px -1px 0 #555555, -1px 1px 0 #555555;
+  text-shadow: 0 0 6px #555555, 0 0 6px #555555, 1px 1px 0px #555555, -1px -1px 0px #555555, -1px 1px 0px #555555, 1px -1px 0px #555555;
 }
 .wc-nav,
 .wc-select,
