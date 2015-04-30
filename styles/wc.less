@@ -1,0 +1,101 @@
+
+
+.wc-display {
+    position:absolute;
+    z-index: 1000;
+    top:0;
+    left:0;
+    right:0;
+    bottom: 0;
+    width:100%;
+    height:100%;
+    font-family: monospace;
+    background-color: transparent;
+}
+
+#wc.fold {
+    bottom: 64%;
+    border-bottom: 1px solid;
+}
+
+
+
+.wc-pages{
+    position: absolute;
+    width: 60%;
+    max-height: 50%;
+    overflow: auto;
+    bottom: 48px;
+    left:48px;
+    background-color: transparent;
+}
+
+.wc-page {
+    opacity: 1;
+    width: 100%;
+    overflow-y: hidden;
+    padding-left: 10px;
+}
+
+.wc-page-title {
+    font-weight: bold;
+    font-size: 150%;
+    color: grey;
+    margin-bottom: .5em;
+}
+
+
+
+
+.wc-page.wc-inactive {
+    opacity: 0;
+    transform: translateX(-50%);
+    transition-property: opacity, transform;
+    transition-duration: 1s;
+}
+
+.wc-input{
+    position: absolute;
+    bottom: 12px;
+    left:48px;
+    border: 0;
+    border-top: 1px solid grey;
+    font-weight: bold;
+    font-size: 10pt;
+    background-color: transparent;
+    width: 60%;
+    text-shadow: 0 0 6px black;;
+}
+
+.wc-input.wc-inactive {
+    color:#252525;
+    /*display: none;*/
+}
+
+
+.wc-pending{
+    color: #2B71FF;
+}
+
+.wc-error{
+    color: #FF4B3B;
+}
+
+.wc-command{
+    font-style: italic;
+    text-decoration: none;
+    color: #FF00BE;
+}
+.wc-command:hover, .wc-command:focus{
+    border-bottom: 1px solid;
+}
+
+.hidden {
+    display: none;
+}
+
+.hint {
+    font-size: 80%;
+    font-style: italic;
+    letter-spacing: 0.8px
+}
