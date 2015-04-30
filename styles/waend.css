@@ -333,7 +333,6 @@ body {
   text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-buttons-group {
-  font-weight: bold;
   margin-top: 6px;
   color: blue;
 }
@@ -345,7 +344,6 @@ body {
 }
 .wc-button {
   cursor: pointer;
-  font-weight: normal;
   border-bottom: 1px solid transparent;
   font-size: 125%;
   color: #555;
