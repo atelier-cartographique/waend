@@ -206,14 +206,14 @@ body {
   max-height: 50%;
   overflow: auto;
   bottom: 48px;
-  left: 48px;
+  left: 0px;
   background-color: transparent;
 }
 .wc-page {
   opacity: 1;
   width: 100%;
   overflow-y: hidden;
-  padding-left: 10px;
+  padding-left: 12px;
 }
 .wc-page-title {
   font-size: 100%;
@@ -231,7 +231,7 @@ body {
 .wc-input {
   position: absolute;
   bottom: 12px;
-  left: 48px;
+  left: 12px;
   border: 0;
   border-top: 1px solid grey;
   font-size: 12pt;
@@ -307,7 +307,7 @@ body {
 .wc-buttons {
   position: absolute;
   font-size: 125%;
-  bottom: 12px;
+  bottom: 48px;
   right: 12px;
   text-align: right;
   z-index: 123;
