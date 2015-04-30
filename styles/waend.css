@@ -276,7 +276,11 @@ body {
   top: 12px;
   left: 12px;
   font-size: 12pt;
-  color: #FF00BE;
+  text-shadow: 0 0 6px #fff;
+}
+.wc-title .wc-command:hover {
+  border-bottom: 1px solid blue;
+  color: #000;
 }
 .wc-mapblock {
   position: absolute;
