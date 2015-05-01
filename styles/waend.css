@@ -360,7 +360,7 @@ body {
   right: 12px;
   text-align: right;
   z-index: 123;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-buttons-group {
@@ -369,18 +369,25 @@ body {
 }
 .wc-buttons-group.wc-current {
   opacity: 1;
+  font-size: 125%;
+  transition-property: opacity, font-size;
+  transition-duration: 0.5s;
 }
 .wc-buttons-group.wc-active .wc-button {
+  opacity: 1;
   font-size: 100%;
-  color: #888;
+  transition-property: opacity, font-size;
+  transition-duration: 0.5s;
 }
 .wc-buttons-group.wc-inactive {
   opacity: .1;
+  font-size: 100%;
+  transition-property: opacity, font-size;
+  transition-duration: 0.5s;
 }
 .wc-button {
   cursor: pointer;
   border-bottom: 1px solid transparent;
-  font-size: 125%;
   color: #555;
 }
 .wc-button:hover {
