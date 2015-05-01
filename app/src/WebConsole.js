@@ -191,17 +191,17 @@ var WebConsole = Terminal.extend({
             }
             if (1 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active wc-current');
                     groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
                 }
             }
             else if (2 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active ');
                     groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
                 }
                 if (groups.group) {
-                    groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
+                    groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active wc-current');
                 }
             }
             else if (3 === sctx) {
@@ -213,7 +213,7 @@ var WebConsole = Terminal.extend({
                     groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
                 }
                 if (groups.layer) {
-                    groups.layer.setAttribute('class', 'wc-buttons-group wc-button-group-layer wc-active');
+                    groups.layer.setAttribute('class', 'wc-buttons-group wc-button-group-layer wc-active wc-current');
                 }
             }
             else if (4 === sctx) {
@@ -228,7 +228,7 @@ var WebConsole = Terminal.extend({
                     groups.layer.setAttribute('class', 'wc-buttons-group wc-button-group-layer wc-active');
                 }
                 if (groups.feature) {
-                    groups.feature.setAttribute('class', 'wc-buttons-group wc-button-group-feature wc-active');
+                    groups.feature.setAttribute('class', 'wc-buttons-group wc-button-group-feature wc-active wc-current');
                 }
             }
 

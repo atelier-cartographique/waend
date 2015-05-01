@@ -139,7 +139,7 @@ table {
   text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .yellow-text-shadow {
-  text-shadow: 0 0 6px gold, 0 0 6px gold, 1px 1px 0px gold, -1px -1px 0px gold, -1px 1px 0px gold, 1px -1px 0px gold;
+  text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
 }
 .dark-text-shadow {
   text-shadow: 0 0 6px #555555, 0 0 6px #555555, 1px 1px 0px #555555, -1px -1px 0px #555555, -1px 1px 0px #555555, 1px -1px 0px #555555;
@@ -306,7 +306,7 @@ body {
   font-style: italic;
   letter-spacing: 0px;
   font-family: monospace;
-  text-shadow: 0 0 6px gold, 0 0 6px gold, 1px 1px 0px gold, -1px -1px 0px gold, -1px 1px 0px gold, 1px -1px 0px gold;
+  text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
 }
 .hint.first-hint-line {
   margin-top: 12px;
