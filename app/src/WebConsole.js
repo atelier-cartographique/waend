@@ -191,7 +191,7 @@ var WebConsole = Terminal.extend({
             }
             if (1 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active wc-current');
+                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-current');
                     groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
                 }
             }
@@ -201,7 +201,7 @@ var WebConsole = Terminal.extend({
                     groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
                 }
                 if (groups.group) {
-                    groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active wc-current');
+                    groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-current');
                 }
             }
             else if (3 === sctx) {
@@ -213,7 +213,7 @@ var WebConsole = Terminal.extend({
                     groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
                 }
                 if (groups.layer) {
-                    groups.layer.setAttribute('class', 'wc-buttons-group wc-button-group-layer wc-active wc-current');
+                    groups.layer.setAttribute('class', 'wc-buttons-group wc-button-group-layer wc-current');
                 }
             }
             else if (4 === sctx) {
@@ -228,7 +228,7 @@ var WebConsole = Terminal.extend({
                     groups.layer.setAttribute('class', 'wc-buttons-group wc-button-group-layer wc-active');
                 }
                 if (groups.feature) {
-                    groups.feature.setAttribute('class', 'wc-buttons-group wc-button-group-feature wc-active wc-current');
+                    groups.feature.setAttribute('class', 'wc-buttons-group wc-button-group-feature wc-current');
                 }
             }
 

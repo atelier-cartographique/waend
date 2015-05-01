@@ -12,16 +12,20 @@
 .wc-buttons-group {
     margin-top: 6px; 
     color: blue;
-}
 
 
-.wc-buttons-group.wc-active {
-    opacity: 1;
+    &.wc-current {
+        opacity: 1;
+    }
 
-}
+    &.wc-active .wc-button {
+            font-size: 100%;
+            color: #888;
+    }
 
-.wc-buttons-group.wc-inactive {
+    &.wc-inactive {
     opacity: .1;
+    }
 }
 
 .wc-button {

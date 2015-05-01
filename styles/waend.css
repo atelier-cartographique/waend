@@ -367,8 +367,12 @@ body {
   margin-top: 6px;
   color: blue;
 }
-.wc-buttons-group.wc-active {
+.wc-buttons-group.wc-current {
   opacity: 1;
+}
+.wc-buttons-group.wc-active .wc-button {
+  font-size: 100%;
+  color: #888;
 }
 .wc-buttons-group.wc-inactive {
   opacity: .1;
