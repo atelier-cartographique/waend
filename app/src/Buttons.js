@@ -35,7 +35,8 @@ var userButtons = {
 
 var waendButtons = {
     'login' : ['login'],
-    'register' : ['register']
+    'register' : ['register'],
+    'get context infos': ['get']
 };
 
 
