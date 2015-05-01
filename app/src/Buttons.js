@@ -9,35 +9,39 @@
  */
 
 
-var userButtons = {
-    'login' : ['login'],
-    'register' : ['register'],
-    'logout' : ['logout'],
-    'list maps': ['lg'],
-    'create map': ['ic'],
-    'upload media': ['media upload'],
-    'list medias': ['media list']
+var layerButtons = {
+    'add text': ['draw | close | create | cc | edit | set text'],
+    'add line': ['draw | create'],
+    'add zone': ['draw | close | create'],
+    'add image': ['draw | close | create | cc | media pick | set image'],
+    'import data': ['import'],
+    'list features': ['lf']
 };
 
-
 var groupButtons = {
+    'add layer': ['ic'],
     'list layers' : ['ll'],
-    'create layer': ['ic'],
     'set map extent': ['region print | set extent']
 };
 
+var userButtons = {
+    'add map': ['ic'],
+    'list maps': ['lg'],
+    'upload media': ['media upload'],
+    'browse medias': ['media list'],
+    'logout' : ['logout']
 
-var layerButtons = {
-    'list features': ['lf'],
-    'add line': ['draw | create'],
-    'add zone': ['draw | close | create'],
-    'add text': ['draw | close | create | cc | edit | set text'],
-    'add image': ['draw | close | create | cc | media pick | set image'],
-    'import data': ['import']
 };
 
+var waendButtons = {
+    'login' : ['login'],
+    'register' : ['register']
+};
+
+
 module.exports = exports = {
-    'user' : userButtons,
+    'layer': layerButtons,
     'group': groupButtons,
-    'layer': layerButtons
+    'user' : userButtons,
+    'wænd' : waendButtons,
 };

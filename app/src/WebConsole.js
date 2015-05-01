@@ -20,7 +20,7 @@ var _ = require('underscore'),
 
 var document = window.document;
 
-var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
+var titleTypes = ['shell', 'wænd', 'user', 'group', 'layer', 'feature'];
 
 function WebCommand (term, options) {
     this.term = term;
@@ -192,11 +192,13 @@ var WebConsole = Terminal.extend({
             if (1 === sctx) {
                 if (groups.user) {
                     groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
+                    groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
                 }
             }
             else if (2 === sctx) {
                 if (groups.user) {
                     groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
+                    groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
                 }
                 if (groups.group) {
                     groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
@@ -205,6 +207,7 @@ var WebConsole = Terminal.extend({
             else if (3 === sctx) {
                 if (groups.user) {
                     groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
+                    groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
                 }
                 if (groups.group) {
                     groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
@@ -216,6 +219,7 @@ var WebConsole = Terminal.extend({
             else if (4 === sctx) {
                 if (groups.user) {
                     groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
+                    groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
                 }
                 if (groups.group) {
                     groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
