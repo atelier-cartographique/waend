@@ -114,12 +114,20 @@
 
     .value {
         width: calc(~"100% - 75px - 6px");
+        font-family: monospace;
+        font-size: 11pt;
+        letter-spacing: 0.5px;
     }
 }
 
 .key-name {
     display: inline-block !important;
-    & .value {font-size: 200%;}
+    
+    & .value {
+        font-size: 200%;
+        font-family: inherit;
+        letter-spacing: inherit;
+}
     & .key {display: inline-block !important;}
 }
 
@@ -131,6 +139,7 @@
     font-style: italic;
     letter-spacing: 0px;
     font-family: monospace;
+    .yellow-text-shadow;
 
 
     &.first-hint-line {
@@ -144,5 +153,6 @@
         font-size: 11pt;
         display: block;
         padding: 6px 0 4px 0;
+        .white-text-shadow;
     }
 }
