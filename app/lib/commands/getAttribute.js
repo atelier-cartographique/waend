@@ -23,7 +23,7 @@ function getAttr () {
     if(key){
         result = self.data.get(key)
         // sys.stdout.write('"'+ key +'" : '+ JSON.stringify(self.data.get(key)));
-        sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + key + '</span>' + '<span class="value">' + JSON.stringify(self.data.get(key)) + '</span>' + '</span>');
+        sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(self.data.get(key)) + '</span>' + '</span>');
 
     }
     else{
@@ -31,7 +31,7 @@ function getAttr () {
         result = data;
         for(var key in data){
             // sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + '"'+ key +'" : ' +'</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
-            sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + key + '</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
+            sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
         }
     }
 
