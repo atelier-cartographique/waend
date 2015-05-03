@@ -27,8 +27,7 @@ function listGroups () {
                     var cmd = terminal.makeCommand({
                         'args': [
                             'cc /'+userId+'/'+group.id,
-                            'get',
-                            'll'
+                            'get'
                             ],
                         'text': group.id
                     });
