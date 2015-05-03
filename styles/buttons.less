@@ -11,7 +11,7 @@
 
 .wc-buttons-group {
     margin-top: 6px; 
-    color: blue;
+    color: #333;
 
 
     &.wc-current {
@@ -39,9 +39,14 @@
 .wc-button {
     cursor: pointer;
     border-bottom: 1px solid transparent;
-    color: #555;
 }
 
 .wc-button:hover {
     border-bottom: 1px solid blue;
 }
+
+.wc-button-group-feature .wc-button { color: @colorFeature;}
+.wc-button-group-layer .wc-button   { color: @colorLayer;}
+.wc-button-group-group .wc-button   { color: @colorGroup;}
+.wc-button-group-user .wc-button    { color: @colorUser;}
+.wc-button-group-waend .wc-button   { color: @colorWaend;}
