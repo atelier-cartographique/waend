@@ -255,7 +255,7 @@ var WebConsole = Terminal.extend({
 
             var titleType = titleTypes[ctxPath.length - 1];
             var names = new Array(ctxPath.length);
-            var titleComps = ['('+titleType+')'];
+            var titleComps = [];
             if(ctxPath.length > 0){
                 for (var pidx = 0; pidx < ctxPath.length; pidx++) {
                     var id = ctxPath[pidx];
