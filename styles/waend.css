@@ -184,6 +184,21 @@ body {
     padding-top: 38px;*/
   background-color: transparent;
 }
+.wc-context-feature {
+  color: #198cff !important;
+}
+.wc-context-layer {
+  color: #2892d1 !important;
+}
+.wc-context-group {
+  color: #3698a4 !important;
+}
+.wc-context-user {
+  color: #459f76 !important;
+}
+.wc-context-shell {
+  color: #53a548 !important;
+}
 .wc-display {
   position: absolute;
   z-index: 1000;
@@ -327,9 +342,49 @@ body {
   font-size: 12pt;
   text-shadow: 0 0 6px #fff;
 }
-.wc-title .wc-command:hover {
+.wc-title a:link {
+  display: inline-block;
+  font-size: 100%;
+  text-decoration: none !important;
+  margin-right: 3px;
+  height: 20px;
+  line-height: 20px;
+  text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+}
+.wc-title a:last-child {
+  font-size: 125%;
+}
+.wc-title a:hover {
   border-bottom: 1px solid blue;
-  color: #000;
+}
+.wc-title .wc-context-feature:after {
+  content: "feature";
+}
+.wc-title .wc-context-layer:after {
+  content: "layer";
+}
+.wc-title .wc-context-group:after {
+  content: "group";
+}
+.wc-title .wc-context-user:after {
+  content: "user";
+}
+.wc-title .wc-context-shell:after {
+  content: "wænd";
+}
+.wc-title .wc-context-feature:after,
+.wc-title .wc-context-layer:after,
+.wc-title .wc-context-group:after,
+.wc-title .wc-context-user:after,
+.wc-title .wc-context-shell:after {
+  position: relative;
+  display: block;
+  font-size: 8pt;
+  font-family: monospace;
+  width: 40px;
+  left: calc(50% - 20px);
+  text-align: center;
+  top: -3px;
 }
 .wc-mapblock {
   position: absolute;
@@ -365,22 +420,23 @@ body {
 }
 .wc-buttons-group {
   margin-top: 6px;
-  color: #333;
+  font-family: monospace;
+  font-size: 9pt;
 }
-.wc-buttons-group.wc-current {
-  font-size: 125%;
+.wc-buttons-group.wc-current .wc-button {
+  font-size: 15pt;
   margin-right: 0px;
   transition-property: font-size, margin-right;
   transition-duration: 0.5s;
 }
 .wc-buttons-group.wc-active .wc-button {
-  font-size: 100%;
+  font-size: 12pt;
   margin-right: 0px;
   transition-property: font-size, margin-right;
   transition-duration: 0.5s;
 }
 .wc-buttons-group.wc-inactive {
-  font-size: 100%;
+  font-size: 12pt;
   margin-right: -100px;
   transition-property: font-size, margin-right;
   transition-duration: 0.5s;
@@ -388,24 +444,13 @@ body {
 .wc-button {
   cursor: pointer;
   border-bottom: 1px solid transparent;
+  font-family: "osp-dindin";
+}
+.wc-button:first-child {
+  padding-top: 3px;
 }
 .wc-button:hover {
   border-bottom: 1px solid blue;
-}
-.wc-button-group-feature .wc-button {
-  color: #198cff;
-}
-.wc-button-group-layer .wc-button {
-  color: #2892d1;
-}
-.wc-button-group-group .wc-button {
-  color: #3698a4;
-}
-.wc-button-group-user .wc-button {
-  color: #459f76;
-}
-.wc-button-group-waend .wc-button {
-  color: #53a548;
 }
 .media-wrapper {
   position: relative;

@@ -11,25 +11,25 @@
 
 .wc-buttons-group {
     margin-top: 6px; 
-    color: #333;
+    font-family: monospace;
+    font-size: 9pt;
 
-
-    &.wc-current {
-        font-size: 125%;
+    &.wc-current .wc-button{
+        font-size: 15pt;
         margin-right: 0px;
         transition-property: font-size, margin-right;
         transition-duration: 0.5s;
     }
 
     &.wc-active .wc-button{
-        font-size: 100%;
+        font-size: 12pt;
         margin-right: 0px;
         transition-property: font-size, margin-right;
         transition-duration: 0.5s;
     }
 
     &.wc-inactive {
-        font-size: 100%;
+        font-size: 12pt;
         margin-right: -100px;
         transition-property: font-size, margin-right;
         transition-duration: 0.5s;
@@ -39,14 +39,14 @@
 .wc-button {
     cursor: pointer;
     border-bottom: 1px solid transparent;
+    font-family: "osp-dindin";
+
+
+    &:first-child{
+        padding-top: 3px;
+    }
 }
 
 .wc-button:hover {
     border-bottom: 1px solid blue;
 }
-
-.wc-button-group-feature .wc-button { color: @colorFeature;}
-.wc-button-group-layer .wc-button   { color: @colorLayer;}
-.wc-button-group-group .wc-button   { color: @colorGroup;}
-.wc-button-group-user .wc-button    { color: @colorUser;}
-.wc-button-group-waend .wc-button   { color: @colorWaend;}

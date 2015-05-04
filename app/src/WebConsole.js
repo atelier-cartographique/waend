@@ -200,56 +200,56 @@ var WebConsole = Terminal.extend({
 
             if (groups.shell) {
                 groups.shell.setAttribute('class',
-                                'wc-buttons-group wc-button-group-shell wc-active');
+                                'wc-buttons-group wc-context-shell wc-active');
 
             }
 
             if (1 === sctx) {
                 if (groups.user) {
                     groups.user.setAttribute('class',
-                            'wc-buttons-group wc-button-group-user wc-current');
+                            'wc-buttons-group wc-context-user wc-current');
                 }
             }
             else if (2 === sctx) {
                 if (groups.user) {
                     groups.user.setAttribute('class',
-                            'wc-buttons-group wc-button-group-user wc-active ');
+                            'wc-buttons-group wc-context-user wc-active ');
                 }
                 if (groups.group) {
                     groups.group.setAttribute('class',
-                            'wc-buttons-group wc-button-group-group wc-current');
+                            'wc-buttons-group wc-context-group wc-current');
                 }
             }
             else if (3 === sctx) {
                 if (groups.user) {
                     groups.user.setAttribute('class',
-                            'wc-buttons-group wc-button-group-user wc-active');
+                            'wc-buttons-group wc-context-user wc-active');
                 }
                 if (groups.group) {
                     groups.group.setAttribute('class',
-                            'wc-buttons-group wc-button-group-group wc-active');
+                            'wc-buttons-group wc-context-group wc-active');
                 }
                 if (groups.layer) {
                     groups.layer.setAttribute('class',
-                            'wc-buttons-group wc-button-group-layer wc-current');
+                            'wc-buttons-group wc-context-layer wc-current');
                 }
             }
             else if (4 === sctx) {
                 if (groups.user) {
                     groups.user.setAttribute('class',
-                            'wc-buttons-group wc-button-group-user wc-active');
+                            'wc-buttons-group wc-context-user wc-active');
                 }
                 if (groups.group) {
                     groups.group.setAttribute('class',
-                            'wc-buttons-group wc-button-group-group wc-active');
+                            'wc-buttons-group wc-context-group wc-active');
                 }
                 if (groups.layer) {
                     groups.layer.setAttribute('class',
-                            'wc-buttons-group wc-button-group-layer wc-active');
+                            'wc-buttons-group wc-context-layer wc-active');
                 }
                 if (groups.feature) {
                     groups.feature.setAttribute('class',
-                            'wc-buttons-group wc-button-group-feature wc-current');
+                            'wc-buttons-group wc-context-feature wc-current');
                 }
             }
 
@@ -273,7 +273,7 @@ var WebConsole = Terminal.extend({
                         'args': ['cc /' + ctxPath.slice(0, pidx + 1).join('/')],
                         'text': '  > ' + names[pidx],
                         'attributes': {
-                            'class': 'context-' + titleTypes[pidx + 1]
+                            'class': 'wc-context-' + titleTypes[pidx + 1]
                         }
                     }));
                 }
