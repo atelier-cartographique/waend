@@ -1,9 +1,9 @@
 /*
  * app/lib/Context.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -40,6 +40,9 @@ var Context = O.extend({
             cmd = args.shift();
 
         if(!(cmd in this.commands)){
+            if (this.parent) {
+                return this.parent.exec.apply(this.parent, arguments);
+            }
             throw (new Error("command not found: "+cmd));
         }
 
