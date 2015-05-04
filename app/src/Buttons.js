@@ -33,7 +33,7 @@ var userButtons = {
 
 };
 
-var waendButtons = {
+var shellButtons = {
     'login' : ['login'],
     'register' : ['register'],
     'get context infos': ['get']
@@ -44,5 +44,5 @@ module.exports = exports = {
     'layer': layerButtons,
     'group': groupButtons,
     'user' : userButtons,
-    'wænd' : waendButtons,
+    'shell' : shellButtons,
 };

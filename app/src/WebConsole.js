@@ -20,13 +20,14 @@ var _ = require('underscore'),
 
 var document = window.document;
 
-var titleTypes = ['shell', 'wænd', 'user', 'group', 'layer', 'feature'];
+var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
 
 function WebCommand (term, options) {
     this.term = term;
     this.args = options.args;
     this.text = options.text;
     this.fragment = options.fragment;
+    this.attributes = options.attributes;
 }
 
 WebCommand.prototype.toString = function () {
@@ -57,8 +58,15 @@ WebCommand.prototype.toDomFragment = function () {
     var element = document.createElement('a'),
         textElement = document.createTextNode(this.text.toString());
     element.setAttribute('href', '#');
-    element.setAttribute('class', 'wc-command');
-    element.setAttribute('title', this.args.join(' '));
+    if (!!this.attributes) {
+        for (var k in this.attributes) {
+            element.setAttribute(k, this.attributes[k]);
+        }
+    }
+    else {
+        element.setAttribute('class', 'wc-command');
+        element.setAttribute('title', this.args.join(' '));
+    }
     element.appendChild(textElement);
     element.addEventListener('click', this.onClick(), false);
     return element;
@@ -189,50 +197,63 @@ var WebConsole = Terminal.extend({
                     elem.setAttribute('class', 'wc-buttons-group wc-inactive');
                 }
             }
+
+            if (groups.shell) {
+                groups.shell.setAttribute('class',
+                                'wc-buttons-group wc-button-group-shell wc-active');
+
+            }
+
             if (1 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-current');
-                    groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
+                    groups.user.setAttribute('class',
+                            'wc-buttons-group wc-button-group-user wc-current');
                 }
             }
             else if (2 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active ');
-                    groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
+                    groups.user.setAttribute('class',
+                            'wc-buttons-group wc-button-group-user wc-active ');
                 }
                 if (groups.group) {
-                    groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-current');
+                    groups.group.setAttribute('class',
+                            'wc-buttons-group wc-button-group-group wc-current');
                 }
             }
             else if (3 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
-                    groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
+                    groups.user.setAttribute('class',
+                            'wc-buttons-group wc-button-group-user wc-active');
                 }
                 if (groups.group) {
-                    groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
+                    groups.group.setAttribute('class',
+                            'wc-buttons-group wc-button-group-group wc-active');
                 }
                 if (groups.layer) {
-                    groups.layer.setAttribute('class', 'wc-buttons-group wc-button-group-layer wc-current');
+                    groups.layer.setAttribute('class',
+                            'wc-buttons-group wc-button-group-layer wc-current');
                 }
             }
             else if (4 === sctx) {
                 if (groups.user) {
-                    groups.user.setAttribute('class', 'wc-buttons-group wc-button-group-user wc-active');
-                    groups.wænd.setAttribute('class', 'wc-buttons-group wc-button-group-wænd wc-active');
+                    groups.user.setAttribute('class',
+                            'wc-buttons-group wc-button-group-user wc-active');
                 }
                 if (groups.group) {
-                    groups.group.setAttribute('class', 'wc-buttons-group wc-button-group-group wc-active');
+                    groups.group.setAttribute('class',
+                            'wc-buttons-group wc-button-group-group wc-active');
                 }
                 if (groups.layer) {
-                    groups.layer.setAttribute('class', 'wc-buttons-group wc-button-group-layer wc-active');
+                    groups.layer.setAttribute('class',
+                            'wc-buttons-group wc-button-group-layer wc-active');
                 }
                 if (groups.feature) {
-                    groups.feature.setAttribute('class', 'wc-buttons-group wc-button-group-feature wc-current');
+                    groups.feature.setAttribute('class',
+                            'wc-buttons-group wc-button-group-feature wc-current');
                 }
             }
 
-            var titleType = titleTypes[ctxPath.length];
+            var titleType = titleTypes[ctxPath.length - 1];
             var names = new Array(ctxPath.length);
             var titleComps = ['('+titleType+')'];
             if(ctxPath.length > 0){
@@ -250,7 +271,10 @@ var WebConsole = Terminal.extend({
 
                     titleComps.push(this.makeCommand({
                         'args': ['cc /' + ctxPath.slice(0, pidx + 1).join('/')],
-                        'text': '  > ' + names[pidx]
+                        'text': '  > ' + names[pidx],
+                        'attributes': {
+                            'class': 'context-' + titleTypes[pidx + 1]
+                        }
                     }));
                 }
             }
@@ -271,7 +295,7 @@ var WebConsole = Terminal.extend({
         this.root.appendChild(this.container);
         this.root.appendChild(this.pages);
 
-        this.setTitle('/wænd');
+        this.setTitle('/shell');
         this.insertInput();
         this.setButtons();
         this.setMapBlock();
