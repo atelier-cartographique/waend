@@ -9,6 +9,11 @@
  */
 
 
+ var featureButtons = {
+     'set name': ['get name | edit | set name']
+
+ };
+
 var layerButtons = {
     'add text': [
         'draw | close | create | cc',
@@ -47,6 +52,7 @@ var shellButtons = {
 
 
 module.exports = exports = {
+    'feature': featureButtons,
     'layer': layerButtons,
     'group': groupButtons,
     'user' : userButtons,

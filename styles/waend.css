@@ -1,8 +1,8 @@
-@import "codemirror.css";
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
+@import "codemirror.css";
 html,
 body,
 div,
@@ -140,7 +140,7 @@ table {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .yellow-text-shadow {
-  text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
+  text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
 }
 .dark-text-shadow {
   text-shadow: 0 0 6px #555555, 0 0 6px #555555, 1px 1px 0px #555555, -1px -1px 0px #555555, -1px 1px 0px #555555, 1px -1px 0px #555555;
@@ -322,7 +322,7 @@ body {
   font-style: italic;
   letter-spacing: 0px;
   font-family: monospace;
-  text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
+  text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
 }
 .hint.first-hint-line {
   margin-top: 12px;
@@ -402,7 +402,7 @@ body {
 .wc-select,
 .wc-draw-zoom {
   cursor: pointer;
-  margin-bottom: 6px;
+  margin-bottom: 3px;
   border-bottom: 1px solid transparent;
 }
 .wc-nav:hover,
@@ -436,6 +436,7 @@ body {
   transition-duration: 0.5s;
 }
 .wc-buttons-group.wc-inactive {
+  display: none;
   font-size: 0pt;
   transition-property: font-size;
   transition-duration: 0.5s;
