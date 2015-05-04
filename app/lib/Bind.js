@@ -137,6 +137,10 @@ var DB = O.extend({
         return this._db[id].model;
     },
 
+    getComps: function (id) {
+        return this._db[id].comps;
+    },
+
     lookupKey: function (prefix) {
         var pat = new RegExp('^'+prefix+'.*');
         var result = [];
@@ -192,13 +196,17 @@ var Bind = O.extend({
         var db = this.db,
             binder = this;
         var pr = function (response) {
-            var u = new User(binder, objectifyResponse(response));;
+            var u = new User(binder, objectifyResponse(response));
             db.record([u.id], u);
             return u;
         };
 
         var url = API_URL+'/auth';
         return this.transport.get(url, {parse: pr});
+    },
+
+    getComps: function (id) {
+        return this.db.getComps(id);
     },
 
     getUser: function (userId) {

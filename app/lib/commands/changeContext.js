@@ -17,6 +17,20 @@ var dotdot = '..';
 var dot = '.';
 
 function cc (opt_path) {
+    if (!opt_path) {
+        var tmp = this.shell.env.DELIVERED;
+        if (_.isString(tmp)) {
+            opt_path = tmp;
+        }
+        else if (_.isObject(tmp) && ('id' in tmp)) {
+            var bcomps = Bind.get().getComps(tmp.id);
+            opt_path = '/' + bcomps.join('/');
+        }
+        else {
+            return this.endWithError('NothingToChangeTo');
+        }
+    }
+
     var path = ospath.normalize(opt_path),
         isAbsolute = ospath.isAbsolute ? ospath.isAbsolute(path) : '/' === path[0],
         pathComps = path.split('/'),
@@ -64,7 +78,6 @@ function cc (opt_path) {
 
     return this.shell.historyPushContext(ctxPath)
         .then(function(){
-            // terminal.setTitle(title);
             return self.end(ctxPath);
         })
         .catch(function(err){

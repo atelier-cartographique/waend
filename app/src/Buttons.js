@@ -13,7 +13,10 @@ var layerButtons = {
     'add text': ['draw | close | create | cc | edit | set text'],
     'add line': ['draw | create'],
     'add zone': ['draw | close | create'],
-    'add image': ['draw | close | create | cc | media pick | set image'],
+    'add image': [
+        'draw | close | create | cc',
+        'media pick | set image'
+    ],
     'import data': ['import'],
     'list features': ['lf']
 };
