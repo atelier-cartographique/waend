@@ -29,6 +29,7 @@ var commandModules = [
     require('./media'),
     require('./select'),
     require('./close'),
+    require('./textEdit')
     ];
 
 
