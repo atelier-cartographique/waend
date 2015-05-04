@@ -32,6 +32,7 @@ function getAttr () {
         for(var key in data){
             // sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + '"'+ key +'" : ' +'</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
             sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
+            sys.stdout.write('<a class="edit-value" href="get ' + key + ' | edit | set ' + key + '">' + 'edit ' + key + '</a>');
         }
     }
 

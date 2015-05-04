@@ -10,8 +10,10 @@
 
 
  var featureButtons = {
-     'set name': ['get name | edit | set name']
-
+     'set name': ['get name | edit | set name'],
+     'set image': ['media pick | set image'],
+     'set color': ['get color | edit | set color'],
+     'set text': ['get text | edit | set text']
  };
 
 var layerButtons = {
