@@ -13,25 +13,23 @@
     margin-top: 6px; 
     font-family: monospace;
     font-size: 9pt;
+    width: auto;
 
     &.wc-current .wc-button{
         font-size: 15pt;
-        margin-right: 0px;
-        transition-property: font-size, margin-right;
+        transition-property: font-size;
         transition-duration: 0.5s;
     }
 
     &.wc-active .wc-button{
         font-size: 12pt;
-        margin-right: 0px;
-        transition-property: font-size, margin-right;
+        transition-property: font-size;
         transition-duration: 0.5s;
     }
 
     &.wc-inactive {
-        font-size: 12pt;
-        margin-right: -100px;
-        transition-property: font-size, margin-right;
+        font-size: 0pt;
+        transition-property: font-size;
         transition-duration: 0.5s;
     }
 }

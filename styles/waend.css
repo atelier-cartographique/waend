@@ -136,7 +136,7 @@ table {
 }
 /**** VARIABLES ****/
 .white-text-shadow {
-  text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .yellow-text-shadow {
   text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
@@ -161,7 +161,7 @@ body {
   letter-spacing: 1px;
   font-size: 12pt;
   font-family: "osp-dindin";
-  text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 #page-title {
   display: none;
@@ -333,7 +333,7 @@ body {
   font-size: 11pt;
   display: block;
   padding: 6px 0 4px 0;
-  text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-title {
   position: absolute;
@@ -349,7 +349,7 @@ body {
   margin-right: 3px;
   height: 20px;
   line-height: 20px;
-  text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-title a:last-child {
   font-size: 125%;
@@ -391,11 +391,11 @@ body {
   right: 12px;
   top: 12px;
   font-size: 150%;
-  color: #fff;
+  color: #53a548;
   font-weight: normal;
   letter-spacing: 2px;
   text-align: right;
-  text-shadow: 0 0 6px #555555, 0 0 6px #555555, 1px 1px 0px #555555, -1px -1px 0px #555555, -1px 1px 0px #555555, 1px -1px 0px #555555;
+  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-nav,
 .wc-select,
@@ -416,29 +416,27 @@ body {
   text-align: right;
   z-index: 123;
   letter-spacing: 1px;
-  text-shadow: 6px 0 6px #ffffff, -6px 0 6px #ffffff, 0 6px 6px #ffffff, 0 -6px 6px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-buttons-group {
   margin-top: 6px;
   font-family: monospace;
   font-size: 9pt;
+  width: auto;
 }
 .wc-buttons-group.wc-current .wc-button {
   font-size: 15pt;
-  margin-right: 0px;
-  transition-property: font-size, margin-right;
+  transition-property: font-size;
   transition-duration: 0.5s;
 }
 .wc-buttons-group.wc-active .wc-button {
   font-size: 12pt;
-  margin-right: 0px;
-  transition-property: font-size, margin-right;
+  transition-property: font-size;
   transition-duration: 0.5s;
 }
 .wc-buttons-group.wc-inactive {
-  font-size: 12pt;
-  margin-right: -100px;
-  transition-property: font-size, margin-right;
+  font-size: 0pt;
+  transition-property: font-size;
   transition-duration: 0.5s;
 }
 .wc-button {
