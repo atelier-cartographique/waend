@@ -28,13 +28,15 @@ function textEdit (opt_txt) {
     var resolver = function (resolve, reject) {
         var cm = CodeMirror(display.node, {
             'value': opt_txt || '',
-            lineWrapping: true
+            'autofocus': true
         });
 
+        var buttons = document.createElement('div');
+        buttons.setAttribute('class', 'edit-buttons');
 
         var saveButton = document.createElement('div');
         saveButton.setAttribute('class', 'edit-save');
-        saveButton.innerHTML = 'save';
+        saveButton.innerHTML = 'validate';
 
         saveButton.addEventListener('click', function(){
             var doc = cm.getDoc(),
@@ -43,7 +45,18 @@ function textEdit (opt_txt) {
             resolve(txt);
         }, false);
 
-        display.node.appendChild(saveButton);
+        var cancelButton = document.createElement('div');
+        cancelButton.setAttribute('class', 'edit-cancel');
+        cancelButton.innerHTML = 'cancel';
+
+        cancelButton.addEventListener('click', function(){
+            display.end();
+            reject('Canceled');
+        }, false);
+
+        buttons.appendChild(saveButton);
+        buttons.appendChild(cancelButton);
+        display.node.appendChild(buttons);
     };
 
     return (new Promise(resolver));

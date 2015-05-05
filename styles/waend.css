@@ -1,8 +1,8 @@
+@import "codemirror.css";
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
-@import "codemirror.css";
 html,
 body,
 div,
@@ -140,7 +140,7 @@ table {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .yellow-text-shadow {
-  text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
+  text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
 }
 .dark-text-shadow {
   text-shadow: 0 0 6px #555555, 0 0 6px #555555, 1px 1px 0px #555555, -1px -1px 0px #555555, -1px 1px 0px #555555, 1px -1px 0px #555555;
@@ -211,17 +211,6 @@ body {
   height: 100%;
   font-family: monospace;
   background-color: transparent;
-}
-.wc-display .edit-save {
-  position: absolute;
-  top: 91px;
-  left: calc(50% - 300px - 60px);
-  color: #f8f8f8;
-  font-family: 'osp-dindin';
-  font-size: 200%;
-  cursor: pointer;
-  text-shadow: none;
-  border-bottom: 1px solid blue;
 }
 #wc.fold {
   bottom: 64%;
@@ -335,7 +324,7 @@ body {
   font-style: italic;
   letter-spacing: 0px;
   font-family: monospace;
-  text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
+  text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
 }
 .hint.first-hint-line {
   margin-top: 12px;
@@ -510,4 +499,27 @@ body {
 }
 .CodeMirror .CodeMirror-code {
   text-shadow: none;
+}
+.edit-buttons {
+  position: absolute;
+  top: 100px;
+  right: 102px;
+  width: auto;
+  text-align: center;
+}
+.edit-buttons .edit-save {
+  color: #f8f8f8;
+  font-family: 'osp-dindin';
+  font-size: 200%;
+  cursor: pointer;
+  text-shadow: none;
+  border-bottom: 1px solid blue;
+}
+.edit-buttons .edit-cancel {
+  color: #f8f8f8;
+  font-family: 'osp-dindin';
+  font-size: 200%;
+  cursor: pointer;
+  text-shadow: none;
+  border-bottom: 1px solid red;
 }
