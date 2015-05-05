@@ -51,7 +51,7 @@ function select () {
                             'gg | region set',
                             'get'
                         ],
-                        'text': (f.getId() + ' ' + f.get('name'))
+                        'text': ('id: ' + f.getId() + ' - ' + f.get('name'))
                     }));
                 }
                 resolve(features);

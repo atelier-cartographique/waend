@@ -16,6 +16,7 @@ function getAttr () {
     var self = this,
         shell = self.shell,
         stdout = shell.stdout,
+        terminal = shell.terminal,
         args = _.toArray(arguments),
         key = args.shift(),
         sys = self.sys,
@@ -29,10 +30,15 @@ function getAttr () {
     else{
         var data = self.data.getData();
         result = data;
+
         for(var key in data){
-            // sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + '"'+ key +'" : ' +'</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
-            sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
-            // sys.stdout.write('<a class="edit-value" href="get ' + key + ' | edit | set ' + key + '">' + 'edit ' + key + '</a>');
+            sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');     
+            stdout.write(terminal.makeCommand({
+                'args': [
+                    'get '+ key +' | edit | set ' + key
+                ],
+                'text': 'edit'
+            }));
         }
     }
 
