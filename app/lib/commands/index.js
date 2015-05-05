@@ -19,6 +19,7 @@ var commandModules = [
     require('./printCurrentContext'),
     require('./setAttribute'),
     require('./getAttribute'),
+    require('./delAttribute'),
     require('./create'),
     require('./region'),
     require('./zoom'),

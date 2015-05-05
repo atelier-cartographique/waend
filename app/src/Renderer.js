@@ -13,6 +13,7 @@
 
 var _ = require('underscore'),
     semaphore = require('../lib/Semaphore'),
+    Geometry = require('../lib/Geometry'),
     W = require('./Worker'),
     Painter = require('./Painter');
 
@@ -51,12 +52,16 @@ CanvasRenderer.prototype.renderFeature = function (feature) {
     this.features[id] = true;
     var geom = feature.getGeometry(),
         geomType = geom.getType().toLowerCase(),
-        props = _.omit(feature.getProperties(), 'geometry'),
+        dFeature = feature.feature,
+        props = dFeature.getData(),
         coordinates = geom.getCoordinates();
 
-    feature.feature.on('set', function(key, val){
-        this.render();
-    }, this);
+    if (!feature.eventId) {
+        feature.eventId = dFeature.on('set set:data', function(key, val){
+            // this.render(feature.getGeometry().getExtent());
+            this.render();
+        }, this);
+    }
 
     try {
         this.worker.post(geomType, coordinates, props, this.view.transform.flatMatrix());
@@ -66,30 +71,22 @@ CanvasRenderer.prototype.renderFeature = function (feature) {
     }
 };
 
-CanvasRenderer.prototype.render = function () {
+CanvasRenderer.prototype.render = function (opt_extent) {
     var self = this,
         worker = this.worker,
-        pExtent = this.view.extent,
+        pExtent = opt_extent ? (new Geometry.Extent(opt_extent)) : this.view.extent,
         projectedMin = pExtent.getBottomLeft().getCoordinates(),
         projectedMax = pExtent.getTopRight().getCoordinates(),
         min = this.proj.inverse(projectedMin),
         max = this.proj.inverse(projectedMax),
         extent = min.concat(max);
 
+    // TODO clear only to features list extent
     this.painter.clear();
+    this.features = {};
 
     var rf = function (f) {
-        var geom = f.getGeometry(),
-            geomType = geom.getType().toLowerCase(),
-            props = _.omit(f.getProperties(), 'geometry'),
-            coordinates = geom.getCoordinates();
-
-        try {
-            worker.post(geomType, coordinates, props, self.view.transform.flatMatrix());
-        }
-        catch (err) {
-            self.features[f.id] = false;
-        }
+        self.renderFeature(f);
     };
 
     this.layer.forEachFeatureInExtent(extent, rf);

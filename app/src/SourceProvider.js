@@ -108,17 +108,17 @@ Source.prototype.buildFeature = function (f) {
     var geom = f.getGeometry(),
         data = f.getData(),
         feature = new ol.Feature({
-            geometry: f.getGeometry(),
+            geometry: geom,
             id: f.id,
             path: [this.uid, this.gid, this.layer.id, f.id]
         });
-    _.each(data, function(val, key){
-        feature.set(key, val);
-    });
+    // _.each(data, function(val, key){
+    //     feature.set(key, val);
+    // });
     feature.setId(f.id);
-    f.on('set', function(key, val){
-        feature.set(key, val);
-    });
+    // f.on('set', function(key, val){
+    //     feature.set(key, val);
+    // });
     feature.feature = f;
     return feature;
 };

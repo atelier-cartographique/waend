@@ -46,6 +46,7 @@ var Model = O.extend({
 
     setData: function (data) {
         this.data.properties = data;
+        this.emit('set:data', data);
         return this.binder.update(this);
     },
 
