@@ -103,7 +103,7 @@ function importer () {
                         var feature = features[index],
                             lastOne = index === lastIndex;
 
-                        return create(binder, uid, gid, lid, !lastOne);
+                        return create(binder, uid, gid, lid, feature, !lastOne);
                     }, 0)
                     .then(function(){
                         resolve();
