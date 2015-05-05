@@ -97,7 +97,7 @@ function vecAdd (v1, v2, a) {
 
 // font size & horizontal segments
 // a hyper basic text composer
-Text.prototype.draw = function (fontsz, segments, offset) {
+Text.prototype.draw = function (fontsz, segments, offset, mergeSegments) {
     if (!this.font) {
         console.warn('Text.prototype.draw NoFont');
         return [null, []];
@@ -122,6 +122,7 @@ Text.prototype.draw = function (fontsz, segments, offset) {
             if (sa < vecDist(curPos, endPos)) {
                 currentPath = getPath.apply(g, [curPos[0], curPos[1], fontsz]);
                 currentPath.segment = cs;
+                currentPath.pos = curPos;
                 paths.push(currentPath);
                 gOffset += 1;
                 curPos = vecAdd(curPos, endPos, sa);
@@ -132,7 +133,12 @@ Text.prototype.draw = function (fontsz, segments, offset) {
                     // no more space
                     return [[cOffset, gOffset], paths];
                 }
-                cs = segments[csIdx];
+                if (mergeSegments) {
+                    cs = [curPos, segments[csIdx][1]];
+                }
+                else {
+                    cs = segments[csIdx];
+                }
                 curPos = cs[0];
                 endPos = cs[1];
                 iii--; // try again on next segment

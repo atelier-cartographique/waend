@@ -281,7 +281,7 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
     var fs = fsz || 100,
         startSegment = 0,
         t = new Text(txt), result, tOffsets = [0,0],
-        paths, p, cmd, TT, tfnR,
+        paths, p, cmd, TT, tfnR, angle,
         tfn = T.mapVec2Fn(),
         instructions = [],
         segments = [],
@@ -291,30 +291,29 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
     for (var lidx = 1; lidx < coordinates.length; lidx++) {
         var start = coordinates[lidx - 1],
             end = coordinates[lidx],
-            seg = [start, end],
-            RT = new Transform();
-        //
-        // seg.angle = lineAngle(start, end);
-        // RT.rotate(-seg.angle);
-        // lineTransform(RT, seg);
+            seg = [start, end];
+
         segments.push(seg);
     }
 
     var proceed = function () {
         if (segments.length > 0) {
-            result = t.draw(fs, segments, tOffsets);
+            result = t.draw(fs, segments, tOffsets, true);
             tOffsets = result[0];
             paths = result[1];
 
             for (var i = 0; i < paths.length; i++) {
                 p = paths[i];
-                // tfnR = (new Transform()).rotate(p.segment.angle).mapVec2Fn();
+                angle = -Math.abs(lineAngle(p.segment[0], p.segment[1]));
+                tfnR = (new Transform())
+                            .rotate(angle, {x:p.pos[0], y:p.pos[1]})
+                            .mapVec2Fn();
                 // TT.rotate(p.segment.angle);
                 // tfn = T.clone().multiply(p.segment.T).mapVec2Fn();
                 // tfn = T.clone().multiply(TT).mapVec2Fn();
                 instructions.push(['beginPath']);
                 for (var ii = 0; ii < p.commands.length; ii++) {
-                    instructions.push(transformCommand(tfn, p.commands[ii]));
+                    instructions.push(transformCommand(tfn, tfnR, p.commands[ii]));
                 }
                 instructions.push(['fill']);
             }
