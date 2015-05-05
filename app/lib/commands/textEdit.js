@@ -28,7 +28,8 @@ function textEdit (opt_txt) {
     var resolver = function (resolve, reject) {
         var cm = CodeMirror(display.node, {
             'value': opt_txt || '',
-            'autofocus': true
+            'autofocus': true,
+            'lineWrapping': true
         });
 
         var buttons = document.createElement('div');
