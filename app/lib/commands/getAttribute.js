@@ -32,12 +32,12 @@ function getAttr () {
         for(var key in data){
             // sys.stdout.write('<span class="key-value key-'+ key +'">' + '<span class="key">' + '"'+ key +'" : ' +'</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
             sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');
-            sys.stdout.write('<a class="edit-value" href="get ' + key + ' | edit | set ' + key + '">' + 'edit ' + key + '</a>');
+            // sys.stdout.write('<a class="edit-value" href="get ' + key + ' | edit | set ' + key + '">' + 'edit ' + key + '</a>');
         }
     }
 
     stdout.write('<span class="hint first-hint-line">HINT : </span>');
-    stdout.write('<span class="hint">Add and edit attribute of this element with SET command, by typing :</span>');
+    stdout.write('<span class="hint">Add and edit attributes of this element with SET command, by typing :</span>');
     stdout.write('<span class="hint hint-exemple">set attribute-name attribute-value</span>');
     stdout.write('<span class="hint">NOTE : Multiple words attributes must be surrounded by " and "</span>');
 
