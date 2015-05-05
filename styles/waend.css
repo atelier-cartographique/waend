@@ -252,7 +252,7 @@ body {
   border-top: 1px solid grey;
   font-size: 16pt;
   background-color: #F8F8F8;
-  width: 100%;
+  width: calc(100% - 24px);
   font-family: monospace;
 }
 .wc-input:focus {
