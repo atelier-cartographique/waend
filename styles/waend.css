@@ -1,8 +1,8 @@
-@import "codemirror.css";
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
+@import "codemirror.css";
 html,
 body,
 div,
@@ -140,7 +140,7 @@ table {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .yellow-text-shadow {
-  text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
+  text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
 }
 .dark-text-shadow {
   text-shadow: 0 0 6px #555555, 0 0 6px #555555, 1px 1px 0px #555555, -1px -1px 0px #555555, -1px 1px 0px #555555, 1px -1px 0px #555555;
@@ -324,7 +324,7 @@ body {
   font-style: italic;
   letter-spacing: 0px;
   font-family: monospace;
-  text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
+  text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
 }
 .hint.first-hint-line {
   margin-top: 12px;
@@ -487,14 +487,14 @@ body {
   height: 100%;
 }
 .CodeMirror .CodeMirror-sizer {
-  width: 600px;
-  margin: auto!important;
+  width: 550px;
+  margin-left: 12px!important;
   background: #f8f8f8;
   border: 0px;
   padding: 12px!important;
-  top: 100px;
+  top: 55px;
   min-height: 50px!important;
-  max-height: calc(100vh - 200px);
+  max-height: calc(100vh - 110px);
   overflow-y: auto;
 }
 .CodeMirror .CodeMirror-code {
@@ -502,8 +502,8 @@ body {
 }
 .edit-buttons {
   position: absolute;
-  top: 100px;
-  right: 102px;
+  top: 55px;
+  margin-left: calc(598px);
   width: auto;
   text-align: center;
 }
