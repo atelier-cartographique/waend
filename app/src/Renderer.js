@@ -53,7 +53,7 @@ CanvasRenderer.prototype.renderFeature = function (feature) {
     var geom = feature.getGeometry(),
         geomType = geom.getType().toLowerCase(),
         dFeature = feature.feature,
-        props = _.extendOwn(dFeature.getData(), this.layer.layer.getData()),
+        props = _.defaults(dFeature.getData(), this.layer.layer.getData()),
         coordinates = geom.getCoordinates();
 
     if (!feature.eventId) {
