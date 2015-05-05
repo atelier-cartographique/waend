@@ -42,16 +42,18 @@ function select () {
             if (features) {
                 // resolve(features[0]);
                 for (var i =0 ; i < features.length; i++) {
-                    var f = features[i],
-                        props = f.getProperties(),
-                        p = '/' + props.path.join('/');
+                    var olf = features[i],
+                        f = olf.feature,
+                        id = f.id,
+                        name = f.has('name') ? ' - ' + f.get('name') : '',
+                        p = '/' + olf.getProperties().path.join('/');
                     stdout.write(terminal.makeCommand({
                         'args': [
                             'cc '+p,
                             'gg | region set',
                             'get'
                         ],
-                        'text': ('id: ' + f.getId() + ' - ' + f.get('name'))
+                        'text': (id + name)
                     }));
                 }
                 resolve(features);
