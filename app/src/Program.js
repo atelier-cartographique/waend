@@ -25,7 +25,15 @@ function Program (ctx) {
             var T = new ctx.Transform(fm);
             ctx.lineProject(coordinates);
             ctx.lineTransform(T, coordinates);
-            ctx.emit('draw', 'line', coordinates);
+            if ('color' in props) {
+                ctx.emit('save');
+                ctx.emit('set', 'strokeStyle', props.color);
+                ctx.emit('draw', 'line', coordinates);
+                ctx.emit('restore');
+            }
+            else {
+                ctx.emit('draw', 'line', coordinates);
+            }
         }
     };
 
