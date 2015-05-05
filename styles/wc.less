@@ -11,6 +11,41 @@
     height:100%;
     font-family: monospace;
     background-color: transparent;
+
+    .edit-save {
+        position: absolute;
+        top: 91px;
+        left: calc(~"50% - 300px - 60px");
+        color: #f8f8f8;
+        font-family: 'osp-dindin';
+        font-size: 200%;
+        cursor: pointer;
+        text-shadow: none;
+        border-bottom: 1px solid blue;
+    }
+}
+
+
+.CodeMirror {
+    background: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+
+    .CodeMirror-sizer {
+      width: 600px;
+      margin: auto!important;
+      background: #f8f8f8;
+      border: 0px;
+      padding: 12px!important;
+      top: 100px;
+      min-height: 50px!important;
+      max-height: calc(~"100vh - 200px");
+      overflow-y: auto;
+    }
+
+    .CodeMirror-code {
+      text-shadow: none;
+    }
 }
 
 #wc.fold {
