@@ -40,13 +40,15 @@ function getAttr () {
                 'text': 'edit'
             }));
         }
+
+        stdout.write('<span class="hint first-hint-line">HINT : </span>');
+        stdout.write('<span class="hint">Add and edit attributes of this element with SET command, by typing :</span>');
+        stdout.write('<span class="hint hint-exemple">set attribute-name attribute-value</span>');
+        stdout.write('<span class="hint">NOTE : Multiple words attributes must be surrounded by " and "</span>');
+
     }
 
-    stdout.write('<span class="hint first-hint-line">HINT : </span>');
-    stdout.write('<span class="hint">Add and edit attributes of this element with SET command, by typing :</span>');
-    stdout.write('<span class="hint hint-exemple">set attribute-name attribute-value</span>');
-    stdout.write('<span class="hint">NOTE : Multiple words attributes must be surrounded by " and "</span>');
-
+   
     return self.end(result);
 
 };

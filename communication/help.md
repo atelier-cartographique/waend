@@ -6,7 +6,19 @@
 Write the commands in Wænd console line.
 Pipe is allowed to chain commands together.
 
-###Common keys
+
+###Common commands
+
+- help : help
+- lc : list command
+- set : set something to something, often attribute to current context
+- del : delete + attribute name to delete
+- get : get current context attributes
+- select : select feature in viewport
+- draw : draw on map
+
+
+###Commands details
 
 ######help 
 get help
