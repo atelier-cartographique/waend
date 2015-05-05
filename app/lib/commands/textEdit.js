@@ -23,6 +23,8 @@ function textEdit (opt_txt) {
         map = shell.env.map,
         display = terminal.display();
 
+    opt_txt = opt_txt || shell.env.DELIVERED;
+
     var resolver = function (resolve, reject) {
         var cm = CodeMirror(display.node, {
             'value': opt_txt || ''
