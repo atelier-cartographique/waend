@@ -24,7 +24,7 @@ function setupDropZone (container) {
     return dropbox;
 }
 
-function create (binder, uid, gid, lid, feature) {
+function create (binder, uid, gid, lid, feature, batchJob) {
     var olGeom = feature.getGeometry();
     var props = _.omit(feature.getProperties(), 'geometry', 'id');
     var geomType = olGeom.getType();
@@ -39,7 +39,8 @@ function create (binder, uid, gid, lid, feature) {
             'properties': props,
             'geom': geom
         };
-        return binder.setFeature(uid, gid, lid, data, true);
+
+        return binder.setFeature(uid, gid, lid, data, batchJob);
     }
     console.write('importer unsupported geom type', geomType);
     return Promise.resolve();
@@ -95,11 +96,14 @@ function importer () {
 
             var creator = function (evt) {
                 var geojson = evt.target.result,
-                    features = Geometry.format.GeoJSON.readFeatures(geojson);
+                    features = Geometry.format.GeoJSON.readFeatures(geojson),
+                    lastIndex = features.length - 1;
 
                 Promise.reduce(features, function(total, item, index){
-                        var feature = features[index];
-                        return create(binder, uid, gid, lid, feature);
+                        var feature = features[index],
+                            lastOne = index === lastIndex;
+
+                        return create(binder, uid, gid, lid, !lastOne);
                     }, 0)
                     .then(function(){
                         resolve();
