@@ -11,11 +11,22 @@
 
 function Program (ctx) {
 
-    ctx.linestring = function (coordinates, props, fm) {
+    var textedLine = function (coordinates, props, fm) {
         var T = new ctx.Transform(fm);
         ctx.lineProject(coordinates);
-        ctx.lineTransform(T, coordinates);
-        ctx.emit('draw', 'line', coordinates);
+        ctx.drawTextOnLine(T, coordinates, props.text, props.fontsize);
+    };
+
+    ctx.linestring = function (coordinates, props, fm) {
+        if ('text' in props) {
+            textedLine(coordinates, props, fm);
+        }
+        else {
+            var T = new ctx.Transform(fm);
+            ctx.lineProject(coordinates);
+            ctx.lineTransform(T, coordinates);
+            ctx.emit('draw', 'line', coordinates);
+        }
     };
 
     var hatchedPolygon = function (coordinates, props, fm) {

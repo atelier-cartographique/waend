@@ -39,12 +39,14 @@ var polygonProject = function (coordinates) {
             coordinates[i][ii] = Proj3857.forward(coordinates[i][ii]);
         }
     }
+    return coordinates;
 };
 
 var lineProject = function (coordinates) {
     for (var i = 0; i < coordinates.length; i++) {
         coordinates[i] = Proj3857.forward(coordinates[i]);
     }
+    return coordinates;
 };
 
 
@@ -55,12 +57,14 @@ var polygonTransform = function (T, coordinates) {
             coordinates[i][ii] = T.mapVec2(coordinates[i][ii]);
         }
     }
+    return coordinates;
 };
 
 var lineTransform = function (T, coordinates) {
     for (var i = 0; i < coordinates.length; i++) {
         coordinates[i] = T.mapVec2(coordinates[i]);
     }
+    return coordinates;
 };
 
 
@@ -185,7 +189,17 @@ function getWritableSegments (p, lineHeight, start) {
 }
 
 
-function transformCommand (tfn, cmd) {
+function transformCommand () {
+    var transforms = [],
+        cmd = arguments[arguments.length - 1],
+        argMaxIdx = arguments.length - 1;
+
+    for (var i = 0; i < argMaxIdx; i++) {
+        transforms.push(arguments[i]);
+    }
+
+    var tfn = underscore.compose.apply(underscore, transforms);
+
     var p0, p1, p2;
     switch (cmd.type) {
         case 'M':
@@ -251,6 +265,69 @@ function drawTextInPolygon (T, polygon, txt, fsz) {
 workerContext.waend.drawTextInPolygon = drawTextInPolygon;
 
 
+function lineAngle (start, end) {
+    var d = [end[0] - start[0], end[1] - start[1]],
+        theta = Math.atan2(-d[1], d[0]) * 360.0 / 6.2831853071795,
+        theta_normalized = theta < 0 ? theta + 360 : theta;
+    if(theta_normalized > 360){
+        return 0;
+    }
+    return theta_normalized;
+}
+
+
+
+function drawTextOnLine (T, coordinates, txt, fsz) {
+    var fs = fsz || 100,
+        startSegment = 0,
+        t = new Text(txt), result, tOffsets = [0,0],
+        paths, p, cmd, TT, tfnR,
+        tfn = T.mapVec2Fn(),
+        instructions = [],
+        segments = [],
+        ts = T.getScale(),
+        tsi = T.inverse().getScale();
+
+    for (var lidx = 1; lidx < coordinates.length; lidx++) {
+        var start = coordinates[lidx - 1],
+            end = coordinates[lidx],
+            seg = [start, end],
+            RT = new Transform();
+        //
+        // seg.angle = lineAngle(start, end);
+        // RT.rotate(-seg.angle);
+        // lineTransform(RT, seg);
+        segments.push(seg);
+    }
+
+    var proceed = function () {
+        if (segments.length > 0) {
+            result = t.draw(fs, segments, tOffsets);
+            tOffsets = result[0];
+            paths = result[1];
+
+            for (var i = 0; i < paths.length; i++) {
+                p = paths[i];
+                // tfnR = (new Transform()).rotate(p.segment.angle).mapVec2Fn();
+                // TT.rotate(p.segment.angle);
+                // tfn = T.clone().multiply(p.segment.T).mapVec2Fn();
+                // tfn = T.clone().multiply(TT).mapVec2Fn();
+                instructions.push(['beginPath']);
+                for (var ii = 0; ii < p.commands.length; ii++) {
+                    instructions.push(transformCommand(tfn, p.commands[ii]));
+                }
+                instructions.push(['fill']);
+            }
+        }
+        emit('instructions', instructions);
+    };
+
+    t.whenReady(proceed);
+
+}
+
+
+workerContext.waend.drawTextOnLine = drawTextOnLine;
 
 
 

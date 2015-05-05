@@ -81,6 +81,20 @@ function getPath (x, y, fontSize) {
     return p;
 }
 
+
+function vecDist (v1, v2) {
+    var dx = v2[0] - v1[0],
+        dy = v2[1] - v1[1];
+    return Math.sqrt((dx*dx) + (dy*dy));
+}
+
+function vecAdd (v1, v2, a) {
+    var t = a / vecDist(v1, v2),
+        rx = v1[0] + (v2[0] - v1[0]) * t,
+        ry = v1[1] + (v2[1] - v1[1]) * t;
+    return [rx, ry];
+}
+
 // font size & horizontal segments
 // a hyper basic text composer
 Text.prototype.draw = function (fontsz, segments, offset) {
@@ -90,12 +104,12 @@ Text.prototype.draw = function (fontsz, segments, offset) {
     }
     var csIdx = 0, cs = segments[csIdx],
         gcs, gc,
-        cx = cs[0][0],
-        cy = cs[0][1],
-        nx = cs[1][0],
+        curPos = cs[0],
+        endPos = cs[1],
         scale =  fontsz / this.font.unitsPerEm, sa,
         paths = [],
-        clusters = this.clusters;
+        clusters = this.clusters,
+        currentPath;
 
     offset = offset || [0,0];
     var cOffset = offset[0];
@@ -105,11 +119,12 @@ Text.prototype.draw = function (fontsz, segments, offset) {
         for (var iii = gOffset; iii < gc.length; iii++) {
             g = gc[iii];
             sa = g.advanceWidth * scale;
-            if ((cx + sa) < nx) {
-                paths.push(getPath.apply(g, [cx, cy, fontsz]));
-                // paths.push(g.getPath(cx, cy, fontsz));
-                cx += sa;
+            if (sa < vecDist(curPos, endPos)) {
+                currentPath = getPath.apply(g, [curPos[0], curPos[1], fontsz]);
+                currentPath.segment = cs;
+                paths.push(currentPath);
                 gOffset += 1;
+                curPos = vecAdd(curPos, endPos, sa);
             }
             else {
                 csIdx++;
@@ -118,9 +133,8 @@ Text.prototype.draw = function (fontsz, segments, offset) {
                     return [[cOffset, gOffset], paths];
                 }
                 cs = segments[csIdx];
-                cx = cs[0][0];
-                cy = cs[0][1];
-                nx = cs[1][0];
+                curPos = cs[0];
+                endPos = cs[1];
                 iii--; // try again on next segment
             }
         }
