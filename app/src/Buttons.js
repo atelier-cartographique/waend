@@ -13,7 +13,8 @@
      'set name': ['get name | edit | set name'],
      'set image': ['media pick | set image'],
      'set color': ['get color | edit | set color'],
-     'set text': ['get text | edit | set text']
+     'set text': ['get text | edit | set text'],
+     'go to feature' : ['gg | region set']
  };
 
 var layerButtons = {

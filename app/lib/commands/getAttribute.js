@@ -33,12 +33,12 @@ function getAttr () {
 
         for(var key in data){
             sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');     
-            stdout.write(terminal.makeCommand({
-                'args': [
-                    'get '+ key +' | edit | set ' + key
-                ],
-                'text': 'edit'
-            }));
+            // stdout.write(terminal.makeCommand({
+            //     'args': [
+            //         'get '+ key +' | edit | set ' + key
+            //     ],
+            //     'text': 'edit'
+            // }));
         }
 
         stdout.write('<span class="hint first-hint-line">HINT : </span>');
