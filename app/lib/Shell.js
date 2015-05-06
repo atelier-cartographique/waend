@@ -106,6 +106,7 @@ var defaultDescriptor = {
 var Shell = O.extend({
 
     initialize: function (terminal) {
+        this.historyStarted = false;
         this._contexts = new Array(5);
         this._contexts[SHELL] = new Root({shell:this});
         this._currentContext = SHELL;
@@ -143,9 +144,13 @@ var Shell = O.extend({
         if(path[0].length === 0) {
             path = path.slice(1);
         }
+        var startPath;
         if ((fragment.length > 0) && (path.length > 0)) {
             this.historyPushContext(path);
+            startPath = path;
         }
+        this.historyStarted = startPath;
+        this.emit('history:start', startPath);
     },
 
     historyPopContext: function (event) {
@@ -516,6 +521,25 @@ var Shell = O.extend({
             .then(getLayer)
             .then(getFeature);
     },
+
+    loginUser: function (u) {
+        var self = this;
+        self.user = u;
+        semaphore.signal('login', u);
+
+        var next = function (startPath) {
+            if (!startPath) {
+                self.switchContext([u.id]);
+            }
+        };
+
+        if (self.historyStarted !== false) {
+            next(self.historyStarted);
+        }
+        else {
+            self.once('history:start', next);
+        }
+    }
 
 });
 

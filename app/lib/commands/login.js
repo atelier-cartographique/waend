@@ -55,7 +55,7 @@ function login (username, password) {
     return stdin.read().then(function(pwd){
         return remoteLogin(username, pwd);
     });
-};
+}
 
 
 module.exports = exports = {

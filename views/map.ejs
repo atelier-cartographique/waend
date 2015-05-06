@@ -2,12 +2,16 @@
 <html>
 <head>
     <title>wænd</title>
-    <link rel="stylesheet" type="text/css" href="/styles/waend.css" />	
+    <link rel="stylesheet" type="text/css" href="/styles/waend.css" />
+    <% if (user) { %>
+    <script>
+    window.waendUser = "<%= user.id %>";
+    </script>
+    <% } %>
     <script src="/bin/wmap.js"></script>
 
 </head>
 <body>
-    <!-- <div id="page-title">wænd</div> -->
     <div id="map"></div>
     <div id="wc" class=""></div>
 </body>

@@ -10,7 +10,8 @@
 
 
 
-var WebConsole = require('./WebConsole'),
+var Bind = require('../lib/Bind'),
+    WebConsole = require('./WebConsole'),
     LayerProvider = require('./LayerProvider'),
     SourceProvider = require('./SourceProvider'),
     WMap = require('./WaendMap');
@@ -26,6 +27,14 @@ function init () {
 
     wc.start();
     wc.shell.env.map = wmap; // there might be a better way, but we want this result.
+
+    if (window.waendUser) {
+        Bind.get()
+            .getMe()
+            .then(function(user){
+                wc.shell.loginUser(user);
+            });
+    }
 }
 
 document.onreadystatechange = function () {

@@ -22,19 +22,24 @@ module.exports = exports = function(app){
 
     /* GET home page. */
     router.get('/', function(req, res) {
-        if (req.isAuthenticated()) {
-            res.render('index');
-        }
-        else{
-            res.redirect('/login');
-        }
+        res.redirect('/map');
     });
 
     router.get('/console', function(request, response){
         response.render('console');
     });
     router.get('/map*', function(request, response){
-        response.render('map');
+        if (request.isAuthenticated()) {
+            console.log('map', request.user);
+            response.render('map', {
+                'user': request.user
+            });
+        }
+        else{
+            response.render('map', {
+                'user': null
+            });
+        }
     });
 
 
