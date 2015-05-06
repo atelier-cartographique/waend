@@ -1,9 +1,9 @@
 /*
  * routes/endpoints/entity.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2014  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -37,14 +37,14 @@ module.exports = exports = base.RequestHandler.extend({
                 verb: 'post',
                 handler: 'post',
                 url: 'user/:user_id/group/:group_id/layer/:layer_id/feature/',
-                permissions: ['isAuthenticated', 'isUser', 'isLayerOwner']
+                permissions: ['isAuthenticated', 'isLayerOwner']
             },
 
             put: {
                 verb: 'put',
                 handler: 'put',
                 url: 'user/:user_id/group/:group_id/layer/:layer_id/feature/:feature_id',
-                permissions: ['isAuthenticated', 'isUser', 'isLayerOwner']
+                permissions: ['isAuthenticated', 'isLayerOwner']
             },
         },
 
