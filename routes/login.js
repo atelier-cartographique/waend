@@ -41,7 +41,7 @@ function register (req, res) {
 
     auth.register(email, password)
         .then(function(){
-            res.render('login', {email:email});
+            res.redirect('/map');
         })
         .catch(function(err){
             res.status(500).render('registerFailed', {
