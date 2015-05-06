@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/help.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -22,8 +22,16 @@ function help () {
 
     var closer = function (reject) {
 
+        var helpFrameWrapper = document.createElement('div');
+        helpFrameWrapper.setAttribute('class', 'help-wrapper');
+        display.node.appendChild(helpFrameWrapper);
+
+        var helpFrame = document.createElement('iframe');
+        helpFrame.setAttribute('src', '/documentation/help.html');
+        helpFrameWrapper.appendChild(helpFrame);
+
         var buttons = document.createElement('div');
-        buttons.setAttribute('class', 'widget-buttons');
+        buttons.setAttribute('class', 'help-buttons');
 
 
         var closeButton = document.createElement('div');
