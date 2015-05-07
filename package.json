@@ -38,6 +38,7 @@
     "sockjs": "^0.3.9",
     "static-favicon": "~1.0.0",
     "underscore": "*",
-    "wellknown": "^0.3.1"
+    "wellknown": "^0.3.1",
+    "search-index": "*"
   }
 }
