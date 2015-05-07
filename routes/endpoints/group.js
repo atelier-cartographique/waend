@@ -63,7 +63,10 @@ module.exports = exports = base.RequestHandler.extend({
             cache.client()
                 .lookupGroups(request.params.term)
                 .then(function(results){
-                    self.paginate(results, request, response);
+                    var data = _.filter(results, function (g) {
+                        return (0 === g.status_flag);
+                    });
+                    self.paginate(data, request, response);
                 })
                 .catch(function(err){
                     response.status(500).send(err);

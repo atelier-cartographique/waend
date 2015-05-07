@@ -31,7 +31,8 @@ var commandModules = [
     require('./select'),
     require('./close'),
     require('./textEdit'),
-    require('./help')
+    require('./help'),
+    require('./lookup')
     ];
 
 
