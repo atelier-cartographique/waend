@@ -316,7 +316,7 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
 
             for (var i = 0; i < paths.length; i++) {
                 p = paths[i];
-                angle = Math.alineAngle(p.segment[0], p.segment[1]);
+                angle = Math.abs(lineAngle(p.segment[0], p.segment[1]));
                 tfnR = (new Transform())
                             .rotate(angle, {x:p.pos[0], y:p.pos[1]})
                             .mapVec2Fn();
