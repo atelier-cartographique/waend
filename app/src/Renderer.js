@@ -34,10 +34,25 @@ function CanvasRenderer (options) {
 }
 
 CanvasRenderer.prototype.initWorker = function () {
+    var self = this;
     var worker = new W(this.layer.getProgram());
+    var handler = function (m) {
+        return function () {
+            var rid = arguments[0];
+            if (rid !== self.renderId) {
+                return;
+            }
+            var args = new Array(arguments.length - 1);
+            for (var i = 1; i < arguments.length; i++) {
+                args[i-1] = arguments[i];
+            }
+            m.apply(self.painter, args);
+        };
+    };
     for (var pk in this.painter.handlers) {
         var method = this.painter[this.painter.handlers[pk]];
-        worker.on(pk, method, this.painter);
+        // worker.on(pk, method, this.painter);
+        worker.on(pk, handler(method));
     }
     worker.start();
     this.worker = worker;
@@ -64,7 +79,7 @@ CanvasRenderer.prototype.renderFeature = function (feature) {
     }
 
     try {
-        this.worker.post(geomType, coordinates, props, this.view.transform.flatMatrix());
+        this.worker.post(geomType, this.renderId, coordinates, props, this.view.transform.flatMatrix());
     }
     catch (err) {
         this.features[feature.id] = false;
@@ -82,14 +97,19 @@ CanvasRenderer.prototype.render = function (opt_extent) {
         extent = min.concat(max);
 
     // TODO clear only to features list extent
+    this.renderId = _.uniqueId();
+    this.worker.post('worker:render_id', this.renderId);
     this.painter.clear();
     this.features = {};
+    console.log('RENDER START', this.renderId);
 
     var rf = function (f) {
+        // console.log('RENDER FEATURE', renderId);
         self.renderFeature(f);
     };
 
     this.layer.forEachFeatureInExtent(extent, rf);
+    // console.log('RENDER STOP', renderId);
 };
 
 CanvasRenderer.prototype.stop = function () {

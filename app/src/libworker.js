@@ -79,12 +79,22 @@ workerContext.waend = {
     'lineProject': lineProject
 };
 
+var renderId;
+
 function messageHandler (event) {
     var data = event.data,
         name = data.name,
         args = data.args || [];
-    if (name && (name in workerContext.waend)) {
-        workerContext.waend[name].apply(workerContext, args);
+    if ('worker:render_id' === name) {
+        // console.log('worker.renderId', args[0]);
+        renderId = args[0];
+    }
+    else if (name && (name in workerContext.waend)) {
+        var rid = args[0];
+        // console.log('worker', renderId, rid, name);
+        if (rid === renderId) {
+            workerContext.waend[name].apply(workerContext, args.slice(1));
+        }
     }
 }
 
@@ -96,11 +106,13 @@ function emit () {
     if(0 === arguments.length) {
         return;
     }
-
-    for (var i = 0; i < arguments.length; i++) {
-        args.push(arguments[i]);
+    args.push(arguments[0]);
+    args.push(renderId);
+    if(arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args.push(arguments[i]);
+        }
     }
-
     workerContext.postMessage(args);
 }
 
@@ -304,7 +316,7 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
 
             for (var i = 0; i < paths.length; i++) {
                 p = paths[i];
-                angle = -Math.abs(lineAngle(p.segment[0], p.segment[1]));
+                angle = Math.alineAngle(p.segment[0], p.segment[1]);
                 tfnR = (new Transform())
                             .rotate(angle, {x:p.pos[0], y:p.pos[1]})
                             .mapVec2Fn();
