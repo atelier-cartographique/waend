@@ -32,13 +32,14 @@
     "passport-local": "^1.0.0",
     "pg": "^3.4.1",
     "proj4": "^2.3.5",
+    "rbush": "^1.4.0",
     "redis": "^0.12.1",
     "rtree": "^1.4.2",
+    "search-index": "*",
     "slug": "^0.8.0",
     "sockjs": "^0.3.9",
     "static-favicon": "~1.0.0",
     "underscore": "*",
-    "wellknown": "^0.3.1",
-    "search-index": "*"
+    "wellknown": "^0.3.1"
   }
 }

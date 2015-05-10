@@ -88,7 +88,7 @@ function Program (ctx) {
             var rt = new ctx.Transform(),
                 ccoords = center.getCoordinates();
             rt.rotate(props.rotation, {'x': ccoords[0], 'y': ccoords[1]});
-            console.log('rotation', props.rotation, ccoords, rt.flatMatrix());
+            // console.log('rotation', props.rotation, ccoords, rt.flatMatrix());
             ctx.lineTransform(rt, patternCoordinates);
         }
 

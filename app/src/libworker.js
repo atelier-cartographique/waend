@@ -27,6 +27,7 @@ workerContext.Image = function Image() {};
 var underscore = require('underscore'),
     Geometry = require('../lib/Geometry'),
     Transform = require('../lib/Transform'),
+    BaseSource = require('./BaseSource'),
     Text = require('./Text'),
     Projection = require('proj4');
 
@@ -79,22 +80,68 @@ workerContext.waend = {
     'lineProject': lineProject
 };
 
+
+var dataSource;
 var renderId;
+
+function GeomItem (data) {
+    underscore.extend(this, data);
+}
+
+GeomItem.prototype.getGeometry = function () {
+    return Geometry.format.GeoJSON.read(this.geom);
+};
+
+function initData (data) {
+    dataSource = new BaseSource();
+    for (var i = 0; i < data.length; i++) {
+        var item = new GeomItem(data[i]);
+        dataSource.addFeature(item);
+    }
+}
+
+function updateView (opt_extent, opt_matrix) {
+    var T = new Transform(opt_matrix);
+    var startedWith = renderId;
+    var rf = function (feature) {
+        var geom = feature.getGeometry(),
+            geomType = geom.getType().toLowerCase(),
+            props = feature.properties,
+            coordinates = geom.getCoordinates();
+        if (geomType && (geomType in workerContext.waend)) {
+            // var rid = args[0];
+            // console.log('worker', renderId, rid, name);
+            workerContext.waend[geomType].call(workerContext, coordinates, props, opt_matrix);
+        }
+    };
+
+    var features = dataSource.getFeatures(opt_extent);
+    for (var i = 0; i < features.length; i++) {
+        if(renderId !== startedWith) {
+            break;
+        }
+        rf(features[i]);
+    }
+}
+
 
 function messageHandler (event) {
     var data = event.data,
         name = data.name,
         args = data.args || [];
     if ('worker:render_id' === name) {
-        // console.log('worker.renderId', args[0]);
         renderId = args[0];
+        console.log('worker:render_id', renderId);
+        emit('worker:render_id:'+renderId);
     }
-    else if (name && (name in workerContext.waend)) {
-        var rid = args[0];
-        // console.log('worker', renderId, rid, name);
-        if (rid === renderId) {
-            workerContext.waend[name].apply(workerContext, args.slice(1));
-        }
+    else if ('init:data' === name) {
+        initData(args[0]);
+        console.log('init:data', args[0].length);
+        emit('data:init');
+    }
+    else if ('update:view' === name) {
+        console.log('update:view');
+        updateView(args[0], args[1]);
     }
 }
 
@@ -107,7 +154,7 @@ function emit () {
         return;
     }
     args.push(arguments[0]);
-    args.push(renderId);
+    // args.push(renderId);
     if(arguments.length > 1) {
         for (var i = 1; i < arguments.length; i++) {
             args.push(arguments[i]);

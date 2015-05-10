@@ -47,11 +47,21 @@ var WWorker = O.extend({
     post: function () {
         var args = _.toArray(arguments),
             name = args.shift();
+        // console.log('POST', name);
         this.w.postMessage({
             'name': name,
             'args': args
         });
     },
+
+    // postBuffers: function () {
+    //     var args = _.toArray(arguments),
+    //         name = args.shift();
+    //     // console.log('POST', name);
+    //     this.w.postMessage({
+    //         'name': name
+    //     }, args);
+    // },
 
     start: function() {
         var body = this.wrapBody();

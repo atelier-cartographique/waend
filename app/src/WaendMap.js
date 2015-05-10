@@ -75,9 +75,6 @@ Map.prototype.waendAddLayer = function (layer) {
 
     this.renderers[layer.id] = renderer;
     renderer.render();
-    layer.on('addfeature', function (event) {
-        renderer.renderFeature(event.feature);
-    }, this);
 };
 
 Map.prototype.waendRemoveLayer = function (layer) {
@@ -95,8 +92,8 @@ Map.prototype.getCoordinateFromPixel = function (pixel) {
     return this.projection.inverse(tv);
 };
 
-Map.prototype.getFeaturesAt = function (coordinate) {
-    return this.view.getFeaturesAt(coordinate);
+Map.prototype.getFeatures = function (extent) {
+    return this.view.getFeatures(extent);
 };
 
 module.exports = exports = Map;

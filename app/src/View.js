@@ -115,11 +115,11 @@ View.prototype.getLayer = function (layerId) {
     return this.layers[idx];
 };
 
-View.prototype.getFeaturesAt = function (coordinate) {
+View.prototype.getFeatures = function (extent) {
     var features = [];
     for (var i = 0; i < this.layers.length; i++) {
         var lyr = this.layers[i],
-            fts = lyr.getFeaturesAtCoordinate(coordinate);
+            fts = lyr.getFeatures(extent);
         if (fts) {
             features = features.concat(fts);
         }

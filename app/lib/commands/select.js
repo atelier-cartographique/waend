@@ -35,18 +35,19 @@ function select () {
 
     var resolver = function (resolve, reject) {
         var innerSelect = function (event) {
-            var clientPos = [event.clientX, event.clientY],
-                mapPos = map.getCoordinateFromPixel(clientPos),
-                features = map.getFeaturesAt(mapPos);
+            var clientPosMin = [event.clientX - 1, event.clientY - 1],
+                clientPosMax = [event.clientX + 1, event.clientY + 1],
+                mapPosMin = map.getCoordinateFromPixel(clientPosMin),
+                mapPosMax = map.getCoordinateFromPixel(clientPosMax),
+                features = map.getFeatures(mapPosMin.concat(mapPosMax));
             display.end();
             if (features) {
                 // resolve(features[0]);
                 for (var i =0 ; i < features.length; i++) {
-                    var olf = features[i],
-                        f = olf.feature,
+                    var f = features[i],
                         id = f.id,
                         name = f.has('name') ? ' - ' + f.get('name') : '',
-                        p = '/' + olf.getProperties().path.join('/');
+                        p = '/' + f.getPath().join('/');
                     stdout.write(terminal.makeCommand({
                         'args': [
                             'cc '+p,

@@ -22,6 +22,10 @@ var Model = O.extend({
         O.apply(this, [data]);
     },
 
+    getPath: function () {
+        return this.binder.getComps(this.id);
+    },
+
     isNew: function () {
         return !('id' in this.data);
     },
