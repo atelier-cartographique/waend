@@ -35,6 +35,9 @@ var Source = BaseSource.extend({
 
     update : function () {
         var self = this;
+        var emitUpdate = function () {
+            self.emit('update');
+        };
         binder.getFeatures(self.uid, self.gid, self.layer.id)
             .then(function(features){
                 var newSize = 0;
@@ -42,16 +45,16 @@ var Source = BaseSource.extend({
                     var feature = features[i];
                     var featureIsNew = !(feature.id in self.index);
                     if(featureIsNew){
+                        feature.on('set set:data', emitUpdate);
                         self.addFeature(feature);
                         newSize += 1;
                     }
                 }
-                if (newSize > 0) {
-                    self.emit('update', newSize);
-                    console.log('Added', newSize, 'to source', self.layer.id);
-                }
+                emitUpdate();
             })
-            .catch(console.error.bind(console));
+            .catch(function(err){
+                console.error('Source.update', err);
+            });
     },
 
         toJSON : function () {

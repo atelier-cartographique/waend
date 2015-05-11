@@ -61,7 +61,7 @@ CanvasRenderer.prototype.initWorker = function () {
         }, this);
         worker.post('init:data', this.layer.toJSON());
     }, this);
-    console.log('Render subscribed to layer', this.layer.id);
+    // console.log('Render subscribed to layer', this.layer.id);
 
     worker.once('data:init', function(){
         this.isReady = true;
@@ -70,7 +70,7 @@ CanvasRenderer.prototype.initWorker = function () {
         }
     }, this);
     var data = this.layer.toJSON();
-    console.log('Renderer send data', this.layer.id, data.length);
+    // console.log('Renderer send data', this.layer.id, data.length);
     worker.post('init:data', data);
     this.worker = worker;
 };
