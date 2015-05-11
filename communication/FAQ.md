@@ -8,23 +8,6 @@ Les cartes peuvent être constituées par des éléments classiques de la cartog
 
 Son champs d’application est extrêmement varié, allant de la recherche académique aux arts numériques, en passant par le secteur social et la société civile.
 
-##Pourquoi ça s’appelle Wænd ?
-
-Wænd vient de wænd, wand et wend.
- 
-Nous trouvons que ça sonne bien, que ça a du sens, et nous sommes très contents d’avoir un e dans l’a dans notre nom.  
-Ce n’est pas toujours évident à repérer sur le clavier, mais nous trouvons que c’est assez beau.
-
-*Wænd* : [Old Eng], "de la sorte"  
-Exemple "*Wænd þu þa hlafes, þæt heo ne forbeornen*" soit "*La femme dit au roi : Retourne les cakes, de la sorte à ce qu'ils ne brûlent pas*"  
-→ https://t.co/kFpMkWixuw  
-→ http://s30.postimg.org/r71o3o8m9/waend.png
-
-*Wand* : [Eng] baguette magique
-
-*Wend* : "*to proceed on*" Old English wendan "*to turn, direct, go; convert, translate*" from Proto-Germanic **wanjan*
-
-
 ## Concrètement, comment ca fonctionne ?
 
 La plateforme repose sur deux grand mécanismes : la création de cartes, et le volet collaboratif.
@@ -55,7 +38,7 @@ Ce sont des choix éditoriaux importants qui orientent fortement la lecture de l
 ######___
 
 
-> 	Tentative d'illustration
+> 	Illustration :
 
 > 	Pour illustrer le fonctionnement de la plateforme, nous prendrons un exemple -assez simpliste- de deux utilisateurs qui cartographient des choses différentes mais qui pourraient être mises en relation. 
 
@@ -72,7 +55,6 @@ Ce sont des choix éditoriaux importants qui orientent fortement la lecture de l
 
 > 	Il ajoute alors son ensemble « Roofvogel nesten in Limburg » à la carte d’Alain. Ce dernier, bien qu’un peu surpris au premier abord, voit finalement la chose d’un bon oeil en s’apercevant de la corrélation.
 
-> (oui, c'est mignon)
 
 Nous vous invitons à consulter la documentation pour une description plus détaillée des différentes fonctionnalités de la plateforme, et notament des subtilités liées au mécanisme de socialité.
 
@@ -80,10 +62,14 @@ Nous vous invitons à consulter la documentation pour une description plus déta
 
 ######Sur Wænd, tout est possible.
 
-La majeur partie des plateformes cartographiques actuelles permettent de visualiser le territoire selon son utilisation urbanistique (routes, bâtiments, type d’occupation du sol), ce qui constitue une portion infime du potentiel de la cartographie.  
-Wænd permet de faire tout le reste. 
+La majeur partie des plateformes cartographiques actuelles permettent principalement de visualiser le territoire selon son utilisation urbanistique (routes, bâtiments, type d’occupation du sol), ce qui constitue une portion infime du potentiel de la cartographie.  
 
-En plus de pouvoir utiliser votre propre fond de carte (uniquement les voies d’eau, par exemple), vous pouvez également travailler sans représentation pré-établie du territoire, en laissant les éléments géographique que vous ajoutez en tisser une nouvelle représentation.   C’est ici qu’une forme de ré-appropriation du territoire émerge et que la création cartographique commence.
+Wænd est beaucoup plus orienté sur la *publication* cartographique. Bien qu'il soit possible de visualiser les cartes publiées sur la plateforme, la création de nouvelles représentation territoriales selon les besoins et intentions des utilisateurs constitue le coeur de notre application.
+
+Ces fonctionnalités de publication
+
+En plus de pouvoir importer les données dont vous auriez besoin (les voies d’eau de votre région, par exemple), vous pouvez également travailler sans représentation pré-établie du territoire, en laissant les éléments géographique que vous ajoutez en tisser une nouvelle représentation.  
+C’est ici qu’une forme de ré-appropriation du territoire émerge et que la création cartographique commence.
 
 ######Wænd propose de nouveaux outils narratifs
 
@@ -163,6 +149,19 @@ Si vous ne pouvez pas le faire vous-même ou qu’il s’agit de quelque chose d
 Il y aura toujours une solution envisageable.
 
 
-##Il parait que Wænd fait des lasagnes, c’est vrai ?
+##Pourquoi ça s’appelle Wænd ?
 
-Pas vraiment. Mais presque. Disons que si c’était le cas, Wænd permettrait de venir ajouter sa propre couche de lasagne à celle qu’a préparé un ami pour l’améliorer (ou pas). 
+Wænd vient de wænd, wand et wend.
+ 
+Nous trouvons que ça sonne bien, que ça a du sens, et nous sommes très contents d’avoir un e dans l’a dans notre nom.  
+Ce n’est pas toujours évident à repérer sur le clavier, mais nous trouvons que c’est assez beau.
+
+*Wænd* : [Old Eng], "de la sorte"  
+Exemple "*Wænd þu þa hlafes, þæt heo ne forbeornen*" soit "*La femme dit au roi : Retourne les cakes, de la sorte à ce qu'ils ne brûlent pas*"  
+→ https://t.co/kFpMkWixuw  
+→ http://s30.postimg.org/r71o3o8m9/waend.png
+
+*Wand* : [Eng] baguette magique
+
+*Wend* : "*to proceed on*" Old English wendan "*to turn, direct, go; convert, translate*" from Proto-Germanic **wanjan*
+
