@@ -139,7 +139,3 @@ size of the font (number)
 Exemple:
 
 	set fontsize 120
-
-
-
-salle becker / 1er étage
