@@ -28,9 +28,18 @@ function Program (ctx) {
             if ('color' in props) {
                 ctx.emit('save');
                 ctx.emit('set', 'strokeStyle', props.color);
+                ctx.emit('set', 'lineWidth', props.linewidth);
                 ctx.emit('draw', 'line', coordinates);
                 ctx.emit('restore');
             }
+
+            else if ('linewidth' in props) {
+                ctx.emit('save');
+                ctx.emit('set', 'lineWidth', props.linewidth);
+                ctx.emit('draw', 'line', coordinates);
+                ctx.emit('restore');
+            }
+
             else {
                 ctx.emit('draw', 'line', coordinates);
             }
