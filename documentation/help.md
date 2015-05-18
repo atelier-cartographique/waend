@@ -97,13 +97,23 @@ will set the region viewport to the drawing extend
 ##Style keys details
 
 ###hn
+application: polygon  
 number of hatches per polygon (number)
 
 Exemple:
 
 	set hn 150
+	
+###hatchwidth
+*application: polygon*  
+Hatches thickness
+
+Exemple:
+
+	set hatchwidth 8
 
 ###step
+*application: polygon*  
 steps value between hatches (number)
 
 Exemple:
@@ -111,6 +121,7 @@ Exemple:
 	set step 10
 
 ###rotation
+*application: polygon*  
 hatches angle (number)
 
 Exemple:
@@ -118,6 +129,7 @@ Exemple:
 	set rotation 45
 
 ###color
+*application: general*  
 set color (all css color value welcome)
 
 Exemple for orange color:
@@ -125,20 +137,31 @@ Exemple for orange color:
 	set color orange
 	set color #FFA500
 	set color "rgba(255, 165, 0, 1)"
+	
+###linewidth 
+*application: line*  
+set line thickness
+
+Exemple for orange color:
+
+	set color orange
+
 
 ###Text
-the text you want to display in a polygon 
+*application: line / polygon*  
+the text you want to display in a polygon  
 
 Exemple:
 
 	set text "enter your text here"
 
 ###fontsize
+*application: line / polygon*  
 size of the font (number)
 
 Exemple:
 
-	set fontsize 120
+	set linewidth 12
 
 ##Importing datas
 

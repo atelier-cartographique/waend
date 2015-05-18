@@ -415,31 +415,44 @@ use [o] to zoom out</p>
 
 <h3 id="toc_13">hn</h3>
 
-<p>number of hatches per polygon (number)</p>
+<p>application: polygon<br>
+number of hatches per polygon (number)</p>
 
 <p>Exemple:</p>
 
 <pre><code>set hn 150</code></pre>
 
-<h3 id="toc_14">step</h3>
+<h3 id="toc_14">hatchwidth</h3>
 
-<p>steps value between hatches (number)</p>
+<p><em>application: polygon</em><br>
+Hatches thickness</p>
+
+<p>Exemple:</p>
+
+<pre><code>set hatchwidth 8</code></pre>
+
+<h3 id="toc_15">step</h3>
+
+<p><em>application: polygon</em><br>
+steps value between hatches (number)</p>
 
 <p>Exemple:</p>
 
 <pre><code>set step 10</code></pre>
 
-<h3 id="toc_15">rotation</h3>
+<h3 id="toc_16">rotation</h3>
 
-<p>hatches angle (number)</p>
+<p><em>application: polygon</em><br>
+hatches angle (number)</p>
 
 <p>Exemple:</p>
 
 <pre><code>set rotation 45</code></pre>
 
-<h3 id="toc_16">color</h3>
+<h3 id="toc_17">color</h3>
 
-<p>set color (all css color value welcome)</p>
+<p><em>application: general</em><br>
+set color (all css color value welcome)</p>
 
 <p>Exemple for orange color:</p>
 
@@ -447,25 +460,36 @@ use [o] to zoom out</p>
 set color #FFA500
 set color &quot;rgba(255, 165, 0, 1)&quot;</code></pre>
 
-<h3 id="toc_17">Text</h3>
+<h3 id="toc_18">linewidth</h3>
 
-<p>the text you want to display in a polygon </p>
+<p><em>application: line</em><br>
+set line thickness</p>
+
+<p>Exemple for orange color:</p>
+
+<pre><code>set color orange</code></pre>
+
+<h3 id="toc_19">Text</h3>
+
+<p><em>application: line / polygon</em><br>
+the text you want to display in a polygon  </p>
 
 <p>Exemple:</p>
 
 <pre><code>set text &quot;enter your text here&quot;</code></pre>
 
-<h3 id="toc_18">fontsize</h3>
+<h3 id="toc_20">fontsize</h3>
 
-<p>size of the font (number)</p>
+<p><em>application: line / polygon</em><br>
+size of the font (number)</p>
 
 <p>Exemple:</p>
 
-<pre><code>set fontsize 120</code></pre>
+<pre><code>set linewidth 12</code></pre>
 
-<h2 id="toc_19">Importing datas</h2>
+<h2 id="toc_21">Importing datas</h2>
 
-<h3 id="toc_20">Working with GeoJSON</h3>
+<h3 id="toc_22">Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import datas in it and work with them: </p>
 
