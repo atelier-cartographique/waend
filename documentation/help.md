@@ -139,3 +139,20 @@ size of the font (number)
 Exemple:
 
 	set fontsize 120
+
+##Importing datas
+
+###Working with GeoJSON
+
+While Wænd is not meant to be an online Geographic Information System, you can import datas in it and work with them: 
+
+We currently support GeoJSON format. 
+The restrictions so far are : 
+
+- no multipolygons
+- no multilines
+- no points
+
+An easy way to create a GeoJSON file from your zone of interest is to use [http://overpass-turbo.eu/](http://overpass-turbo.eu/), it is a powerfull online tool quickly export datas from OpenStreetMap.
+
+Another option is to use [QGis](http://www.qgis.org/en/site/), a free and opensource GIS, that you can use for manipulating any kind of geo-datas.
