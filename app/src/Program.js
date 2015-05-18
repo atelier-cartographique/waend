@@ -67,6 +67,7 @@ function Program (ctx) {
             patternCoordinates = [],
             strokeColor = ('color' in props) ? props.color: '#000',
             step = height / hatchLen,
+            lineWidth = (('hatchwidth' in props) ? props.linewidth : 1),
             turnFlag = false;
 
         patternCoordinates.push([left, bottomLeft[1]]);
@@ -104,6 +105,7 @@ function Program (ctx) {
         ctx.emit('save');
         // ctx.emit('draw', 'polygon', coordinates);
         ctx.emit('set', 'strokeStyle', strokeColor);
+        ctx.emit('set', 'lineWidth', lineWidth);        
         ctx.emit('clip', 'begin', coordinates);
         ctx.emit('draw', 'line', patternCoordinates);
         ctx.emit('clip', 'end');
