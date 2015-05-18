@@ -35,24 +35,34 @@ function createGroup (uid, ctx, resolve, reject) {
             shell.terminal.input(stdin);
             stdin.read()
                 .then(function(name){
-                    var data = {
-                        user_id: uid,
-                        status_flag: (pp - 1),
-                        properties: {'name':name}
-                    };
-                    ctx.binder.setGroup(uid, data)
-                        .then(function(model){
-                            var cmd = terminal.makeCommand({
-                                args: ['cc /'+uid+'/'+model.id],
-                                text: (model.get('name') || model.id)
-                            });
-                            stdout.write(cmd);
-                            resolve(model);
-                        });
+
+                    stdout.write('enter a description');
+                    terminal.input(stdin);
+                    stdin.read()
+                        .then(function(desc){
+                            var data = {
+                                user_id: uid,
+                                status_flag: (pp - 1),
+                                properties: {'name':name,'description':desc}
+                            };
+
+                            ctx.binder.setGroup(uid, data)
+                                .then(function(model){
+                                    var cmd = terminal.makeCommand({
+                                        args: ['cc /'+uid+'/'+model.id],
+                                        text: (model.get('name') || model.id)
+                                    });
+                                    stdout.write(cmd);
+                                    resolve(model);
+                                });
+                        })
                 });
         })
         .catch(reject);
 }
+
+
+
 
 function createLayer (uid, gid, ctx, resolve, reject) {
     var binder = ctx.binder,
@@ -64,22 +74,60 @@ function createLayer (uid, gid, ctx, resolve, reject) {
     terminal.input(stdin);
     stdin.read()
         .then(function(name){
-            var data = {
-                user_id: uid,
-                properties: {'name':name}
-            };
-            binder.setLayer(uid, gid, data)
-                .then(function(model){
-                    var cmd = terminal.makeCommand({
-                        args: ['cc /'+uid+'/'+gid+'/'+model.id],
-                        text: (model.get('name') || model.id)
-                    });
-                    stdout.write('created layer ', cmd);
-                    resolve(model);
-                });
+
+            stdout.write('enter a description');
+            terminal.input(stdin);
+            stdin.read()
+                .then(function(desc){
+                    var data = {
+                        user_id: uid,
+                        properties: {'name':name,'description':desc}
+                    };
+                
+                    binder.setLayer(uid, gid, data)
+                        .then(function(model){
+                            var cmd = terminal.makeCommand({
+                                args: ['cc /'+uid+'/'+gid+'/'+model.id],
+                                text: (model.get('name') || model.id)
+                            });
+                            stdout.write('created layer ', cmd);
+                            resolve(model);
+                        });
+                })
         })
         .catch(reject);
 }
+
+
+
+
+// function createLayer (uid, gid, ctx, resolve, reject) {
+//     var binder = ctx.binder,
+//         stdout = ctx.sys.stdout,
+//         stdin = ctx.sys.stdin,
+//         terminal = ctx.shell.terminal;
+
+//     stdout.write('enter a name');
+//     terminal.input(stdin);
+//     stdin.read()
+//         .then(function(name){
+//             var data = {
+//                 user_id: uid,
+//                 properties: {'name':name}
+//             };
+            
+//             binder.setLayer(uid, gid, data)
+//                 .then(function(model){
+//                     var cmd = terminal.makeCommand({
+//                         args: ['cc /'+uid+'/'+gid+'/'+model.id],
+//                         text: (model.get('name') || model.id)
+//                     });
+//                     stdout.write('created layer ', cmd);
+//                     resolve(model);
+//                 });
+//         })
+//         .catch(reject);
+// }
 
 function createFeature (uid, gid, lid, ctx, resolve, reject) {
     var binder = ctx.binder,
