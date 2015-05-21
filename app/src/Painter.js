@@ -135,7 +135,18 @@ Painter.prototype.imageClip = function (coordinates, extent, imagePath) {
         // self.drawPolygon(coordinates, ['stroke']);
         self.context.restore();
     };
-    img.src = url + '?size=' + Math.max(width, height);
+
+    var getStep = function (sz) {
+        var steps = [ 4, 8, 16, 32, 64, 128, 256, 512, 1024 ],
+            sl = steps.length;
+        for (var i = sl - 1; i >= 0; i--) {
+            if (sz >= steps[i]) {
+                return steps[i];
+            }
+        }
+    };
+
+    img.src = url + '/' + getStep(Math.max(width, height));
     if (img.complete) {
         complete();
     }

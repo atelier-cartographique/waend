@@ -65,12 +65,12 @@ function drawLine () {
                 console.log('errr not implemted');
             }
             else {
-                polyLineOrGon = new Geometry.LineString([]);
+                var line = new Geometry.LineString([]);
                 var segments = path.segments;
                 for (var i = 0; i < segments.length; i++) {
                     var s = segments[i],
                         pixel = [s.point.x, s.point.y];
-                    polyLineOrGon.appendCoordinate(map.getCoordinateFromPixel(pixel));
+                    line.appendCoordinate(map.getCoordinateFromPixel(pixel));
                 }
             }
 

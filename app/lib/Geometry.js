@@ -55,6 +55,7 @@ Geometry.prototype.toGeoJSON = function () {
     return copy(this._geometry);
 };
 
+
 function Point () {
     var data = arguments[0];
     if (_.isArray(data)) {
@@ -64,6 +65,7 @@ function Point () {
 }
 util.inherits(Point, Geometry);
 
+
 function LineString () {
     var data = arguments[0];
     if (_.isArray(data)) {
@@ -72,6 +74,12 @@ function LineString () {
     Geometry.call(this, data);
 }
 util.inherits(LineString, Geometry);
+
+LineString.prototype.appendCoordinate = function (opt_point) {
+    var p = new Point(opt_point);
+    this._geometry.coordinates.push(p.getCoordinates());
+};
+
 
 function Polygon () {
     var data = arguments[0];

@@ -138,7 +138,7 @@ function getStep (sz) {
 }
 
 function getMedia (request, response) {
-    var size = ('size' in request.query) ? parseInt(request.query.size) : STEPS[0],
+    var size = parseInt(request.params.size),
         step = getStep(size),
         userDir = path.basename(request.params.user_id),
         mediaName = path.basename(request.params.media_name),
@@ -152,7 +152,7 @@ module.exports = exports = function(router, app){
 
     // GETs
     router.get('/media/:user_id', listMedia);
-    router.get('/media/:user_id/:media_name', getMedia);
+    router.get('/media/:user_id/:media_name/:size', getMedia);
 
     // POSTs
     router.post('/media',  function(request, response){
