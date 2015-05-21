@@ -20,7 +20,8 @@ function setAttr () {
     if (!key) {
         throw (new Error('No Key'));
     }
-    else if (0 === args.length && env.DELIVERED) {
+
+    if (0 === args.length && env.DELIVERED) {
         try {
             var delivered = env.DELIVERED.toJSON();
             return this.data.set(key, delivered);
