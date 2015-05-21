@@ -89,7 +89,7 @@ function GeomItem (data) {
 }
 
 GeomItem.prototype.getGeometry = function () {
-    return Geometry.format.GeoJSON.read(this.geom);
+    return (new Geometry.Geometry(this.geom));
 };
 
 function initData (data) {
@@ -223,7 +223,7 @@ function findIntersectSegment (coordinates, apx, apy, avx, avy) {
 
 function getWritableSegments (p, lineHeight, start) {
     var coordinates = p.getCoordinates(),
-        extent = p.getExtentObject(),
+        extent = p.getExtent(),
         height = extent.getHeight(),
         width = extent.getWidth(),
         bottomLeft = extent.getBottomLeft().getCoordinates(),

@@ -51,7 +51,7 @@ function Program (ctx) {
         ctx.polygonProject(coordinates);
         ctx.polygonTransform(T, coordinates);
         var p = new ctx.Geometry.Polygon(coordinates),
-            initialExtent = p.getExtentObject(),
+            initialExtent = p.getExtent(),
             initialHeight = initialExtent.getHeight(),
             initialWidth = initialExtent.getWidth(),
             bufExtent = initialExtent.buffer(Math.max(initialHeight, initialWidth) / 2),
@@ -105,7 +105,7 @@ function Program (ctx) {
         ctx.emit('save');
         // ctx.emit('draw', 'polygon', coordinates);
         ctx.emit('set', 'strokeStyle', strokeColor);
-        ctx.emit('set', 'lineWidth', lineWidth);        
+        ctx.emit('set', 'lineWidth', lineWidth);
         ctx.emit('clip', 'begin', coordinates);
         ctx.emit('draw', 'line', patternCoordinates);
         ctx.emit('clip', 'end');
@@ -125,7 +125,7 @@ function Program (ctx) {
         ctx.polygonProject(coordinates);
         ctx.polygonTransform(T, coordinates);
         var p = new ctx.Geometry.Polygon(coordinates),
-            extent = p.getExtent();
+            extent = p.getExtent().getArray();
 
         ctx.emit('image:clip', coordinates, extent, props.image);
     };
