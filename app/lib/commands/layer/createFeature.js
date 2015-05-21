@@ -12,6 +12,8 @@
 // var Promise = require('bluebird'),
 //     region = require('../Region');
 
+var Geometry = require('../../Geometry');
+
 function createFeature (sGeom) {
     var self = this,
         env = self.shell.env,
@@ -30,26 +32,17 @@ function createFeature (sGeom) {
         geom = JSON.parse(sGeom);
     }
     catch (err) {
-        try{ // stdout
-            sGeom = JSON.parse(self.sys.stdout.readSync());
-            geom = JSON.parse(sGeom);
-            if (!('type' in geom)) {
-                throw (new Error('not a geometry'));
+        try { // env
+            if (env.DELIVERED
+                && (env.DELIVERED instanceof Geometry.Geometry)) {
+                geom = env.DELIVERED.toGeoJSON();
+            }
+            else {
+                geom = JSON.parse(env.DELIVERED); // if this last one throws, well, means we can stop
             }
         }
         catch (err) {
-            try { // env
-                if (env.DELIVERED
-                    && env.DELIVERED.toGeoJSON) {
-                    geom = env.DELIVERED.toGeoJSON();
-                }
-                else {
-                    geom = JSON.parse(env.DELIVERED); // if this last one throws, well, means we can stop
-                }
-            }
-            catch (err) {
-                throw (err);
-            }
+            throw (err);
         }
 
     }

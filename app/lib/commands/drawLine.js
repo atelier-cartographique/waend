@@ -80,7 +80,7 @@ function drawLine () {
             tool.remove();
             paper.project.remove();
             display.end();
-            resolve(polyLineOrGon);
+            resolve(line);
         };
 
         tool.on('mousedown', onMouseDown);

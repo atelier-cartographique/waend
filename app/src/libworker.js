@@ -69,18 +69,6 @@ var lineTransform = function (T, coordinates) {
 };
 
 
-workerContext.waend = {
-    'Projection': Projection,
-    'Geometry': Geometry,
-    'Transform': Transform,
-    'proj3857': Proj3857,
-    'polygonTransform' : polygonTransform,
-    'lineTransform': lineTransform,
-    'polygonProject': polygonProject,
-    'lineProject': lineProject
-};
-
-
 var dataSource;
 var renderId;
 
@@ -163,7 +151,6 @@ function emit () {
     workerContext.postMessage(args);
 }
 
-workerContext.waend.emit = emit;
 
 
 /*
@@ -321,7 +308,6 @@ function drawTextInPolygon (T, polygon, txt, fsz) {
 
 }
 
-workerContext.waend.drawTextInPolygon = drawTextInPolygon;
 
 
 function lineAngle (start, end) {
@@ -385,7 +371,34 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
 }
 
 
-workerContext.waend.drawTextOnLine = drawTextOnLine;
+
+function processStyle (props) {
+    if ('style' in props) {
+        var style = props.style;
+        emit('save');
+        underscore.each(style, function(value, key){
+            emit('set', key, value);
+        });
+    }
+}
+
+
+
+
+workerContext.waend = {
+    'Projection': Projection,
+    'Geometry': Geometry,
+    'Transform': Transform,
+    'proj3857': Proj3857,
+    'polygonTransform' : polygonTransform,
+    'lineTransform': lineTransform,
+    'polygonProject': polygonProject,
+    'lineProject': lineProject,
+    'drawTextOnLine': drawTextOnLine,
+    'drawTextInPolygon': drawTextInPolygon,
+    'emit': emit,
+    'processStyle': processStyle
+};
 
 
 

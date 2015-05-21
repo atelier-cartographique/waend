@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/getGeometry.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -19,9 +19,9 @@ function getGeometry () {
         sys = self.sys,
         geom = self.data.getGeometry();
 
-    sys.stdout.write(geom.format(format));
+    sys.stdout.write(JSON.stringify(geom.toGeoJSON()));
     return self.end(geom);
-};
+}
 
 
 module.exports = exports = {

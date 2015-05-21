@@ -17,7 +17,16 @@ function Program (ctx) {
         ctx.drawTextOnLine(T, coordinates, props.text, props.fontsize);
     };
 
+    var startFeature = function (props) {
+        ctx.processStyle(props);
+    };
+
+    var endFeature = function () {
+        ctx.emit('restore');
+    };
+
     ctx.linestring = function (coordinates, props, fm) {
+        startFeature(props);
         if ('text' in props) {
             textedLine(coordinates, props, fm);
         }
@@ -25,25 +34,9 @@ function Program (ctx) {
             var T = new ctx.Transform(fm);
             ctx.lineProject(coordinates);
             ctx.lineTransform(T, coordinates);
-            if ('color' in props) {
-                ctx.emit('save');
-                ctx.emit('set', 'strokeStyle', props.color);
-                ctx.emit('set', 'lineWidth', props.linewidth);
-                ctx.emit('draw', 'line', coordinates);
-                ctx.emit('restore');
-            }
-
-            else if ('linewidth' in props) {
-                ctx.emit('save');
-                ctx.emit('set', 'lineWidth', props.linewidth);
-                ctx.emit('draw', 'line', coordinates);
-                ctx.emit('restore');
-            }
-
-            else {
-                ctx.emit('draw', 'line', coordinates);
-            }
+            ctx.emit('draw', 'line', coordinates);
         }
+        endFeature();
     };
 
     var hatchedPolygon = function (coordinates, props, fm) {
@@ -102,14 +95,9 @@ function Program (ctx) {
             ctx.lineTransform(rt, patternCoordinates);
         }
 
-        ctx.emit('save');
-        // ctx.emit('draw', 'polygon', coordinates);
-        ctx.emit('set', 'strokeStyle', strokeColor);
-        ctx.emit('set', 'lineWidth', lineWidth);
         ctx.emit('clip', 'begin', coordinates);
         ctx.emit('draw', 'line', patternCoordinates);
         ctx.emit('clip', 'end');
-        ctx.emit('restore');
     };
 
     var textedPolygon = function (coordinates, props, fm) {
@@ -131,6 +119,7 @@ function Program (ctx) {
     };
 
     ctx.polygon = function (coordinates, props, fm) {
+        startFeature(props);
         if ('image' in props) {
             imagedPolygon(coordinates, props, fm);
         }
@@ -140,6 +129,7 @@ function Program (ctx) {
         else {
             hatchedPolygon(coordinates, props, fm);
         }
+        endFeature();
     };
 }
 
