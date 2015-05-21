@@ -43,7 +43,31 @@ var Model = O.extend({
     },
 
     set: function (key, val) {
-        this.data.properties[key] = val;
+        var keys = key.split('.');
+        var props = this.data.properties;
+        if (1 === keys.length) {
+            props[key] = val;
+        }
+        else {
+            var kl = keys.length,
+                currentDict = props,
+                k;
+            for (var i = 0; i < kl; i++) {
+                k = keys[i];
+                if ((i + 1) === kl) {
+                    currentDict[k] = val;
+                }
+                else {
+                    if (!(k in currentDict)) {
+                        currentDict[k] = {};
+                    }
+                    else if (!_.isObject(currentDict[k])) {
+                        currentDict[k] = {};
+                    }
+                    currentDict = currentDict[k];
+                }
+            }
+        }
         this.emit('set', key, val);
         return this.binder.update(this);
     },
