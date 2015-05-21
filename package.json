@@ -26,7 +26,6 @@
     "multer": "^0.1.8",
     "node-ft": "0.0.9",
     "node-uuid": "^1.4.2",
-    "openlayers": "*",
     "opentype.js": "^0.4.6",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
@@ -39,6 +38,7 @@
     "slug": "^0.8.0",
     "sockjs": "^0.3.9",
     "static-favicon": "~1.0.0",
+    "turf": "^2.0.2",
     "underscore": "*",
     "wellknown": "^0.3.1"
   }

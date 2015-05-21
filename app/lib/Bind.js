@@ -59,7 +59,7 @@ var Feature = Model.extend({
     type: 'feature',
 
     getGeometry: function () {
-        return Geometry.format.GeoJSON.read(this.data.geom);
+        return (new Geometry.Geometry(this.data.geom));
     }
 });
 

@@ -47,28 +47,21 @@ var Region = O.extend({
         return this.emitChange(extent);
     },
 
-    push: function (geom, opt_format) {
-        if (!opt_format && (geom instanceof Geometry.Extent)) {
-            var extent = geom.clone();
-            return this.pushExtent(extent);
+    push: function (geom) {
+        var extent;
+        if (geom instanceof Geometry.Extent) {
+            extent = geom.clone();
         }
-        else if (!opt_format && (geom instanceof Geometry.Geometry)) {
-            var extent = new Geometry.Extent(geom.getExtent());
-            return this.pushExtent(extent);
+        else if (geom instanceof Geometry.Geometry) {
+            extent = geom.getExtent();
         }
-        else if (!opt_format && _.isArray(geom)) { // we assume ol.extent type
-            var extent = new Geometry.Extent(geom);
-            return this.pushExtent(extent);
+        else if (_.isArray(geom)) { // we assume ol.extent type
+            extent = new Geometry.Extent(geom);
         }
-        else if (!!opt_format){
-            if (opt_format in Geometry.format) {
-                var gg = Geometry.format[opt_format].read(geom);
-                var extent = new Geometry.Extent(gg.getExtent());
-                return this.pushExtent(extent);
-            }
-            throw (new Error('region.push format not supported: '+ opt_format));
+        else{
+            extent = (new Geometry(geom)).getExtent();
         }
-        throw (new Error('region.push invalid geometry'))
+        return this.pushExtent(extent);
     },
 
 });

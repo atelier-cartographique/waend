@@ -8,132 +8,104 @@
  *
  */
 
-'use strict';
+// 'use strict';
 
 
 var _ = require('underscore'),
-    util = require("util"),
-    ol = require('openlayers');
-
-var Geometry = ol.geom.Geometry,
-    format = ol.format,
-    supportedFormatNames = [
-    "GeoJSON",
-    "GPX",
-    "KML",
-    "OSMXML",
-    "Polyline",
-    "TopoJSON",
-    "WKT",
-    "GML2", "GML3", "GML"
-    ],
-    supportedFormat = {};
+    util = require('util'),
+    turf = require('turf');
 
 
-function Point () {
-    ol.geom.Point.apply(this, arguments);
+function copy (data) {
+    return JSON.parse(JSON.stringify(data));
 }
-util.inherits(Point, ol.geom.Point);
 
-function LineString () {
-    ol.geom.LineString.apply(this, arguments);
-}
-util.inherits(LineString, ol.geom.LineString);
-
-function Polygon () {
-    ol.geom.Polygon.apply(this, arguments);
-}
-util.inherits(Polygon, ol.geom.Polygon);
-
-
-_.each(supportedFormatNames, function(name){
-    var f = new (ol.format[name])();
-    if(f.writeGeometry
-        && f.readGeometry){
-        supportedFormat[name] = _.extend(f,{
-            read: function () {
-                var geom = this.readGeometry.apply(this, arguments),
-                    geomType = geom.getType();
-                if ('Point' === geomType) {
-                    return (new Point(geom.getCoordinates()));
-                }
-                if ('LineString' === geomType) {
-                    return (new LineString(geom.getCoordinates()));
-                }
-                if ('Polygon' === geomType) {
-                    return (new Polygon(geom.getCoordinates()));
-                }
-                throw (new Error('Unsupported Geometry Type ' + geomType));
-            },
-
-            write: function () {
-                return this.writeGeometry.apply(this, arguments);
-            }
-        });
+function Geometry (data) {
+    if (data instanceof Geometry) {
+        this._geometry = copy(data._geometry);
     }
-});
-
-
-function formatGeometry (opt_format) {
-    opt_format = opt_format || 'GeoJSON';
-    var format = supportedFormat[opt_format],
-        str = format.write(this);
-    return str;
-}
-
-function toGeoJSON () {
-    var gjStr = formatGeometry.call(this);
-    return JSON.parse(gjStr);
-}
-
-function getExtentObject () {
-    var extent = this.getExtent();
-    return new Extent(extent);
-}
-
-Point.prototype.format = formatGeometry;
-LineString.prototype.format = formatGeometry;
-Polygon.prototype.format = formatGeometry;
-
-Point.prototype.toString = formatGeometry;
-LineString.prototype.toString = formatGeometry;
-Polygon.prototype.toString = formatGeometry;
-
-Point.prototype.toGeoJSON = toGeoJSON;
-LineString.prototype.toGeoJSON = toGeoJSON;
-Polygon.prototype.toGeoJSON = toGeoJSON;
-
-Point.prototype.getExtentObject = getExtentObject;
-LineString.prototype.getExtentObject = getExtentObject;
-Polygon.prototype.getExtentObject = getExtentObject;
-
-
-function Extent ( extent ) { // whether from an OL extent or an Extent
-    if (extent instanceof Extent){
-        this.extent = JSON.parse(JSON.stringify(extent.extent));
+    else if ('geometry' in data) { // a feature dict
+        this._geometry = copy(data.geometry);
+    }
+    else if ('type' in data) { // a geometry
+        this._geometry = copy(data);
     }
     else {
-        this.extent = JSON.parse(JSON.stringify(extent));
+        throw (new Error('CanNotBuildGeometry'));
     }
 }
+
+Geometry.prototype.clone = function () {
+    return (new Geometry(this));
+};
+
+Geometry.prototype.getType = function () {
+    return this._geometry.type;
+};
+
+Geometry.prototype.getCoordinates = function () {
+    return copy(this._geometry.coordinates);
+};
+
+Geometry.prototype.getExtent = function () {
+    return (new Extent(turf.extent(this._geometry)));
+};
+
+Geometry.prototype.toGeoJSON = function () {
+    return copy(this._geometry);
+};
+
+function Point () {
+    var data = arguments[0];
+    if (_.isArray(data)) {
+        data = turf.point(data);
+    }
+    Geometry.call(this, data);
+}
+util.inherits(Point, Geometry);
+
+function LineString () {
+    var data = arguments[0];
+    if (_.isArray(data)) {
+        data = turf.linestring(data);
+    }
+    Geometry.call(this, data);
+}
+util.inherits(LineString, Geometry);
+
+function Polygon () {
+    var data = arguments[0];
+    if (_.isArray(data)) {
+        data = turf.polygon(data);
+    }
+    Geometry.call(this, data);
+}
+util.inherits(Polygon, Geometry);
+
+
+
+function Extent ( extent ) { // whether from an [minx, miny, maxx, maxy] extent or an Extent
+    if (extent instanceof Extent){
+        this.extent = extent.getArray();
+    }
+    else if (extent instanceof Geometry) {
+        this.extent = extent.getExtent().getArray();
+    }
+    else {
+        this.extent = copy(extent);
+    }
+}
+
+Extent.prototype.getArray = function () {
+    return copy(this.extent);
+};
 
 Extent.prototype.clone = function () {
     return (new Extent(this));
 };
 
 Extent.prototype.toPolygon = function () {
-    var coords = [[
-        this.getTopLeft().getCoordinates(),
-        this.getTopRight().getCoordinates(),
-        this.getBottomRight().getCoordinates(),
-        this.getBottomLeft().getCoordinates(),
-        this.getTopLeft().getCoordinates()
-    ]];
-    return (new Polygon(coords));
-};
-
-Extent.prototype.toString = function (opt_format) {
-    return this.toPolygon().format(opt_format);
+    return (new Polygon(turf.bboxPolygon(this.extent)));
 };
 
 Extent.prototype.normalize = function () {
@@ -151,67 +123,51 @@ Extent.prototype.normalize = function () {
     return this;
 };
 
-Extent.prototype.toBounds = function () {
-    var sw = this.getBottomLeft().getCoordinates(),
-        ne = this.getTopRight().getCoordinates(),
-        // width = this.getWidth(),
-        // height = this.getHeight(),
-        bounds = {'w':sw[0], 's':sw[1], 'e':ne[0], 'n':ne[1]};
-
-    return bounds;
+Extent.prototype.buffer = function (value) {
+    this.extent = [
+        this.extent[0] - value,
+        this.extent[1] - value,
+        this.extent[2] + value,
+        this.extent[3] + value
+      ];
+    return this;
 };
 
-var extentMethods = [
-    'buffer',
-    'containsCoordinate',
-    'containsXY',
-    'getHeight',
-    'getWidth',
-    'isEmpty'
-];
+Extent.prototype.getHeight = function () {
+    return (this.extent[3] - this.extent[1]);
+};
 
-var extentExtentMethods = [
-    'containsExtent',
-    'equals',
-    'extend',
-    'intersects',
-];
+Extent.prototype.getWidth = function () {
+    return (this.extent[2] - this.extent[0]);
+};
 
-var extentPointMethods = [
-    'getBottomLeft',
-    'getBottomRight',
-    'getCenter',
-    'getTopLeft',
-    'getTopRight'
-    ];
+Extent.prototype.getBottomLeft = function () {
+    return new Point([this.extent[0], this.extent[1]]);
+};
+
+Extent.prototype.getBottomRight = function () {
+    return new Point([this.extent[2], this.extent[1]]);
+};
+
+Extent.prototype.getTopLeft = function () {
+    return new Point([this.extent[0], this.extent[3]]);
+};
+
+Extent.prototype.getTopRight = function () {
+    return new Point([this.extent[2], this.extent[3]]);
+};
+
+Extent.prototype.getCenter = function () {
+    return new Point([
+        (this.extent[0] + this.extent[2]) / 2,
+        (this.extent[1] + this.extent[3]) / 2
+        ]);
+};
 
 
-_.each(extentMethods, function(methodName) {
-    Extent.prototype[methodName] = function () {
-        var args = _.toArray(arguments);
-        return ol.extent[methodName].apply(ol.extent, [this.extent].concat(args));
-    };
-});
-
-_.each(extentExtentMethods, function(methodName) {
-    Extent.prototype[methodName] = function () {
-        var args = _.toArray(arguments),
-            ext2 = new Extent(args.shift());
-        return ol.extent[methodName].apply(ol.extent, [this.extent, ext2.extent].concat(args));
-    };
-});
-
-_.each(extentPointMethods, function(methodName) {
-    Extent.prototype[methodName] = function () {
-        var args = _.toArray(arguments);
-        var coords = ol.extent[methodName].apply(ol.extent, [this.extent].concat(args));
-        return (new Point(coords));
-    };
-});
 
 module.exports.Geometry = Geometry;
 module.exports.Extent = Extent;
 module.exports.Point = Point;
 module.exports.LineString = LineString;
 module.exports.Polygon = Polygon;
-module.exports.format = supportedFormat;
