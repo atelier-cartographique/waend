@@ -46,25 +46,19 @@ function popRegion () {
     return this.end(r);
 }
 
-function getCenter (opt_format) {
+function getCenter () {
     var r = region.get(),
-        format = opt_format || 'WKT',
-        center = r.getCenter();
-    if(opt_format){
-        this.sys.stdout.write(center.format(format));
-    }
+        center = r.getCenter().getCoordinates();
+    this.sys.stdout.write(center[0], ' ', center[1]);
     return this.end(center);
 }
 
 function printRegion (opt_format) {
     var r = region.get(),
-        NW = r.getTopLeft().format('WKT'),
-        SE = r.getBottomRight().format('WKT');
-    this.sys.stdout.write('NorthWest ', NW);
-    this.sys.stdout.write('SouthEast ', SE);
-    // this.sys.stdout.write('South ', SW[1]);
-    // this.sys.stdout.write('West ', SW[0]);
-    return this.end(r.extent);
+        NW = r.getTopLeft().getCoordinates(),
+        SE = r.getBottomRight().getCoordinates();
+    this.sys.stdout.write(SE[0], SE[1], NW[0], NW[1]);
+    return this.end(r);
 }
 
 
