@@ -141,6 +141,9 @@ Painter.prototype.imageClip = function (coordinates, extent, imagePath) {
             sl = steps.length;
         for (var i = sl - 1; i >= 0; i--) {
             if (sz >= steps[i]) {
+                if (i < (sl - 1)){
+                    return steps[i + 1];
+                }
                 return steps[i];
             }
         }
