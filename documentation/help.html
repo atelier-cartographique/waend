@@ -411,9 +411,35 @@ use [o] to zoom out</p>
 
 <p>will set the region viewport to the drawing extend</p>
 
-<h2 id="toc_12">Style keys details</h2>
+<h2 id="toc_12">Style keys</h2>
 
-<h3 id="toc_13">hn</h3>
+<p>The Style key is a dictionary of keys, using CanvasRenderingContext2D properties. It means that you have to define your style this way : </p>
+
+<pre><code>exemples for orange color :
+set style.strokeStyle orange
+set style.strokeStyle #FF7F00
+set style.strokeStyle &quot;rgb(255, 127, 0)&quot;
+set style.strokeStyle &quot;rgba(255, 127, 0, 0.8)&quot;
+
+exemples for line width :
+set style.lineWidth 5</code></pre>
+
+<p>You can find all the documentation on thoses properties here : <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D</a></p>
+
+<p><em>exception:</em></p>
+
+<pre><code>If you want to play with dashed lines, 
+SetLineDash has to be writen our way : 
+
+set style.lineDash 2 10
+
+where 2 is the dash lenght, and 10 the gap.</code></pre>
+
+<h2 id="toc_13">Parameters</h2>
+
+<p>The following keys has to be set autonomously.</p>
+
+<h3 id="toc_14">hn</h3>
 
 <p>application: polygon<br>
 number of hatches per polygon (number)</p>
@@ -421,15 +447,6 @@ number of hatches per polygon (number)</p>
 <p>Exemple:</p>
 
 <pre><code>set hn 150</code></pre>
-
-<h3 id="toc_14">hatchwidth</h3>
-
-<p><em>application: polygon</em><br>
-Hatches thickness</p>
-
-<p>Exemple:</p>
-
-<pre><code>set hatchwidth 8</code></pre>
 
 <h3 id="toc_15">step</h3>
 
@@ -449,27 +466,7 @@ hatches angle (number)</p>
 
 <pre><code>set rotation 45</code></pre>
 
-<h3 id="toc_17">color</h3>
-
-<p><em>application: general</em><br>
-set color (all css color value welcome)</p>
-
-<p>Exemple for orange color:</p>
-
-<pre><code>set color orange
-set color #FFA500
-set color &quot;rgba(255, 165, 0, 1)&quot;</code></pre>
-
-<h3 id="toc_18">linewidth</h3>
-
-<p><em>application: line</em><br>
-set line thickness</p>
-
-<p>Exemple for orange color:</p>
-
-<pre><code>set color orange</code></pre>
-
-<h3 id="toc_19">Text</h3>
+<h3 id="toc_17">Text</h3>
 
 <p><em>application: line / polygon</em><br>
 the text you want to display in a polygon  </p>
@@ -478,7 +475,7 @@ the text you want to display in a polygon  </p>
 
 <pre><code>set text &quot;enter your text here&quot;</code></pre>
 
-<h3 id="toc_20">fontsize</h3>
+<h3 id="toc_18">fontsize</h3>
 
 <p><em>application: line / polygon</em><br>
 size of the font (number)</p>
@@ -486,6 +483,15 @@ size of the font (number)</p>
 <p>Exemple:</p>
 
 <pre><code>set linewidth 12</code></pre>
+
+<h2 id="toc_19">Style tips &amp; tricks</h2>
+
+<h3 id="toc_20">polygon fill color</h3>
+
+<p>set hn key to 1 (One line to this polygon).<br>
+set style.lineWidth to 3000 (the line will be 2000px wide)</p>
+
+<p>You are done with a filled polygon ! </p>
 
 <h2 id="toc_21">Importing datas</h2>
 

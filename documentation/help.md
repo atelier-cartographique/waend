@@ -94,7 +94,33 @@ Exemple:
 will set the region viewport to the drawing extend
 
 
-##Style keys details
+##Style keys
+
+The Style key is a dictionary of keys, using CanvasRenderingContext2D properties. It means that you have to define your style this way : 
+	
+	exemples for orange color :
+	set style.strokeStyle orange
+	set style.strokeStyle #FF7F00
+	set style.strokeStyle "rgb(255, 127, 0)"
+	set style.strokeStyle "rgba(255, 127, 0, 0.8)"
+	
+	exemples for line width :
+	set style.lineWidth 5
+	
+You can find all the documentation on thoses properties here : <https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D>
+
+*exception:*
+	
+	If you want to play with dashed lines, 
+	SetLineDash has to be writen our way : 
+	
+	set style.lineDash 2 10
+	
+	where 2 is the dash lenght, and 10 the gap.
+
+##Parameters
+
+The following keys has to be set autonomously.
 
 ###hn
 application: polygon  
@@ -104,14 +130,6 @@ Exemple:
 
 	set hn 150
 	
-###hatchwidth
-*application: polygon*  
-Hatches thickness
-
-Exemple:
-
-	set hatchwidth 8
-
 ###step
 *application: polygon*  
 steps value between hatches (number)
@@ -127,24 +145,6 @@ hatches angle (number)
 Exemple:
 
 	set rotation 45
-
-###color
-*application: general*  
-set color (all css color value welcome)
-
-Exemple for orange color:
-
-	set color orange
-	set color #FFA500
-	set color "rgba(255, 165, 0, 1)"
-	
-###linewidth 
-*application: line*  
-set line thickness
-
-Exemple for orange color:
-
-	set color orange
 
 
 ###Text
@@ -162,6 +162,16 @@ size of the font (number)
 Exemple:
 
 	set linewidth 12
+
+##Style tips & tricks
+
+###polygon fill color
+
+set hn key to 1 (One line to this polygon).  
+set style.lineWidth to 3000 (the line will be 2000px wide)
+
+You are done with a filled polygon ! 
+
 
 ##Importing datas
 
