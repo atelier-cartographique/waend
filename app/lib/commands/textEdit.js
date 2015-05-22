@@ -23,7 +23,19 @@ function textEdit (opt_txt) {
         map = shell.env.map,
         display = terminal.display();
 
-    opt_txt = opt_txt || shell.env.DELIVERED;
+    if (!opt_txt && shell.env.DELIVERED) {
+        if (_.isString(shell.env.DELIVERED)) {
+            opt_txt = shell.env.DELIVERED;
+        }
+        else {
+            try {
+                opt_txt = JSON.stringify(shell.env.DELIVERED);
+            }
+            catch (err) {
+                opt_txt = '';
+            }
+        }
+    }
 
     var resolver = function (resolve, reject) {
         var cm = CodeMirror(display.node, {

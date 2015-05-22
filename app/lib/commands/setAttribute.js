@@ -27,7 +27,15 @@ function setAttr () {
             return this.data.set(key, delivered);
         }
         catch (err) {
-            return this.data.set(key, env.DELIVERED);
+//            return this.data.set(key, env.DELIVERED);
+             try {
+                data = JSON.parse(env.DELIVERED.toString());
+                return this.data.set(key, data);
+            }
+            catch (err) {
+                // ok, didn't work either, make it a String.
+                return this.data.set(key, env.DELIVERED.toString());
+            }
         }
     }
     else if (1 === args.length) {
