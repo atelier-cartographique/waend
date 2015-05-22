@@ -81,7 +81,13 @@ Painter.prototype.wrap = function (f, ctx) {
 
 // graphic state
 Painter.prototype.set = function (prop, value) {
-    this.context[prop] = value;
+    if (this.context[prop]) {
+        this.context[prop] = value;
+    }
+    else if ('lineDash' === prop) {
+        this.context.setLineDash(value);
+    }
+    
 };
 
 // clipping
