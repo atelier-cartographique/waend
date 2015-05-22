@@ -266,11 +266,11 @@ function transformCommand () {
     }
 }
 
-function drawTextInPolygon (T, polygon, txt, fsz) {
-    var fs = fsz || 100,
-        startSegment = 0,
+function drawTextInPolygon (T, polygon, txt, fs) {
+    var startSegment = 0,
         segments = getWritableSegments(polygon, fs * 1.2, startSegment),
-        t = new Text(txt), result, tOffsets = [0,0],
+        t = (txt instanceof Text) ? txt : (new Text(txt)),
+        result, tOffsets = [0,0],
         paths, p, cmd,
         tfn = T.mapVec2Fn(),
         instructions = [];
@@ -305,7 +305,93 @@ function drawTextInPolygon (T, polygon, txt, fsz) {
     };
 
     t.whenReady(proceed);
+}
 
+function vecDist (v1, v2) {
+    var dx = v2[0] - v1[0],
+        dy = v2[1] - v1[1];
+    return Math.sqrt((dx*dx) + (dy*dy));
+}
+
+/*
+ * implements binary search (recursive)
+ *
+ * https://en.wikipedia.org/wiki/Binary_search_algorithm
+ * Where it's different from general implementation lies in the fact
+ * that's the predicate which evaluates rather then numeric comparision.
+ * Thus the predicate must know the key.
+ *
+ * @param min Number minimum value
+ * @param max Number maximun value
+ * @predicate Function(pivot) a function that evaluates the current mid value a la compareFunction
+ * @context Object context to which the predicate is applied
+ *
+ */
+function binarySearch(min, max, predicate, context){
+    var interval = max - min;
+    var pivot = min + (Math.floor(interval/2));
+
+    if (max === min) {
+        return pivot;
+    }
+    else if(max < min){
+        throw (new Error('MaxLowerThanMin'));
+    }
+
+    if(predicate.apply(context, [pivot]) > 0){
+        return binarySearch(min, pivot, predicate, context);
+    }
+    else if(predicate.apply(context, [pivot]) < 0){
+        return binarySearch(pivot + 1, max, predicate, context);
+    }
+    return pivot;
+}
+
+function drawTextInPolygonAuto (T, polygon, txt) {
+    var basefs = 1, highfs = 1000000,
+        t = (txt instanceof Text) ? txt : (new Text(txt));
+
+    var segmentsLength = function (fs) {
+        var start = 0,
+            segments = getWritableSegments(polygon, fs * 1.2, start),
+            totalLength = 0;
+        while (segments) {
+            for (var i = 0, sl = segments.length; i < sl; i++) {
+                totalLength += vecDist(segments[i][0], segments[i][1]);
+                // totalLength += Math.abs(segments[i][1][0] - segments[i][0][0]);
+            }
+            start += 1;
+            segments = getWritableSegments(polygon, fs *  1.2, start);
+        }
+        return totalLength * (1 - (Math.log(fs) / 100));
+    };
+
+    // var prevLen = segmentsLength(highfs), curLen;
+    // for (var si = highfs - 16; si > basefs; si -= 16) {
+    //     curLen = segmentsLength(si);
+    //     console.log(si, curLen, prevLen);
+    //     if (curLen > prevLen) {
+    //         highfs = si + 16;
+    //         break;
+    //     }
+    //     prevLen = curLen;
+    // }
+
+
+    var proceed = function () {
+        var baseTextLength = t.getFlatLength(1);
+        var predicate = function (pivot) {
+            var sl = segmentsLength(pivot),
+                tl = baseTextLength * pivot;
+
+            return Math.floor(tl - sl);
+        };
+
+        var fs = binarySearch(basefs, highfs, predicate);
+        drawTextInPolygon(T, polygon, t, fs);
+    };
+
+    t.whenReady(proceed);
 }
 
 
@@ -367,15 +453,14 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
     };
 
     t.whenReady(proceed);
-
 }
 
 
 
 function processStyle (props) {
+    emit('save');
     if ('style' in props) {
         var style = props.style;
-        emit('save');
         underscore.each(style, function(value, key){
             emit('set', key, value);
         });
@@ -396,6 +481,7 @@ workerContext.waend = {
     'lineProject': lineProject,
     'drawTextOnLine': drawTextOnLine,
     'drawTextInPolygon': drawTextInPolygon,
+    'drawTextInPolygonAuto': drawTextInPolygonAuto,
     'emit': emit,
     'processStyle': processStyle
 };

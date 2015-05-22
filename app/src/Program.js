@@ -104,7 +104,12 @@ function Program (ctx) {
         var T = new ctx.Transform(fm);
         ctx.polygonProject(coordinates);
         var p = new ctx.Geometry.Polygon(coordinates);
-        ctx.drawTextInPolygon(T, p, props.text, props.fontsize);
+        if ('fontsize' in props) {
+            ctx.drawTextInPolygon(T, p, props.text, props.fontsize);
+        }
+        else {
+            ctx.drawTextInPolygonAuto(T, p, props.text);
+        }
     };
 
 

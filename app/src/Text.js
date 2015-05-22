@@ -14,6 +14,7 @@ var Hyph = require('hypher'),
     Font = require('./Font');
 
 function Text (str, fontName) {
+    this._string = str;
     var strs = str.split(' ');
     this.clusters = [];
     for (var i = 0; i < strs.length; i++) {
@@ -94,6 +95,19 @@ function vecAdd (v1, v2, a) {
         ry = v1[1] + (v2[1] - v1[1]) * t;
     return [rx, ry];
 }
+
+
+Text.prototype.getFlatLength = function (fontSize) {
+    var glyphs = this.font.stringToGlyphs(this._string),
+        scale =  fontSize / this.font.unitsPerEm,
+        len = 0;
+
+    for (var i = 0, gl = glyphs.length; i < gl; i++) {
+        len += glyphs[i].advanceWidth * scale;
+    }
+    
+    return len;
+};
 
 // font size & horizontal segments
 // a hyper basic text composer
