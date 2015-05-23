@@ -30,16 +30,19 @@ function SourceProvider () {
 
     semaphore.on('shell:change:context', function(ctxIndex, path){
         if (ctxIndex > 1) {
+            self.currentPath = path;
             self.updateGroup(path[0], path[1]);
         }
     });
-
+    semaphore.on('create:layer', function(){
+        self.updateGroup(self.currentPath[0], self.currentPath[1], true);
+    });
 }
 
 // implementations
-SourceProvider.prototype.updateGroup = function(userId, groupId) {
+SourceProvider.prototype.updateGroup = function(userId, groupId, opt_force) {
     var self = this;
-    if (self.groupId === groupId) {
+    if (!opt_force && self.groupId === groupId) {
         return;
     }
     self.userId = userId;

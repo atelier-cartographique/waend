@@ -372,16 +372,13 @@ var Bind = O.extend({
         var pr = function (response) {
             var f = new Feature(binder, objectifyResponse(response));
             db.record([userId, groupId, layerId, f.id], f);
-            binder.changeParent(layerId);
+            if (!batch) {
+                binder.changeParent(layerId);
+            }
             return f;
         };
 
         var url = API_URL+path;
-        if (!!batch) {
-            return this.transport.post(url, {
-                body: data
-            });
-        }
         return this.transport.post(url, {
             parse: pr,
             body: data

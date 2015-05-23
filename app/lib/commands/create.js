@@ -10,6 +10,7 @@
 
 
 var Promise = require('bluebird'),
+    semaphore = require('../Semaphore'),
     region = require('../Region');
 
 
@@ -55,7 +56,7 @@ function createGroup (uid, ctx, resolve, reject) {
                                     stdout.write(cmd);
                                     resolve(model);
                                 });
-                        })
+                        });
                 });
         })
         .catch(reject);
@@ -83,17 +84,18 @@ function createLayer (uid, gid, ctx, resolve, reject) {
                         user_id: uid,
                         properties: {'name':name,'description':desc}
                     };
-                
+
                     binder.setLayer(uid, gid, data)
                         .then(function(model){
                             var cmd = terminal.makeCommand({
                                 args: ['cc /'+uid+'/'+gid+'/'+model.id],
                                 text: (model.get('name') || model.id)
                             });
+                            semaphore.signal('create:layer', model);
                             stdout.write('created layer ', cmd);
                             resolve(model);
                         });
-                })
+                });
         })
         .catch(reject);
 }
@@ -115,7 +117,7 @@ function createLayer (uid, gid, ctx, resolve, reject) {
 //                 user_id: uid,
 //                 properties: {'name':name}
 //             };
-            
+
 //             binder.setLayer(uid, gid, data)
 //                 .then(function(model){
 //                     var cmd = terminal.makeCommand({
