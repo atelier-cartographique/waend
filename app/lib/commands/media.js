@@ -43,11 +43,11 @@ function listMedia () {
             if('medias' in data) {
                 for (var i = 0; i < data.medias.length; i++) {
                     var m = data.medias[i];
-                    var imageUrl = MEDIA_URL + '/' + user.id+'/'+m + '?size=200';
+                    var imageUrl = MEDIA_URL + '/' + user.id+'/'+m + '/256';
                     var wrapper = document.createElement('div');
                     var style = [
-                        'width:200px;',
-                        'height:200px;',
+                        'width:256px;',
+                        'height:256px;',
                         'background-position: center center;',
                         'background-size: cover;',
                         'background-repeat: no-repeat;',
@@ -160,7 +160,7 @@ function showMedia (mediaName) {
 
     var display = terminal.display(),
         mediaId = user.id + '/' + mediaName,
-        mediaUrl = MEDIA_URL + '/' + mediaId + '?size=2000',
+        mediaUrl = MEDIA_URL + '/' + mediaId + '/1024',
         wrapper = document.createElement('div'),
         closer = document.createElement('div');
 
