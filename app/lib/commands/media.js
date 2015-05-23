@@ -223,11 +223,11 @@ function pickMedia () {
                 for (var i = 0; i < data.medias.length; i++) {
                     var m = data.medias[i];
                     var mid = user.id+'/'+m;
-                    var imageUrl = MEDIA_URL + '/' + mid + '?size=200';
+                    var imageUrl = MEDIA_URL + '/' + mid + '/256';
                     var pwrapper = document.createElement('div');
                     var style = [
-                        'width:200px;',
-                        'height:200px;',
+                        'width:256px;',
+                        'height:256px;',
                         'background-position: center center;',
                         'background-size: cover;',
                         'background-repeat: no-repeat;',
