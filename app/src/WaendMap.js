@@ -92,6 +92,13 @@ Map.prototype.getCoordinateFromPixel = function (pixel) {
     return this.projection.inverse(tv);
 };
 
+Map.prototype.getPixelFromCoordinate = function (coord) {
+    var v = Array.apply(null, coord),
+        pv = this.projection.forward(v),
+        tv = this.view.transform.mapVec2(pv);
+    return tv;
+};
+
 Map.prototype.getFeatures = function (extent) {
     return this.view.getFeatures(extent);
 };

@@ -80,16 +80,15 @@ function setupCreateData (binder, uid, gid, lid) {
 }
 
 function create (feature, batchJob) {
-    var olGeom = feature.getGeometry();
-    var props = _.omit(feature.getProperties(), 'geometry', 'id');
-    var geomType = olGeom.getType();
+    var geom = new Geometry.Geometry(feature);
+    var props = _.omit(feature.properties || {}, 'id');
+    var geomType = geom.getType();
     if(('LineString' === geomType) || ('Polygon' === geomType)) {
-        var geom = JSON.parse(Geometry.format.GeoJSON.write(olGeom));
         var data = {
             'user_id': createData.uid,
             'layer_id': createData.lid,
             'properties': props,
-            'geom': geom
+            'geom': geom.toGeoJSON()
         };
 
         return createData.binder.setFeature(
@@ -135,8 +134,18 @@ var handleFile = function (file, options, resolve, reject) {
     var reader = new FileReader();
 
     var creator = function (evt) {
-        var geojson = evt.target.result,
-            features = Geometry.format.GeoJSON.readFeatures(geojson),
+        var geojsonString = evt.target.result, geojson;
+        try {
+            geojson = JSON.parse(geojsonString);
+        }
+        catch (err) {
+            return reject('NotJSONParsable');
+        }
+        if (!('features' in geojson)) {
+            return reject('NoFeatures');
+        }
+
+        var features = geojson.features,
             lastIndex = features.length - 1;
 
         Promise.reduce(features, function(total, item, index, arrayLength){
