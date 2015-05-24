@@ -1,0 +1,154 @@
+@font-face {
+    font-family: "osp-dindin";
+    src: url('../fonts/osp-din-webfont.eot');
+    src: url('../fonts/osp-din-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/osp-din-webfont.woff2') format('woff2'),
+         url('../fonts/osp-din-webfont.woff') format('woff'),
+         url('../fonts/osp-din-webfont.ttf') format('truetype'),
+         url('../fonts/osp-din-webfont.svg#osp-dindin') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: "dauphine";
+    src: url('../fonts/dauphine_regular-webfont.eot');
+    src: url('../fonts/dauphine_regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/dauphine_regular-webfont.woff2') format('woff2'),
+         url('../fonts/dauphine_regular-webfont.woff') format('woff'),
+         url('../fonts/dauphine_regular-webfont.ttf') format('truetype'),
+         url('../fonts/dauphine_regular-webfont.svg#osp-dindin') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+body{
+    background-color:#fbfbfb;
+    font-family: "dauphine";
+    letter-spacing: 1px;
+    font-size:18pt;
+    padding-bottom: 50px;
+
+}
+
+h1 {
+    font-family: "osp-dindin";
+    font-size: 200pt;
+    color:#5EDBFC;
+}
+
+h2{
+    font-family: "osp-dindin";
+    font-size:36pt;
+    margin-bottom:30px;
+    margin-top: 12px;
+    color:#5EDBFC;
+}
+
+h3 {
+    font-family: "osp-dindin";
+    font-size: 14pt;
+    margin: 20px 10px 10px 0px;
+    color: #5EDBFC
+}
+
+a,
+a:link,
+a:visited,
+a:hover {
+    color: #000;
+    display: inline-block;
+    border-bottom: 1px solid #5EDBFC;
+    text-decoration: none;
+    padding-bottom: 2px;
+}
+
+a:hover {
+    border-bottom: 3px solid #5EDBFC;
+    padding-bottom: 0px;
+
+}
+
+.header,
+.footer{
+    min-width: 400px;
+    /*padding:24px;*/
+    text-align:center;
+    width: 80%;
+    margin: auto;
+}
+
+
+.text{
+    padding:24px;
+}
+
+
+.pitch{
+    font-family: "osp-dindin";
+    font-size:36pt;
+    padding-bottom: 36px;
+    display: block;
+    color:#5EDBFC;
+}
+
+
+
+.what span {
+    display: block;
+    margin-bottom: -7px
+}
+
+.projects {
+    padding:24px;
+    margin-top: 24px;
+    float: none;
+    clear: both;
+}
+
+
+.projects .digiprint {
+    width: 80%;
+    min-width: 400px;
+    margin: auto;
+    display: block;
+    overflow: hidden;
+    padding-bottom: 20px
+    }
+
+.projects .digital,
+.projects .print{
+    display: block;
+    width: 45%;
+    float: left;
+    margin: 0px 2.5%;
+}
+
+.team {
+    float: none;
+    clear: both;
+    margin-bottom: 30px
+}
+
+
+.contact{
+    width:60%;
+    min-width: 400px;
+    margin: auto;
+    padding-bottom:24px;
+    /*border:1px solid rgb(224, 224, 224);*/
+    /*background-color:white;*/
+    text-align:center;
+}
+
+.email{
+    color:#5EDBFC;
+}
+
+
+
+
+
