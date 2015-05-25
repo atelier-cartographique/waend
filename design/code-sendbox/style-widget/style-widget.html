@@ -1,0 +1,148 @@
+
+
+<html class="no-js" lang="en">
+
+<head>
+
+
+	<meta charset="utf-8" />
+	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+	<meta name="viewport" content="width=device-width">
+
+	<title>style widget</title>
+
+	<script src="scripts/picker.js"></script>
+
+
+
+	<style>	    
+	    #pick-color {
+	        padding: 10px 0px;
+	        width: 200px;
+	        height: 35px;
+	        text-align: center;
+	        border: 1px solid #ccc;
+	        cursor: pointer;
+	        margin: -67px 0 10px 204px;
+	        background: #FFF;
+	    }
+
+	    #pick-color-background {
+	    	padding: 10px 0px;
+	    	width: 200px;
+	    	height: 35px;
+	    	text-align: center;
+	    	border: 1px solid #ccc;
+	    	cursor: pointer;
+	    	margin: 0 0 10px 204px;
+	    	background: url(pictos/damier.jpg);
+	    }
+
+	    form {
+	    	width: 410px;
+	    	/*margin: auto;*/
+	    }
+
+	    label,
+	    input {
+	    	width: 200px;
+	    	display: inline-block;
+	    	margin-bottom: 10px;
+	    }
+
+	    label {
+	    	text-align: right;
+	    }
+
+	    textarea {
+	    	width: 400px;
+	    	float: none;
+	    	clear: both;
+	    	display: block;
+	    }
+
+	    #rot-output {
+	    	display: block;
+	    	width: 200px;
+	    	font-size: 30pt;
+	    	text-align: center;
+	    	margin-left: 200px;
+	    }
+
+	   input[type=submit]{
+	   	margin-left: 100px;
+	   	margin-top: 30px;
+	   	font-size: 36pt;
+	   }
+
+	</style>
+
+</head>
+
+<body>
+
+
+
+	<div class="style-widget">
+		<form>
+
+			<label for="strokeStyle">Line color</label>
+			<input type="text" id="strokeStyle"/>
+			<div id="pick-color-background"></div>
+			<div id="pick-color">click to pick a color</div>
+
+
+			<label for="lineWidth">Line width</label>
+			<input id="lineWidth" type="number" step="any" min="0"/><br>
+
+			<label for="hn">Haches number</label>
+			<input id="hn" type="number" step="any" min="0"/><br>
+
+			<label for="step">Haches gap</label>
+			<input id="step" type="number" step="any" min="0"/><br>
+
+			<label for="lineDash_value1">Line dash - Dash width </label>
+			<input id="lineDash_value1" type="number" step="any" min="0"/><br>
+
+			<label for="lineDash_value2">Line dash - Dash gap</label>
+			<input id="lineDash_value2" type="number" step="any" min="0"/><br>
+
+			<label for="rotator">Haches rotation </label>
+				<input type=range min=0 max=360 value=0 id="rotator" step=1 oninput="outputUpdate(value)">
+				<output for="rotator" id="rot-output">0°</output><br>
+			  <script>
+			  function outputUpdate(rot) {
+			  document.querySelector('#rot-output').value = rot + '°';
+			  }
+			  </script>
+			
+			<label for="text">Text</label>
+			<textarea id="text"></textarea><br>
+
+			<label for="fontsize">Fontsize (in meter)</label>
+			<input type="number" step="any" min="0"/><br>
+
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+	
+	<script type="text/javascript">
+	var parent = document.getElementById('pick-color');
+	var picker = new Picker(parent);
+	picker.on_done = function(colour) {
+
+	  parent.style.background = colour.rgba().toString();
+	  parent.innerHTML = colour.hex().toString();
+	  var rgba = colour.rgba();
+	  document.getElementById('strokeStyle').value = rgba; 
+
+	}
+
+	document.getElementById('pick-color').onclick = function(e) {
+
+	  picker.show();
+	  e.preventDefault()
+	};
+	</script>
+</body>
+</html>
