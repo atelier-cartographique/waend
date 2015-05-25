@@ -22,6 +22,13 @@
 			width: 410px;
 		}
 
+		#hexa-value {
+			width: 200px;
+			height: 35px;
+			float: left;
+			text-align: right;
+		}
+
 	    #pick-color {
 	        padding: 10px 0px;
 	        width: 200px;
@@ -92,7 +99,9 @@
 
 			<label for="strokeStyle">Line color</label>
 			<input type="text" id="strokeStyle"/>
+			<div id="hexa-value"></div>
  			<div id="pick-color">click to pick a color</div>
+ 			
 
  				<script type="text/javascript">
  				var parent = document.getElementById('pick-color');
@@ -101,9 +110,11 @@
 
  				  parent.style.backgroundColor = colour.rgba().toString();
  				  parent.style.backgroundImage = 'url(pictos/damier.jpg)';
- 				  parent.innerHTML = colour.hex().toString();
+ 				  // parent.innerHTML = colour.hex().toString();
+ 				  parent.innerHTML = '';
  				  var rgba = colour.rgba();
  				  document.getElementById('strokeStyle').value = rgba; 
+ 				  document.getElementById('hexa-value').innerHTML = colour.hex().toString();
 
  				}
 
