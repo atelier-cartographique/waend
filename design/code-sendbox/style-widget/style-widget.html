@@ -23,20 +23,11 @@
 	        text-align: center;
 	        border: 1px solid #ccc;
 	        cursor: pointer;
-	        margin: -67px 0 10px 204px;
-	        background: #FFF;
+	        margin: 0px 0 10px 204px;
+	        background-color: #FFF;
+	        background-blend-mode: multiply;
 	    }
 
-	    #pick-color-background {
-	    	padding: 10px 0px;
-	    	width: 200px;
-	    	height: 35px;
-	    	text-align: center;
-	    	border: 1px solid #ccc;
-	    	cursor: pointer;
-	    	margin: 0 0 10px 204px;
-	    	background: url(pictos/damier.jpg);
-	    }
 
 	    form {
 	    	width: 410px;
@@ -88,8 +79,8 @@
 
 			<label for="strokeStyle">Line color</label>
 			<input type="text" id="strokeStyle"/>
-			<div id="pick-color-background"></div>
-			<div id="pick-color">click to pick a color</div>
+<!-- 			<div id="pick-color-background"></div>
+ -->			<div id="pick-color">click to pick a color</div>
 
 
 			<label for="lineWidth">Line width</label>
@@ -131,7 +122,8 @@
 	var picker = new Picker(parent);
 	picker.on_done = function(colour) {
 
-	  parent.style.background = colour.rgba().toString();
+	  parent.style.backgroundColor = colour.rgba().toString();
+	  parent.style.backgroundImage = 'url(pictos/damier.jpg)';
 	  parent.innerHTML = colour.hex().toString();
 	  var rgba = colour.rgba();
 	  document.getElementById('strokeStyle').value = rgba; 

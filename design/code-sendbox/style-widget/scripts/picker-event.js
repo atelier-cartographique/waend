@@ -1,12 +1,12 @@
-
   var parent = document.getElementById('pick-color');
   var picker = new Picker(parent);
   picker.on_done = function(colour) {
 
-    parent.style.background = colour.rgba().toString();
+    parent.style.backgroundColor = colour.rgba().toString();
+    parent.style.backgroundImage = 'url(pictos/damier.jpg)';
     parent.innerHTML = colour.hex().toString();
     var rgba = colour.rgba();
-    document.getElementById('rgba').value = rgba; 
+    document.getElementById('strokeStyle').value = rgba; 
 
   }
 
