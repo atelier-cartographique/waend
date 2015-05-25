@@ -16,6 +16,12 @@
 
 
 	<style>	    
+
+		.style-widget {
+			float: left;
+			width: 410px;
+		}
+
 	    #pick-color {
 	        padding: 10px 0px;
 	        width: 200px;
@@ -30,7 +36,7 @@
 
 
 	    form {
-	    	width: 410px;
+	    	
 	    	/*margin: auto;*/
 	    }
 
@@ -66,6 +72,13 @@
 	   	font-size: 36pt;
 	   }
 
+	   .preview-feature {
+	   	width: 400px;
+	   	height: 400px;
+	   	border: 1px solid #CCC;
+	   	float: left;
+	   }
+
 	</style>
 
 </head>
@@ -79,8 +92,27 @@
 
 			<label for="strokeStyle">Line color</label>
 			<input type="text" id="strokeStyle"/>
-<!-- 			<div id="pick-color-background"></div>
- -->			<div id="pick-color">click to pick a color</div>
+ 			<div id="pick-color">click to pick a color</div>
+
+ 				<script type="text/javascript">
+ 				var parent = document.getElementById('pick-color');
+ 				var picker = new Picker(parent);
+ 				picker.on_done = function(colour) {
+
+ 				  parent.style.backgroundColor = colour.rgba().toString();
+ 				  parent.style.backgroundImage = 'url(pictos/damier.jpg)';
+ 				  parent.innerHTML = colour.hex().toString();
+ 				  var rgba = colour.rgba();
+ 				  document.getElementById('strokeStyle').value = rgba; 
+
+ 				}
+
+ 				document.getElementById('pick-color').onclick = function(e) {
+
+ 				  picker.show();
+ 				  e.preventDefault()
+ 				};
+ 				</script>
 
 
 			<label for="lineWidth">Line width</label>
@@ -101,11 +133,12 @@
 			<label for="rotator">Haches rotation </label>
 				<input type=range min=0 max=360 value=0 id="rotator" step=1 oninput="outputUpdate(value)">
 				<output for="rotator" id="rot-output">0°</output><br>
-			  <script>
-			  function outputUpdate(rot) {
-			  document.querySelector('#rot-output').value = rot + '°';
-			  }
-			  </script>
+					  
+					  <script>
+					  function outputUpdate(rot) {
+					  document.querySelector('#rot-output').value = rot + '°';
+					  }
+					  </script>
 			
 			<label for="text">Text</label>
 			<textarea id="text"></textarea><br>
@@ -116,25 +149,13 @@
 			<input type="submit" value="Submit">
 		</form>
 	</div>
+
+	<div class="preview-feature">
+
+		<span>here could be a preview of the feature</span>
+
+	</div>
 	
-	<script type="text/javascript">
-	var parent = document.getElementById('pick-color');
-	var picker = new Picker(parent);
-	picker.on_done = function(colour) {
 
-	  parent.style.backgroundColor = colour.rgba().toString();
-	  parent.style.backgroundImage = 'url(pictos/damier.jpg)';
-	  parent.innerHTML = colour.hex().toString();
-	  var rgba = colour.rgba();
-	  document.getElementById('strokeStyle').value = rgba; 
-
-	}
-
-	document.getElementById('pick-color').onclick = function(e) {
-
-	  picker.show();
-	  e.preventDefault()
-	};
-	</script>
 </body>
 </html>
