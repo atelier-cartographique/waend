@@ -154,7 +154,7 @@ var Picker = function (options) {
 
             rgb.toString = function () {
 
-                return 'rgba(' + this.r + ', ' + this.g + ', ' + this.b + ', ' + this.a + ')';
+                return 'rgba(' + this.r + ', ' + this.g + ', ' + this.b + ', ' + Math.round(this.a * 100) / 100 + ')';
             };
 
             return rgb;
