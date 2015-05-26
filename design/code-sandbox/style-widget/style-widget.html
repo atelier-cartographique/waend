@@ -12,6 +12,7 @@
 	<title>style widget</title>
 
 	<script src="scripts/picker.js"></script>
+	<script src="scripts/picker-event.js"></script>
 
 
 
@@ -100,32 +101,8 @@
 			<label for="strokeStyle">Line color</label>
 			<input type="text" id="strokeStyle"/>
 			<div id="hexa-value"></div>
- 			<div id="pick-color">click to pick a color</div>
+ 			<div id="pick-color" onclick="chooseColor()">click to pick a color</div>
  			
-
- 				<script type="text/javascript">
- 				var parent = document.getElementById('pick-color');
- 				var picker = new Picker(parent);
- 				picker.on_done = function(colour) {
-
- 				  parent.style.backgroundColor = colour.rgba().toString();
- 				  parent.style.backgroundImage = 'url(pictos/damier.jpg)';
- 				  // parent.innerHTML = colour.hex().toString();
- 				  parent.innerHTML = '';
- 				  var rgba = colour.rgba();
- 				  document.getElementById('strokeStyle').value = rgba; 
- 				  document.getElementById('hexa-value').innerHTML = colour.hex().toString();
-
- 				}
-
- 				document.getElementById('pick-color').onclick = function(e) {
-
- 				  picker.show();
- 				  e.preventDefault()
- 				};
- 				</script>
-
-
 			<label for="lineWidth">Line width</label>
 			<input id="lineWidth" type="number" step="any" min="0"/><br>
 
@@ -148,7 +125,11 @@
 					  <script>
 					  function outputUpdate(rot) {
 					  document.querySelector('#rot-output').value = rot + '°';
+					  document.getElementById('rot-output').style.transform = 'rotate(' + rot + 'deg)';
 					  }
+
+					  // var rotate = document.getElementById('pick-color');
+
 					  </script>
 			
 			<label for="text">Text</label>
