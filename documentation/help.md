@@ -109,12 +109,12 @@ The *name* key is often used across the platform to textualize items, if not fou
 The style dictionary is expected to hold feature's style informations. Keys here are [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) properties.
 
 color example:
-```
-set style.strokeStyle orange
-set style.strokeStyle #FF7F00
-set style.strokeStyle "rgb(255, 127, 0)"
-set style.strokeStyle "rgba(255, 127, 0, 0.8)"
-```
+
+	set style.strokeStyle orange  
+	set style.strokeStyle #FF7F00  
+	set style.strokeStyle "rgb(255, 127, 0)"  
+	set style.strokeStyle "rgba(255, 127, 0, 0.8)"  
+
 line width example:
 ```
 set style.lineWidth 5
