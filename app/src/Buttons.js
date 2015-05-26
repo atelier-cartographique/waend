@@ -12,8 +12,8 @@
  var featureButtons = {
      'set name': ['get name | edit | set name'],
      'set image': ['media pick | set image'],
-     'set color': ['get color | edit | set color'],
-     'set text': ['get text | edit | set text'],
+     'set color': ['get color | edit | set style.strokeStyle'],
+     'set text': ['get text | edit | set params.text'],
      'go to feature' : ['gg | region set']
  };
 

@@ -466,15 +466,7 @@ size of the font (number)</p>
 set description &quot;here is my description&quot;
 set &quot;city population&quot; 1000000</code></pre>
 
-<h3 id="toc_15">del</h3>
-
-<p>Delete an attribute</p>
-
-<p>Example:</p>
-
-<pre><code>del text</code></pre>
-
-<h3 id="toc_16">get</h3>
+<h3 id="toc_15">get</h3>
 
 <p>get all attributes from current element
 get attributeName : get value for attributeName</p>
@@ -484,18 +476,49 @@ get attributeName : get value for attributeName</p>
 <pre><code>get
 get name</code></pre>
 
-<h3 id="toc_17">navigate</h3>
+<h3 id="toc_16">edit</h3>
+
+<p>There is no <em>edit</em> button yet, but the functionnality is here.
+To edit a key, type : </p>
+
+<pre><code>get your_key | edit | set your_key</code></pre>
+
+<p>It will get the <em>your_key</em> value, open the editor with this value, and set the edited value to <em>your_key</em></p>
+
+<p>To edit <em>style</em> or <em>params</em> dictionnary, do the same with : </p>
+
+<pre><code>get style | edit | set style
+or
+get params | edit | set params</code></pre>
+
+<h3 id="toc_17">del</h3>
+
+<p>Delete an attribute</p>
+
+<p>Example:</p>
+
+<pre><code>del text</code></pre>
+
+<p>Delete an attribute in <em>style</em> or <em>params</em>  </p>
+
+<p>For now you need to delete the entire <em>style</em> or <em>params</em> with :</p>
+
+<pre><code>del params
+or
+del style</code></pre>
+
+<h3 id="toc_18">navigate</h3>
 
 <p>navigate in the map viewport<br>
 use keyboard arrows to navigate<br>
 use [i] to zoom in<br>
 use [o] to zoom out</p>
 
-<h3 id="toc_18">select</h3>
+<h3 id="toc_19">select</h3>
 
 <p>select a feature in the viewport</p>
 
-<h3 id="toc_19">draw</h3>
+<h3 id="toc_20">draw</h3>
 
 <p>draw with on map, usualy pipped with another command  </p>
 
@@ -505,18 +528,18 @@ use [o] to zoom out</p>
 
 <p>will set the region viewport to the drawing extend</p>
 
-<h2 id="toc_20">Style tips &amp; tricks</h2>
+<h2 id="toc_21">Style tips &amp; tricks</h2>
 
-<h3 id="toc_21">polygon fill color</h3>
+<h3 id="toc_22">polygon fill color</h3>
 
 <p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
 Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
 
 <p>You are done with a filled polygon !</p>
 
-<h2 id="toc_22">Import data</h2>
+<h2 id="toc_23">Import data</h2>
 
-<h3 id="toc_23">Working with GeoJSON</h3>
+<h3 id="toc_24">Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 

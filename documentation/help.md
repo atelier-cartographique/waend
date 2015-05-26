@@ -160,13 +160,6 @@ Example :
 	set description "here is my description"
 	set "city population" 1000000
 
-### del
-Delete an attribute
-
-Example:
-
-	del text
-
 ### get
 get all attributes from current element
 get attributeName : get value for attributeName
@@ -175,6 +168,37 @@ Example :
 
 	get
 	get name
+
+###edit
+There is no *edit* button yet, but the functionnality is here.
+To edit a key, type : 
+
+	get your_key | edit | set your_key
+	
+It will get the *your_key* value, open the editor with this value, and set the edited value to *your_key*
+
+To edit *style* or *params* dictionnary, do the same with : 
+
+	get style | edit | set style
+	or
+	get params | edit | set params
+
+
+### del
+Delete an attribute
+
+Example:
+
+	del text
+	
+Delete an attribute in *style* or *params*  
+
+For now you need to delete the entire *style* or *params* with :
+
+	del params
+	or
+	del style
+
 
 
 ### navigate
