@@ -80,7 +80,8 @@ set style.strokeStyle "rgba(255, 127, 0, 0.8)"
 line width example:
 ```
 set style.lineWidth 5
-```
+```  
+
 **exception**
 
 If you want to play with dashed lines,

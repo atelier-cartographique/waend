@@ -307,7 +307,7 @@ sup {
 <h1 id="toc_0">HELP WÆND</h1>
 
 <p>This is a quite rought help for now, it will be improved from time to time.
-Fell free to help ! </p>
+Fell free to help !</p>
 
 <h2 id="toc_1">Common commands</h2>
 
@@ -334,173 +334,194 @@ like :</p>
 <pre><code>draw | close | create</code></pre>
 
 <p>to draw a line, close it to make a polygon, and save it.
-That&#39;s what the &quot;draw zone&quot; button does ! </p>
+That&#39;s what the &quot;draw zone&quot; button does !</p>
 
-<h2 id="toc_2">Common keys</h2>
+<h2 id="toc_2">Keys</h2>
 
-<ul>
-<li>name</li>
-<li>text</li>
-<li>fontsize</li>
-<li>color</li>
-<li>step</li>
-<li>hn</li>
-<li>rotation</li>
-</ul>
+<p>Every entities are attached a dictionary.
+One manipulates dictionary&#39;s values with the <code>get</code>, <code>set</code> and <code>del</code> commands.</p>
 
-<h2 id="toc_3">Commands details</h2>
+<p>Something to note here, from a key you can reference another key in the same dictionary by prefixing its path with the <em>@</em> character, e.g:</p>
 
-<h3 id="toc_4">help</h3>
+<pre><code class="language-javascript">{
+    &quot;params&quot; : {
+        &quot;text&quot; : &quot;@name&quot;
+    },
+    &quot;name&quot; : &quot;felicity street&quot;
+}</code></pre>
+
+<p>Something else is that you can address keys which are inside dictionaries with the dot notation, e.g:</p>
+
+<pre><code>set style.strokeStyle blue</code></pre>
+
+<p>will results in</p>
+
+<pre><code class="language-javascript">{
+    &quot;style&quot;: {
+        &quot;strokeStyle&quot; : &quot;blue&quot;
+    }
+}</code></pre>
+
+<p>Note that feature&#39;s <em>style</em> and <em>params</em> dictionaries inherit from their layer&#39;s values.</p>
+
+<h3 id="toc_3">name</h3>
+
+<p>The <em>name</em> key is often used across the platform to textualize items, if not found, the system will usually use item&#39;s identifier.</p>
+
+<h3 id="toc_4">style</h3>
+
+<p>The style dictionary is expected to hold feature&#39;s style informations. Keys here are <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">CanvasRenderingContext2D</a> properties.</p>
+
+<p>color example:
+<code>
+set style.strokeStyle orange
+set style.strokeStyle #FF7F00
+set style.strokeStyle &quot;rgb(255, 127, 0)&quot;
+set style.strokeStyle &quot;rgba(255, 127, 0, 0.8)&quot;
+</code>
+line width example:
+<code>
+set style.lineWidth 5
+</code>  </p>
+
+<p><strong>exception</strong></p>
+
+<p>If you want to play with dashed lines,
+setLineDash has to be written our way :
+<code>
+set style.lineDash 2 10
+</code>
+where 2 is the dash length, and 10 the gap.</p>
+
+<h3 id="toc_5">params</h3>
+
+<p>Holds parameters to feed the <em>rendering program</em>. The default renderer processes the following keys in the <em>params</em> dictionary.</p>
+
+<h4 id="toc_6">hn</h4>
+
+<p>application: polygon<br>
+number of hatches per polygon (number)</p>
+
+<p>Example:</p>
+
+<pre><code>set params.hn 150</code></pre>
+
+<h4 id="toc_7">step</h4>
+
+<p><em>application: polygon</em><br>
+steps value between hatches (number)</p>
+
+<p>Example:</p>
+
+<pre><code>set params.step 10</code></pre>
+
+<h4 id="toc_8">rotation</h4>
+
+<p><em>application: polygon</em><br>
+hatches angle (number)</p>
+
+<p>Example:</p>
+
+<pre><code>set params.rotation 45</code></pre>
+
+<h4 id="toc_9">text</h4>
+
+<p><em>application: line / polygon</em><br>
+the text you want to display in a polygon  </p>
+
+<p>Example:</p>
+
+<pre><code>set params.text &quot;enter your text here&quot;</code></pre>
+
+<h4 id="toc_10">fontsize</h4>
+
+<p><em>application: line / polygon</em><br>
+size of the font (number)</p>
+
+<p>Example:</p>
+
+<pre><code>set params.fontsize 12</code></pre>
+
+<h2 id="toc_11">Commands details</h2>
+
+<h3 id="toc_12">help</h3>
 
 <p>get help</p>
 
-<h3 id="toc_5">lc</h3>
+<h3 id="toc_13">lc</h3>
 
 <p>list commands  </p>
 
-<h3 id="toc_6">set</h3>
+<h3 id="toc_14">set</h3>
 
-<p>set attribute to current element (user, group, layer or feature). </p>
+<p>set attribute to current element (user, group, layer or feature).</p>
 
 <p>[set] is very usefull to qualify your datas, to give informations about your maps, etc.</p>
 
 <p>Multiple words must be surronded by &quot;quotes&quot;.</p>
 
-<p>Exemple : </p>
+<p>Example :</p>
 
 <pre><code>set name my-element-name
 set description &quot;here is my description&quot;
 set &quot;city population&quot; 1000000</code></pre>
 
-<h3 id="toc_7">del</h3>
+<h3 id="toc_15">del</h3>
 
 <p>Delete an attribute</p>
 
-<p>Exemple:</p>
+<p>Example:</p>
 
 <pre><code>del text</code></pre>
 
-<h3 id="toc_8">get</h3>
+<h3 id="toc_16">get</h3>
 
-<p>get all attributes from current element 
+<p>get all attributes from current element
 get attributeName : get value for attributeName</p>
 
-<p>Exemple : </p>
+<p>Example :</p>
 
-<pre><code>get 
+<pre><code>get
 get name</code></pre>
 
-<h3 id="toc_9">navigate</h3>
+<h3 id="toc_17">navigate</h3>
 
 <p>navigate in the map viewport<br>
 use keyboard arrows to navigate<br>
 use [i] to zoom in<br>
 use [o] to zoom out</p>
 
-<h3 id="toc_10">select</h3>
+<h3 id="toc_18">select</h3>
 
 <p>select a feature in the viewport</p>
 
-<h3 id="toc_11">draw</h3>
+<h3 id="toc_19">draw</h3>
 
 <p>draw with on map, usualy pipped with another command  </p>
 
-<p>Exemple:</p>
+<p>Example:</p>
 
 <pre><code>draw | region set</code></pre>
 
 <p>will set the region viewport to the drawing extend</p>
 
-<h2 id="toc_12">Style keys</h2>
+<h2 id="toc_20">Style tips &amp; tricks</h2>
 
-<p>The Style key is a dictionary of keys, using CanvasRenderingContext2D properties. It means that you have to define your style this way : </p>
+<h3 id="toc_21">polygon fill color</h3>
 
-<pre><code>exemples for orange color :
-set style.strokeStyle orange
-set style.strokeStyle #FF7F00
-set style.strokeStyle &quot;rgb(255, 127, 0)&quot;
-set style.strokeStyle &quot;rgba(255, 127, 0, 0.8)&quot;
+<p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
+Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
 
-exemples for line width :
-set style.lineWidth 5</code></pre>
+<p>You are done with a filled polygon !</p>
 
-<p>You can find all the documentation on thoses properties here : <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D</a></p>
+<h2 id="toc_22">Import data</h2>
 
-<p><em>exception:</em></p>
+<h3 id="toc_23">Working with GeoJSON</h3>
 
-<pre><code>If you want to play with dashed lines, 
-SetLineDash has to be writen our way : 
+<p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 
-set style.lineDash 2 10
-
-where 2 is the dash lenght, and 10 the gap.</code></pre>
-
-<h2 id="toc_13">Parameters</h2>
-
-<p>The following keys has to be set autonomously.</p>
-
-<h3 id="toc_14">hn</h3>
-
-<p>application: polygon<br>
-number of hatches per polygon (number)</p>
-
-<p>Exemple:</p>
-
-<pre><code>set hn 150</code></pre>
-
-<h3 id="toc_15">step</h3>
-
-<p><em>application: polygon</em><br>
-steps value between hatches (number)</p>
-
-<p>Exemple:</p>
-
-<pre><code>set step 10</code></pre>
-
-<h3 id="toc_16">rotation</h3>
-
-<p><em>application: polygon</em><br>
-hatches angle (number)</p>
-
-<p>Exemple:</p>
-
-<pre><code>set rotation 45</code></pre>
-
-<h3 id="toc_17">Text</h3>
-
-<p><em>application: line / polygon</em><br>
-the text you want to display in a polygon  </p>
-
-<p>Exemple:</p>
-
-<pre><code>set text &quot;enter your text here&quot;</code></pre>
-
-<h3 id="toc_18">fontsize</h3>
-
-<p><em>application: line / polygon</em><br>
-size of the font (number)</p>
-
-<p>Exemple:</p>
-
-<pre><code>set linewidth 12</code></pre>
-
-<h2 id="toc_19">Style tips &amp; tricks</h2>
-
-<h3 id="toc_20">polygon fill color</h3>
-
-<p>set hn key to 1 (One line to this polygon).<br>
-set style.lineWidth to 3000 (the line will be 2000px wide)</p>
-
-<p>You are done with a filled polygon ! </p>
-
-<h2 id="toc_21">Importing datas</h2>
-
-<h3 id="toc_22">Working with GeoJSON</h3>
-
-<p>While Wænd is not meant to be an online Geographic Information System, you can import datas in it and work with them: </p>
-
-<p>We currently support GeoJSON format. 
-The restrictions so far are : </p>
+<p>We currently only support GeoJSON format.
+The restrictions so far are :</p>
 
 <ul>
 <li>no multipolygons</li>
@@ -508,7 +529,7 @@ The restrictions so far are : </p>
 <li>no points</li>
 </ul>
 
-<p>An easy way to create a GeoJSON file from your zone of interest is to use <a href="http://overpass-turbo.eu/">http://overpass-turbo.eu/</a>, it is a powerfull online tool quickly export datas from OpenStreetMap.</p>
+<p>An easy way to create a GeoJSON file from your zone of interest is to use <a href="http://overpass-turbo.eu/">http://overpass-turbo.eu/</a>, it is a powerfull online tool quickly export data from OpenStreetMap.</p>
 
 <p>Another option is to use <a href="http://www.qgis.org/en/site/">QGis</a>, a free and opensource GIS, that you can use for manipulating any kind of geo-datas.</p>
 
