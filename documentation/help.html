@@ -309,7 +309,34 @@ sup {
 <p>This is a quite rought help for now, it will be improved from time to time.<br>
 Feel free to give a hand !</p>
 
-<h2 id="toc_1">Common commands</h2>
+<ol>
+<li><p><a href="#commands">Common commands</a></p></li>
+<li><p><a href="#keys">Style attributes and parameters</a><br>
+2.1  <a href="#name">name</a><br>
+2.3  <a href="#style">styles (style.)</a><br>
+2.4  <a href="#params">parameters (params.)</a><br>
+2.5  <a href="#hn">hatches number (hn)</a><br>
+2.6  <a href="#step">hatches step (step)</a><br>
+2.7  <a href="#rotation">hatches rotation (rotation)</a><br>
+2.4  <a href="#text">text</a><br>
+2.4  <a href="#fontsize">fontsize</a>   </p></li>
+<li><p><a href="#commands-details">Commands details</a><br>
+3.1  <a href="#help">help</a><br>
+3.3  <a href="#lc">list commands (lc)</a><br>
+3.4  <a href="#set">set attribute (set)</a><br>
+3.5  <a href="#get">get attributes (get)</a><br>
+3.6  <a href="#edit">edit attributes (edit)</a><br>
+3.7  <a href="#del">delete attributes (del)</a><br>
+3.8  <a href="#navigate">navigate on map (navigate)</a><br>
+3.9  <a href="#select">select feature (select)</a><br>
+3.10 <a href="#draw">draw</a>  </p></li>
+<li><p><a href="#style-tips">Style tips &amp; tricks</a><br>
+4.1  <a href="#tip-fill">polygon fill color</a>  </p></li>
+<li><p><a href="#import">Import Datas</a><br>
+5.1  <a href="#GeoJSON">Working with GeoJSON</a></p></li>
+</ol>
+
+<h2 id="toc_1"><a name="commands"></a>Common commands</h2>
 
 <ul>
 <li>help : <em>help</em></li>
@@ -336,10 +363,19 @@ like :</p>
 <p>to draw a line, close it to make a polygon, and save it.
 That&#39;s what the &quot;draw zone&quot; button does !</p>
 
-<h2 id="toc_2">Keys</h2>
+<h2 id="toc_2"><a name="keys"></a> Style attributes and parameters</h2>
 
 <p>Every entities are attached a dictionary.
-One manipulates dictionary&#39;s values with the <code>get</code>, <code>set</code> and <code>del</code> commands.</p>
+One manipulates dictionary&#39;s values with the <code>get</code>, <code>set</code>,  <code>del</code> and <code>edit</code> commands.</p>
+
+<p>For more infos with those commands, see :  </p>
+
+<ul>
+<li><a href="#set">set attribute (set)</a><br></li>
+<li><a href="#get">get attributes (get)</a><br></li>
+<li><a href="#del">del attributes (del)</a><br></li>
+<li><a href="#edit">edit attributes (edit)</a><br></li>
+</ul>
 
 <p>Something to note here, from a key you can reference another key in the same dictionary by prefixing its path with the <em>@</em> character, e.g:</p>
 
@@ -364,11 +400,11 @@ One manipulates dictionary&#39;s values with the <code>get</code>, <code>set</co
 
 <p>Note that feature&#39;s <em>style</em> and <em>params</em> dictionaries inherit from their layer&#39;s values.</p>
 
-<h3 id="toc_3">name</h3>
+<h3 id="toc_3"><a name="name"></a> name</h3>
 
 <p>The <em>name</em> key is often used across the platform to textualize items, if not found, the system will usually use item&#39;s identifier.</p>
 
-<h3 id="toc_4">style</h3>
+<h3 id="toc_4"><a name="style"></a> styles (style.)</h3>
 
 <p>The style dictionary is expected to hold feature&#39;s style informations. Keys here are <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">CanvasRenderingContext2D</a> properties.</p>
 
@@ -393,11 +429,11 @@ set style.lineDash 2 10
 </code>
 where 2 is the dash length, and 10 the gap.</p>
 
-<h3 id="toc_5">params</h3>
+<h3 id="toc_5"><a name="params"></a> parameters (params.)</h3>
 
 <p>Holds parameters to feed the <em>rendering program</em>. The default renderer processes the following keys in the <em>params</em> dictionary.</p>
 
-<h4 id="toc_6">hn</h4>
+<h4 id="toc_6"><a name="hn"></a> hatches number (hn)</h4>
 
 <p>application: polygon<br>
 number of hatches per polygon (number)</p>
@@ -406,7 +442,7 @@ number of hatches per polygon (number)</p>
 
 <pre><code>set params.hn 150</code></pre>
 
-<h4 id="toc_7">step</h4>
+<h4 id="toc_7"><a name="step"></a> hatches step (step)</h4>
 
 <p><em>application: polygon</em><br>
 steps value between hatches (number)</p>
@@ -415,7 +451,7 @@ steps value between hatches (number)</p>
 
 <pre><code>set params.step 10</code></pre>
 
-<h4 id="toc_8">rotation</h4>
+<h4 id="toc_8"><a name="rotation"></a> hatches rotation (rotation)</h4>
 
 <p><em>application: polygon</em><br>
 hatches angle (number)</p>
@@ -424,7 +460,7 @@ hatches angle (number)</p>
 
 <pre><code>set params.rotation 45</code></pre>
 
-<h4 id="toc_9">text</h4>
+<h4 id="toc_9"><a name="text"></a> text</h4>
 
 <p><em>application: line / polygon</em><br>
 the text you want to display in a polygon  </p>
@@ -433,7 +469,7 @@ the text you want to display in a polygon  </p>
 
 <pre><code>set params.text &quot;enter your text here&quot;</code></pre>
 
-<h4 id="toc_10">fontsize</h4>
+<h4 id="toc_10"><a name="fontsize"></a> fontsize</h4>
 
 <p><em>application: line / polygon</em><br>
 size of the font (number)</p>
@@ -442,17 +478,17 @@ size of the font (number)</p>
 
 <pre><code>set params.fontsize 12</code></pre>
 
-<h2 id="toc_11">Commands details</h2>
+<h2 id="toc_11"><a name="commands-details"></a> Commands details</h2>
 
-<h3 id="toc_12">help</h3>
+<h3 id="toc_12"><a name="help"></a> help</h3>
 
 <p>get help</p>
 
-<h3 id="toc_13">lc</h3>
+<h3 id="toc_13"><a name="lc"></a> list comands (lc)</h3>
 
 <p>list commands  </p>
 
-<h3 id="toc_14">set</h3>
+<h3 id="toc_14"><a name="set"></a> set attribute (set)</h3>
 
 <p>set attribute to current element (user, group, layer or feature).</p>
 
@@ -466,7 +502,7 @@ size of the font (number)</p>
 set description &quot;here is my description&quot;
 set &quot;city population&quot; 1000000</code></pre>
 
-<h3 id="toc_15">get</h3>
+<h3 id="toc_15"><a name="get"></a> get attributes (get)</h3>
 
 <p>get all attributes from current element
 get attributeName : get value for attributeName</p>
@@ -476,7 +512,7 @@ get attributeName : get value for attributeName</p>
 <pre><code>get
 get name</code></pre>
 
-<h3 id="toc_16">edit</h3>
+<h3 id="toc_16"><a name="edit"></a> edit</h3>
 
 <p>There is no <em>edit</em> button yet, but the functionnality is here.
 To edit a key, type : </p>
@@ -491,7 +527,7 @@ To edit a key, type : </p>
 or
 get params | edit | set params</code></pre>
 
-<h3 id="toc_17">del</h3>
+<h3 id="toc_17"><a name="del"></a> delete (del)</h3>
 
 <p>Delete an attribute</p>
 
@@ -507,18 +543,18 @@ get params | edit | set params</code></pre>
 or
 del style</code></pre>
 
-<h3 id="toc_18">navigate</h3>
+<h3 id="toc_18"><a name="navigate"></a> navigate in map (navigate)</h3>
 
 <p>navigate in the map viewport<br>
 use keyboard arrows to navigate<br>
 use [i] to zoom in<br>
 use [o] to zoom out</p>
 
-<h3 id="toc_19">select</h3>
+<h3 id="toc_19"><a name="select"></a> select features (select)</h3>
 
 <p>select a feature in the viewport</p>
 
-<h3 id="toc_20">draw</h3>
+<h3 id="toc_20"><a name="draw"></a> draw</h3>
 
 <p>draw with on map, usualy pipped with another command  </p>
 
@@ -528,18 +564,18 @@ use [o] to zoom out</p>
 
 <p>will set the region viewport to the drawing extend</p>
 
-<h2 id="toc_21">Style tips &amp; tricks</h2>
+<h2 id="toc_21"><a name="style-tips"></a> Style tips &amp; tricks</h2>
 
-<h3 id="toc_22">polygon fill color</h3>
+<h3 id="toc_22"><a name="tip-fill"></a> polygon fill color</h3>
 
 <p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
 Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
 
 <p>You are done with a filled polygon !</p>
 
-<h2 id="toc_23">Import data</h2>
+<h2 id="toc_23"><a name="import"></a> Import data (import)</h2>
 
-<h3 id="toc_24">Working with GeoJSON</h3>
+<h3 id="toc_24"><a name="GeoJSON"></a> Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 
