@@ -1,6 +1,6 @@
 #HELP WÆND
-This is a quite rought help for now, it will be improved from time to time.
-Fell free to help !
+This is a quite rought help for now, it will be improved from time to time.  
+Feel free to give a hand !
 
 
 ##Common commands
