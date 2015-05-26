@@ -11,10 +11,8 @@
 
 function Program (ctx) {
 
-    var textedLine = function (coordinates, props, fm) {
-        var T = new ctx.Transform(fm);
-        ctx.lineProject(coordinates);
-        ctx.drawTextOnLine(T, coordinates, props.text, props.fontsize);
+    var getParameter = function (props, k, def) {
+        return ctx.getProperty(props, 'params.'+k, def);
     };
 
     var startFeature = function (props) {
@@ -25,9 +23,19 @@ function Program (ctx) {
         ctx.emit('restore');
     };
 
+    var textedLine = function (coordinates, props, fm) {
+        var T = new ctx.Transform(fm);
+        ctx.lineProject(coordinates);
+        ctx.drawTextOnLine(T, coordinates,
+            getParameter(props, 'text'),
+            getParameter(props, 'fontsize'));
+    };
+
+
     ctx.linestring = function (coordinates, props, fm) {
         startFeature(props);
-        if ('text' in props) {
+        var txt = getParameter(props, 'text');
+        if (txt) {
             textedLine(coordinates, props, fm);
         }
         else {
@@ -50,7 +58,8 @@ function Program (ctx) {
             bufExtent = initialExtent.buffer(Math.max(initialHeight, initialWidth) / 2),
             extent = new ctx.Geometry.Extent(bufExtent),
             height = extent.getHeight(),
-            hatchLen = (height * (('hn' in props) ? props.hn : 24)) / initialHeight,
+            paramHN = getParameter(props, 'hn', 24),
+            hatchLen = (height * paramHN) / initialHeight,
             center = extent.getCenter(),
             bottomLeft = extent.getBottomLeft().getCoordinates(),
             topRight = extent.getTopRight().getCoordinates(),
@@ -58,15 +67,18 @@ function Program (ctx) {
             left = bottomLeft[0],
             right = topRight[0],
             patternCoordinates = [],
-            strokeColor = ('color' in props) ? props.color: '#000',
+            strokeColor = getParameter(props, 'color', '#000'),
             step = height / hatchLen,
-            lineWidth = (('hatchwidth' in props) ? props.linewidth : 1),
-            turnFlag = false;
-
+            lineWidth = getParameter(props, 'hatchwidth',
+                                    getParameter(props, 'linewidth', 1)),
+            turnFlag = false,
+            rotation = getParameter(props, 'rotation'),
+            paramStep = getParameter(props, 'step');
+console.log('paramHN', paramHN);
         patternCoordinates.push([left, bottomLeft[1]]);
 
-        if ('step' in props) {
-            step = props.step;
+        if (paramStep) {
+            step = paramStep;
             hatchLen = height / step;
         }
 
@@ -87,10 +99,10 @@ function Program (ctx) {
           turnFlag = !turnFlag;
         }
 
-        if ('rotation' in props && !!props.rotation) {
+        if (rotation) {
             var rt = new ctx.Transform(),
                 ccoords = center.getCoordinates();
-            rt.rotate(props.rotation, {'x': ccoords[0], 'y': ccoords[1]});
+            rt.rotate(rotation, {'x': ccoords[0], 'y': ccoords[1]});
             // console.log('rotation', props.rotation, ccoords, rt.flatMatrix());
             ctx.lineTransform(rt, patternCoordinates);
         }
@@ -104,11 +116,14 @@ function Program (ctx) {
         var T = new ctx.Transform(fm);
         ctx.polygonProject(coordinates);
         var p = new ctx.Geometry.Polygon(coordinates);
-        if ('fontsize' in props) {
-            ctx.drawTextInPolygon(T, p, props.text, props.fontsize);
+        var fs = getParameter(props, 'fontsize');
+        if (fs) {
+            ctx.drawTextInPolygon(T, p,
+                getParameter(props, 'text'), fs);
         }
         else {
-            ctx.drawTextInPolygonAuto(T, p, props.text);
+            ctx.drawTextInPolygonAuto(T, p,
+                getParameter(props, 'text'));
         }
     };
 
@@ -120,15 +135,17 @@ function Program (ctx) {
         var p = new ctx.Geometry.Polygon(coordinates),
             extent = p.getExtent().getArray();
 
-        ctx.emit('image:clip', coordinates, extent, props.image);
+        ctx.emit('image:clip', coordinates, extent, getParameter(props, 'image'));
     };
 
     ctx.polygon = function (coordinates, props, fm) {
         startFeature(props);
-        if ('image' in props) {
+        var img = getParameter(props, 'image'),
+            txt = getParameter(props, 'text');
+        if (img) {
             imagedPolygon(coordinates, props, fm);
         }
-        else if ('text' in props) {
+        else if (txt) {
             textedPolygon(coordinates, props, fm);
         }
         else {

@@ -455,15 +455,44 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
     t.whenReady(proceed);
 }
 
+function pathKey (obj, path, def) {
+    path = path.split('.');
+    for(var i = 0, len = path.length; i < len; i++){
+        if (!obj || (typeof obj !== 'object')) {
+            return def;
+        }
+        obj = obj[path[i]];
+    }
+    if (obj === undefined) {
+        return def;
+    }
+    return obj;
+}
 
+function getProperty (props, key, def) {
+    var val = pathKey(props, key, def);
+    if (val
+        && underscore.isString(val)
+        && (val.length > 1)
+        && ('@' === val[0])) {
+        return pathKey(props, val.slice(1), val);
+    }
+    return val;
+}
 
 function processStyle (props) {
     emit('save');
     if ('style' in props) {
-        var style = props.style;
-        underscore.each(style, function(value, key){
-            emit('set', key, value);
-        });
+        var style = props.style, val;
+        for (var k in style) {
+            val = getProperty(props, 'style.'+k, null);
+            if (val) {
+                emit('set', k, val);
+            }
+        }
+        // underscore.each(style, function(value, key){
+        //     emit('set', key, value);
+        // });
     }
 }
 
@@ -483,6 +512,7 @@ workerContext.waend = {
     'drawTextInPolygon': drawTextInPolygon,
     'drawTextInPolygonAuto': drawTextInPolygonAuto,
     'emit': emit,
+    'getProperty': getProperty,
     'processStyle': processStyle
 };
 

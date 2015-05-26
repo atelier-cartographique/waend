@@ -61,7 +61,8 @@ var Source = BaseSource.extend({
             var features = this.getFeatures(),
                 a = new Array(features.length),
                 layerData = this.layer.getData(),
-                layerStyle = layerData.style || {};
+                layerStyle = layerData.style || {},
+                layerParams = layerData.params || {};
 
             for (var i = 0; i < features.length; i++) {
                 var f = JSON.parse(features[i].toJSON()),
@@ -71,6 +72,12 @@ var Source = BaseSource.extend({
                 }
                 else {
                     props.style = layerStyle;
+                }
+                if ('params' in props) {
+                    _.defaults(props.params, layerParams);
+                }
+                else {
+                    props.params = layerParams;
                 }
                 a[i] = f;
             }
