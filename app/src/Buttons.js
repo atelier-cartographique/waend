@@ -26,7 +26,7 @@ var layerButtons = {
     'add zone': ['draw | close | create'],
     'add image': [
         'draw | close | create | cc',
-        'media pick | set image'
+        'media pick | set params.image'
     ],
     'import data': ['import'],
     'list features': ['lf']
