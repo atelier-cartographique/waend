@@ -15,8 +15,8 @@ function Program (ctx) {
         return ctx.getProperty(props, 'params.'+k, def);
     };
 
-    var startFeature = function (props) {
-        ctx.processStyle(props);
+    var startFeature = function (props, fm) {
+        ctx.processStyle(props, new ctx.Transform(fm));
     };
 
     var endFeature = function () {
@@ -33,7 +33,7 @@ function Program (ctx) {
 
 
     ctx.linestring = function (coordinates, props, fm) {
-        startFeature(props);
+        startFeature(props, fm);
         var txt = getParameter(props, 'text');
         if (txt) {
             textedLine(coordinates, props, fm);
@@ -74,11 +74,11 @@ function Program (ctx) {
             turnFlag = false,
             rotation = getParameter(props, 'rotation'),
             paramStep = getParameter(props, 'step');
-console.log('paramHN', paramHN);
+
         patternCoordinates.push([left, bottomLeft[1]]);
 
         if (paramStep) {
-            step = paramStep;
+            step = paramStep * T.getScale()[0];
             hatchLen = height / step;
         }
 
@@ -139,7 +139,7 @@ console.log('paramHN', paramHN);
     };
 
     ctx.polygon = function (coordinates, props, fm) {
-        startFeature(props);
+        startFeature(props, fm);
         var img = getParameter(props, 'image'),
             txt = getParameter(props, 'text');
         if (img) {

@@ -480,14 +480,26 @@ function getProperty (props, key, def) {
     return val;
 }
 
-function processStyle (props) {
+function processStyle (props, T) {
+    var scale = T.getScale()[0];
     emit('save');
     if ('style' in props) {
         var style = props.style, val;
         for (var k in style) {
             val = getProperty(props, 'style.'+k, null);
             if (val) {
-                emit('set', k, val);
+                if (underscore.isNumber(val)) {
+                    var tv = val * scale;
+                    emit('set', k, tv);
+                }
+                else if ('dashLine' === k) {
+                    var tv0 = val[0] * scale,
+                        tv1 = val[1] * scale;
+                    emit('set', 'dashLine', [tv0, tv1]);
+                }
+                else {
+                    emit('set', k, val);
+                }
             }
         }
         // underscore.each(style, function(value, key){
