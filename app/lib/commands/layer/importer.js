@@ -49,7 +49,8 @@ function setupHints (container) {
         ,'<p class="hint">Wænd currently does not support</p>'
         ,'<p class="hint">multilines and multipolygons</p>'
         ,'<p class="hint">nor points -yeah!-</p>'
-        ,'<p class="hint">Projection should be EPGS:4326 - WGS84</p>'
+        ,'<p class="hint">Your datas should be in EPGS:4326 - WGS84</p>'
+        ,'<p class="hint">and we display them in EPSG:3857</p>'
     ].join(' ');
     container.appendChild(hints);
 }
