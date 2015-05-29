@@ -286,3 +286,5 @@ The restrictions so far are :
 An easy way to create a GeoJSON file from your zone of interest is to use [http://overpass-turbo.eu/](http://overpass-turbo.eu/), it is a powerfull online tool quickly export data from OpenStreetMap.
 
 Another option is to use [QGis](http://www.qgis.org/en/site/), a free and opensource GIS, that you can use for manipulating any kind of geo-datas.
+
+*Good to know* : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  
