@@ -15,7 +15,7 @@ Feel free to give a hand !
 2.4  [text](#text)  
 2.4  [fontsize](#fontsize)
 
-3.   [Commands details](#commands-details)
+3.   [Commands details](#commands-details)  
 3.1  [help](#help)  
 3.3  [list commands (lc)](#lc)  
 3.4  [set attribute (set)](#set)  
@@ -33,8 +33,6 @@ Feel free to give a hand !
 5.   [Import Datas](#import)  
 5.1  [Working with GeoJSON](#GeoJSON)
 
-6.   [Edit feature](#edit-feature)  
-6.1  [Delete feature](#delete)
 
 
 
@@ -299,10 +297,3 @@ An easy way to create a GeoJSON file from your zone of interest is to use [http:
 Another option is to use [QGis](http://www.qgis.org/en/site/), a free and opensource GIS, that you can use for manipulating any kind of geo-datas.
 
 *Good to know* : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  
-
-
-##<a name="edit-feature"></a> Edit feature
-
-###<a name="delete"></a> Delete
-
-	delete_feature

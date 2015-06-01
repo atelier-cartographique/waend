@@ -319,23 +319,22 @@ Feel free to give a hand !</p>
 2.6  <a href="#step">hatches step (step)</a><br>
 2.7  <a href="#rotation">hatches rotation (rotation)</a><br>
 2.4  <a href="#text">text</a><br>
-2.4  <a href="#fontsize">fontsize</a>   </p></li>
+2.4  <a href="#fontsize">fontsize</a></p></li>
 <li><p><a href="#commands-details">Commands details</a><br>
 3.1  <a href="#help">help</a><br>
 3.3  <a href="#lc">list commands (lc)</a><br>
 3.4  <a href="#set">set attribute (set)</a><br>
 3.5  <a href="#get">get attributes (get)</a><br>
-3.6  <a href="#edit">edit attributes (edit)</a><br>
+3.6  <a href="#edit">edit text (edit)</a><br>
 3.7  <a href="#del">delete attributes (del)</a><br>
 3.8  <a href="#navigate">navigate on map (navigate)</a><br>
 3.9  <a href="#select">select feature (select)</a><br>
-3.10 <a href="#draw">draw</a>  </p></li>
-<li><p><a href="#style-tips">Style tips &amp; tricks</a><br>
+3.10 <a href="#draw">draw</a><br>
+3.11 <a href="#del_feature">del_feature</a>  </p></li>
+<li><p><a href="#style-tips">Style tips &amp; tricks</a>
 4.1  <a href="#tip-fill">polygon fill color</a>  </p></li>
 <li><p><a href="#import">Import Datas</a><br>
 5.1  <a href="#GeoJSON">Working with GeoJSON</a></p></li>
-<li><p><a href="#edit-feature">Edit feature</a><br>
-6.1  <a href="#delete">Delete feature</a></p></li>
 </ol>
 
 <h2 id="toc_1"><a name="commands"></a>Common commands</h2>
@@ -516,14 +515,14 @@ get name</code></pre>
 
 <h3 id="toc_16"><a name="edit"></a> edit</h3>
 
-<p>There is no <em>edit</em> button yet, but the functionnality is here.
-To edit a key, type : </p>
+<p>There is no <em>edit</em> button yet, but the functionality is here.
+To edit a key, type :</p>
 
 <pre><code>get your_key | edit | set your_key</code></pre>
 
 <p>It will get the <em>your_key</em> value, open the editor with this value, and set the edited value to <em>your_key</em></p>
 
-<p>To edit <em>style</em> or <em>params</em> dictionnary, do the same with : </p>
+<p>To edit <em>style</em> or <em>params</em> dictionary, do the same with :</p>
 
 <pre><code>get style | edit | set style
 or
@@ -552,6 +551,8 @@ use keyboard arrows to navigate<br>
 use [i] to zoom in<br>
 use [o] to zoom out</p>
 
+<p>Type any other key to escape this mode.</p>
+
 <h3 id="toc_19"><a name="select"></a> select features (select)</h3>
 
 <p>select a feature in the viewport</p>
@@ -566,18 +567,25 @@ use [o] to zoom out</p>
 
 <p>will set the region viewport to the drawing extend</p>
 
-<h2 id="toc_21"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+<h3 id="toc_21"><a name="del_feature"></a> delete feature (del_feature)</h3>
 
-<h3 id="toc_22"><a name="tip-fill"></a> polygon fill color</h3>
+<p>In the context of a feature, and if you&#39;re granted to, the command will delete
+the current feature and bring you back to the parent layer context.</p>
+
+<p>In the context of a layer, you must give a feature ID in argument of the command.</p>
+
+<h2 id="toc_22"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+
+<h3 id="toc_23"><a name="tip-fill"></a> polygon fill color</h3>
 
 <p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
 Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
 
 <p>You are done with a filled polygon !</p>
 
-<h2 id="toc_23"><a name="import"></a> Import data (import)</h2>
+<h2 id="toc_24"><a name="import"></a> Import data (import)</h2>
 
-<h3 id="toc_24"><a name="GeoJSON"></a> Working with GeoJSON</h3>
+<h3 id="toc_25"><a name="GeoJSON"></a> Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 
@@ -595,12 +603,6 @@ The restrictions so far are :</p>
 <p>Another option is to use <a href="http://www.qgis.org/en/site/">QGis</a>, a free and opensource GIS, that you can use for manipulating any kind of geo-datas.</p>
 
 <p><em>Good to know</em> : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  </p>
-
-<h2 id="toc_25"><a name="edit-feature"></a> Edit feature</h2>
-
-<h3 id="toc_26"><a name="delete"></a> Delete</h3>
-
-<pre><code>delete_feature</code></pre>
 
 
 </body>
