@@ -9,6 +9,7 @@
  */
 
 var _ = require('underscore'),
+    util = require('util'),
     region = require('../Region');
 
 
@@ -31,19 +32,18 @@ function setRegion (north, east, south, west) {
     }
 
     region.push(extent);
-    return self.end(region.get());
+    return self.end(region.get().getArray());
 }
 
 
 function getRegion () {
     var r = region.get();
-    this.sys.stdout.write(r);
-    return this.end(r);
+    return this.end(r.getArray());
 }
 
 function popRegion () {
     var r = region.pop();
-    return this.end(r);
+    return this.end(r.getArray());
 }
 
 function getCenter () {
@@ -56,9 +56,11 @@ function getCenter () {
 function printRegion (opt_format) {
     var r = region.get(),
         NW = r.getTopLeft().getCoordinates(),
-        SE = r.getBottomRight().getCoordinates();
-    this.sys.stdout.write(SE[0], SE[1], NW[0], NW[1]);
-    return this.end(r);
+        SE = r.getBottomRight().getCoordinates(),
+        f = '%d %d %d %d';
+
+    this.sys.stdout.write(util.format(f, SE[0], SE[1], NW[0], NW[1]));
+    return this.end(r.getArray());
 }
 
 
@@ -67,7 +69,7 @@ function bufferRegion (arg) {
 
     r.buffer(arg || 0);
     region.set(r);
-    return this.end(r);
+    return this.end(r.getArray());
 }
 
 function regionCommand () {

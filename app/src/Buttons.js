@@ -35,7 +35,7 @@ var layerButtons = {
 var groupButtons = {
     'add layer': ['ic'],
     'list layers' : ['ll'],
-    'set map extent': ['region print | set extent']
+    'set map extent': ['region get | set extent']
 };
 
 var userButtons = {

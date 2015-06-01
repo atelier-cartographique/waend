@@ -22,6 +22,9 @@ function setAttr () {
     }
 
     if (0 === args.length && env.DELIVERED) {
+        if (_.isArray(env.DELIVERED)) { // toString on this does not mork
+            return this.data.set(key, env.DELIVERED);
+        }
         try {
             var delivered = env.DELIVERED.toJSON();
             return this.data.set(key, delivered);
