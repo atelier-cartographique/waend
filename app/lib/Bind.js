@@ -137,6 +137,10 @@ var DB = O.extend({
         return this._db[id].model;
     },
 
+    del: function (id) {
+        delete this._db[id];
+    },
+
     getComps: function (id) {
         return this._db[id].comps;
     },
@@ -317,6 +321,23 @@ var Bind = O.extend({
         };
         var url = API_URL+path;
         return this.transport.get(url, {parse: pr});
+    },
+
+    delFeature: function (userId, groupId, layerId, featureId) {
+        var path = '/user/' + userId +
+                   '/group/' + groupId +
+                   '/layer/' + layerId +
+                   '/feature/' + featureId,
+            url = API_URL + path,
+            db = this.db,
+            self = this;
+
+        var pr = function () {
+            db.del(featureId);
+            self.changeParent(layerId);
+        };
+
+        return this.transport.del(url, {parse: pr});
     },
 
     getFeatures: function (userId, groupId, layerId, page) {

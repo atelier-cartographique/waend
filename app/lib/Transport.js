@@ -234,6 +234,45 @@ var Transport = O.extend({
     put: function(url, options) {
         return this._write('PUT', url, options);
     },
+
+    del: function(url, delOptions) {
+        var transport = this.transport;
+        delOptions = delOptions || {};
+
+        var resolver = function (resolve, reject) {
+            var errorhandler = function (evt, xhr) {
+                reject(xhr.statusText);
+            };
+            var successHandler = function (evt, xhr) {
+                if(xhr.status >= 400){
+                    return reject(xhr.statusText);
+                }
+                if(delOptions.parse){
+                    resolve(delOptions.parse(xhr.response));
+                }
+                else{
+                    resolve(xhr.response);
+                }
+            };
+
+            var options = {
+                'listeners': {
+                    'error' : {callback:errorhandler, context:undefined},
+                    'abort' : {callback:errorhandler, context:undefined},
+                    'timeout' : {callback:errorhandler, context:undefined},
+                    'load' : {callback:successHandler, context:undefined},
+                },
+                'headers': _.extend({}, delOptions.headers),
+                'params': delOptions.params,
+                'verb': 'DELETE',
+                'url': url
+            };
+
+            transport(options);
+        };
+
+        return new Promise(resolver);
+    }
 });
 
 

@@ -26,9 +26,24 @@ var Context = O.extend({
         this.shell = options.shell;
         this.data = options.data;
         this.parent = options.parent;
+        this._current = this._computeCurrent();
         O.apply(this, arguments);
-
         _.defaults(this.commands, commands);
+    },
+
+    _computeCurrent: function (ctx, memo) {
+        //console.log('context.current', ctx, memo);
+        if(!ctx){
+            ctx = this;
+            memo = [];
+        }
+        if(ctx.parent){
+            this._computeCurrent(ctx.parent, memo);
+        }
+        if(ctx.data){
+            memo.push(ctx.data.id);
+        }
+        return memo;
     },
 
     /**
@@ -53,19 +68,40 @@ var Context = O.extend({
         return ret;
     },
 
-    current: function (ctx, memo) {
-        //console.log('context.current', ctx, memo);
-        if(!ctx){
-            ctx = this;
-            memo = [];
+    current: function () {
+        return this._current;
+    },
+
+    getUser: function () {
+        var cur = this.current();
+        if (cur.length > 0) {
+            return cur[0];
         }
-        if(ctx.parent){
-            this.current(ctx.parent, memo);
+        return null;
+    },
+
+    getGroup: function () {
+        var cur = this.current();
+        if (cur.length > 1) {
+            return cur[1];
         }
-        if(ctx.data){
-            memo.push(ctx.data.id);
+        return null;
+    },
+
+    getLayer: function () {
+        var cur = this.current();
+        if (cur.length > 2) {
+            return cur[2];
         }
-        return memo;
+        return null;
+    },
+
+    getFeature: function () {
+        var cur = this.current();
+        if (cur.length > 3) {
+            return cur[3];
+        }
+        return null;
     },
 
 

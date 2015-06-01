@@ -40,15 +40,20 @@ var Source = BaseSource.extend({
         };
         binder.getFeatures(self.uid, self.gid, self.layer.id)
             .then(function(features){
-                var newSize = 0;
+                var newSize = 0, ids = [];
                 for (var i = 0; i < features.length; i++) {
                     var feature = features[i];
+                    ids.push(feature.id);
                     var featureIsNew = !(feature.id in self.index);
                     if(featureIsNew){
                         feature.on('set set:data', emitUpdate);
                         self.addFeature(feature);
                         newSize += 1;
                     }
+                }
+                var diff = _.difference(Object.keys(self.index), ids);
+                for (var di = 0; di < diff.length; di++) {
+                    self.removeFeature([diff[di]]);
                 }
                 emitUpdate();
             })

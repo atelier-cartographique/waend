@@ -2,7 +2,7 @@
 This is a quite rought help for now, it will be improved from time to time.  
 Feel free to give a hand !
 
- 
+
 1.   [Common commands](#commands)
 
 2.   [Style attributes and parameters](#keys)  
@@ -13,20 +13,21 @@ Feel free to give a hand !
 2.6  [hatches step (step)](#step)  
 2.7  [hatches rotation (rotation)](#rotation)  
 2.4  [text](#text)  
-2.4  [fontsize](#fontsize)   
+2.4  [fontsize](#fontsize)
 
-3.   [Commands details](#commands-details)   
+3.   [Commands details](#commands-details)
 3.1  [help](#help)  
 3.3  [list commands (lc)](#lc)  
 3.4  [set attribute (set)](#set)  
 3.5  [get attributes (get)](#get)  
-3.6  [edit attributes (edit)](#edit)  
+3.6  [edit text (edit)](#edit)  
 3.7  [delete attributes (del)](#del)  
 3.8  [navigate on map (navigate)](#navigate)  
 3.9  [select feature (select)](#select)  
 3.10 [draw](#draw)  
+3.11 [del_feature](#del_feature)  
 
-4.   [Style tips & tricks](#style-tips)   
+4.   [Style tips & tricks](#style-tips)
 4.1  [polygon fill color](#tip-fill)  
 
 5.   [Import Datas](#import)  
@@ -37,7 +38,7 @@ Feel free to give a hand !
 
 
 
-##<a name="commands"></a>Common commands
+## <a name="commands"></a>Common commands
 
 - help : *help*
 - set : *set something to something, often attribute to current context*
@@ -180,15 +181,15 @@ Example:
 
 
 
-##<a name="commands-details"></a> Commands details
+## <a name="commands-details"></a> Commands details
 
-###<a name="help"></a> help
+### <a name="help"></a> help
 get help
 
-###<a name="lc"></a> list comands (lc)
+### <a name="lc"></a> list comands (lc)
 list commands  
 
-###<a name="set"></a> set attribute (set)
+### <a name="set"></a> set attribute (set)
 set attribute to current element (user, group, layer or feature).
 
 [set] is very usefull to qualify your datas, to give informations about your maps, etc.
@@ -201,7 +202,7 @@ Example :
 	set description "here is my description"
 	set "city population" 1000000
 
-###<a name="get"></a> get attributes (get)
+### <a name="get"></a> get attributes (get)
 get all attributes from current element
 get attributeName : get value for attributeName
 
@@ -210,28 +211,28 @@ Example :
 	get
 	get name
 
-###<a name="edit"></a> edit
-There is no *edit* button yet, but the functionnality is here.
-To edit a key, type : 
+### <a name="edit"></a> edit
+There is no *edit* button yet, but the functionality is here.
+To edit a key, type :
 
 	get your_key | edit | set your_key
-	
+
 It will get the *your_key* value, open the editor with this value, and set the edited value to *your_key*
 
-To edit *style* or *params* dictionnary, do the same with : 
+To edit *style* or *params* dictionary, do the same with :
 
 	get style | edit | set style
 	or
 	get params | edit | set params
 
 
-###<a name="del"></a> delete (del)
+### <a name="del"></a> delete (del)
 Delete an attribute
 
 Example:
 
 	del text
-	
+
 Delete an attribute in *style* or *params*  
 
 For now you need to delete the entire *style* or *params* with :
@@ -242,16 +243,18 @@ For now you need to delete the entire *style* or *params* with :
 
 
 
-###<a name="navigate"></a> navigate in map (navigate)
+### <a name="navigate"></a> navigate in map (navigate)
 navigate in the map viewport  
 use keyboard arrows to navigate  
 use [i] to zoom in  
 use [o] to zoom out
 
-###<a name="select"></a> select features (select)
+Type any other key to escape this mode.
+
+### <a name="select"></a> select features (select)
 select a feature in the viewport
 
-###<a name="draw"></a> draw
+### <a name="draw"></a> draw
 draw with on map, usualy pipped with another command  
 
 Example:
@@ -261,7 +264,12 @@ Example:
 will set the region viewport to the drawing extend
 
 
+### <a name="del_feature"></a> delete feature (del_feature)
 
+In the context of a feature, and if you're granted to, the command will delete
+the current feature and bring you back to the parent layer context.
+
+In the context of a layer, you must give a feature ID in argument of the command.
 
 ##<a name="style-tips"></a> Style tips & tricks
 

@@ -38,6 +38,15 @@ var BaseSource = O.Object.extend({
         this.emit('add', f);
     },
 
+    removeFeature: function (id) {
+        var f = this.index[id],
+            geom = f.getGeometry(),
+            extent = geom.getExtent().getArray();
+        extent.push(id);
+        this.tree.remove(extent);
+        delete this.index[id];
+    },
+
     getFeatures: function (opt_extent) {
         var features = [], items, i;
         if (opt_extent) {

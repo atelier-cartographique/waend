@@ -46,6 +46,13 @@ module.exports = exports = base.RequestHandler.extend({
                 url: 'user/:user_id/group/:group_id/layer/:layer_id/feature/:feature_id',
                 permissions: ['isAuthenticated', 'isLayerOwner']
             },
+
+            del: {
+                verb: 'delete',
+                handler: 'del',
+                url: 'user/:user_id/group/:group_id/layer/:layer_id/feature/:feature_id',
+                permissions: ['isAuthenticated', 'isLayerOwner']
+            },
         },
 
 
@@ -107,5 +114,17 @@ module.exports = exports = base.RequestHandler.extend({
                 });
         },
 
+        del: function (request, response) {
+            var lid = request.params.layer_id,
+                fid = request.params.feature_id;
+            cache.client()
+                .delFeature(lid, fid)
+                .then(function(n){
+                    response.status(204).end();
+                })
+                .catch(function(err){
+                    response.status(500).send(err);
+                });
+        }
 
     });
