@@ -262,6 +262,20 @@ Example:
 will set the region viewport to the drawing extend
 
 
+### <a name="trace"></a> trace
+trace with on map, usualy pipped with another command. Follow with "enter".
+
+Example:
+
+	trace | create
+
+will draw a line and create a feature out of it.
+
+	trace | close | create
+
+will draw a line, close it to make a polygon and create a feature out of it.
+
+
 ### <a name="del_feature"></a> delete feature (del_feature)
 
 In the context of a feature, and if you're granted to, the command will delete

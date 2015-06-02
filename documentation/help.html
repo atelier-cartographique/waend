@@ -567,25 +567,39 @@ use [o] to zoom out</p>
 
 <p>will set the region viewport to the drawing extend</p>
 
-<h3 id="toc_21"><a name="del_feature"></a> delete feature (del_feature)</h3>
+<h3 id="toc_21"><a name="trace"></a> trace</h3>
+
+<p>trace with on map, usualy pipped with another command. Follow with &quot;enter&quot;.</p>
+
+<p>Example:</p>
+
+<pre><code>trace | create</code></pre>
+
+<p>will draw a line and create a feature out of it.</p>
+
+<pre><code>trace | close | create</code></pre>
+
+<p>will draw a line, close it to make a polygon and create a feature out of it.</p>
+
+<h3 id="toc_22"><a name="del_feature"></a> delete feature (del_feature)</h3>
 
 <p>In the context of a feature, and if you&#39;re granted to, the command will delete
 the current feature and bring you back to the parent layer context.</p>
 
 <p>In the context of a layer, you must give a feature ID in argument of the command.</p>
 
-<h2 id="toc_22"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+<h2 id="toc_23"><a name="style-tips"></a> Style tips &amp; tricks</h2>
 
-<h3 id="toc_23"><a name="tip-fill"></a> polygon fill color</h3>
+<h3 id="toc_24"><a name="tip-fill"></a> polygon fill color</h3>
 
 <p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
 Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
 
 <p>You are done with a filled polygon !</p>
 
-<h2 id="toc_24"><a name="import"></a> Import data (import)</h2>
+<h2 id="toc_25"><a name="import"></a> Import data (import)</h2>
 
-<h3 id="toc_25"><a name="GeoJSON"></a> Working with GeoJSON</h3>
+<h3 id="toc_26"><a name="GeoJSON"></a> Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 
