@@ -71,9 +71,13 @@ var lineTransform = function (T, coordinates) {
     return coordinates;
 };
 
-var CONTROL_SZ = 4,
+var CONTROL_SZ = 8,
     CONTROL_HALF_SZ = CONTROL_SZ / 2;
 
+
+function isKeyCode (kc) {
+    return (kc === event.which || kc === event.keyCode);
+}
 
 function TracerMode (tracer) {
     this.tracer = tracer;
@@ -81,6 +85,23 @@ function TracerMode (tracer) {
 
 TracerMode.prototype.getName = function () {
     return this.modeName;
+};
+
+
+TracerMode.prototype.keypress = function (event) {
+    if (isKeyCode(13)) { // enter
+        this.tracer.end();
+    }
+    else if (isKeyCode(27)) { // escape
+        this.tracer.clear();
+        this.tracer.end();
+    }
+    else if (isKeyCode(101)) { // e
+        this.tracer.setMode('EditPoint');
+    }
+    else if (isKeyCode(110)) { // n
+        this.tracer.setMode('NewPoint');
+    }
 };
 
 function TracerModeNewPoint () {
@@ -93,6 +114,7 @@ util.inherits(TracerModeNewPoint, TracerMode);
 function TracerModeEditPoint () {
     TracerMode.apply(this, arguments);
     this.modeName = 'EditPoint';
+    this.inverse = this.tracer.transform.inverse();
 }
 util.inherits(TracerModeEditPoint, TracerMode);
 
@@ -103,12 +125,35 @@ TracerModeNewPoint.prototype.click = function (event) {
     this.tracer.addSegment(vec);
 };
 
-TracerModeNewPoint.prototype.keypress = function (event) {
-    if (13 === event.which || 13 === event.keyCode) {
-        this.tracer.end();
+
+TracerModeEditPoint.prototype.mousedown = function (event) {
+    var controls = this.tracer.controls,
+        pos = this.inverse.mapVec2([event.clientX, event.clientY]),
+        selected = this.tracer.getControls(pos);
+
+    this.currentSelection = selected;
+    // this.startingPoint = pos;
+    this.tracer.draw(selected);
+};
+
+
+TracerModeEditPoint.prototype.mousemove = function (event) {
+    if (this.currentSelection) {
+        event.preventDefault();
+        event.stopPropagation();
+        var pos = this.inverse.mapVec2([event.clientX, event.clientY]);
+        for (var i = 0; i < this.currentSelection.length; i++) {
+            var index = this.currentSelection[i];
+            this.tracer.segments[index] = pos;
+        }
+        this.tracer.draw(this.currentSelection);
     }
 };
 
+TracerModeEditPoint.prototype.mouseup = function (event) {
+    this.currentSelection = null;
+    this.tracer.draw();
+};
 
 var TRACER_MODES = [
     TracerModeNewPoint,
@@ -142,7 +187,11 @@ Tracer.prototype.setupCanvas = function () {
     this.context = this.canvas.getContext('2d');
 
     var dispatcher = _.bind(this.dispatcher, this),
-        events = ['click', 'dblclick', 'keypress', 'mousemove'];
+        events = [
+            'click', 'dblclick',
+            'mousedown', 'mousemove', 'mouseup',
+            'keypress', 'keydown', 'keyup'
+            ];
     for (var i = 0; i < events.length; i++) {
         this.canvas.addEventListener(events[i], dispatcher, false);
     }
@@ -155,38 +204,48 @@ Tracer.prototype.setupModes = function () {
 };
 
 Tracer.prototype.createControl = function (pos, idx) {
+    var scale = this.transform.getScale()[0],
+        chs = CONTROL_HALF_SZ / scale;
     var item = [
-        pos[0] - CONTROL_HALF_SZ, pos[1] - CONTROL_HALF_SZ,
-        pos[0] + CONTROL_HALF_SZ, pos[1] + CONTROL_HALF_SZ,
+        pos[0] - chs, pos[1] - chs,
+        pos[0] + chs, pos[1] + chs,
         idx
     ];
     this.controls.insert(item);
 };
 
-Tracer.prototype.getSegments = function (idx) {
-    if (0 === idx) {
-        return [null, this.segments[0]];
-    }
-    else if ((this.segments.length - 1) == idx) {
-        return [this.segments[idx], null];
-    }
-    else {
-        return [this.segments[idx - 1], this.segments[idx]];
-    }
+Tracer.prototype.clear = function () {
+    this.segments = [];
+    this.controls.clear();
 };
+//
+// Tracer.prototype.getSegments = function (idx) {
+//     if (0 === idx) {
+//         return [null, this.segments[0]];
+//     }
+//     else if ((this.segments.length - 1) == idx) {
+//         return [this.segments[idx], null];
+//     }
+//     else {
+//         return [this.segments[idx - 1], this.segments[idx]];
+//     }
+// };
 
-Tracer.prototype.getControl = function (pos) {
+Tracer.prototype.getControls = function (pos) {
+    var scale = this.transform.getScale()[0],
+        chs = CONTROL_HALF_SZ / scale;
     var rect = [
-        pos[0] - CONTROL_HALF_SZ, pos[1] - CONTROL_HALF_SZ,
-        pos[0] + CONTROL_HALF_SZ, pos[1] + CONTROL_HALF_SZ
+        pos[0] - chs, pos[1] - chs,
+        pos[0] + chs, pos[1] + chs
     ];
 
-    var controls = this.controls.search(rect);
-    if (controls.length > 0) {
-        return controls[0][4];
+    var controls = this.controls.search(rect),
+        indices = [];
+    for (var i = 0, li = controls.length; i < li; i++) {
+        indices.push(controls[i][4]);
     }
 
-    return null;
+    return indices;
 };
 
 Tracer.prototype.setControls = function () {
@@ -268,7 +327,7 @@ Tracer.prototype.getSegments = function () {
     return JSON.parse(JSON.stringify(this.segments));
 };
 
-Tracer.prototype.drawSegments = function () {
+Tracer.prototype.drawSegments = function (selected) {
     var points = this.getSegments(),
         context = this.context;
     lineTransform(this.transform, points);
@@ -284,10 +343,11 @@ Tracer.prototype.drawSegments = function () {
 };
 
 
-Tracer.prototype.drawControls = function () {
+Tracer.prototype.drawControls = function (selected) {
     var points = this.getSegments(),
         context = this.context,
         vec;
+    selected = selected || [];
     lineTransform(this.transform, points);
     context.save();
     context.strokeStyle = '#337AFF';
@@ -296,21 +356,33 @@ Tracer.prototype.drawControls = function () {
     for (var i = 0, li = points.length; i < li; i++) {
         vec = points[i];
         context.beginPath();
-        context.arc(vec[0], vec[1], CONTROL_HALF_SZ, 0, 2 * Math.PI, false);
-        context.fill();
-        context.stroke();
+        if (_.indexOf(selected, i) < 0) {
+            context.arc(vec[0], vec[1], CONTROL_HALF_SZ, 0, 2 * Math.PI, false);
+            context.fill();
+            context.stroke();
+        }
+        else {
+            context.save();
+            context.strokeStyle = '#D60111';
+            context.fillStyle = 'white';
+            context.lineWidth = 1;
+            context.arc(vec[0], vec[1], CONTROL_HALF_SZ, 0, 2 * Math.PI, false);
+            context.fill();
+            context.stroke();
+            context.restore();
+        }
     }
     context.restore();
 };
 
-Tracer.prototype.draw = function () {
+Tracer.prototype.draw = function (selected) {
     var rect = this.canvas.getBoundingClientRect();
     this.context.clearRect(0, 0, rect.width, rect.height);
     if (this.segments.length > 1) {
-        this.drawSegments();
+        this.drawSegments(selected);
     }
     if (this.segments.length > 0) {
-        this.drawControls();
+        this.drawControls(selected);
     }
     return this;
 };

@@ -12,7 +12,7 @@
 
 var O = require('../../lib/object').Object,
     _ = require('underscore'),
-    Promise = require('bluebird'),
+    Bromise = require('bluebird'),
     Context = require('./Context'),
     User = require('./User'),
     Root = require('./Root'),
@@ -250,12 +250,12 @@ var Shell = O.extend({
                 .apply(context, args)
                 .then(function(result){
                     self.env.DELIVERED = result;
-                    return Promise.resolve(result);
+                    return Bromise.resolve(result);
                 });
         }
         catch (err) {
             self.env.DELIVERED = err;
-            return Promise.reject(err);
+            return Bromise.reject(err);
         }
     },
 
@@ -287,7 +287,7 @@ var Shell = O.extend({
             // });
         };
 
-        return Promise.reduce(cls, function(total, item, index) {
+        return Bromise.reduce(cls, function(total, item, index) {
             self.env.DELIVERED = total;
             var cl = cls[index].trim(),
                 toks = self.commandLineTokens(cl),
@@ -336,7 +336,7 @@ var Shell = O.extend({
         if(0 === pathComps.length){
             this._currentContext = SHELL;
             this.clearContexts();
-            return Promise.resolve(0, 'shell');
+            return Bromise.resolve(0, 'shell');
         }
         else if(1 === pathComps.length){
             return this.loadUser(pathComps);
@@ -376,7 +376,7 @@ var Shell = O.extend({
                 });
                 self._currentContext = USER;
                 self.clearContexts();
-                return Promise.resolve(self);
+                return Bromise.resolve(self);
             })
             .catch(function(err){
                 console.error('failed to switch context', err);
@@ -413,7 +413,7 @@ var Shell = O.extend({
                     }
                 }
                 self.clearContexts();
-                return Promise.resolve(self);
+                return Bromise.resolve(self);
             })
             .catch(function(err){
                 console.error('failed to switch context', err);
@@ -438,7 +438,7 @@ var Shell = O.extend({
                 });
                 self._currentContext = LAYER;
                 self.clearContexts();
-                return Promise.resolve(self);
+                return Bromise.resolve(self);
             })
             .catch(function(err){
                 console.error('failed to switch context', err);
@@ -464,7 +464,7 @@ var Shell = O.extend({
                 });
                 self._currentContext = FEATURE;
                 self.clearContexts();
-                return Promise.resolve(self);
+                return Bromise.resolve(self);
             })
             .catch(function(err){
                 console.error('failed to switch context', err);

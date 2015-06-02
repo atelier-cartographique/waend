@@ -367,28 +367,20 @@ var WebConsole = Terminal.extend({
             .then(function(unlock){
                 input.setAttribute('class', 'wc-input wc-pending');
                 self.pageStart(val);
+
                 self.shell.exec(val)
                     .then(function(){
-                        console.log.apply(console, arguments);
+                        self.history.push(val);
+                        self.insertInput();
+                        unlock();
                     })
                     .catch(function(err){
-                        if(err.toString){
-                            self.write(err.toString());
-                        }
-                    })
-                    .finally(function(){
-                        // input.setAttribute('class', 'wc-input wc-inactive');
-                        // input.setAttribute('disabled', 'disabled');
-                        self.history.push(val);
-                        // self.pageEnd();
                         self.insertInput();
                         unlock();
                     });
             })
-            .catch(function(){
-                _.defer(function(){
-                    self.runCommand(val);
-                });
+            .catch(function(err){
+                console.error('get mutex', err);
             });
     },
 

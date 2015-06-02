@@ -29,6 +29,7 @@ var Context = O.extend({
         this._current = this._computeCurrent();
         O.apply(this, arguments);
         _.defaults(this.commands, commands);
+        this.binder = Bind.get();
     },
 
     _computeCurrent: function (ctx, memo) {
@@ -62,7 +63,6 @@ var Context = O.extend({
         }
 
         this.sys = sys;
-        this.binder = Bind.get();
 
         var ret = this.commands[cmd].apply(this, args);
         return ret;
