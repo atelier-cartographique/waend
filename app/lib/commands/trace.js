@@ -13,7 +13,8 @@
 var _ = require('underscore'),
     util = require('util'),
     rbush = require('rbush'),
-    Projection = require('proj4');
+    Projection = require('proj4'),
+    Geometry = require('../Geometry');
 
 var Proj3857 = Projection('EPSG:3857');
 
@@ -30,6 +31,24 @@ var polygonProject = function (coordinates) {
 var lineProject = function (coordinates) {
     for (var i = 0; i < coordinates.length; i++) {
         coordinates[i] = Proj3857.forward(coordinates[i]);
+    }
+    return coordinates;
+};
+
+
+var polygonUnproject = function (coordinates) {
+    for (var i = 0; i < coordinates.length; i++) {
+        var ringLength = coordinates[i].length;
+        for (var ii = 0; ii < ringLength; ii++) {
+            coordinates[i][ii] = Proj3857.inverse(coordinates[i][ii]);
+        }
+    }
+    return coordinates;
+};
+
+var lineUnproject = function (coordinates) {
+    for (var i = 0; i < coordinates.length; i++) {
+        coordinates[i] = Proj3857.inverse(coordinates[i]);
     }
     return coordinates;
 };
@@ -84,6 +103,12 @@ TracerModeNewPoint.prototype.click = function (event) {
     this.tracer.addSegment(vec);
 };
 
+TracerModeNewPoint.prototype.keypress = function (event) {
+    if (13 === event.which || 13 === event.keyCode) {
+        this.tracer.end();
+    }
+};
+
 
 var TRACER_MODES = [
     TracerModeNewPoint,
@@ -112,9 +137,15 @@ Tracer.prototype.setupCanvas = function () {
     this.canvas.style.left = '0';
 
     container.appendChild(this.canvas);
+    this.canvas.setAttribute('tabindex', -1);
+    this.canvas.focus();
     this.context = this.canvas.getContext('2d');
 
-    this.canvas.addEventListener('click', _.bind(this.dispatcher, this), false);
+    var dispatcher = _.bind(this.dispatcher, this),
+        events = ['click', 'dblclick', 'keypress', 'mousemove'];
+    for (var i = 0; i < events.length; i++) {
+        this.canvas.addEventListener(events[i], dispatcher, false);
+    }
 };
 
 Tracer.prototype.setupModes = function () {
@@ -176,7 +207,23 @@ Tracer.prototype.loadPolygon = function (coordinates) {
 };
 
 Tracer.prototype.getGeometry = function () {
-    // TODO
+    var gt = this.geometryType,
+        coordinates = this.getSegments();
+
+    if ('LineString' === gt) {
+        if (coordinates.length > 1) {
+            lineUnproject(coordinates);
+            return (new Geometry.LineString(coordinates));
+        }
+    }
+    else if ('Polygon' === gt) {
+        if (coordinates.length > 3) {
+            polygonUnproject(coordinates);
+            return (new Geometry.Polygon([coordinates]));
+        }
+    }
+
+    return null;
 };
 
 Tracer.prototype.start = function (ender, geometry) {

@@ -50,7 +50,7 @@ function navigate () {
     stdout.write('<span class="hint">zoom out with [o]</span>');
     stdout.write('<span class="hint">pan with arrow keys</span>');
     stdout.write('<span class="hint">any other key exits navigate mode</span>');
-    
+
     var navNorth = function () {
         var T = new Transform(),
             extent = region.get(),
@@ -132,7 +132,7 @@ function navigate () {
         };
         display.node.setAttribute('tabindex', -1);
         display.node.focus();
-        display.node.addEventListener('keydown', dispatch, true);
+        display.node.addEventListener('keydown', dispatch, false);
     };
 
     return (new Promise(resolver));
