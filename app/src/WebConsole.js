@@ -99,8 +99,8 @@ function isKeyReturnEvent (event) {
     return (13 === event.which || 13 === event.keyCode);
 }
 
-var WebConsole = Terminal.extend({
 
+var WebConsole = Terminal.extend({
 
     capabilities: {
         'dom': {
@@ -125,7 +125,17 @@ var WebConsole = Terminal.extend({
         this._inputField.setAttribute('class', 'wc-input');
         this._inputField.setAttribute('type', 'text');
         this.container.appendChild(this._inputField);
-        this._inputField.addEventListener('keypress', listener, false);
+
+        // A bit of a trick to prevent keyup event to trigger on a display from here
+        var keyPressEvent;
+        var keyUpHandler = function () {
+            listener(keyPressEvent);
+        };
+        this._inputField.addEventListener('keypress', function (event) {
+            keyPressEvent =event;
+        }, false);
+        this._inputField.addEventListener('keyup', keyUpHandler, false);
+
         this._inputField.focus();
     },
 

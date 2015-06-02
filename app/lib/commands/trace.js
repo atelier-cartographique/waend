@@ -89,6 +89,16 @@ TracerMode.prototype.getName = function () {
 
 
 TracerMode.prototype.keypress = function (event) {
+    if (isKeyCode(101)) { // e
+        this.tracer.setMode('EditPoint');
+    }
+    else if (isKeyCode(110)) { // n
+        this.tracer.setMode('NewPoint');
+    }
+};
+
+
+TracerMode.prototype.keyup = function (event) {
     if (isKeyCode(13)) { // enter
         this.tracer.end();
     }
@@ -96,13 +106,8 @@ TracerMode.prototype.keypress = function (event) {
         this.tracer.clear();
         this.tracer.end();
     }
-    else if (isKeyCode(101)) { // e
-        this.tracer.setMode('EditPoint');
-    }
-    else if (isKeyCode(110)) { // n
-        this.tracer.setMode('NewPoint');
-    }
 };
+
 
 function TracerModeNewPoint () {
     TracerMode.apply(this, arguments);
@@ -120,11 +125,36 @@ util.inherits(TracerModeEditPoint, TracerMode);
 
 
 TracerModeNewPoint.prototype.click = function (event) {
-    var vec = [event.clientX, event.clientY];
-    this.inverse.mapVec2(vec);
-    this.tracer.addSegment(vec);
+    var pos = this.inverse.mapVec2([event.clientX, event.clientY]),
+        selected = this.tracer.getControls(pos);
+    if (('LineString' === this.tracer.geometryType)
+        && (selected.length > 0)
+        && (_.indexOf(selected, 0) >= 0)) {
+        this.tracer.closeSegment();
+        this.tracer.setMode('EditPoint');
+    }
+    else {
+        var vec = [event.clientX, event.clientY];
+        this.inverse.mapVec2(vec);
+        this.tracer.addSegment(vec);
+    }
 };
 
+
+TracerModeNewPoint.prototype.mousemove = function (event) {
+    if ('LineString' === this.tracer.geometryType) {
+        var pos = this.inverse.mapVec2([event.clientX, event.clientY]),
+            selected = this.tracer.getControls(pos);
+        if ((selected.length > 0) && (_.indexOf(selected, 0) >= 0)) {
+            this.highlighted = true;
+            this.tracer.draw([0]);
+        }
+        else if (this.highlighted) {
+            this.highlighted = false;
+            this.tracer.draw();
+        }
+    }
+};
 
 TracerModeEditPoint.prototype.mousedown = function (event) {
     var controls = this.tracer.controls,
@@ -145,6 +175,9 @@ TracerModeEditPoint.prototype.mousemove = function (event) {
         for (var i = 0; i < this.currentSelection.length; i++) {
             var index = this.currentSelection[i];
             this.tracer.segments[index] = pos;
+            if ((0 === index) && ('Polygon' === this.tracer.geometryType)) {
+                this.tracer.segments[this.tracer.segments.length - 1] = pos;
+            }
         }
         this.tracer.draw(this.currentSelection);
     }
@@ -160,6 +193,23 @@ var TRACER_MODES = [
     TracerModeEditPoint
 ];
 
+function makeButton (label, callback, ctx) {
+    var button = document.createElement('div'),
+        labelElement = document.createElement('span');
+    button.setAttribute('class', 'trace-button');
+    labelElement.setAttribute('class', 'trace-button-label');
+    labelElement.innerHTML = label;
+
+    if (callback) {
+        button.addEventListener('click', function(event){
+            callback.call(ctx, event);
+        }, false);
+    }
+
+    button.appendChild(labelElement);
+    return button;
+}
+
 function Tracer (options) {
     this.options = options;
     this.transform = options.transform;
@@ -167,7 +217,38 @@ function Tracer (options) {
     this.segments = [];
     this.setupModes();
     this.setupCanvas();
+    this.setupButtons();
 }
+
+
+Tracer.prototype.setupButtons = function () {
+    var container = this.options.container,
+        buttonBlock = document.createElement('div');
+
+    buttonBlock.setAttribute('class', 'trace-buttons');
+    buttonBlock.appendChild(makeButton('OK', function(){
+        this.end();
+    }, this));
+    buttonBlock.appendChild(makeButton('cancel', function(){
+        this.clear();
+        this.end();
+    }, this));
+
+    this.modeButtons = {
+        'NewPoint': makeButton('Add', function(){
+            this.setMode('NewPoint');
+        }, this),
+
+        'EditPoint': makeButton('Edit', function(){
+            this.setMode('EditPoint');
+        }, this)
+    };
+
+    buttonBlock.appendChild(this.modeButtons.NewPoint);
+    buttonBlock.appendChild(this.modeButtons.EditPoint);
+
+    container.appendChild(buttonBlock);
+};
 
 Tracer.prototype.setupCanvas = function () {
     var container = this.options.container;
@@ -218,18 +299,6 @@ Tracer.prototype.clear = function () {
     this.segments = [];
     this.controls.clear();
 };
-//
-// Tracer.prototype.getSegments = function (idx) {
-//     if (0 === idx) {
-//         return [null, this.segments[0]];
-//     }
-//     else if ((this.segments.length - 1) == idx) {
-//         return [this.segments[idx], null];
-//     }
-//     else {
-//         return [this.segments[idx - 1], this.segments[idx]];
-//     }
-// };
 
 Tracer.prototype.getControls = function (pos) {
     var scale = this.transform.getScale()[0],
@@ -288,7 +357,6 @@ Tracer.prototype.getGeometry = function () {
 Tracer.prototype.start = function (ender, geometry) {
 
     this.ender = ender;
-
     if (geometry) {
         var gt = geometry.getType(),
             coordinates = geometry.getCoordinates();
@@ -323,6 +391,14 @@ Tracer.prototype.addSegment = function (pos) {
     this.draw();
 };
 
+Tracer.prototype.closeSegment = function () {
+    if ('Polygon' !== this.geometryType) {
+        this.geometryType = 'Polygon';
+        this.segments.push(this.segments[0]);
+        this.draw();
+    }
+};
+
 Tracer.prototype.getSegments = function () {
     return JSON.parse(JSON.stringify(this.segments));
 };
@@ -333,12 +409,16 @@ Tracer.prototype.drawSegments = function (selected) {
     lineTransform(this.transform, points);
     context.save();
     context.strokeStyle = '#337AFF';
+    context.fillStyle = 'rgba(128,128,128,0.5)';
     context.lineWidth = 1;
     context.moveTo(points[0][0], points[0][1]);
     for (var i = 1, li = points.length; i < li; i++) {
         context.lineTo(points[i][0], points[i][1]);
     }
     context.stroke();
+    if ('Polygon' === this.geometryType) {
+        context.fill();
+    }
     context.restore();
 };
 
@@ -401,6 +481,10 @@ Tracer.prototype.createMode = function (proto) {
 
 Tracer.prototype.setMode = function (modeName) {
     this.currentMode = modeName;
+    for (var mb in this.modeButtons) {
+        this.modeButtons[mb].setAttribute('class', 'trace-button');
+    }
+    this.modeButtons[modeName].setAttribute('class', 'trace-button active');
     return this;
 };
 
@@ -446,7 +530,9 @@ function trace () {
                 reject('NoGeometry');
             }
         };
-        tracer.start(ender);
+        _.defer(function(){
+            tracer.start(ender);
+        });
     };
 
     return (new Promise(resolver));
