@@ -20,7 +20,7 @@
 var layerButtons = {
     'add text': [
         'draw | close | create | cc',
-        'edit | set text'
+        'edit | set params.text'
     ],
     'add line': ['draw | create'],
     'add zone': ['draw | close | create'],
