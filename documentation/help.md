@@ -25,7 +25,8 @@ Feel free to give a hand !
 3.8  [navigate on map (navigate)](#navigate)  
 3.9  [select feature (select)](#select)  
 3.10 [draw](#draw)  
-3.11 [del_feature](#del_feature)  
+3.11 [trace](#trace)   
+3.12 [del_feature](#del_feature)  
 
 4.   [Style tips & tricks](#style-tips)
 4.1  [polygon fill color](#tip-fill)  
