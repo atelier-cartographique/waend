@@ -263,7 +263,13 @@ will set the region viewport to the drawing extend
 
 
 ### <a name="trace"></a> trace
-trace with on map, usualy pipped with another command. Follow with "enter".
+trace with on map, usualy pipped with another command.
+
+keys:
+- ```enter``` validate geometry and exit
+- ```escape``` cancel geometry and exit
+- ```e``` enters edit mode (moving control points)
+- ```n``` enters append mode (click to add points)
 
 Example:
 
