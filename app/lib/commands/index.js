@@ -26,6 +26,7 @@ var commandModules = [
     require('./pan'),
     require('./filter'),
     require('./drawLine'),
+    require('./trace'),
     require('./navigate'),
     require('./media'),
     require('./select'),

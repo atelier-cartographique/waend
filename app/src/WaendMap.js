@@ -99,6 +99,10 @@ Map.prototype.getPixelFromCoordinate = function (coord) {
     return tv;
 };
 
+Map.prototype.getView = function () {
+    return this.view;
+};
+
 Map.prototype.getFeatures = function (extent) {
     return this.view.getFeatures(extent);
 };
