@@ -185,6 +185,7 @@ TracerModeEditPoint.prototype.mousemove = function (event) {
 
 TracerModeEditPoint.prototype.mouseup = function (event) {
     this.currentSelection = null;
+    this.tracer.setControls();
     this.tracer.draw();
 };
 
