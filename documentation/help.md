@@ -27,6 +27,7 @@ Feel free to give a hand !
 3.10 [draw](#draw)  
 3.11 [trace](#trace)   
 3.12 [del_feature](#del_feature)  
+3.13 [attach a layer to another map](#attach)  
 
 4.   [Style tips & tricks](#style-tips)
 4.1  [polygon fill color](#tip-fill)  
@@ -285,10 +286,20 @@ will draw a line, close it to make a polygon and create a feature out of it.
 
 ### <a name="del_feature"></a> delete feature (del_feature)
 
-In the context of a feature, and if you're granted to, the command will delete
-the current feature and bring you back to the parent layer context.
+In the context of a feature, and if you're granted to, the command will delete the current feature and bring you back to the parent layer context.
 
 In the context of a layer, you must give a feature ID in argument of the command.
+
+### <a name="attach"></a> attach a layer to another map (attach)
+
+In the context of a layer, and if you're granted to, the command will attach the current layer to another map. It doesn't *move* the layer but will *display* it within this other map. 
+
+You must specify wich map the layer should attached to, as argument of the command.
+
+	attach userID mapID
+
+
+
 
 ##<a name="style-tips"></a> Style tips & tricks
 

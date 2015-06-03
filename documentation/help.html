@@ -331,7 +331,8 @@ Feel free to give a hand !</p>
 3.9  <a href="#select">select feature (select)</a><br>
 3.10 <a href="#draw">draw</a><br>
 3.11 <a href="#trace">trace</a><br>
-3.12 <a href="#del_feature">del_feature</a>  </p></li>
+3.12 <a href="#del_feature">del_feature</a><br>
+3.13 <a href="#attach">attach a layer to another map</a>  </p></li>
 <li><p><a href="#style-tips">Style tips &amp; tricks</a>
 4.1  <a href="#tip-fill">polygon fill color</a>  </p></li>
 <li><p><a href="#import">Import Datas</a><br>
@@ -590,23 +591,30 @@ use [o] to zoom out</p>
 
 <h3 id="toc_22"><a name="del_feature"></a> delete feature (del_feature)</h3>
 
-<p>In the context of a feature, and if you&#39;re granted to, the command will delete
-the current feature and bring you back to the parent layer context.</p>
+<p>In the context of a feature, and if you&#39;re granted to, the command will delete the current feature and bring you back to the parent layer context.</p>
 
 <p>In the context of a layer, you must give a feature ID in argument of the command.</p>
 
-<h2 id="toc_23"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+<h3 id="toc_23"><a name="attach"></a> attach a layer to another map (attach)</h3>
 
-<h3 id="toc_24"><a name="tip-fill"></a> polygon fill color</h3>
+<p>In the context of a layer, and if you&#39;re granted to, the command will attach the current layer to another map. It doesn&#39;t <em>move</em> the layer but will <em>display</em> it within this other map. </p>
+
+<p>You must specify wich map the layer should attached to, as argument of the command.</p>
+
+<pre><code>attach userID mapID</code></pre>
+
+<h2 id="toc_24"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+
+<h3 id="toc_25"><a name="tip-fill"></a> polygon fill color</h3>
 
 <p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
 Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
 
 <p>You are done with a filled polygon !</p>
 
-<h2 id="toc_25"><a name="import"></a> Import data (import)</h2>
+<h2 id="toc_26"><a name="import"></a> Import data (import)</h2>
 
-<h3 id="toc_26"><a name="GeoJSON"></a> Working with GeoJSON</h3>
+<h3 id="toc_27"><a name="GeoJSON"></a> Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 
