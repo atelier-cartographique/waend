@@ -347,7 +347,7 @@ Tracer.prototype.getGeometry = function () {
     }
     else if ('Polygon' === gt) {
         if (coordinates.length > 3) {
-            polygonUnproject(coordinates);
+            polygonUnproject([coordinates]);
             return (new Geometry.Polygon([coordinates]));
         }
     }
@@ -510,9 +510,15 @@ function trace () {
         shell = self.shell,
         stdout = shell.stdout,
         terminal = shell.terminal,
-        map = shell.env.map,
+        env = shell.env,
+        map = env.map,
         view = map.getView(),
-        display = terminal.display();
+        display = terminal.display(),
+        geom;
+
+    if (env.DELIVERED && (env.DELIVERED instanceof Geometry.Geometry)) {
+        geom = env.DELIVERED;
+    }
 
     var tracerOptions = {
         'container': display.node,
@@ -532,7 +538,7 @@ function trace () {
             }
         };
         _.defer(function(){
-            tracer.start(ender);
+            tracer.start(ender, geom);
         });
     };
 

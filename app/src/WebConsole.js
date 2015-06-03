@@ -129,10 +129,12 @@ var WebConsole = Terminal.extend({
         // A bit of a trick to prevent keyup event to trigger on a display from here
         var keyPressEvent;
         var keyUpHandler = function () {
-            listener(keyPressEvent);
+            if (keyPressEvent) {
+                listener(keyPressEvent);
+            }
         };
         this._inputField.addEventListener('keypress', function (event) {
-            keyPressEvent =event;
+            keyPressEvent = event;
         }, false);
         this._inputField.addEventListener('keyup', keyUpHandler, false);
 
