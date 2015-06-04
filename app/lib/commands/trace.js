@@ -75,7 +75,7 @@ var CONTROL_SZ = 8,
     CONTROL_HALF_SZ = CONTROL_SZ / 2;
 
 
-function isKeyCode (kc) {
+function isKeyCode (event, kc) {
     return (kc === event.which || kc === event.keyCode);
 }
 
@@ -89,20 +89,20 @@ TracerMode.prototype.getName = function () {
 
 
 TracerMode.prototype.keypress = function (event) {
-    if (isKeyCode(101)) { // e
+    if (isKeyCode(event, 101)) { // e
         this.tracer.setMode('EditPoint');
     }
-    else if (isKeyCode(110)) { // n
+    else if (isKeyCode(event, 110)) { // n
         this.tracer.setMode('NewPoint');
     }
 };
 
 
 TracerMode.prototype.keyup = function (event) {
-    if (isKeyCode(13)) { // enter
+    if (isKeyCode(event, 13)) { // enter
         this.tracer.end();
     }
-    else if (isKeyCode(27)) { // escape
+    else if (isKeyCode(event, 27)) { // escape
         this.tracer.clear();
         this.tracer.end();
     }
@@ -537,9 +537,7 @@ function trace () {
                 reject('NoGeometry');
             }
         };
-        _.defer(function(){
-            tracer.start(ender, geom);
-        });
+        tracer.start(ender, geom);
     };
 
     return (new Promise(resolver));

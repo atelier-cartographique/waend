@@ -475,7 +475,7 @@ function getProperty (props, key, def) {
         && underscore.isString(val)
         && (val.length > 1)
         && ('@' === val[0])) {
-        return pathKey(props, val.slice(1), val);
+        return pathKey(props, val.slice(1), def);
     }
     return val;
 }
