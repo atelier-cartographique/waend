@@ -13,6 +13,7 @@
 
 var _ = require('underscore'),
     config = require('../../config'),
+    Geometry = require('../lib/Geometry'),
     semaphore = require('../lib/Semaphore');
 
 var MEDIA_URL = config.public.mediaUrl;
@@ -33,7 +34,7 @@ Painter.prototype.handlers = {
     'set': 'set',
     'clip': 'clip',
     'context': 'rawContext',
-    'image:clip': 'imageClip',
+    'image': 'image',
     'instructions': 'processInstructions',
     'save': 'save',
     'restore': 'restore'
@@ -87,7 +88,7 @@ Painter.prototype.set = function (prop, value) {
     else if ('lineDash' === prop) {
         this.context.setLineDash(value);
     }
-    
+
 };
 
 // clipping
@@ -125,20 +126,53 @@ Painter.prototype.drawPolygon = function (coordinates, ends) {
     }
 };
 
-Painter.prototype.imageClip = function (coordinates, extent, imagePath) {
+Painter.prototype.image = function (coordinates, extentArray, options) {
     var self = this,
         img = document.createElement('img'),
-        url = MEDIA_URL + '/' + imagePath,
-        sw = [extent[0], extent[1]],
-        ne = [extent[2], extent[3]],
-        width = Math.abs(ne[0] - sw[0]),
-        height = Math.abs(ne[1] - sw[1]);
+        url = MEDIA_URL + '/' + options.image,
+        extent = new Geometry.Extent(extentArray),
+        width = extent.getWidth(),
+        height = extent.getHeight();
 
     var complete = function () {
+        // now we're supposed to have access to image size
+        var imgWidth = img.naturalWidth,
+            imgHeight = img.naturalHeight,
+            sw = extent.getBottomLeft().getCoordinates(),
+            scale;
+
+        if ('none' === options.adjust) {
+            imgWidth = width;
+            imgHeight = height;
+        }
+        else if ('fit' === options.adjust) {
+            scale = Math.min(width/imgWidth, height/imgHeight);
+            imgWidth = imgWidth * scale;
+            imgHeight = imgHeight * scale;
+            if ((width - imgWidth) < (height - imgHeight)) {
+                sw[1] += (height - imgHeight) / 2;
+            }
+            else {
+                sw[0] += (width - imgWidth) / 2;
+            }
+        }
+        else if ('cover' === options.adjust) {
+            scale = Math.max(width/imgWidth, height/imgHeight);
+            imgWidth = imgWidth * scale;
+            imgHeight = imgHeight * scale;
+            if ((width - imgWidth) > (height - imgHeight)) {
+                sw[1] += (height - imgHeight) / 2;
+            }
+            else {
+                sw[0] += (width - imgWidth) / 2;
+            }
+        }
+
         self.context.save();
-        self.drawPolygon(coordinates, ['clip']);
-        self.context.drawImage(img, sw[0], sw[1], width, height);
-        // self.drawPolygon(coordinates, ['stroke']);
+        if (options.clip) {
+            self.drawPolygon(coordinates, ['clip']);
+        }
+        self.context.drawImage(img, sw[0], sw[1], imgWidth, imgHeight);
         self.context.restore();
     };
 

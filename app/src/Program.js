@@ -128,14 +128,20 @@ function Program (ctx) {
     };
 
 
-    var imagedPolygon = function (coordinates, props, fm) {
+    var imagedPolygon = function (coordinates, img, props, fm) {
         var T = new ctx.Transform(fm);
         ctx.polygonProject(coordinates);
         ctx.polygonTransform(T, coordinates);
         var p = new ctx.Geometry.Polygon(coordinates),
             extent = p.getExtent().getArray();
 
-        ctx.emit('image:clip', coordinates, extent, getParameter(props, 'image'));
+        var options = {
+            'image': img,
+            'clip' : getParameter(props, 'clip', true),
+            'adjust': getParameter(props, 'adjust', 'none') // 'fit', 'cover'
+        };
+
+        ctx.emit('image', coordinates, extent, options);
     };
 
     ctx.polygon = function (coordinates, props, fm) {
@@ -143,7 +149,7 @@ function Program (ctx) {
         var img = getParameter(props, 'image'),
             txt = getParameter(props, 'text');
         if (img) {
-            imagedPolygon(coordinates, props, fm);
+            imagedPolygon(coordinates, img, props, fm);
         }
         else if (txt) {
             textedPolygon(coordinates, props, fm);
