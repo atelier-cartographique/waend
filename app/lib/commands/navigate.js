@@ -16,7 +16,8 @@ var _ = require('underscore'),
     Geometry = require('../Geometry'),
     Transform = require('../Transform'),
     Projection = require('proj4'),
-    region = require('../Region');
+    region = require('../Region'),
+    semaphore = require('../Semaphore');
 
 
 var Proj3857 = Projection('EPSG:3857');
@@ -65,7 +66,10 @@ NavigatorMode.prototype.keypress = function (event) {
 
 
 NavigatorMode.prototype.keyup = function (event) {
-    if (isKeyCode(event, 38)) {
+    if (isKeyCode(event, 27)) { // escape
+        this.navigator.end();
+    }
+    else if (isKeyCode(event, 38)) {
         this.navigator.south();
     }
     else if (isKeyCode(event, 40)) {
@@ -83,8 +87,28 @@ NavigatorMode.prototype.keyup = function (event) {
 function NavigatorModeBase () {
     NavigatorMode.apply(this, arguments);
     this.modeName = 'ModeBase';
+
+    semaphore.on('region:change', function () {
+        if (this.isActive) {
+            this.navigator.draw();
+        }
+    }, this);
 }
 util.inherits(NavigatorModeBase, NavigatorMode);
+
+NavigatorModeBase.prototype.enter = function () {
+    this.navigator.draw();
+    this.isActive = true;
+};
+
+NavigatorModeBase.prototype.exit = function () {
+    this.navigator.clear();
+    this.isActive = true;
+};
+
+NavigatorModeBase.prototype.click = function (event) {
+    this.navigator.centerOn([event.clientX, event.clientY]);
+};
 
 var NAVIGATOR_MODES = [
     NavigatorModeBase,
@@ -110,10 +134,18 @@ function makeButton (label, callback, ctx) {
 
 function Navigator (options) {
     this.options = options;
-    this.transform = options.transform;
     this.setupModes();
     this.setupCanvas();
     this.setupButtons();
+    this.map = options.map;
+
+    var view = options.map.getView();
+
+    Object.defineProperty(this, 'transform', {
+        get: function () {
+            return view.transform.clone();
+        }
+    });
 }
 
 
@@ -156,7 +188,8 @@ Navigator.prototype.setupModes = function () {
 };
 
 Navigator.prototype.clear = function () {
-
+    var rect = this.canvas.getBoundingClientRect();
+    this.context.clearRect(0, 0, rect.width, rect.height);
 };
 
 Navigator.prototype.start = function (ender) {
@@ -168,11 +201,60 @@ Navigator.prototype.end = function () {
     this.ender();
 };
 
+Navigator.prototype.drawRegion = function () {
+    var ctx = this.context,
+        rect = this.canvas.getBoundingClientRect(),
+        extent = region.get(),
+        bl = extent.getBottomLeft().getCoordinates(),
+        tr = extent.getTopRight().getCoordinates(),
+        centerLatLong = extent.getCenter().getCoordinates(),
+        center;
+
+    bl = Proj3857.forward(bl);
+    tr = Proj3857.forward(tr);
+    center = Proj3857.forward(centerLatLong);
+    this.transform.mapVec2(bl);
+    this.transform.mapVec2(tr);
+    this.transform.mapVec2(center);
+
+    ctx.save();
+    ctx.strokeStyle = '#337AFF';
+    ctx.fillStyle = '#888';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(bl[0], bl[1]);
+    ctx.lineTo(bl[0], tr[1]);
+    ctx.lineTo(tr[0], tr[1]);
+    ctx.lineTo(tr[0], bl[1]);
+    ctx.lineTo(bl[0], bl[1]);
+    // ctx.lineTo(-2, rect.height + 2);
+    // ctx.lineTo(rect.width + 2, rect.height + 2);
+    // ctx.lineTo(rect.width + 2, -2);
+    // ctx.lineTo(-2, -2);
+    // ctx.lineTo(-2, rect.height + 2);
+    ctx.stroke();
+    // ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.strokeStyle = '#337AFF';
+    ctx.lineWidth = 2;
+    ctx.font = '16px monospace';
+    ctx.beginPath();
+    ctx.moveTo(center[0], -2);
+    ctx.lineTo(center[0], rect.height + 2);
+    ctx.stroke();
+    ctx.moveTo(-2, center[1]);
+    ctx.lineTo(rect.width + 2, center[1]);
+    ctx.stroke();
+    ctx.fillText(Geometry.toDMS(centerLatLong), 4 , center[1] - 4);
+    ctx.save();
+};
+
 Navigator.prototype.draw = function (selected) {
-    var rect = this.canvas.getBoundingClientRect();
-    this.context.clearRect(0, 0, rect.width, rect.height);
+    this.clear();
     this.drawRegion();
-    this.drawScale();
+    // this.drawScale();
     return this;
 };
 
@@ -189,12 +271,22 @@ Navigator.prototype.createMode = function (proto) {
 };
 
 Navigator.prototype.setMode = function (modeName) {
+    if (this.currentMode) {
+        var oldMode = this.getMode();
+        if (oldMode.exit) {
+            oldMode.exit();
+        }
+    }
     this.currentMode = modeName;
     if (this.modeButtons) {
         for (var mb in this.modeButtons) {
             this.modeButtons[mb].setAttribute('class', 'trace-button');
         }
         this.modeButtons[modeName].setAttribute('class', 'trace-button active');
+    }
+    var mode = this.getMode();
+    if (mode.enter) {
+        mode.enter();
     }
     return this;
 };
@@ -267,6 +359,15 @@ Navigator.prototype.west = function () {
     transformRegion(T, extent);
 };
 
+Navigator.prototype.centerOn = function (pix) {
+    var coords = this.map.getCoordinateFromPixel(pix),
+        T = new Transform(),
+        extent = region.get(),
+        center = extent.getCenter().getCoordinates();
+
+    T.translate(coords[0] - center[0], coords[1] - center[1]);
+    transformRegion(T, extent);
+};
 
 
 
@@ -277,12 +378,11 @@ function navigate () {
         stdout = shell.stdout,
         terminal = shell.terminal,
         map = shell.env.map,
-        view = map.getView(),
         display = terminal.display();
 
     var options = {
         'container': display.node,
-        'transform': view.transform.clone()
+        'map': map
     };
 
     var nav = new Navigator(options);

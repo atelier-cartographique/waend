@@ -173,9 +173,39 @@ Extent.prototype.getCenter = function () {
 };
 
 
+function toDMS (lat, lng) {
+    var latD, latM, latS,
+        lngD, lngM, lngS,
+        latAbs, lngAbs, latAz, lngAz;
+    if (_.isArray(lat)) {
+        lng = lat[0];
+        lat = lat[1];
+    }
+
+    latAbs = Math.abs(lat);
+    lngAbs = Math.abs(lng);
+    latAz = (lat < 0) ? 'S' : 'N';
+    lngAz = (lng < 0) ? 'W' : 'E';
+
+    latD = Math.floor(latAbs);
+    latM = Math.floor(60 * (latAbs - latD));
+    latS = 3600 * (latAbs - latD - latM/60);
+
+
+    lngD = Math.floor(lngAbs);
+    lngM = Math.floor(60 * (lngAbs - lngD));
+    lngS = 3600 * (lngAbs - lngD - lngM/60);
+
+    return [
+        latD + '°', latM + "′", latS.toPrecision(4) + "″", latAz,
+        lngD + '°', lngM + "′", lngS.toPrecision(4) + "″", lngAz
+        ].join(' ');
+}
+
 
 module.exports.Geometry = Geometry;
 module.exports.Extent = Extent;
 module.exports.Point = Point;
 module.exports.LineString = LineString;
 module.exports.Polygon = Polygon;
+module.exports.toDMS = toDMS;
