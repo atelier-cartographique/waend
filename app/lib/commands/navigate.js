@@ -17,7 +17,8 @@ var _ = require('underscore'),
     Transform = require('../Transform'),
     Projection = require('proj4'),
     region = require('../Region'),
-    semaphore = require('../Semaphore');
+    semaphore = require('../Semaphore'),
+    turf = require('turf');
 
 
 var Proj3857 = Projection('EPSG:3857');
@@ -238,6 +239,7 @@ Navigator.prototype.drawRegion = function () {
 
     ctx.save();
     ctx.strokeStyle = '#337AFF';
+    ctx.fillStyle = '#337AFF';
     ctx.lineWidth = 2;
     ctx.font = '16px monospace';
     ctx.beginPath();
@@ -251,10 +253,79 @@ Navigator.prototype.drawRegion = function () {
     ctx.save();
 };
 
+Navigator.prototype.drawScale = function () {
+    var ctx = this.context,
+        rect = this.canvas.getBoundingClientRect(),
+        extent = region.get(),
+        bl = extent.getBottomLeft().getCoordinates(),
+        tr = extent.getTopRight().getCoordinates(),
+        centerLatLong = extent.getCenter().getCoordinates(),
+        center;
+
+    bl = Proj3857.forward(bl);
+    tr = Proj3857.forward(tr);
+    center = Proj3857.forward(centerLatLong);
+    this.transform.mapVec2(bl);
+    this.transform.mapVec2(tr);
+    this.transform.mapVec2(center);
+
+    var hw = rect.width / 2,
+        left = rect.width * 0.25,
+        right = rect.width * 0.75,
+        top = rect.height - 128,
+        bottom = top + 64,
+        leftVec = this.map.getCoordinateFromPixel([left, top]),
+        rightVec = this.map.getCoordinateFromPixel([right, top]),
+        dist = turf.distance(turf.point(leftVec), turf.point(rightVec), 'kilometers') * 100000; // centimeters
+
+    var formatNumber = function (n) {
+        if (Math.floor(n) === n) {
+            return n;
+        }
+        return n.toFixed(2);
+    };
+
+    var labelRight, labelCenter;
+    if (dist < 100) {
+        labelRight = formatNumber(dist) + ' cm';
+        labelCenter = formatNumber(dist/2) + ' cm';
+    }
+    else if (dist < 100000) {
+        labelRight = formatNumber(dist / 100) + ' m';
+        labelCenter = formatNumber((dist/2)/100) + ' m';
+    }
+    else {
+        labelRight = formatNumber(dist / 100000) + ' km';
+        labelCenter = formatNumber((dist/2) / 100000) + ' km';
+    }
+
+    ctx.save();
+    ctx.fillStyle = 'black';
+    ctx.font = '16px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('0', left, top - 4);
+    ctx.fillText(labelCenter, hw, top - 4);
+    ctx.fillText(labelRight, right, top - 4);
+    ctx.restore();
+
+    ctx.save();
+    ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.fillRect(left, top, hw, 64);
+    ctx.restore();
+
+    ctx.save();
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.fillRect(left + 1, top + 1, hw /2, 31);
+    ctx.fillRect(hw, top + 32, hw/2, 31);
+    ctx.restore();
+};
+
 Navigator.prototype.draw = function (selected) {
     this.clear();
     this.drawRegion();
-    // this.drawScale();
+    this.drawScale();
     return this;
 };
 
