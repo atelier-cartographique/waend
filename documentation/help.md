@@ -12,8 +12,9 @@ Feel free to give a hand !
 2.5  [hatches number (hn)](#hn)  
 2.6  [hatches step (step)](#step)  
 2.7  [hatches rotation (rotation)](#rotation)  
-2.4  [text](#text)  
-2.4  [fontsize](#fontsize)
+2.8  [text](#text)  
+2.9  [fontsize](#fontsize)
+2.10 [image](#image)
 
 3.   [Commands details](#commands-details)  
 3.1  [help](#help)  
@@ -25,7 +26,7 @@ Feel free to give a hand !
 3.8  [navigate on map (navigate)](#navigate)  
 3.9  [select feature (select)](#select)  
 3.10 [draw](#draw)  
-3.11 [trace](#trace)   
+3.11 [trace](#trace)
 3.12 [del_feature](#del_feature)  
 3.13 [attach a layer to another map](#attach)  
 
@@ -51,19 +52,28 @@ Feel free to give a hand !
 - select : *select feature in viewport*
 - draw : *draw on map*
 - navigate : *navigate on map*
-- import : *import GeoJSON file (cannot be multilines, multipolygons, or points)*
+- import : *import GeoJSON file (only imports feature of type "Polygon" and "LineString")*
 - media upload : *upload image*
 - media list : *browse images*
+- media show [image_id]: *show image*
+- media pick : *select an image*
 
 Pipe (|) is allowed to chain commands together.
-like :
+e.g:
 
-	draw | close | create
+```
+draw | close | create
+```
 
 to draw a line, close it to make a polygon, and save it.
 That's what the "draw zone" button does !
 
-##<a name="keys"></a> Style attributes and parameters
+```
+media pick | set params.image
+```
+To attach an image to a feature.
+
+## <a name="keys"></a> Style attributes and parameters
 
 Every entities are attached a dictionary.
 One manipulates dictionary's values with the ```get```, ```set```,  ```del``` and ```edit``` commands.
@@ -180,6 +190,14 @@ Example:
 	set params.fontsize 12
 
 
+#### <a name="image"></a> image
+*application: polygon*
+
+Set an image to be inserted at the polygon's location.
+
+```params.clip``` boolean (default to true)
+
+```params.adjust``` 'none' or 'fit' or 'cover' (default to 'none')
 
 ## <a name="commands-details"></a> Commands details
 
