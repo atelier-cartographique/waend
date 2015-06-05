@@ -1,9 +1,9 @@
 /*
  * app/lib/commands/getAttribute.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -20,19 +20,19 @@ function getAttr () {
         args = _.toArray(arguments),
         key = args.shift(),
         sys = self.sys,
-        result = undefined;
+        result;
     if(key){
-        result = self.data.get(key)
+        result = self.data.get(key);
         // sys.stdout.write('"'+ key +'" : '+ JSON.stringify(self.data.get(key)));
-        sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(self.data.get(key)) + '</span>' + '</span>');
+        sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(result) + '</span>' + '</span>');
 
     }
     else{
         var data = self.data.getData();
         result = data;
 
-        for(var key in data){
-            sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(data[key]) + '</span>' + '</span>');     
+        for(var k in data){
+            sys.stdout.write('<span class="key-value key-'+ k + '">' + '<span class="key">' + k + ' :' + '</span>' + '<span class="value">' + JSON.stringify(data[k]) + '</span>' + '</span>');
             // stdout.write(terminal.makeCommand({
             //     'args': [
             //         'get '+ key +' | edit | set ' + key
@@ -48,10 +48,10 @@ function getAttr () {
 
     }
 
-   
+
     return self.end(result);
 
-};
+}
 
 
 module.exports = exports = {

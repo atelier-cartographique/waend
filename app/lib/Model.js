@@ -13,6 +13,20 @@ var _ = require('underscore'),
     O = require('../../lib/object').Object,
     Promise = require("bluebird");
 
+function pathKey (obj, path, def) {
+    path = path.split('.');
+    for(var i = 0, len = path.length; i < len; i++){
+        if (!obj || (typeof obj !== 'object')) {
+            return def;
+        }
+        obj = obj[path[i]];
+    }
+    if (obj === undefined) {
+        return def;
+    }
+    return obj;
+}
+
 
 var Model = O.extend({
     constructor: function(binder, data) {
@@ -34,8 +48,8 @@ var Model = O.extend({
         return (prop in this.data.properties);
     },
 
-    get: function (prop) {
-        return this.data.properties[prop];
+    get: function (key, def) {
+        return pathKey(this.data.properties, key, def);
     },
 
     getData: function () {
