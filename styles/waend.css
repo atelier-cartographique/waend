@@ -308,6 +308,29 @@ body {
   font-size: 11pt;
   letter-spacing: 0.5px;
 }
+.wc-mapblock {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  font-size: 125%;
+  color: #ff00be;
+  font-weight: normal;
+  letter-spacing: 2px;
+  text-align: right;
+  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+}
+.wc-nav,
+.wc-select,
+.wc-draw-zoom {
+  cursor: pointer;
+  margin-bottom: 0px;
+  border-bottom: 1px solid transparent;
+}
+.wc-nav:hover,
+.wc-select:hover,
+.wc-draw-zoom:hover {
+  border-bottom: 1px solid blue;
+}
 .key-name {
   display: inline-block !important;
 }
@@ -389,28 +412,56 @@ body {
   text-align: center;
   top: -3px;
 }
-.wc-mapblock {
+.navigate-buttons {
   position: absolute;
-  right: 12px;
-  top: 12px;
-  font-size: 125%;
-  color: #ff00be;
-  font-weight: normal;
-  letter-spacing: 2px;
-  text-align: right;
-  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  top: 32px;
+  left: 32px;
 }
-.wc-nav,
-.wc-select,
-.wc-draw-zoom {
+.navigate-buttons .navigate-button {
+  font-family: monospace;
+  font-weight: bold;
+  background-color: white;
+  border: 1px solid black;
+  font-size: 20px;
+  position: absolute;
+  width: 32px;
+  height: 26px;
+  padding-top: 6px;
+  text-align: center;
   cursor: pointer;
-  margin-bottom: 0px;
-  border-bottom: 1px solid transparent;
 }
-.wc-nav:hover,
-.wc-select:hover,
-.wc-draw-zoom:hover {
-  border-bottom: 1px solid blue;
+.navigate-buttons .navigate-button:hover {
+  background-color: #aaa;
+  border: 1px solid blue;
+}
+.navigate-buttons .navigate-button.navigate-zoom-in {
+  top: 0;
+  left: 0;
+}
+.navigate-buttons .navigate-button.navigate-zoom-out {
+  top: 0;
+  left: 36px;
+}
+.navigate-buttons .navigate-button.navigate-south {
+  top: 36px;
+  left: 18px;
+}
+.navigate-buttons .navigate-button.navigate-east {
+  top: 72px;
+  left: 0;
+}
+.navigate-buttons .navigate-button.navigate-west {
+  top: 72px;
+  left: 36px;
+}
+.navigate-buttons .navigate-button.navigate-north {
+  top: 110px;
+  left: 18px;
+}
+.navigate-buttons .navigate-button.navigate-exit {
+  width: 82px;
+  top: 150px;
+  left: 0;
 }
 .wc-buttons {
   position: absolute;

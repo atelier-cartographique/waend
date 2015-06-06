@@ -46,6 +46,26 @@ function transformRegion (T, opt_extent) {
     region.push(newExtent);
 }
 
+function makeButton (label, attrs, callback, ctx) {
+    var button = document.createElement('div'),
+        labelElement = document.createElement('span');
+    labelElement.setAttribute('class', 'label');
+    labelElement.innerHTML = label;
+
+    _.each(attrs, function (val, k) {
+        button.setAttribute(k, val);
+    });
+
+    if (callback) {
+        button.addEventListener('click', function(event){
+            callback.call(ctx, event);
+        }, false);
+    }
+
+    button.appendChild(labelElement);
+    return button;
+}
+
 
 function NavigatorMode (nav) {
     this.navigator = nav;
@@ -115,23 +135,6 @@ var NAVIGATOR_MODES = [
     NavigatorModeBase,
 ];
 
-function makeButton (label, callback, ctx) {
-    var button = document.createElement('div'),
-        labelElement = document.createElement('span');
-    button.setAttribute('class', 'trace-button');
-    labelElement.setAttribute('class', 'trace-button-label');
-    labelElement.innerHTML = label;
-
-    if (callback) {
-        button.addEventListener('click', function(event){
-            callback.call(ctx, event);
-        }, false);
-    }
-
-    button.appendChild(labelElement);
-    return button;
-}
-
 
 function Navigator (options) {
     this.options = options;
@@ -151,7 +154,52 @@ function Navigator (options) {
 
 
 Navigator.prototype.setupButtons = function () {
+    var container = this.options.container,
+        buttonBlock = document.createElement('div');
 
+    buttonBlock.setAttribute('class', 'navigate-buttons');
+
+    var zoomIn = makeButton('+', {
+        'class': 'navigate-button navigate-zoom-in',
+        'title': '[i]'
+        }, this.zoomIn, this);
+
+    var zoomOut = makeButton('-', {
+        'class': 'navigate-button navigate-zoom-out',
+        'title': '[o]'
+    }, this.zoomOut, this);
+
+    var west = makeButton('↦', {
+        'class': 'navigate-button navigate-west'
+    }, this.west, this);
+
+    var east = makeButton('↤', {
+        'class': 'navigate-button navigate-east'
+    }, this.east, this);
+
+    var north = makeButton('↧', {
+        'class': 'navigate-button navigate-north'
+    }, this.north, this);
+
+    var south = makeButton('↥', {
+        'class': 'navigate-button navigate-south'
+    }, this.south, this);
+
+    var exit = makeButton('exit', {
+        'class': 'navigate-button navigate-exit',
+        'title': 'escape'
+    }, this.end, this);
+
+
+    buttonBlock.appendChild(zoomIn);
+    buttonBlock.appendChild(zoomOut);
+    buttonBlock.appendChild(north);
+    buttonBlock.appendChild(east);
+    buttonBlock.appendChild(south);
+    buttonBlock.appendChild(west);
+    buttonBlock.appendChild(exit);
+
+    container.appendChild(buttonBlock);
 };
 
 Navigator.prototype.setupCanvas = function () {
@@ -219,6 +267,7 @@ Navigator.prototype.drawRegion = function () {
     this.transform.mapVec2(center);
 
     ctx.save();
+    ctx.setLineDash([4, 16]);
     ctx.strokeStyle = '#337AFF';
     ctx.fillStyle = '#888';
     ctx.lineWidth = 2;

@@ -125,6 +125,32 @@
     }
 }
 
+.wc-mapblock {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    font-size: 125%;
+    color: @pink;
+    font-weight: normal;
+    letter-spacing: 2px;
+    text-align: right;
+    .white-text-shadow;
+}
+
+.wc-nav,
+.wc-select,
+.wc-draw-zoom {
+	cursor: pointer;
+	margin-bottom: 0px;
+	border-bottom: 1px solid transparent; // to avoid glitch on over
+
+
+	&:hover {
+		border-bottom: 1px solid blue;
+	}
+}
+
+
 .key-name {
     display: inline-block !important;
 
