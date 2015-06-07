@@ -47,6 +47,10 @@ var BaseSource = O.Object.extend({
         delete this.index[id];
     },
 
+    getLength: function () {
+        return Object.keys(this.index).length;
+    },
+
     getFeatures: function (opt_extent) {
         var features = [], items, i;
         if (opt_extent) {

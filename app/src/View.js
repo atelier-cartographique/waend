@@ -90,6 +90,15 @@ View.prototype.setTransform = function () {
     this.transform.reset(t);
 };
 
+View.prototype.getGeoExtent = function (projection) {
+    var pExtent = this.extent,
+        projectedMin = pExtent.getBottomLeft().getCoordinates(),
+        projectedMax = pExtent.getTopRight().getCoordinates(),
+        min = projection.inverse(projectedMin),
+        max = projection.inverse(projectedMax);
+    return min.concat(max);
+};
+
 View.prototype.getProjectedPointOnView = function (x, y) {
     var v = [x,y],
         inv = this.transform.inverse();

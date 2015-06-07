@@ -24,6 +24,7 @@ var _ = require('underscore'),
  * projection => {forward()}
  */
 function CanvasRenderer (options) {
+    this.id = _.uniqueId();
     this.layer = options.layer;
     this.view = options.view;
     this.proj = options.projection;
@@ -33,18 +34,47 @@ function CanvasRenderer (options) {
     semaphore.on('map:update', this.render, this);
 }
 
+CanvasRenderer.prototype.getNewRenderId = function () {
+    return (this.id + '.' + _.uniqueId());
+};
+
+CanvasRenderer.prototype.dispatch = function () {
+    // var rid = arguments[0];
+    // if (rid !== this.renderId) {
+    //     console.warn('discarding render event', rid, this.renderId);
+    //     return;
+    // }
+
+    var painter = this.painter,
+        handlers = painter.handlers,
+        revent = arguments[0],
+        args = [];
+    for (var i = 1; i < arguments.length; i++) {
+        args.push(arguments[i]);
+    }
+
+    if (revent in handlers) {
+        painter[handlers[revent]].apply(painter, args);
+    }
+
+};
+
 CanvasRenderer.prototype.initWorker = function () {
     var self = this;
     var worker = new W(this.layer.getProgram());
-    var handler = function (m) {
-        return function () {
-            m.apply(self.painter, arguments);
-        };
-    };
-    for (var pk in this.painter.handlers) {
-        var method = this.painter[this.painter.handlers[pk]];
-        worker.on(pk, handler(method));
-    }
+    // var handler = function (m) {
+    //     return function () {
+    //         m.apply(self.painter, arguments);
+    //     };
+    // };
+    // for (var pk in this.painter.handlers) {
+    //     var method = this.painter[this.painter.handlers[pk]];
+    //     worker.on(pk, handler(method));
+    // }
+
+
+
+
     worker.start();
     this.layer.on('update', function(){
         worker.once('data:init', function(){
@@ -69,24 +99,23 @@ CanvasRenderer.prototype.render = function (opt_extent) {
         this.pendingUpdate = true;
         return;
     }
-    var self = this,
-        worker = this.worker,
-        pExtent = opt_extent ? (new Geometry.Extent(opt_extent)) : this.view.extent,
-        projectedMin = pExtent.getBottomLeft().getCoordinates(),
-        projectedMax = pExtent.getTopRight().getCoordinates(),
-        min = this.proj.inverse(projectedMin),
-        max = this.proj.inverse(projectedMax),
-        extent = min.concat(max);
+    var worker = this.worker;
 
-    // TODO clear only to features list extent
-    this.renderId = _.uniqueId();
-    this.worker.once('worker:render_id:'+this.renderId, function(){
-        // console.log('RENDER START', this.renderId);
-        this.painter.clear();
-        this.worker.post('update:view', extent, this.view.transform.flatMatrix());
-    }, this);
-    // this.features = {};
-    this.worker.post('worker:render_id', this.renderId);
+    if (this.renderId) {
+        console.log('removing handler', this.renderId);
+        worker.removeAllListeners(this.renderId);
+    }
+    this.renderId = this.getNewRenderId();
+    // worker.on('worker:render_id', function(rid){
+    this.painter.clear();
+    console.log('RENDER START', this.renderId);
+    var extent = this.view.getGeoExtent(this.proj);
+    worker.on(this.renderId, this.dispatch, this);
+    worker.post('update:view', this.renderId,
+                extent, this.view.transform.flatMatrix());
+    // }, this);
+
+    // worker.post('worker:render_id', this.renderId);
 };
 
 CanvasRenderer.prototype.stop = function () {

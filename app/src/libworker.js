@@ -88,9 +88,8 @@ function initData (data) {
     }
 }
 
-function updateView (opt_extent, opt_matrix) {
+function updateView (startedWith, opt_extent, opt_matrix) {
     var T = new Transform(opt_matrix);
-    var startedWith = renderId;
     var rf = function (feature) {
         var geom = feature.getGeometry(),
             geomType = geom.getType().toLowerCase(),
@@ -104,8 +103,10 @@ function updateView (opt_extent, opt_matrix) {
     };
 
     var features = dataSource.getFeatures(opt_extent);
+    console.log('updateView.start', startedWith, features.length);
     for (var i = 0; i < features.length; i++) {
         if(renderId !== startedWith) {
+            console.log('updateView.stop', i);
             break;
         }
         rf(features[i]);
@@ -120,16 +121,16 @@ function messageHandler (event) {
     if ('worker:render_id' === name) {
         renderId = args[0];
         console.log('worker:render_id', renderId);
-        emit('worker:render_id:'+renderId);
+        workerContext.postMessage(['worker:render_id', renderId]);
     }
     else if ('init:data' === name) {
         initData(args[0]);
-        console.log('init:data', args[0].length);
-        emit('data:init');
+        console.log('init:data', dataSource.getLength());
+        workerContext.postMessage(['data:init']);
     }
     else if ('update:view' === name) {
-        console.log('update:view');
-        updateView(args[0], args[1]);
+        renderId = args[0];
+        updateView(renderId, args[1], args[2]);
     }
 }
 
@@ -141,12 +142,10 @@ function emit () {
     if(0 === arguments.length) {
         return;
     }
-    args.push(arguments[0]);
-    // args.push(renderId);
-    if(arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args.push(arguments[i]);
-        }
+    args.push(renderId);
+    // args.push(arguments[0]);
+    for (var i = 0; i < arguments.length; i++) {
+        args.push(arguments[i]);
     }
     workerContext.postMessage(args);
 }
