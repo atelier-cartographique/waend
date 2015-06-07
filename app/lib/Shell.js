@@ -123,8 +123,8 @@ var Shell = O.extend({
 
 
     initHistory: function () {
+        var self = this;
         if (hasHistory) {
-            var self = this;
             var popStateCallback = function () {
                 self.historyPopContext.apply(self, arguments);
             };
@@ -146,8 +146,14 @@ var Shell = O.extend({
         }
         var startPath;
         if ((fragment.length > 0) && (path.length > 0)) {
-            this.historyPushContext(path);
+            var after = _.noop;
             startPath = path;
+            if (path.length === FEATURE) {
+                after = function() {
+                    self.exec('gg | region set');
+                };
+            }
+            this.historyPushContext(path).then(after);
         }
         this.historyStarted = startPath;
         this.emit('history:start', startPath);
