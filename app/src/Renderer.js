@@ -28,20 +28,11 @@ function CanvasRenderer (options) {
     this.layer = options.layer;
     this.view = options.view;
     this.proj = options.projection;
-    this._visible = true;
     this.painter = new Painter(this.view, this.layer.id);
     this.initWorker();
     this.features = {};
     semaphore.on('map:update', this.render, this);
 }
-
-CanvasRenderer.prototype.setVisibility = function (v) {
-    this._visible = !!v;
-};
-
-CanvasRenderer.prototype.isVisible = function () {
-    return this._visible;
-};
 
 CanvasRenderer.prototype.getNewRenderId = function () {
     return (this.id + '.' + _.uniqueId());
@@ -104,10 +95,6 @@ CanvasRenderer.prototype.initWorker = function () {
 };
 
 CanvasRenderer.prototype.render = function (opt_extent) {
-    if (!this.isVisible()) {
-        this.painter.clear();
-        return;
-    }
     if (!this.isReady) {
         this.pendingUpdate = true;
         return;
@@ -115,12 +102,8 @@ CanvasRenderer.prototype.render = function (opt_extent) {
     var worker = this.worker;
 
     if (this.renderId) {
-        var rid = this.renderId;
-        console.log('removing handler', rid);
-        worker.removeAllListeners(rid);
-        // worker.on(rid, function(){
-        //     // console.log('TRAsH', rid);
-        // });
+        console.log('removing handler', this.renderId);
+        worker.removeAllListeners(this.renderId);
     }
     this.renderId = this.getNewRenderId();
     // worker.on('worker:render_id', function(rid){
@@ -141,4 +124,3 @@ CanvasRenderer.prototype.stop = function () {
 
 
 module.exports = exports = CanvasRenderer;
-7

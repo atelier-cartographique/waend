@@ -30,6 +30,12 @@ var Source = BaseSource.extend({
 
         // listen to the layer to update features if some are created
         layer.on('change', this.update, this);
+        layer.on('set', function (key) {
+            var prefix = _.first(key.split('.'));
+            if (('style' === prefix) || ('params' === prefix)) {
+                this.emit('update');
+            }
+        }, this);
     },
 
 
