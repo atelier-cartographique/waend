@@ -318,8 +318,9 @@ Feel free to give a hand !</p>
 2.5  <a href="#hn">hatches number (hn)</a><br>
 2.6  <a href="#step">hatches step (step)</a><br>
 2.7  <a href="#rotation">hatches rotation (rotation)</a><br>
-2.4  <a href="#text">text</a><br>
-2.4  <a href="#fontsize">fontsize</a></p></li>
+2.8  <a href="#text">text</a><br>
+2.9  <a href="#fontsize">fontsize</a><br>
+2.10 <a href="#image">image</a></p></li>
 <li><p><a href="#commands-details">Commands details</a><br>
 3.1  <a href="#help">help</a><br>
 3.3  <a href="#lc">list commands (lc)</a><br>
@@ -333,7 +334,7 @@ Feel free to give a hand !</p>
 3.11 <a href="#trace">trace</a><br>
 3.12 <a href="#del_feature">del_feature</a><br>
 3.13 <a href="#attach">attach a layer to another map</a>  </p></li>
-<li><p><a href="#style-tips">Style tips &amp; tricks</a>
+<li><p><a href="#style-tips">Style tips &amp; tricks</a><br>
 4.1  <a href="#tip-fill">polygon fill color</a>  </p></li>
 <li><p><a href="#import">Import Datas</a><br>
 5.1  <a href="#GeoJSON">Working with GeoJSON</a></p></li>
@@ -353,18 +354,24 @@ Feel free to give a hand !</p>
 <li>select : <em>select feature in viewport</em></li>
 <li>draw : <em>draw on map</em></li>
 <li>navigate : <em>navigate on map</em></li>
-<li>import : <em>import GeoJSON file (cannot be multilines, multipolygons, or points)</em></li>
+<li>import : <em>import GeoJSON file (only imports feature of type &quot;Polygon&quot; and &quot;LineString&quot;)</em></li>
 <li>media upload : <em>upload image</em></li>
 <li>media list : <em>browse images</em></li>
+<li>media show [image_id]: <em>show image</em></li>
+<li>media pick : <em>select an image</em></li>
 </ul>
 
 <p>Pipe (|) is allowed to chain commands together.
-like :</p>
+e.g:</p>
 
 <pre><code>draw | close | create</code></pre>
 
 <p>to draw a line, close it to make a polygon, and save it.
 That&#39;s what the &quot;draw zone&quot; button does !</p>
+
+<pre><code>media pick | set params.image</code></pre>
+
+<p>To attach an image to a feature.</p>
 
 <h2 id="toc_2"><a name="keys"></a> Style attributes and parameters</h2>
 
@@ -481,17 +488,27 @@ size of the font (number)</p>
 
 <pre><code>set params.fontsize 12</code></pre>
 
-<h2 id="toc_11"><a name="commands-details"></a> Commands details</h2>
+<h4 id="toc_11"><a name="image"></a> image</h4>
 
-<h3 id="toc_12"><a name="help"></a> help</h3>
+<p><em>application: polygon</em></p>
+
+<p>Set an image to be inserted at the polygon&#39;s location.</p>
+
+<p><code>params.clip</code> boolean (default to true)</p>
+
+<p><code>params.adjust</code> &#39;none&#39; or &#39;fit&#39; or &#39;cover&#39; (default to &#39;none&#39;)</p>
+
+<h2 id="toc_12"><a name="commands-details"></a> Commands details</h2>
+
+<h3 id="toc_13"><a name="help"></a> help</h3>
 
 <p>get help</p>
 
-<h3 id="toc_13"><a name="lc"></a> list comands (lc)</h3>
+<h3 id="toc_14"><a name="lc"></a> list comands (lc)</h3>
 
 <p>list commands  </p>
 
-<h3 id="toc_14"><a name="set"></a> set attribute (set)</h3>
+<h3 id="toc_15"><a name="set"></a> set attribute (set)</h3>
 
 <p>set attribute to current element (user, group, layer or feature).</p>
 
@@ -505,7 +522,7 @@ size of the font (number)</p>
 set description &quot;here is my description&quot;
 set &quot;city population&quot; 1000000</code></pre>
 
-<h3 id="toc_15"><a name="get"></a> get attributes (get)</h3>
+<h3 id="toc_16"><a name="get"></a> get attributes (get)</h3>
 
 <p>get all attributes from current element
 get attributeName : get value for attributeName</p>
@@ -515,7 +532,7 @@ get attributeName : get value for attributeName</p>
 <pre><code>get
 get name</code></pre>
 
-<h3 id="toc_16"><a name="edit"></a> edit</h3>
+<h3 id="toc_17"><a name="edit"></a> edit</h3>
 
 <p>There is no <em>edit</em> button yet, but the functionality is here.
 To edit a key, type :</p>
@@ -530,7 +547,7 @@ To edit a key, type :</p>
 or
 get params | edit | set params</code></pre>
 
-<h3 id="toc_17"><a name="del"></a> delete (del)</h3>
+<h3 id="toc_18"><a name="del"></a> delete (del)</h3>
 
 <p>Delete an attribute</p>
 
@@ -546,7 +563,7 @@ get params | edit | set params</code></pre>
 or
 del style</code></pre>
 
-<h3 id="toc_18"><a name="navigate"></a> navigate in map (navigate)</h3>
+<h3 id="toc_19"><a name="navigate"></a> navigate in map (navigate)</h3>
 
 <p>navigate in the map viewport<br>
 use keyboard arrows to navigate<br>
@@ -555,11 +572,11 @@ use [o] to zoom out</p>
 
 <p>Type any other key to escape this mode.</p>
 
-<h3 id="toc_19"><a name="select"></a> select features (select)</h3>
+<h3 id="toc_20"><a name="select"></a> select features (select)</h3>
 
 <p>select a feature in the viewport</p>
 
-<h3 id="toc_20"><a name="draw"></a> draw</h3>
+<h3 id="toc_21"><a name="draw"></a> draw</h3>
 
 <p>draw with on map, usualy pipped with another command  </p>
 
@@ -569,7 +586,7 @@ use [o] to zoom out</p>
 
 <p>will set the region viewport to the drawing extend</p>
 
-<h3 id="toc_21"><a name="trace"></a> trace</h3>
+<h3 id="toc_22"><a name="trace"></a> trace</h3>
 
 <p>trace with on map, usualy pipped with another command.</p>
 
@@ -589,13 +606,13 @@ use [o] to zoom out</p>
 
 <p>will draw a line, close it to make a polygon and create a feature out of it.</p>
 
-<h3 id="toc_22"><a name="del_feature"></a> delete feature (del_feature)</h3>
+<h3 id="toc_23"><a name="del_feature"></a> delete feature (del_feature)</h3>
 
 <p>In the context of a feature, and if you&#39;re granted to, the command will delete the current feature and bring you back to the parent layer context.</p>
 
 <p>In the context of a layer, you must give a feature ID in argument of the command.</p>
 
-<h3 id="toc_23"><a name="attach"></a> attach a layer to another map (attach)</h3>
+<h3 id="toc_24"><a name="attach"></a> attach a layer to another map (attach)</h3>
 
 <p>In the context of a layer, and if you&#39;re granted to, the command will attach the current layer to another map. It doesn&#39;t <em>move</em> the layer but will <em>display</em> it within this other map. </p>
 
@@ -603,18 +620,18 @@ use [o] to zoom out</p>
 
 <pre><code>attach userID mapID</code></pre>
 
-<h2 id="toc_24"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+<h2 id="toc_25"><a name="style-tips"></a> Style tips &amp; tricks</h2>
 
-<h3 id="toc_25"><a name="tip-fill"></a> polygon fill color</h3>
+<h3 id="toc_26"><a name="tip-fill"></a> polygon fill color</h3>
 
 <p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
 Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
 
 <p>You are done with a filled polygon !</p>
 
-<h2 id="toc_26"><a name="import"></a> Import data (import)</h2>
+<h2 id="toc_27"><a name="import"></a> Import data (import)</h2>
 
-<h3 id="toc_27"><a name="GeoJSON"></a> Working with GeoJSON</h3>
+<h3 id="toc_28"><a name="GeoJSON"></a> Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 

@@ -13,7 +13,7 @@ Feel free to give a hand !
 2.6  [hatches step (step)](#step)  
 2.7  [hatches rotation (rotation)](#rotation)  
 2.8  [text](#text)  
-2.9  [fontsize](#fontsize)
+2.9  [fontsize](#fontsize)  
 2.10 [image](#image)
 
 3.   [Commands details](#commands-details)  
@@ -26,11 +26,11 @@ Feel free to give a hand !
 3.8  [navigate on map (navigate)](#navigate)  
 3.9  [select feature (select)](#select)  
 3.10 [draw](#draw)  
-3.11 [trace](#trace)
-3.12 [del_feature](#del_feature)  
+3.11 [trace](#trace)  
+3.12 [del_feature](#del_feature)    
 3.13 [attach a layer to another map](#attach)  
 
-4.   [Style tips & tricks](#style-tips)
+4.   [Style tips & tricks](#style-tips)  
 4.1  [polygon fill color](#tip-fill)  
 
 5.   [Import Datas](#import)  
