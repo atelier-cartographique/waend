@@ -23,8 +23,8 @@ function Painter (view, layerId) {
     this.transform = view.transform.clone();
     this.view = view;
     semaphore.on('view:change', this.resetTransform, this);
-    this.resetTransform();
-    this.resetClip();
+    this.stateInc = 0;
+    this.clear();
 
     this.context.globalCompositeOperation = 'multiply';
 }
@@ -59,6 +59,11 @@ Painter.prototype.resetClip = function () {
 };
 
 Painter.prototype.clear = function () {
+    while (this.stateInc > 0) {
+        this.restore();
+    }
+    this.resetTransform();
+    this.resetClip();
     this.context.clearRect(0, 0, this.view.size.width, this.view.size.height);
 };
 //
@@ -68,10 +73,12 @@ Painter.prototype.clear = function () {
 
 Painter.prototype.save = function () {
     this.context.save();
+    this.stateInc += 1;
 };
 
 Painter.prototype.restore = function () {
     this.context.restore();
+    this.stateInc -= 1;
 };
 
 Painter.prototype.wrap = function (f, ctx) {
@@ -95,11 +102,11 @@ Painter.prototype.set = function (prop, value) {
 Painter.prototype.clip = function (cmd, coordinates) {
     // console.log('painter.clip', cmd, coordinates ? coordinates[0][0]: '-');
     if('end' === cmd) {
-        this.context.restore();
+        this.restore();
         // this.resetClip();
     }
     else if('begin' === cmd) {
-        this.context.save();
+        this.save();
         this.drawPolygon(coordinates, ['clip']);
         // this.drawPolygon(coordinates, ['closePath', 'stroke']);
     }
@@ -168,12 +175,12 @@ Painter.prototype.image = function (coordinates, extentArray, options) {
             }
         }
 
-        self.context.save();
+        self.save();
         if (options.clip) {
             self.drawPolygon(coordinates, ['clip']);
         }
         self.context.drawImage(img, sw[0], sw[1], imgWidth, imgHeight);
-        self.context.restore();
+        self.restore();
     };
 
     var getStep = function (sz) {

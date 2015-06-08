@@ -103,13 +103,38 @@ function updateView (startedWith, opt_extent, opt_matrix) {
     };
 
     var features = dataSource.getFeatures(opt_extent);
+
     console.log('updateView.start', startedWith, features.length);
-    for (var i = 0; i < features.length; i++) {
-        if(renderId !== startedWith) {
-            console.log('updateView.stop', i);
-            break;
+    var renderBatch = function (start, stop) {
+        if (renderId !== startedWith) {
+            console.log('renderBatch abort due to outdated renderId', startedWith, renderId, start, stop);
+            return;
         }
-        rf(features[i]);
+        console.log('renderBatch', startedWith, start, stop);
+        for (var j = start; j < stop; j++) {
+            if (features[j]) {
+                rf(features[j]);
+            }
+            else {
+                console.log('renderBatch abort', start, stop, j);
+                return;
+            }
+        }
+    };
+
+    var batchLength = 512;
+    if (renderId === startedWith) {
+        for (var i = 0; i < features.length; i += batchLength) {
+            var stop = Math.min(features.length, i + batchLength);
+            if (!features[i] || !features[stop - 1]) {
+                console.log('updateView.stop because of something changed with data', i);
+                break;
+            }
+            underscore.defer(renderBatch, i, stop);
+        }
+    }
+    else {
+        console.log('updateView.stop because of updated renderId', startedWith, renderId);
     }
 }
 
@@ -130,7 +155,9 @@ function messageHandler (event) {
     }
     else if ('update:view' === name) {
         renderId = args[0];
-        updateView(renderId, args[1], args[2]);
+        var localRenderId = renderId;
+        // updateView(renderId, args[1], args[2]);
+        underscore.defer(updateView, localRenderId, args[1], args[2]);
     }
 }
 

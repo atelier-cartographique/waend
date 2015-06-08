@@ -9,7 +9,8 @@
  */
 
 
-var Promise = require("bluebird");
+var _ = require('underscore'),
+    Promise = require("bluebird");
 
 function listLayers () {
     var self = this,
@@ -34,12 +35,12 @@ function listLayers () {
                     });
                     stdout.write(cmd, ' ', layer.get('name') || '');
                 }
-                resolve();
+                resolve(_.map(layers, function(l){return l.id;}));
             })
             .catch(reject);
-    }
+    };
     return (new Promise(res));
-};
+}
 
 
 module.exports = exports = {

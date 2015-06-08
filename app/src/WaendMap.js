@@ -38,6 +38,7 @@ Map.prototype.listenToWaend = function () {
     semaphore.on('layer:layer:remove', this.waendRemoveLayer, this);
     semaphore.on('please:map:render', this.render, this);
     semaphore.on('region:change', this.waendUpdateExtent, this);
+    semaphore.on('visibility:change', this.setVisibility, this);
 };
 
 Map.prototype.unlistenToWaend = function () {
@@ -56,6 +57,17 @@ Map.prototype.waendUpdateExtent = function (extent) {
 };
 
 Map.prototype.waendUpdateRegion = function () {
+};
+
+Map.prototype.setVisibility = function (layerIds) {
+    _.each(this.renderers, function(rdr, id){
+        var vs = rdr.isVisible(),
+            ts = _.indexOf(layerIds, id) >= 0;
+        if (ts !== vs) {
+            rdr.setVisibility(ts);
+            rdr.render();
+        }
+    });
 };
 
 Map.prototype.render = function () {
