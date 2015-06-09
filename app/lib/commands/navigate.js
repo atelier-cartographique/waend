@@ -43,6 +43,11 @@ function transformExtent (extent, T) {
     return min.concat(max);
 }
 
+function vecDist (v1, v2) {
+    var dx = v2[0] - v1[0],
+        dy = v2[1] - v1[1];
+    return Math.sqrt((dx*dx) + (dy*dy));
+}
 
 
 function isKeyCode (event, kc) {
@@ -147,9 +152,7 @@ NavigatorModeBase.prototype.exit = function () {
     this.isActive = true;
 };
 
-NavigatorModeBase.prototype.click = function (event) {
-    this.navigator.centerOn([event.clientX, event.clientY]);
-};
+
 
 NavigatorModeBase.prototype.wheel = function (event) {
     if (Math.abs(event.deltaY) > 2) {
@@ -161,6 +164,66 @@ NavigatorModeBase.prototype.wheel = function (event) {
         }
     }
 };
+
+
+NavigatorModeBase.prototype.mousedown = function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.startPoint = [event.clientX, event.clientY];
+    this.isStarted = true;
+    if (!this.select) {
+        this.select = document.createElement('div');
+        this.select.setAttribute('class', 'navigate-select');
+        this.select.style.position = 'absolute';
+        this.select.style.pointerEvents = 'none';
+        this.select.style.display = 'none';
+        this.navigator.options.container.appendChild(this.select);
+    }
+
+};
+
+
+NavigatorModeBase.prototype.mousemove = function (event) {
+    if (this.isStarted) {
+        var sp = this.startPoint,
+            hp = [event.clientX, event.clientY],
+            extent = new Geometry.Extent(sp.concat(hp));
+        extent.normalize();
+        var tl = extent.getBottomLeft().getCoordinates();
+        this.select.style.left = tl[0] + 'px';
+        this.select.style.top = tl[1] + 'px';
+        this.select.style.width = extent.getWidth() + 'px';
+        this.select.style.height = extent.getHeight() + 'px';
+
+        if (!this.isMoving) {
+            this.isMoving = true;
+            this.select.style.display = 'block';
+        }
+
+    }
+};
+
+NavigatorModeBase.prototype.mouseup = function (event) {
+    if (this.isStarted) {
+        var endPoint = [event.clientX, event.clientY],
+            startPoint = this.startPoint,
+            dist = vecDist(startPoint, endPoint);
+
+        if (dist > 2) {
+            var TI = this.navigator.transform.inverse(),
+                extent = unprojectExtent(transformExtent(startPoint.concat(endPoint), TI));
+
+            region.push(extent);
+        }
+        else {
+            this.navigator.centerOn(startPoint);
+        }
+        this.isStarted = false;
+        this.isMoving = false;
+        this.select.style.display = 'none';
+    }
+};
+
 
 var NAVIGATOR_MODES = [
     NavigatorModeBase,

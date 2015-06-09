@@ -463,6 +463,9 @@ body {
   top: 150px;
   left: 0;
 }
+.navigate-select {
+  border: 1px solid red;
+}
 .wc-buttons {
   position: absolute;
   bottom: 55px;
