@@ -23,6 +23,26 @@ var _ = require('underscore'),
 
 var Proj3857 = Projection('EPSG:3857');
 
+function projectExtent (extent) {
+    var min = Proj3857.forward(extent.slice(0,2)),
+        max = Proj3857.forward(extent.slice(2));
+    return min.concat(max);
+}
+
+function unprojectExtent (extent) {
+    var min = Proj3857.inverse(extent.slice(0,2)),
+        max = Proj3857.inverse(extent.slice(2));
+    return min.concat(max);
+}
+
+function transformExtent (extent, T) {
+    var min = extent.slice(0,2),
+        max = extent.slice(2);
+    T.mapVec2(min);
+    T.mapVec2(max);
+    return min.concat(max);
+}
+
 
 
 function isKeyCode (event, kc) {
@@ -425,21 +445,16 @@ Navigator.prototype.dispatcher = function (event) {
     }
 };
 
-
 Navigator.prototype.zoomIn = function () {
     var extent = region.get(),
         val = getStep(extent);
-
-    var newExtent = extent.buffer(-val);
-    region.push(newExtent);
+    region.push(extent.buffer(-val));
 };
 
 Navigator.prototype.zoomOut = function () {
     var extent = region.get(),
         val = getStep(extent);
-
-    var newExtent = extent.buffer(val);
-    region.push(newExtent);
+    region.push(extent.buffer(val));
 };
 
 

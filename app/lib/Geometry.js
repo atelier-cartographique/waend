@@ -132,21 +132,30 @@ Extent.prototype.normalize = function () {
 };
 
 Extent.prototype.buffer = function (value) {
+    var w = this.getWidth(),
+        h = this.getHeight(),
+        d = Math.sqrt((w*w) + (h*h)),
+        dn = d + value,
+        wn = w * (dn / d),
+        hn = h * (dn / d),
+        c = this.getCenter().getCoordinates();
     this.extent = [
-        this.extent[0] - value,
-        this.extent[1] - value,
-        this.extent[2] + value,
-        this.extent[3] + value
+        c[0] - (wn / 2),
+        c[1] - (hn / 2),
+        c[0] + (wn / 2),
+        c[1] + (hn / 2)
       ];
     return this;
 };
 
+
+
 Extent.prototype.getHeight = function () {
-    return (this.extent[3] - this.extent[1]);
+    return Math.abs(this.extent[3] - this.extent[1]);
 };
 
 Extent.prototype.getWidth = function () {
-    return (this.extent[2] - this.extent[0]);
+    return Math.abs(this.extent[2] - this.extent[0]);
 };
 
 Extent.prototype.getBottomLeft = function () {
