@@ -15,9 +15,8 @@ function Program (ctx) {
         return ctx.getProperty(props, 'params.'+k, def);
     };
 
-    var startFeature = function (geom, props, fm) {
-        var T = new ctx.Transform(fm);
-        ctx.processStyle(props, T);
+    var startFeature = function (props, fm) {
+        ctx.processStyle(props, new ctx.Transform(fm));
     };
 
     var endFeature = function () {
