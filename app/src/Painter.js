@@ -54,9 +54,11 @@ Painter.prototype.resetClip = function () {
     var ctx = this.context,
         view = this.view;
 
+    this.context.beginPath();
     this.context.rect(0, 0, view.size.width, view.size.height);
     this.context.clip();
 };
+
 
 Painter.prototype.clear = function () {
     while (this.stateInc > 0) {
