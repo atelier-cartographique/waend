@@ -29,9 +29,11 @@ Feel free to give a hand !
 3.11 [trace](#trace)  
 3.12 [del_feature](#del_feature)    
 3.13 [attach a layer to another map](#attach)  
+3.14 [visibility of layers](#visible)  
 
 4.   [Style tips & tricks](#style-tips)  
 4.1  [polygon fill color](#tip-fill)  
+4.2  [play with Composite Operation](#tip-composite)  
 
 5.   [Import Datas](#import)  
 5.1  [Working with GeoJSON](#GeoJSON)
@@ -283,7 +285,8 @@ will set the region viewport to the drawing extend
 
 
 ### <a name="trace"></a> trace
-trace with on map, usualy pipped with another command.
+trace with on map, usualy pipped with another command.  
+Trace is usefull to creat segmented lines and polygons.
 
 keys:
 - ```enter``` validate geometry and exit
@@ -291,15 +294,16 @@ keys:
 - ```e``` enters edit mode (moving control points)
 - ```n``` enters append mode (click to add points)
 
-Example:
+To create a feature out of it, in a layer context, use :
 
 	trace | create
 
-will draw a line and create a feature out of it.
+It will draw a line and create a feature out of it.  
+Click on the first point to close the line and make a polygon.
 
-	trace | close | create
+To edit a feature geometry, use : 
 
-will draw a line, close it to make a polygon and create a feature out of it.
+	gg | trace | sg
 
 
 ### <a name="del_feature"></a> delete feature (del_feature)
@@ -317,6 +321,10 @@ You must specify wich map the layer should attached to, as argument of the comma
 	attach userID mapID
 
 
+### <a name="visible"></a> Visibility of layers (visible)
+
+On a map context, type ```visible``` to chose which layers to display.
+
 
 
 ##<a name="style-tips"></a> Style tips & tricks
@@ -327,6 +335,15 @@ Set ```params.hn``` key to 1 (One line to this polygon).
 Set ```style.lineWidth``` to 3000 (the line will be 3000px wide)
 
 You are done with a filled polygon !
+
+###<a name="tip-composite"></a> Play with Composite Operation
+
+We use multiply compositing mode by default in layers.  
+If you want to change it, please refer to [Canvas MDN documentation] (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation)
+
+Exemple for no compositing :
+
+	set style.globalCompositeOperation source-over
 
 
 ##<a name="import"></a> Import data (import)

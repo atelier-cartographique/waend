@@ -333,9 +333,11 @@ Feel free to give a hand !</p>
 3.10 <a href="#draw">draw</a><br>
 3.11 <a href="#trace">trace</a><br>
 3.12 <a href="#del_feature">del_feature</a><br>
-3.13 <a href="#attach">attach a layer to another map</a>  </p></li>
+3.13 <a href="#attach">attach a layer to another map</a><br>
+3.14 <a href="#visible">visibility of layers</a>  </p></li>
 <li><p><a href="#style-tips">Style tips &amp; tricks</a><br>
-4.1  <a href="#tip-fill">polygon fill color</a>  </p></li>
+4.1  <a href="#tip-fill">polygon fill color</a><br>
+4.2  <a href="#tip-composite">play with Composite Operation</a>  </p></li>
 <li><p><a href="#import">Import Datas</a><br>
 5.1  <a href="#GeoJSON">Working with GeoJSON</a></p></li>
 </ol>
@@ -588,7 +590,8 @@ use [o] to zoom out</p>
 
 <h3 id="toc_22"><a name="trace"></a> trace</h3>
 
-<p>trace with on map, usualy pipped with another command.</p>
+<p>trace with on map, usualy pipped with another command.<br>
+Trace is usefull to creat segmented lines and polygons.</p>
 
 <p>keys:
 - <code>enter</code> validate geometry and exit
@@ -596,15 +599,16 @@ use [o] to zoom out</p>
 - <code>e</code> enters edit mode (moving control points)
 - <code>n</code> enters append mode (click to add points)</p>
 
-<p>Example:</p>
+<p>To create a feature out of it, in a layer context, use :</p>
 
 <pre><code>trace | create</code></pre>
 
-<p>will draw a line and create a feature out of it.</p>
+<p>It will draw a line and create a feature out of it.<br>
+Click on the first point to close the line and make a polygon.</p>
 
-<pre><code>trace | close | create</code></pre>
+<p>To edit a feature geometry, use : </p>
 
-<p>will draw a line, close it to make a polygon and create a feature out of it.</p>
+<pre><code>gg | trace | sg</code></pre>
 
 <h3 id="toc_23"><a name="del_feature"></a> delete feature (del_feature)</h3>
 
@@ -620,18 +624,31 @@ use [o] to zoom out</p>
 
 <pre><code>attach userID mapID</code></pre>
 
-<h2 id="toc_25"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+<h3 id="toc_25"><a name="visible"></a> Visibility of layers (visible)</h3>
 
-<h3 id="toc_26"><a name="tip-fill"></a> polygon fill color</h3>
+<p>On a map context, type <code>visible</code> to chose which layers to display.</p>
+
+<h2 id="toc_26"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+
+<h3 id="toc_27"><a name="tip-fill"></a> polygon fill color</h3>
 
 <p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
 Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
 
 <p>You are done with a filled polygon !</p>
 
-<h2 id="toc_27"><a name="import"></a> Import data (import)</h2>
+<h3 id="toc_28"><a name="tip-composite"></a> Play with Composite Operation</h3>
 
-<h3 id="toc_28"><a name="GeoJSON"></a> Working with GeoJSON</h3>
+<p>We use multiply compositing mode by default in layers.<br>
+If you want to change it, please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">Canvas MDN documentation</a></p>
+
+<p>Exemple for no compositing :</p>
+
+<pre><code>set style.globalCompositeOperation source-over</code></pre>
+
+<h2 id="toc_29"><a name="import"></a> Import data (import)</h2>
+
+<h3 id="toc_30"><a name="GeoJSON"></a> Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 
