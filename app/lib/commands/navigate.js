@@ -151,6 +151,17 @@ NavigatorModeBase.prototype.click = function (event) {
     this.navigator.centerOn([event.clientX, event.clientY]);
 };
 
+NavigatorModeBase.prototype.wheel = function (event) {
+    if (Math.abs(event.deltaY) > 2) {
+        if (event.deltaY < 0) {
+            this.navigator.zoomIn();
+        }
+        else {
+            this.navigator.zoomOut();
+        }
+    }
+};
+
 var NAVIGATOR_MODES = [
     NavigatorModeBase,
 ];
@@ -243,7 +254,8 @@ Navigator.prototype.setupCanvas = function () {
         events = [
             'click', 'dblclick',
             'mousedown', 'mousemove', 'mouseup',
-            'keypress', 'keydown', 'keyup'
+            'keypress', 'keydown', 'keyup',
+            'wheel'
             ];
     for (var i = 0; i < events.length; i++) {
         this.canvas.addEventListener(events[i], dispatcher, false);
