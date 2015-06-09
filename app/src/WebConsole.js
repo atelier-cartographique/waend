@@ -387,6 +387,7 @@ var WebConsole = Terminal.extend({
                         unlock();
                     })
                     .catch(function(err){
+                        self.writeError(err);
                         self.insertInput();
                         unlock();
                     });

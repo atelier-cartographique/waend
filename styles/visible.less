@@ -1,0 +1,48 @@
+
+.visible-wrapper {
+    position: relative;
+    width: 33%;
+    height: 100%;
+    margin: auto;
+    overflow-y:auto;
+
+    .visible-cancel, .visible-submit {
+        position: absolute;
+        bottom: 24px;
+        color: white;
+        font-weight: bold;
+        font-size: 200%;
+        text-shadow: 0 0 6px black;
+        cursor: pointer;
+    }
+
+    .visible-cancel:hover, .visible-submit:hover {
+        color: blue;
+    }
+
+    .visible-submit {
+        left:24px;
+    }
+    .visible-cancel {
+        left:124px;
+    }
+
+    .visible-layer {
+        background-color: rgba(255,255,255, 0.2);
+        color: black;
+        font-weight: bold;
+        font-size: 160%;
+        cursor: pointer;
+        padding: 12px;
+        margin:12px;
+        text-align:center;
+    }
+
+    .visible-yes {
+        border: 3px solid #00B8FF;
+    }
+    .visible-no {
+        border: 3px solid #D4D4D4;
+    }
+
+}
