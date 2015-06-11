@@ -261,14 +261,7 @@ function getWritableSegments (p, lineHeight, start) {
 }
 
 
-function transformCommand () {
-    var transforms = [],
-        cmd = arguments[arguments.length - 1],
-        argMaxIdx = arguments.length - 1;
-
-    for (var i = 0; i < argMaxIdx; i++) {
-        transforms.push(arguments[i]);
-    }
+function transformCommand (transforms, cmd) {
 
     var tfn = underscore.compose.apply(underscore, transforms);
 
@@ -318,7 +311,7 @@ function drawTextInPolygon (T, polygon, txt, fs) {
                     p = paths[i];
                     instructions.push(['beginPath']);
                     for (var ii = 0; ii < p.commands.length; ii++) {
-                        instructions.push(transformCommand(tfn, p.commands[ii]));
+                        instructions.push(transformCommand([tfn], p.commands[ii]));
                     }
                     instructions.push(['fill']);
                 }
@@ -438,12 +431,19 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
     var fs = fsz || 100,
         startSegment = 0,
         t = new Text(txt), result, tOffsets = [0,0],
-        paths, p, cmd, TT, tfnR, angle,
         tfn = T.mapVec2Fn(),
         instructions = [],
         segments = [],
-        ts = T.getScale(),
-        tsi = T.inverse().getScale();
+        tsc = T.getScale(),
+        ttr = T.getTranslate(),
+        TI = T.inverse(),
+        tsi = TI.getScale(),
+        translate = (new Transform()).translate(ttr[0] / tsc[0], ttr[1] / tsc[1]),
+        scale = (new Transform()).scale(tsc[0], tsc[1]),
+        translator = translate.mapVec2Fn('translate'),
+        scalator = scale.mapVec2Fn('scale')
+        ident = (new Transform()).mapVec2Fn();
+
 
     for (var lidx = 1; lidx < coordinates.length; lidx++) {
         var start = coordinates[lidx - 1],
@@ -455,29 +455,78 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
 
     var proceed = function () {
         if (segments.length > 0) {
-            result = t.draw(fs, segments, tOffsets, true);
+            var result = t.draw(fs, segments, tOffsets, true),
+                paths = result[1],
+                TT, rotator, angle, p, pos;
+
             tOffsets = result[0];
-            paths = result[1];
 
             for (var i = 0; i < paths.length; i++) {
                 p = paths[i];
-                angle = Math.abs(lineAngle(p.segment[0], p.segment[1]));
-                tfnR = (new Transform())
-                            .rotate(angle, {x:p.pos[0], y:p.pos[1]})
-                            .mapVec2Fn();
-                // TT.rotate(p.segment.angle);
-                // tfn = T.clone().multiply(p.segment.T).mapVec2Fn();
-                // tfn = T.clone().multiply(TT).mapVec2Fn();
+                instructions = [];
+                pos = [
+                    p.pos[0] + (ttr[0] / tsc[0]),
+                    p.pos[1] + (ttr[1] / tsc[1])
+                ];
+                angle =  Math.abs(lineAngle(p.segment[0], p.segment[1])) * -1;
+                TT = new Transform();
+                TT.multiply(translate);
+                TT.rotate(angle, pos);
+                TT.multiply(scale);
+                emit('save');
+                emit.apply(self, ['transform'].concat(TT.flatMatrix()));
                 instructions.push(['beginPath']);
                 for (var ii = 0; ii < p.commands.length; ii++) {
-                    instructions.push(transformCommand(tfn, tfnR, p.commands[ii]));
+                    instructions.push(transformCommand([ident], p.commands[ii]));
+
                 }
                 instructions.push(['fill']);
+                emit('instructions', instructions);
+                emit('restore');
             }
         }
-        emit('instructions', instructions);
     };
+    //
+    // var proceedDebug = function () {
+    //     // translator = (new Transform()).translate(ttr[0], ttr[1]).mapVec2Fn();
+    //     if (segments.length > 0) {
+    //         var result = t.draw(fs, segments, tOffsets, true),
+    //             paths = result[1],
+    //             TT, rotator, angle, p, pos,
+    //             ident = (new Transform()).mapVec2Fn();
+    //
+    //         tOffsets = result[0];
+    //
+    //         // pos = T.mapVec2([0, 0]);
+    //         for (var i = 360; i > 0; i-=8) {
+    //             instructions = [];
+    //             emit('save');
+    //             p = paths[4];
+    //             // pos = T.mapVec2([-p.pos[0], -p.pos[1]]);
+    //             pos = [p.pos[0] + (ttr[0] / tsc[0]), p.pos[1] + (ttr[1] / tsc[1])];
+    //             angle = i;
+    //             TT = new Transform();
+    //             TT.multiply(translate);
+    //             TT.rotate(angle, pos);
+    //             TT.multiply(scale);
+    //             emit.apply(self, ['transform'].concat(TT.flatMatrix()));
+    //             // TT.scale(tsi[0], tsi[1]);
+    //             rotator = TT.mapVec2Fn('rot');
+    //             // console.log('zero', rotator([0,0]));
+    //             instructions.push(['beginPath']);
+    //             for (var ii = 0; ii < p.commands.length; ii++) {
+    //                 instructions.push(transformCommand([ident], p.commands[ii]));
+    //
+    //             }
+    //             instructions.push(['fill']);
+    //             emit('instructions', instructions);
+    //             emit('restore');
+    //         }
+    //     }
+    //     // emit('instructions', instructions);
+    // };
 
+    // t.whenReady(proceedDebug);
     t.whenReady(proceed);
 }
 

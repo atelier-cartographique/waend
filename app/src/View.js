@@ -86,7 +86,7 @@ View.prototype.setTransform = function () {
         tcy = (Math.abs(extent.getHeight()) * s) - (halfSize[1] - (center[1] * s)) ;
     var t = new Transform();
     t.translate(tcx, tcy);
-    t.scale(s, -s, {'x': tcx, 'y': tcy});
+    t.scale(s, -s, [tcx, tcy]);
     this.transform.reset(t);
 };
 

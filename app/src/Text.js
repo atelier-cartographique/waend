@@ -105,7 +105,7 @@ Text.prototype.getFlatLength = function (fontSize) {
     for (var i = 0, gl = glyphs.length; i < gl; i++) {
         len += glyphs[i].advanceWidth * scale;
     }
-    
+
     return len;
 };
 
@@ -137,9 +137,10 @@ Text.prototype.draw = function (fontsz, segments, offset, mergeSegments) {
                 currentPath = getPath.apply(g, [curPos[0], curPos[1], fontsz]);
                 currentPath.segment = cs;
                 currentPath.pos = curPos;
+                currentPath.nextPos = vecAdd(curPos, endPos, sa);
                 paths.push(currentPath);
                 gOffset += 1;
-                curPos = vecAdd(curPos, endPos, sa);
+                curPos = currentPath.nextPos;
             }
             else {
                 csIdx++;

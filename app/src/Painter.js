@@ -37,9 +37,13 @@ Painter.prototype.handlers = {
     'image': 'image',
     'instructions': 'processInstructions',
     'save': 'save',
-    'restore': 'restore'
+    'restore': 'restore',
+    'transform': 'setTransform',
 };
 
+Painter.prototype.setTransform = function (a,b,c,d,e,f) {
+    this.context.setTransform(a,b,c,d,e,f);
+};
 
 Painter.prototype.resetTransform = function () {
     var ctx = this.context,

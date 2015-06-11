@@ -102,7 +102,7 @@ function Program (ctx) {
         if (rotation) {
             var rt = new ctx.Transform(),
                 ccoords = center.getCoordinates();
-            rt.rotate(rotation, {'x': ccoords[0], 'y': ccoords[1]});
+            rt.rotate(rotation, ccoords);
             // console.log('rotation', props.rotation, ccoords, rt.flatMatrix());
             ctx.lineTransform(rt, patternCoordinates);
         }
