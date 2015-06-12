@@ -89,6 +89,9 @@ function initData (data) {
 }
 
 function updateView (startedWith, opt_extent, opt_matrix) {
+    if ('startFrame' in workerContext.waend) {
+        workerContext.waend.startFrame(startedWith, opt_extent, opt_matrix);
+    }
     var T = new Transform(opt_matrix);
     var rf = function (feature) {
         var geom = feature.getGeometry(),
@@ -104,19 +107,15 @@ function updateView (startedWith, opt_extent, opt_matrix) {
 
     var features = dataSource.getFeatures(opt_extent);
 
-    console.log('updateView.start', startedWith, features.length);
     var renderBatch = function (start, stop) {
         if (renderId !== startedWith) {
-            console.log('renderBatch abort due to outdated renderId', startedWith, renderId, start, stop);
             return;
         }
-        console.log('renderBatch', startedWith, start, stop);
         for (var j = start; j < stop; j++) {
             if (features[j]) {
                 rf(features[j]);
             }
             else {
-                console.log('renderBatch abort', start, stop, j);
                 return;
             }
         }
@@ -127,14 +126,10 @@ function updateView (startedWith, opt_extent, opt_matrix) {
         for (var i = 0; i < features.length; i += batchLength) {
             var stop = Math.min(features.length, i + batchLength);
             if (!features[i] || !features[stop - 1]) {
-                console.log('updateView.stop because of something changed with data', i);
                 break;
             }
             underscore.defer(renderBatch, i, stop);
         }
-    }
-    else {
-        console.log('updateView.stop because of updated renderId', startedWith, renderId);
     }
 }
 

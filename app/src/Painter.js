@@ -39,6 +39,7 @@ Painter.prototype.handlers = {
     'save': 'save',
     'restore': 'restore',
     'transform': 'setTransform',
+    'clear' : 'clear'
 };
 
 Painter.prototype.setTransform = function (a,b,c,d,e,f) {
