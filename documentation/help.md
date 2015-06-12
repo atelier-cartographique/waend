@@ -14,7 +14,8 @@ Feel free to give a hand !
 2.7  [hatches rotation (rotation)](#rotation)  
 2.8  [text](#text)  
 2.9  [fontsize](#fontsize)  
-2.10 [image](#image)
+2.10 [fontcolor](#fontcolor)  
+2.11 [image](#image)
 
 3.   [Commands details](#commands-details)  
 3.1  [help](#help)  
@@ -190,6 +191,15 @@ size of the font (number)
 Example:
 
 	set params.fontsize 12
+
+####<a name="fontcolor"></a> fontcolor (fillStyle)
+
+Example:
+
+	set style.fillStyle orange  
+	set style.fillStyle #FF7F00  
+	set style.fillStyle "rgb(255, 127, 0)"  
+	set style.fillStyle "rgba(255, 127, 0, 0.8)" 
 
 
 #### <a name="image"></a> image
