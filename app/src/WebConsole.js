@@ -131,7 +131,7 @@ InputHistory.prototype.backward = function () {
 InputHistory.prototype.forward = function () {
     if (this.commands.length > 0) {
         this.currentIndex += 1;
-        if (this.currentIndex >= (this.commands.length - 1)) {
+        if (this.currentIndex > (this.commands.length - 1)) {
             this.currentIndex = -1;
             return '';
         }
