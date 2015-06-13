@@ -433,6 +433,21 @@ var Bind = O.extend({
         });
     },
 
+    detachLayerFromGroup: function (userId, groupId, layerId) {
+        var path = '/user/' + userId +
+                   '/group/' + groupId +
+                   '/detach/' + layerId,
+            url = API_URL + path,
+            db = this.db,
+            self = this;
+
+        var pr = function () {
+            self.changeParent(groupId);
+        };
+
+        return this.transport.del(url, {parse: pr});
+    },
+
     matchKeyAsync: function (prefix) {
         var res = this.db.lookupKey(prefix);
         if(res.length > 0){

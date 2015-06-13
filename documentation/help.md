@@ -28,9 +28,10 @@ Feel free to give a hand !
 3.9  [select feature (select)](#select)  
 3.10 [draw](#draw)  
 3.11 [trace](#trace)  
-3.12 [del_feature](#del_feature)    
-3.13 [attach a layer to another map](#attach)  
-3.14 [visibility of layers](#visible)  
+3.12 [del_feature](#del_feature)
+3.13 [attach a layer to a map](#attach)
+3.14 [detach a layer from a map](#detach)  
+3.15 [visibility of layers](#visible)  
 
 4.   [Style tips & tricks](#style-tips)  
 4.1  [polygon fill color](#tip-fill)  
@@ -311,7 +312,7 @@ To create a feature out of it, in a layer context, use :
 It will draw a line and create a feature out of it.  
 Click on the first point to close the line and make a polygon.
 
-To edit a feature geometry, use : 
+To edit a feature geometry, use :
 
 	gg | trace | sg
 
@@ -322,13 +323,25 @@ In the context of a feature, and if you're granted to, the command will delete t
 
 In the context of a layer, you must give a feature ID in argument of the command.
 
-### <a name="attach"></a> attach a layer to another map (attach)
+### <a name="attach"></a> attach a layer to a map (attach)
 
-In the context of a layer, and if you're granted to, the command will attach the current layer to another map. It doesn't *move* the layer but will *display* it within this other map. 
+If you're the owner of the layer, the command will attach the said layer to a map. It doesn't *move* the layer but will *display* it within this other map.
 
-You must specify wich map the layer should attached to, as argument of the command.
+The argument is made of a valid path to be created.
 
-	attach userID mapID
+```
+attach /user_id/map_id/layer_id
+```
+
+### <a name="detach"></a> detach a layer from a map (detach)
+
+The ```detach``` command *undo* what has been done by the ```attach``` command, and works the same way.
+
+```
+detach /user_id/map_id/layer_id
+```
+
+A subtlety about *compositions* ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that's created at the same time. It does mean that if you're willing to *remove* a layer, at the moment, your best option is to detach it from all maps it's attached to.
 
 
 ### <a name="visible"></a> Visibility of layers (visible)

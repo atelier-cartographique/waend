@@ -56,6 +56,13 @@ module.exports = exports = base.RequestHandler.extend({
                 url: 'user/:user_id/group/:group_id/attach/',
                 permissions: ['isAuthenticated']
             },
+
+            detach: {
+                verb: 'delete',
+                handler: 'detach',
+                url: 'user/:user_id/group/:group_id/detach/:layer_id',
+                permissions: ['isAuthenticated']
+            }
         },
 
         searchGroups: function(request, response){
@@ -164,6 +171,28 @@ module.exports = exports = base.RequestHandler.extend({
 
         },
 
+        detach: function(request, response){
+            var groupId = request.params.group_id,
+                layerId = request.params.layer_id,
+                userId = request.user.id;
+
+            cache.client()
+                .get('layer', layerId)
+                .then(function(layer){
+                    if(layer.user_id !== userId){
+                        return response.status(403).send('Not Your Layer');
+                    }
+                    cache.client()
+                        .delComposition(groupId, layerId)
+                        .then(function(){
+                            response.status(204).end();
+                        });
+                })
+                .catch(function(err){
+                    response.status(500).send(err);
+                });
+        },
+
         layer: function(request, response) {
 
         },
@@ -176,10 +205,6 @@ module.exports = exports = base.RequestHandler.extend({
 
         },
 
-
-        detach: function(request, response){
-
-        },
 
         moveLayer: function(request, response){
 

@@ -35,6 +35,8 @@ var commandModules = [
     require('./help'),
     require('./lookup'),
     require('./delFeature'),
+    require('./attach'),
+    require('./detach'),
     ];
 
 

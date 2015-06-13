@@ -11,7 +11,6 @@
 'use strict';
 
 var Context = require('./Context'),
-    attach = require('./commands/layer/attach'),
     listFeatures = require('./commands/layer/listFeatures'),
     createFeature = require('./commands/layer/createFeature'),
     importer = require('./commands/layer/importer');
@@ -21,7 +20,6 @@ var Context = require('./Context'),
 var Layer = Context.extend({
     name: 'group',
     commands:{
-        'attach': attach.command,
         'lf': listFeatures.command,
         'create': createFeature.command,
         'import': importer.command
