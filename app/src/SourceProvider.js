@@ -77,7 +77,12 @@ SourceProvider.prototype.updateLayers = function () {
 
 SourceProvider.prototype.loadLayers = function () {
     var self = this;
-    if (self.group && self.group.has('visible')) {
+    self.group.once('set',function(key) {
+        if ('visible' === key) {
+            self.updateGroup(self.userId, self.groupId, true);
+        }
+    });
+    if (self.group.has('visible')) {
         var layers = self.group.get('visible');
         self.clearLayers();
         return Promise.reduce(layers, function(total, item, index) {
