@@ -47,12 +47,16 @@ SourceProvider.prototype.updateGroup = function(userId, groupId, opt_force) {
     }
     self.userId = userId;
     self.groupId = groupId;
-    self.loadLayers()
-        .then(function(){
-            self.updateLayers();
-            semaphore.signal('source:change', self.getSources());
-        })
-        .catch(console.error.bind(console));
+    binder.getGroup(userId, groupId)
+        .then(function(group) {
+            self.group = group;
+            self.loadLayers()
+                .then(function(){
+                    self.updateLayers();
+                    semaphore.signal('source:change', self.getSources());
+                })
+                .catch(console.error.bind(console));
+        });
 };
 
 
@@ -73,12 +77,26 @@ SourceProvider.prototype.updateLayers = function () {
 
 SourceProvider.prototype.loadLayers = function () {
     var self = this;
+    if (self.group && self.group.has('visible')) {
+        var layers = self.group.get('visible');
+        self.clearLayers();
+        return Promise.reduce(layers, function(total, item, index) {
+            var lidx = layers[index];
+            return binder.getLayer(self.userId, self.groupId, lidx)
+                         .then(function(layer){
+                             self.layerSources.push(new Source(
+                                 self.userId,
+                                 self.groupId,
+                                 layer));
+                         });
+        }, 0);
+    }
+
     return binder
         .getLayers(self.userId, self.groupId)
         .then(function(layers){
             self.clearLayers();
             for (var lidx = 0; lidx < layers.length; lidx++) {
-                console.log('SourceProvider load layer', layers[lidx].id);
                 self.layerSources.push(new Source(self.userId, self.groupId, layers[lidx]));
             }
             return Promise.resolve();

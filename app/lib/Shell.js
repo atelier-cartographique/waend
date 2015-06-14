@@ -417,14 +417,6 @@ var Shell = O.extend({
                             });
                         });
                     }
-                    if (groupData.has('visible')) {
-                        var visible = groupData.get('visible');
-                        self.postSwitchCallbacks.push(function(){
-                            semaphore.once('layer:update:complete', function(){
-                                semaphore.signal('visibility:change', visible);
-                            });
-                        });
-                    }
                 }
                 self.clearContexts();
                 return Bromise.resolve(self);
