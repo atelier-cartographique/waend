@@ -333,6 +333,10 @@ The argument is made of a valid path to be created.
 attach /user_id/map_id/layer_id
 ```
 
+```/user_id/map_id``` = the context where you want to attach the layer.  
+```layer_id```= the layer id.
+
+
 ### <a name="detach"></a> detach a layer from a map (detach)
 
 The ```detach``` command *undo* what has been done by the ```attach``` command, and works the same way.
