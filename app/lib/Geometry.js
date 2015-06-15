@@ -1,5 +1,5 @@
 /*
- * app/lib/Region.js
+ * app/lib/Geometry.js
  *
  *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
@@ -148,7 +148,27 @@ Extent.prototype.buffer = function (value) {
     return this;
 };
 
+Extent.prototype.maxSquare = function () {
+    var w = this.getWidth(),
+        h = this.getHeight(),
+        c = this.getCenter().getCoordinates();
+    if (w < h) {
+        var bw = (h - w) / 2;
+        this.extent[0] -= bw;
+        this.extent[2] += bw;
+    }
+    else if (h < w) {
+        var bh = (w - h) / 2;
+        this.extent[1] -= bh;
+        this.extent[3] += bh;
+    }
+    return this;
+};
 
+
+Extent.prototype.minSquare = function () {
+    // TODO
+};
 
 Extent.prototype.getHeight = function () {
     return Math.abs(this.extent[3] - this.extent[1]);

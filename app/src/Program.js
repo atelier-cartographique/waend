@@ -55,7 +55,7 @@ function Program (ctx) {
             initialExtent = p.getExtent(),
             initialHeight = initialExtent.getHeight(),
             initialWidth = initialExtent.getWidth(),
-            bufExtent = initialExtent.buffer(Math.max(initialHeight, initialWidth) / 2),
+            bufExtent = initialExtent.maxSquare().buffer(initialExtent.getWidth() / Math.PI),
             extent = new ctx.Geometry.Extent(bufExtent),
             height = extent.getHeight(),
             paramHN = getParameter(props, 'hn', 24),
@@ -108,6 +108,7 @@ function Program (ctx) {
         }
 
         ctx.emit('clip', 'begin', coordinates);
+        // ctx.emit('draw', 'polygon', coordinates);
         ctx.emit('draw', 'line', patternCoordinates);
         ctx.emit('clip', 'end');
     };
