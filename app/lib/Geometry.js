@@ -150,8 +150,7 @@ Extent.prototype.buffer = function (value) {
 
 Extent.prototype.maxSquare = function () {
     var w = this.getWidth(),
-        h = this.getHeight(),
-        c = this.getCenter().getCoordinates();
+        h = this.getHeight();
     if (w < h) {
         var bw = (h - w) / 2;
         this.extent[0] -= bw;

@@ -55,7 +55,7 @@ function Program (ctx) {
             initialExtent = p.getExtent(),
             initialHeight = initialExtent.getHeight(),
             initialWidth = initialExtent.getWidth(),
-            bufExtent = initialExtent.maxSquare().buffer(initialExtent.getWidth() / Math.PI),
+            bufExtent = initialExtent.maxSquare().buffer(initialExtent.getWidth() / 2),
             extent = new ctx.Geometry.Extent(bufExtent),
             height = extent.getHeight(),
             paramHN = getParameter(props, 'hn', 24),
