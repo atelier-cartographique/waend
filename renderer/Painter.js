@@ -1,5 +1,5 @@
 /*
- * app/src/Painter.js
+ * renderer/Painter.js
  *
  *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
@@ -12,9 +12,10 @@
 
 
 var _ = require('underscore'),
-    config = require('../../config'),
-    Geometry = require('../lib/Geometry'),
-    semaphore = require('../lib/Semaphore');
+    request = require('request'),
+    config = require('../config'),
+    Geometry = require('../app/lib/Geometry'),
+    Canvas = require('canvas');
 
 var MEDIA_URL = config.public.mediaUrl;
 
@@ -22,7 +23,6 @@ function Painter (view, layerId) {
     this.context = view.getContext(layerId);
     this.transform = view.transform.clone();
     this.view = view;
-    semaphore.on('view:change', this.resetTransform, this);
     this.stateInc = 0;
     this.clear();
 
@@ -142,7 +142,7 @@ Painter.prototype.drawPolygon = function (coordinates, ends) {
 
 Painter.prototype.image = function (coordinates, extentArray, options) {
     var self = this,
-        img = document.createElement('img'),
+        img = new Canvas.Image(),
         url = MEDIA_URL + '/' + options.image,
         extent = new Geometry.Extent(extentArray),
         width = extent.getWidth(),
@@ -150,8 +150,8 @@ Painter.prototype.image = function (coordinates, extentArray, options) {
 
     var complete = function () {
         // now we're supposed to have access to image size
-        var imgWidth = img.naturalWidth,
-            imgHeight = img.naturalHeight,
+        var imgWidth = img.width,
+            imgHeight = img.height,
             sw = extent.getBottomLeft().getCoordinates(),
             scale;
 
@@ -203,13 +203,19 @@ Painter.prototype.image = function (coordinates, extentArray, options) {
         }
     };
 
-    img.src = url + '/' + getStep(Math.max(width, height));
-    if (img.complete) {
-        complete();
-    }
-    else {
-        img.addEventListener('load', complete, false);
-    }
+    var reqOptions = {
+        'url': url + '/' + getStep(Math.max(width, height)),
+        'encoding': null
+    };
+    // img.onload = complete;
+    request(reqOptions,
+        function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(typeof body);
+            img.src = img.source = body;
+            complete();
+        }
+    });
 };
 
 Painter.prototype.drawLine = function (coordinates) {

@@ -13,7 +13,12 @@
 var config = require('../../config'),
     opentype = require('opentype.js');
 
+
 var FONT_URL = config.public.baseUrl + '/fonts/';
+if (typeof window === 'undefined') {
+    FONT_URL = __dirname + '/../../fonts/';
+}
+
 
 var fonts = {},
     pendings = {};
