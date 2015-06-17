@@ -89,8 +89,9 @@ function initData (data) {
 }
 
 function updateView (startedWith, opt_extent, opt_matrix) {
+    var features = dataSource.getFeatures(opt_extent);
     if ('startFrame' in workerContext.waend) {
-        workerContext.waend.startFrame(startedWith, opt_extent, opt_matrix);
+        workerContext.waend.startFrame(startedWith, opt_extent, opt_matrix, features);
     }
     var T = new Transform(opt_matrix);
     var rf = function (feature) {
@@ -105,7 +106,6 @@ function updateView (startedWith, opt_extent, opt_matrix) {
         }
     };
 
-    var features = dataSource.getFeatures(opt_extent);
 
     var renderBatch = function (start, stop) {
         if (renderId !== startedWith) {
