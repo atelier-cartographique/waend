@@ -28,6 +28,8 @@ var layerButtons = {
 var groupButtons = {
     'add layer': ['ic'],
     'list layers' : ['ll'],
+    'visible layers': ['visible | set visible'],
+    're-order layers': ['visible | edit | set visible'],
     'set map extent': ['region get | set extent']
 };
 
