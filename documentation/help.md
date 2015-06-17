@@ -1,5 +1,5 @@
 #HELP WÆND
-[(Open help in another windows)](http://alpha.waend.com/documentation/help.html)  
+[(Right click this link to open help in another windows)](http://alpha.waend.com/documentation/help.html)  
 
 This is a quite rought help for now, it will be improved from time to time.  
 Feel free to give a hand !
