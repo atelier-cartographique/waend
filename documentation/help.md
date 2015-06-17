@@ -1,5 +1,6 @@
 #HELP WÆND
-[(Right click this link to open help in another windows)](http://alpha.waend.com/documentation/help.html)  
+<a href ="http://alpha.waend.com/documentation/help.html" target="_blank">Click this link to open help in another windows)</a> 
+
 
 This is a quite rought help for now, it will be improved from time to time.  
 Feel free to give a hand !
