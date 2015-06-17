@@ -148,9 +148,11 @@ table {
 }
 .word-wrap {
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -184,6 +186,7 @@ body {
   bottom: 0;
   /*padding: 24px;
     padding-top: 38px;*/
+
   background-color: transparent;
 }
 .wc-context-feature {
@@ -262,6 +265,7 @@ body {
 .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
+
 }
 .wc-pending {
   color: #2B71FF;
@@ -294,9 +298,11 @@ body {
   color: #ff00be;
   display: block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -517,6 +523,7 @@ body {
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
+  overflow-y: auto;
 }
 .media-wrapper .media-close {
   position: absolute;
