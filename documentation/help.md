@@ -32,10 +32,11 @@ Feel free to give a hand !
 3.9  [select feature (select)](#select)  
 3.10 [draw](#draw)  
 3.11 [trace](#trace)  
-3.12 [del_feature](#del_feature)
-3.13 [attach a layer to a map](#attach)
-3.14 [detach a layer from a map](#detach)  
-3.15 [visibility of layers](#visible)  
+3.12 [edit geometry](#edit_geometry)  
+3.13 [del_feature](#del_feature)  
+3.14 [attach a layer to a map](#attach)  
+3.15 [detach a layer from a map](#detach)  
+3.16 [visibility of layers](#visible)  
 
 4.   [Style tips & tricks](#style-tips)  
 4.1  [polygon fill color](#tip-fill)  
@@ -284,7 +285,7 @@ use keyboard arrows to navigate
 use [i] to zoom in  
 use [o] to zoom out
 
-Type any other key to escape this mode.
+Type [ESC] key to escape this mode.
 
 ### <a name="select"></a> select features (select)
 select a feature in the viewport
@@ -316,9 +317,18 @@ To create a feature out of it, in a layer context, use :
 It will draw a line and create a feature out of it.  
 Click on the first point to close the line and make a polygon.
 
+
+### <a name="edit_geometry"></a> Edit geometry
+
+
 To edit a feature geometry, use :
 
 	gg | trace | sg
+
+To duplicate a feature, use :
+
+	gg | trace | create
+
 
 
 ### <a name="del_feature"></a> delete feature (del_feature)

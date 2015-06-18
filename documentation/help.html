@@ -335,10 +335,11 @@ Feel free to give a hand !</p>
 3.9  <a href="#select">select feature (select)</a><br>
 3.10 <a href="#draw">draw</a><br>
 3.11 <a href="#trace">trace</a><br>
-3.12 <a href="#del_feature">del_feature</a>
-3.13 <a href="#attach">attach a layer to a map</a>
-3.14 <a href="#detach">detach a layer from a map</a><br>
-3.15 <a href="#visible">visibility of layers</a>  </p></li>
+3.12 <a href="#edit_geometry">edit geometry</a><br>
+3.13 <a href="#del_feature">del_feature</a><br>
+3.14 <a href="#attach">attach a layer to a map</a><br>
+3.15 <a href="#detach">detach a layer from a map</a><br>
+3.16 <a href="#visible">visibility of layers</a>  </p></li>
 <li><p><a href="#style-tips">Style tips &amp; tricks</a><br>
 4.1  <a href="#tip-fill">polygon fill color</a><br>
 4.2  <a href="#tip-composite">play with Composite Operation</a>  </p></li>
@@ -585,7 +586,7 @@ use keyboard arrows to navigate<br>
 use [i] to zoom in<br>
 use [o] to zoom out</p>
 
-<p>Type any other key to escape this mode.</p>
+<p>Type [ESC] key to escape this mode.</p>
 
 <h3 id="toc_21"><a name="select"></a> select features (select)</h3>
 
@@ -619,17 +620,23 @@ Trace is usefull to creat segmented lines and polygons.</p>
 <p>It will draw a line and create a feature out of it.<br>
 Click on the first point to close the line and make a polygon.</p>
 
+<h3 id="toc_24"><a name="edit_geometry"></a> Edit geometry</h3>
+
 <p>To edit a feature geometry, use :</p>
 
 <pre><code>gg | trace | sg</code></pre>
 
-<h3 id="toc_24"><a name="del_feature"></a> delete feature (del_feature)</h3>
+<p>To duplicate a feature, use :</p>
+
+<pre><code>gg | trace | create</code></pre>
+
+<h3 id="toc_25"><a name="del_feature"></a> delete feature (del_feature)</h3>
 
 <p>In the context of a feature, and if you&#39;re granted to, the command will delete the current feature and bring you back to the parent layer context.</p>
 
 <p>In the context of a layer, you must give a feature ID in argument of the command.</p>
 
-<h3 id="toc_25"><a name="attach"></a> attach a layer to a map (attach)</h3>
+<h3 id="toc_26"><a name="attach"></a> attach a layer to a map (attach)</h3>
 
 <p>If you&#39;re the owner of the layer, the command will attach the said layer to a map. It doesn&#39;t <em>move</em> the layer but will <em>display</em> it within this other map.</p>
 
@@ -640,7 +647,7 @@ Click on the first point to close the line and make a polygon.</p>
 <p><code>/user_id/map_id</code> = the context where you want to attach the layer.<br>
 <code>layer_id</code>= the layer id.</p>
 
-<h3 id="toc_26"><a name="detach"></a> detach a layer from a map (detach)</h3>
+<h3 id="toc_27"><a name="detach"></a> detach a layer from a map (detach)</h3>
 
 <p>The <code>detach</code> command <em>undo</em> what has been done by the <code>attach</code> command, and works the same way.</p>
 
@@ -648,20 +655,20 @@ Click on the first point to close the line and make a polygon.</p>
 
 <p>A subtlety about <em>compositions</em> ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that&#39;s created at the same time. It does mean that if you&#39;re willing to <em>remove</em> a layer, at the moment, your best option is to detach it from all maps it&#39;s attached to.</p>
 
-<h3 id="toc_27"><a name="visible"></a> Visibility of layers (visible)</h3>
+<h3 id="toc_28"><a name="visible"></a> Visibility of layers (visible)</h3>
 
 <p>On a map context, type <code>visible</code> to chose which layers to display.</p>
 
-<h2 id="toc_28"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+<h2 id="toc_29"><a name="style-tips"></a> Style tips &amp; tricks</h2>
 
-<h3 id="toc_29"><a name="tip-fill"></a> polygon fill color</h3>
+<h3 id="toc_30"><a name="tip-fill"></a> polygon fill color</h3>
 
 <p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
 Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
 
 <p>You are done with a filled polygon !</p>
 
-<h3 id="toc_30"><a name="tip-composite"></a> Play with Composite Operation</h3>
+<h3 id="toc_31"><a name="tip-composite"></a> Play with Composite Operation</h3>
 
 <p>We use multiply compositing mode by default in layers.<br>
 If you want to change it, please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">Canvas MDN documentation</a></p>
@@ -670,9 +677,9 @@ If you want to change it, please refer to <a href="https://developer.mozilla.org
 
 <pre><code>set style.globalCompositeOperation source-over</code></pre>
 
-<h2 id="toc_31"><a name="import"></a> Import data (import)</h2>
+<h2 id="toc_32"><a name="import"></a> Import data (import)</h2>
 
-<h3 id="toc_32"><a name="GeoJSON"></a> Working with GeoJSON</h3>
+<h3 id="toc_33"><a name="GeoJSON"></a> Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 
