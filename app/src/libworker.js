@@ -29,7 +29,8 @@ var underscore = require('underscore'),
     Transform = require('../lib/Transform'),
     BaseSource = require('./BaseSource'),
     Text = require('./Text'),
-    Projection = require('proj4');
+    Projection = require('proj4'),
+    Turf = require('turf');
 
 var Proj3857 = Projection('EPSG:3857');
 
@@ -582,6 +583,7 @@ function processStyle (props, T) {
 
 
 workerContext.waend = {
+    'Turf': Turf,
     'Projection': Projection,
     'Geometry': Geometry,
     'Transform': Transform,
