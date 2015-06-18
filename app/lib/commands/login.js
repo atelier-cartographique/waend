@@ -11,6 +11,7 @@
 
 var querystring = require('querystring'),
     Transport = require('../Transport'),
+    Promise = require('bluebird'),
     config = require('../../../config');
 
 function login (username, password) {
@@ -46,15 +47,35 @@ function login (username, password) {
         });
     };
 
-    if (password) {
+    if (username && password) {
         return remoteLogin(username, password);
     }
+    else if (username) {
+        stdout.write('password:');
+        terminal.input(stdin);
+        return stdin.read().then(function(pwd){
+            return remoteLogin(username, pwd);
+        });
+    }
+    else {
 
-    stdout.write('password:');
-    terminal.input(stdin);
-    return stdin.read().then(function(pwd){
-        return remoteLogin(username, pwd);
-    });
+        var resolver = function (resolve, reject) {
+            stdout.write('username:');
+            terminal.input(stdin);
+            stdin.read()
+                .then(function(username){
+                    stdout.write('password:');
+                    terminal.input(stdin);
+                    stdin.read()
+                        .then(function(pwd){
+                        remoteLogin(username, pwd)
+                            .then(resolve)
+                            .catch(reject);
+                    });
+            });
+        };
+        return (new Promise(resolver));
+    }
 }
 
 

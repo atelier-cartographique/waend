@@ -234,10 +234,10 @@ Painter.prototype.drawLine = function (coordinates) {
     this.context.stroke();
 };
 
-Painter.prototype.draw = function (instruction, coordinates) {
+Painter.prototype.draw = function (instruction, coordinates, ends) {
 
     if ('polygon' === instruction) {
-        this.drawPolygon(coordinates);
+        this.drawPolygon(coordinates, ends);
     }
     else if ('line' === instruction) {
         this.drawLine(coordinates);

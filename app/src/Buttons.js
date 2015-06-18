@@ -18,16 +18,9 @@
  };
 
 var layerButtons = {
-    'add text': [
-        'draw | close | create | cc',
-        'edit | set params.text'
-    ],
-    'add line': ['draw | create'],
-    'add zone': ['draw | close | create'],
-    'add image': [
-        'draw | close | create | cc',
-        'media pick | set params.image'
-    ],
+    'trace': ['trace | create'],
+    'draw line': ['draw | create'],
+    'draw zone': ['draw | close | create'],
     'import data': ['import'],
     'list features': ['lf']
 };
@@ -35,6 +28,8 @@ var layerButtons = {
 var groupButtons = {
     'add layer': ['ic'],
     'list layers' : ['ll'],
+    'visible layers': ['visible | set visible'],
+    're-order layers': ['visible | edit | set visible'],
     'set map extent': ['region get | set extent']
 };
 

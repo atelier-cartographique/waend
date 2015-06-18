@@ -29,7 +29,8 @@ var underscore = require('underscore'),
     Transform = require('../lib/Transform'),
     BaseSource = require('./BaseSource'),
     Text = require('./Text'),
-    Projection = require('proj4');
+    Projection = require('proj4'),
+    Turf = require('turf');
 
 var Proj3857 = Projection('EPSG:3857');
 
@@ -89,8 +90,9 @@ function initData (data) {
 }
 
 function updateView (startedWith, opt_extent, opt_matrix) {
+    var features = dataSource.getFeatures(opt_extent);
     if ('startFrame' in workerContext.waend) {
-        workerContext.waend.startFrame(startedWith, opt_extent, opt_matrix);
+        workerContext.waend.startFrame(startedWith, opt_extent, opt_matrix, features);
     }
     var T = new Transform(opt_matrix);
     var rf = function (feature) {
@@ -105,7 +107,6 @@ function updateView (startedWith, opt_extent, opt_matrix) {
         }
     };
 
-    var features = dataSource.getFeatures(opt_extent);
 
     var renderBatch = function (start, stop) {
         if (renderId !== startedWith) {
@@ -582,6 +583,7 @@ function processStyle (props, T) {
 
 
 workerContext.waend = {
+    'Turf': Turf,
     'Projection': Projection,
     'Geometry': Geometry,
     'Transform': Transform,

@@ -551,6 +551,7 @@ body {
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
+  overflow-y: auto;
 }
 .media-wrapper .media-close {
   position: absolute;
