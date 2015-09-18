@@ -55,12 +55,12 @@ function Program (ctx) {
             initialExtent = p.getExtent(),
             initialHeight = initialExtent.getHeight(),
             initialWidth = initialExtent.getWidth(),
-            bufExtent = initialExtent.buffer(Math.max(initialHeight, initialWidth) / 2),
+            center = initialExtent.getCenter(),
+            bufExtent = initialExtent.maxSquare().buffer(initialExtent.getWidth() * 0.7),
             extent = new ctx.Geometry.Extent(bufExtent),
             height = extent.getHeight(),
             paramHN = getParameter(props, 'hn', 24),
             hatchLen = (height * paramHN) / initialHeight,
-            center = extent.getCenter(),
             bottomLeft = extent.getBottomLeft().getCoordinates(),
             topRight = extent.getTopRight().getCoordinates(),
             start = bottomLeft[1],
@@ -102,12 +102,13 @@ function Program (ctx) {
         if (rotation) {
             var rt = new ctx.Transform(),
                 ccoords = center.getCoordinates();
-            rt.rotate(rotation, {'x': ccoords[0], 'y': ccoords[1]});
+            rt.rotate(rotation, ccoords);
             // console.log('rotation', props.rotation, ccoords, rt.flatMatrix());
             ctx.lineTransform(rt, patternCoordinates);
         }
 
         ctx.emit('clip', 'begin', coordinates);
+        // ctx.emit('draw', 'polygon', coordinates);
         ctx.emit('draw', 'line', patternCoordinates);
         ctx.emit('clip', 'end');
     };

@@ -1,6 +1,10 @@
 #HELP WÆND
+<a href ="http://alpha.waend.com/documentation/help.html" target="_blank">Click this link to open help in another windows)</a> 
+
+
 This is a quite rought help for now, it will be improved from time to time.  
 Feel free to give a hand !
+
 
 
 1.   [Common commands](#commands)
@@ -14,7 +18,8 @@ Feel free to give a hand !
 2.7  [hatches rotation (rotation)](#rotation)  
 2.8  [text](#text)  
 2.9  [fontsize](#fontsize)  
-2.10 [image](#image)
+2.10 [fontcolor](#fontcolor)  
+2.11 [image](#image)
 
 3.   [Commands details](#commands-details)  
 3.1  [help](#help)  
@@ -27,9 +32,11 @@ Feel free to give a hand !
 3.9  [select feature (select)](#select)  
 3.10 [draw](#draw)  
 3.11 [trace](#trace)  
-3.12 [del_feature](#del_feature)    
-3.13 [attach a layer to another map](#attach)  
-3.14 [visibility of layers](#visible)  
+3.12 [edit geometry](#edit_geometry)  
+3.13 [del_feature](#del_feature)  
+3.14 [attach a layer to a map](#attach)  
+3.15 [detach a layer from a map](#detach)  
+3.16 [visibility of layers](#visible)  
 
 4.   [Style tips & tricks](#style-tips)  
 4.1  [polygon fill color](#tip-fill)  
@@ -191,6 +198,15 @@ Example:
 
 	set params.fontsize 12
 
+####<a name="fontcolor"></a> fontcolor (fillStyle)
+
+Example:
+
+	set style.fillStyle orange  
+	set style.fillStyle #FF7F00  
+	set style.fillStyle "rgb(255, 127, 0)"  
+	set style.fillStyle "rgba(255, 127, 0, 0.8)" 
+
 
 #### <a name="image"></a> image
 *application: polygon*
@@ -269,7 +285,7 @@ use keyboard arrows to navigate
 use [i] to zoom in  
 use [o] to zoom out
 
-Type any other key to escape this mode.
+Type [ESC] key to escape this mode.
 
 ### <a name="select"></a> select features (select)
 select a feature in the viewport
@@ -301,9 +317,18 @@ To create a feature out of it, in a layer context, use :
 It will draw a line and create a feature out of it.  
 Click on the first point to close the line and make a polygon.
 
-To edit a feature geometry, use : 
+
+### <a name="edit_geometry"></a> Edit geometry
+
+
+To edit a feature geometry, use :
 
 	gg | trace | sg
+
+To duplicate a feature, use :
+
+	gg | trace | create
+
 
 
 ### <a name="del_feature"></a> delete feature (del_feature)
@@ -312,13 +337,29 @@ In the context of a feature, and if you're granted to, the command will delete t
 
 In the context of a layer, you must give a feature ID in argument of the command.
 
-### <a name="attach"></a> attach a layer to another map (attach)
+### <a name="attach"></a> attach a layer to a map (attach)
 
-In the context of a layer, and if you're granted to, the command will attach the current layer to another map. It doesn't *move* the layer but will *display* it within this other map. 
+If you're the owner of the layer, the command will attach the said layer to a map. It doesn't *move* the layer but will *display* it within this other map.
 
-You must specify wich map the layer should attached to, as argument of the command.
+The argument is made of a valid path to be created.
 
-	attach userID mapID
+```
+attach /user_id/map_id/layer_id
+```
+
+```/user_id/map_id``` = the context where you want to attach the layer.  
+```layer_id```= the layer id.
+
+
+### <a name="detach"></a> detach a layer from a map (detach)
+
+The ```detach``` command *undo* what has been done by the ```attach``` command, and works the same way.
+
+```
+detach /user_id/map_id/layer_id
+```
+
+A subtlety about *compositions* ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that's created at the same time. It does mean that if you're willing to *remove* a layer, at the moment, your best option is to detach it from all maps it's attached to.
 
 
 ### <a name="visible"></a> Visibility of layers (visible)
@@ -359,8 +400,8 @@ The restrictions so far are :
 - no multilines
 - no points
 
-An easy way to create a GeoJSON file from your zone of interest is to use [http://overpass-turbo.eu/](http://overpass-turbo.eu/), it is a powerfull online tool quickly export data from OpenStreetMap.
+An easy way to create a GeoJSON file from your zone of interest is to use <a href="http://overpass-turbo.eu/" target="_blank">http://overpass-turbo.eu/</a>, it is a powerfull online tool quickly export data from OpenStreetMap.
 
-Another option is to use [QGis](http://www.qgis.org/en/site/), a free and opensource GIS, that you can use for manipulating any kind of geo-datas.
+Another option is to use <a href="http://www.qgis.org/en/site/" target="_blank">Qgis</a>, a free and opensource GIS, that you can use for manipulating any kind of geo-datas.
 
 *Good to know* : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  

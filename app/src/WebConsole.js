@@ -94,9 +94,60 @@ Display.prototype.end = function () {
 };
 
 
+function InputHistory (options) {
+    this.commands = [];
+    this.currentIndex = -1;
+}
+
+
+InputHistory.prototype.resetIndex = function () {
+    this.currentIndex = this.commands.length;
+};
+
+InputHistory.prototype.push = function (cmd) {
+    cmd = cmd.trim();
+    if (this.commands.length > 0) {
+        var lastCmd = this.commands[this.commands.length - 1];
+        if (lastCmd === cmd) {
+            return;
+        }
+    }
+    this.commands.push(cmd);
+    this.resetIndex();
+};
+
+InputHistory.prototype.backward = function () {
+    if (this.commands.length > 0) {
+        this.currentIndex -= 1;
+        if (this.currentIndex < 0) {
+            this.resetIndex();
+            return '';
+        }
+        return this.commands[this.currentIndex];
+    }
+    return '';
+};
+
+InputHistory.prototype.forward = function () {
+    if (this.commands.length > 0) {
+        this.currentIndex += 1;
+        if (this.currentIndex > (this.commands.length - 1)) {
+            this.currentIndex = -1;
+            return '';
+        }
+        return this.commands[this.currentIndex];
+    }
+    return '';
+};
+
+
+function isKeyCode (event, kc) {
+    return (kc === event.which || kc === event.keyCode);
+}
+
 
 function isKeyReturnEvent (event) {
-    return (13 === event.which || 13 === event.keyCode);
+    return isKeyCode(event, 13);
 }
 
 
@@ -115,7 +166,7 @@ var WebConsole = Terminal.extend({
         this.commandMutex = new Mutex();
     },
 
-    insertInput: function (listener) {
+    insertInput: function (listener, events) {
         listener = listener || this.handleInput.bind(this);
         var oldInput = this._inputField;
         if (oldInput) {
@@ -127,17 +178,17 @@ var WebConsole = Terminal.extend({
         this.container.appendChild(this._inputField);
 
         // A bit of a trick to prevent keyup event to trigger on a display from here
-        var keyPressEvent;
-        var keyUpHandler = function () {
-            if (keyPressEvent) {
-                listener(keyPressEvent);
-            }
-        };
-        this._inputField.addEventListener('keypress', function (event) {
-            keyPressEvent = event;
-        }, false);
-        this._inputField.addEventListener('keyup', keyUpHandler, false);
-
+        // var keyPressEvent;
+        // var keyUpHandler = function () {
+        //     if (keyPressEvent) {
+        //         listener(keyPressEvent);
+        //     }
+        // };
+        // this._inputField.addEventListener('keypress', function (event) {
+        //     keyPressEvent = event;
+        // }, false);
+        // this._inputField.addEventListener('keyup', keyUpHandler, false);
+        this._inputField.addEventListener('keyup', listener, false);
         this._inputField.focus();
     },
 
@@ -311,6 +362,7 @@ var WebConsole = Terminal.extend({
         this.insertInput();
         this.setButtons();
         this.setMapBlock();
+        this.history = new InputHistory();
         var self = this;
         // self.container.addEventListener('click', function(e){
         //     if(self._inputField){
@@ -418,9 +470,7 @@ var WebConsole = Terminal.extend({
         this.pages.appendChild(page);
     },
 
-    // pageEnd: function () {
-    //
-    // },
+
 
     handleInput: function (event) {
         if(isKeyReturnEvent(event)) {
@@ -436,6 +486,13 @@ var WebConsole = Terminal.extend({
 
             this.runCommand(val);
         }
+        else if (isKeyCode(event, 40)) { // down
+            this._inputField.value = this.history.forward();
+        }
+        else if (isKeyCode(event, 38)) { // up
+            this._inputField.value = this.history.backward();
+        }
+
     },
 
     input: function (fdin, prompt) {

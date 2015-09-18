@@ -37,9 +37,14 @@ Painter.prototype.handlers = {
     'image': 'image',
     'instructions': 'processInstructions',
     'save': 'save',
-    'restore': 'restore'
+    'restore': 'restore',
+    'transform': 'setTransform',
+    'clear' : 'clear'
 };
 
+Painter.prototype.setTransform = function (a,b,c,d,e,f) {
+    this.context.setTransform(a,b,c,d,e,f);
+};
 
 Painter.prototype.resetTransform = function () {
     var ctx = this.context,
@@ -223,10 +228,10 @@ Painter.prototype.drawLine = function (coordinates) {
     this.context.stroke();
 };
 
-Painter.prototype.draw = function (instruction, coordinates) {
+Painter.prototype.draw = function (instruction, coordinates, ends) {
 
     if ('polygon' === instruction) {
-        this.drawPolygon(coordinates);
+        this.drawPolygon(coordinates, ends);
     }
     else if ('line' === instruction) {
         this.drawLine(coordinates);
@@ -280,7 +285,9 @@ Painter.prototype.rawContext = function () {
 };
 
 Painter.prototype.processInstructions = function (instructions) {
+    // console.log('painter.processInstructions', instructions.length);
     for (var i = 0; i < instructions.length; i++) {
+        // console.log('>', i);
         this.rawContext.apply(this, instructions[i]);
     }
 };

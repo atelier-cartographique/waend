@@ -284,14 +284,6 @@ Transform.prototype.translate = function(tx,ty) {
     return this;
 };
 
-/**
-* Returns the current translate of the transformation matrix
-*
-* @returns {Geom.Points}
-*/
-Transform.prototype.currentTranslate = function(){
-    return new Geom.Point(this.M(31), this.M(32));
-};
 
 /**
 * Resets the translation of the matrix to the given x and y
@@ -322,8 +314,8 @@ Transform.prototype.scale = function(sx, sy, origin) {
     if(origin !== undefined)
     {
         var tr1 = new Matrix();
-        tr1.m._31 = -origin.x;
-        tr1.m._32 = -origin.y;
+        tr1.m._31 = -origin[0];
+        tr1.m._32 = -origin[1];
         scaleMat.mul(tr1);
 
         var tr2 = new Matrix();
@@ -332,8 +324,8 @@ Transform.prototype.scale = function(sx, sy, origin) {
         scaleMat.mul(tr2);
 
         var tr3 = new Matrix();
-        tr3.m._31 = origin.x;
-        tr3.m._32 = origin.y;
+        tr3.m._31 = origin[0];
+        tr3.m._32 = origin[1];
         scaleMat.mul(tr3);
     }
     else
@@ -354,8 +346,8 @@ Transform.prototype.rotate = function (r, origin) {
     if(origin)
     {
         var tr1 = new Matrix();
-        tr1.m._31 = -origin.x;
-        tr1.m._32 = -origin.y;
+        tr1.m._31 = -origin[0];
+        tr1.m._32 = -origin[1];
         rotMat.mul(tr1);
 // console.log(tr1.flat());
 
@@ -368,8 +360,8 @@ Transform.prototype.rotate = function (r, origin) {
 // console.log(tr2.flat());
 
         var tr3 = new Matrix();
-        tr3.m._31 = origin.x;
-        tr3.m._32 = origin.y;
+        tr3.m._31 = origin[0];
+        tr3.m._32 = origin[1];
         rotMat.mul(tr3);
 // console.log(tr3.flat());
     }
@@ -388,6 +380,10 @@ Transform.prototype.rotate = function (r, origin) {
 
 Transform.prototype.getScale = function(){
     return [this.M(11), this.M(22)];
+};
+
+Transform.prototype.getTranslate = function() {
+    return [this.M(31), this.M(32)];
 };
 
 Transform.prototype.resetScale = function(){
@@ -413,7 +409,8 @@ Transform.prototype.mapVec2Fn = function() {
         m31 = this.M(31),
         m12 = this.M(12),
         m22 = this.M(22),
-        m32 = this.M(32);
+        m32 = this.M(32),
+        self = this;
     return function (v) {
         v[0] = (v[0] * m11) + (v[1] * m21) + m31;
         v[1] = (v[0] * m12) + (v[1] * m22) + m32;

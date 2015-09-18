@@ -37,7 +37,7 @@ var LayerProvider = O.extend({
         var programSrc = layerSource.layer.get('program'),
             program;
         if (programSrc) {
-            program = new Function(programSrc);
+            program = new Function('ctx', programSrc);
         }
         else {
             program = waendLayerProgram;

@@ -413,11 +413,13 @@ Navigator.prototype.drawScale = function () {
     this.transform.mapVec2(tr);
     this.transform.mapVec2(center);
 
-    var hw = rect.width / 2,
-        left = rect.width * 0.25,
-        right = rect.width * 0.75,
-        top = rect.height - 128,
-        bottom = top + 64,
+    var left = 13,
+        right = 74,
+        top = rect.height - 57,
+	thickness = 6,
+        bottom = top + thickness,
+	lenght = right - left,
+	hw = ((lenght - 1) / 2) + left,
         leftVec = this.map.getCoordinateFromPixel([left, top]),
         rightVec = this.map.getCoordinateFromPixel([right, top]),
         dist = turf.distance(turf.point(leftVec), turf.point(rightVec), 'kilometers') * 100000; // centimeters
@@ -445,24 +447,24 @@ Navigator.prototype.drawScale = function () {
 
     ctx.save();
     ctx.fillStyle = 'black';
-    ctx.font = '16px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('0', left, top - 4);
-    ctx.fillText(labelCenter, hw, top - 4);
-    ctx.fillText(labelRight, right, top - 4);
+    ctx.font = '11px sansguiltmb';
+    ctx.textAlign = 'left';
+    // ctx.fillText('0', left, top - 8);
+    // ctx.fillText(labelCenter, hw, top - 4);
+    ctx.fillText(labelRight, right + 5, top + thickness);
     ctx.restore();
 
     ctx.save();
     ctx.fillStyle = 'black';
     ctx.beginPath();
-    ctx.fillRect(left, top, hw, 64);
+    ctx.fillRect(left, top, right - left, thickness);
     ctx.restore();
 
     ctx.save();
     ctx.fillStyle = 'white';
     ctx.beginPath();
-    ctx.fillRect(left + 1, top + 1, hw /2, 31);
-    ctx.fillRect(hw, top + 32, hw/2, 31);
+    ctx.fillRect(left + 1, top + 1, (lenght / 2) - 1, (thickness / 2) - 1);
+    ctx.fillRect(hw + 1, top + (thickness / 2), (lenght / 2) - 1, (thickness / 2) - 1);
     ctx.restore();
 };
 

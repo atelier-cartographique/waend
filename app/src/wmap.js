@@ -11,6 +11,7 @@
 
 
 var Bind = require('../lib/Bind'),
+    semaphore = require('../lib/Semaphore'),
     WebConsole = require('./WebConsole'),
     LayerProvider = require('./LayerProvider'),
     SourceProvider = require('./SourceProvider'),
@@ -34,6 +35,9 @@ function init () {
             .then(function(user){
                 wc.shell.loginUser(user);
             });
+    }
+    else {
+        semaphore.signal('shell:change:context', 0, []);
     }
 }
 
