@@ -1,0 +1,24 @@
+%!Adobe-FontList 1.14
+%Locale:0x409
+
+%BeginFont
+Handler:DirectoryHandler
+FontType:Type1
+FontName:Dauphine-Regular
+FamilyName:Dauphine
+StyleName:Regular
+MenuName:Dauphine
+StyleBits:0
+WeightClass:400
+WidthClass:5
+AngleClass:0
+FullName:Dauphine Regular
+WritingScript:Roman
+OutlineFileName:\Dauphine Regular.otf
+DataFormat:sfntData
+UsesStandardEncoding:yes
+isCFF:yes
+FileLength:39344
+FileModTime:1366299583
+%EndFont
+
