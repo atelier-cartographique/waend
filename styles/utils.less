@@ -59,12 +59,17 @@
 @margin: 12px;
 
 @pink:#FF00BE;
+@green: #94E294;
+@orange: #FF974C;
+
 
 @colorFeature:#198cff;
 @colorLayer:#2892d1;
 @colorGroup:#3698a4;
 @colorUser:#459f76;
 @colorWaend:#53a548;
+
+
 
 
 // @colorBase : #33cc00;
@@ -129,5 +134,40 @@
        -moz-hyphens: auto;
         -ms-hyphens: auto;
             hyphens: auto;
+}
+
+.link-hover {border-bottom: 1px solid blue;}
+
+.flat-color {
+    font-family: "dauphine_regular";
+    font-size: 80%;
+    text-shadow: none;
+    padding: 6px 8px 5px 8px;
+    display: inline-block;
+    color: #fbfbfb;
+    border-radius: 2px;
+    min-width: 150px;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    a{ 
+      color: #fbfbfb;
+      text-decoration: none !important;}
+
+    a:link{font-family: "dauphine_italic";}
+
+    a:hover{.link-hover}
+}
+
+.flat-green {
+  .flat-color;
+  background-color: @green;
+}
+
+.flat-orange {
+  .flat-color;
+  background-color: @orange;
 }
 

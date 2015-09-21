@@ -187,6 +187,80 @@ table {
   -ms-hyphens: auto;
   hyphens: auto;
 }
+.link-hover {
+  border-bottom: 1px solid blue;
+}
+.flat-color {
+  font-family: "dauphine_regular";
+  font-size: 80%;
+  text-shadow: none;
+  padding: 6px 8px 5px 8px;
+  display: inline-block;
+  color: #fbfbfb;
+  border-radius: 2px;
+  min-width: 150px;
+}
+.flat-color:hover {
+  cursor: pointer;
+}
+.flat-color a {
+  color: #fbfbfb;
+  text-decoration: none !important;
+}
+.flat-color a:link {
+  font-family: "dauphine_italic";
+}
+.flat-color a:hover {
+  border-bottom: 1px solid blue;
+}
+.flat-green {
+  font-family: "dauphine_regular";
+  font-size: 80%;
+  text-shadow: none;
+  padding: 6px 8px 5px 8px;
+  display: inline-block;
+  color: #fbfbfb;
+  border-radius: 2px;
+  min-width: 150px;
+  background-color: #94e294;
+}
+.flat-green:hover {
+  cursor: pointer;
+}
+.flat-green a {
+  color: #fbfbfb;
+  text-decoration: none !important;
+}
+.flat-green a:link {
+  font-family: "dauphine_italic";
+}
+.flat-green a:hover {
+  border-bottom: 1px solid blue;
+}
+.flat-orange {
+  font-family: "dauphine_regular";
+  font-size: 80%;
+  text-shadow: none;
+  padding: 6px 8px 5px 8px;
+  display: inline-block;
+  color: #fbfbfb;
+  border-radius: 2px;
+  min-width: 150px;
+  background-color: #ff974c;
+}
+.flat-orange:hover {
+  cursor: pointer;
+}
+.flat-orange a {
+  color: #fbfbfb;
+  text-decoration: none !important;
+}
+.flat-orange a:link {
+  font-family: "dauphine_italic";
+}
+.flat-orange a:hover {
+  border-bottom: 1px solid blue;
+}
 body {
   background-color: #E5E5E5;
   text-shadow: 0 0 6px black;
@@ -376,20 +450,25 @@ body {
   display: inline-block !important;
 }
 .hint {
-  font-family: "dauphine_italic";
+  font-family: "dauphine_regular";
   font-size: 80%;
-  letter-spacing: 0px;
   text-shadow: none;
-  background-color: rgba(1, 154, 0, 0.3);
   padding: 6px 8px 5px 8px;
   display: inline-block;
   color: #fbfbfb;
   border-radius: 2px;
+  min-width: 150px;
+  background-color: #94e294;
+}
+.hint:hover {
+  cursor: pointer;
 }
 .hint a {
-  font-family: "dauphine_regular";
   color: #fbfbfb;
   text-decoration: none !important;
+}
+.hint a:link {
+  font-family: "dauphine_italic";
 }
 .hint a:hover {
   border-bottom: 1px solid blue;
@@ -632,19 +711,29 @@ body {
   cursor: pointer;
 }
 .importer-input {
+  display: block;
+  text-align: center;
   position: relative;
-  margin: 36px auto;
   width: 50%;
+  margin: 24px auto;
 }
 .importer-dropzone {
   position: relative;
-  margin: 36px auto;
+  margin: 12.5% auto 10px auto;
   width: 50%;
   height: 50%;
-  border: 3px solid green;
+  background-color: #F8F8F8;
+  border: 3px solid #94e294;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .importer-dropzone .importer-dropzone-label {
-  font-size: 72pt;
+  font-size: 25pt;
+  text-align: center;
+  width: 200px;
+  text-shadow: none;
+  font-family: "dauphine";
 }
 .importer-progress {
   position: absolute;
@@ -658,10 +747,39 @@ body {
 .importer-progress .importer-counter {
   font-size: 142pt;
 }
+.importer-cancel {
+  font-family: "dauphine_regular";
+  font-size: 80%;
+  text-shadow: none;
+  padding: 6px 8px 5px 8px;
+  display: inline-block;
+  color: #fbfbfb;
+  border-radius: 2px;
+  min-width: 150px;
+  background-color: #ff974c;
+  display: block;
+  width: 150px;
+  text-align: center;
+  margin: auto;
+}
+.importer-cancel:hover {
+  cursor: pointer;
+}
+.importer-cancel a {
+  color: #fbfbfb;
+  text-decoration: none !important;
+}
+.importer-cancel a:link {
+  font-family: "dauphine_italic";
+}
+.importer-cancel a:hover {
+  border-bottom: 1px solid blue;
+}
 .importer-hints {
-  position: relative;
-  margin: 36px auto;
+  position: absolute;
   width: 50%;
+  bottom: 90px;
+  left: 12px;
 }
 .trace-buttons {
   position: absolute;

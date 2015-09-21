@@ -1,19 +1,29 @@
 
 .importer-input{
+    display: block;
+    text-align: center;
     position: relative;
-    margin: 36px auto;
     width: 50%;
+    margin: 24px auto;
 }
 
 
 .importer-dropzone {
     position: relative;
-    margin: 36px auto;
+    margin: 12.5% auto 10px auto;
     width: 50%;
     height: 50%;
-    border: 3px solid green;
+    background-color: #F8F8F8;
+    border: 3px solid @green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .importer-dropzone-label {
-        font-size: 72pt;
+        font-size: 25pt;
+        text-align: center;
+        width: 200px;
+        text-shadow: none;
+        font-family: "dauphine";
     }
 }
 
@@ -31,8 +41,17 @@
     }
 }
 
+.importer-cancel {
+    .flat-orange;
+    display: block;
+    width: 150px;
+    text-align: center;
+    margin: auto;
+}
+
 .importer-hints {
-    position: relative;
-    margin: 36px auto;
+    position: absolute;
     width: 50%;
+    bottom: 90px;
+    left: 12px;
 }

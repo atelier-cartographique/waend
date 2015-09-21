@@ -53,7 +53,7 @@ function setupHints (container) {
 function setupCancel (container) {
     var cancel = document.createElement('div');
     cancel.setAttribute('class', 'importer-cancel');
-    cancel.innerHTML = 'cancel';
+    cancel.innerHTML = '<a>cancel</a>';
     container.appendChild(cancel);
     return cancel;
 }
@@ -224,17 +224,18 @@ function importer () {
         display = terminal.display();
 
     setupCreateData(binder, uid, gid, lid);
-    setupHints(display.node);
-    var input = setupInput(display.node);
     var dropbox = setupDropZone(display.node);
+    var input = setupInput(display.node);
     var cancel = setupCancel(display.node);
     var options = {
-        'input': input,
         'dropbox': dropbox,
         'container': display.node,
         'display': display,
+        'input': input,
         'cancel': cancel
     };
+    setupHints(display.node);
+
     return (new Promise(resolver(options)));
 }
 
