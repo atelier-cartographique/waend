@@ -311,6 +311,8 @@ sup {
 <p>This is a quite rought help for now, it will be improved from time to time.<br>
 Feel free to give a hand !</p>
 
+<p>If you like to create a user acount, visit http://alpha.waend.com/register.</p>
+
 <ol>
 <li><p><a href="#commands">Common commands</a></p></li>
 <li><p><a href="#keys">Style attributes and parameters</a><br>
@@ -351,6 +353,7 @@ Feel free to give a hand !</p>
 
 <ul>
 <li>help : <em>help</em></li>
+<li>lookup : <em>lookup + a word will search for maps containing this word</em> </li>
 <li>set : <em>set something to something, often attribute to current context</em></li>
 <li>del : <em>delete + attribute name to delete</em></li>
 <li>get : <em>get current context attributes</em></li>
@@ -371,12 +374,12 @@ Feel free to give a hand !</p>
 <p>Pipe (|) is allowed to chain commands together.
 e.g:</p>
 
-<pre><code>draw | close | create</code></pre>
+<pre><code class="language-none">draw | close | create</code></pre>
 
 <p>to draw a line, close it to make a polygon, and save it.
 That&#39;s what the &quot;draw zone&quot; button does !</p>
 
-<pre><code>media pick | set params.image</code></pre>
+<pre><code class="language-none">media pick | set params.image</code></pre>
 
 <p>To attach an image to a feature.</p>
 
@@ -405,7 +408,7 @@ One manipulates dictionary&#39;s values with the <code>get</code>, <code>set</co
 
 <p>Something else is that you can address keys which are inside dictionaries with the dot notation, e.g:</p>
 
-<pre><code>set style.strokeStyle blue</code></pre>
+<pre><code class="language-none">set style.strokeStyle blue</code></pre>
 
 <p>will results in</p>
 
@@ -427,7 +430,7 @@ One manipulates dictionary&#39;s values with the <code>get</code>, <code>set</co
 
 <p>color example:</p>
 
-<pre><code>set style.strokeStyle orange  
+<pre><code class="language-none">set style.strokeStyle orange  
 set style.strokeStyle #FF7F00  
 set style.strokeStyle &quot;rgb(255, 127, 0)&quot;  
 set style.strokeStyle &quot;rgba(255, 127, 0, 0.8)&quot;  </code></pre>
@@ -457,7 +460,7 @@ number of hatches per polygon (number)</p>
 
 <p>Example:</p>
 
-<pre><code>set params.hn 150</code></pre>
+<pre><code class="language-none">set params.hn 150</code></pre>
 
 <h4 id="toc_7"><a name="step"></a> hatches step (step)</h4>
 
@@ -466,7 +469,7 @@ steps value between hatches (number)</p>
 
 <p>Example:</p>
 
-<pre><code>set params.step 10</code></pre>
+<pre><code class="language-none">set params.step 10</code></pre>
 
 <h4 id="toc_8"><a name="rotation"></a> hatches rotation (rotation)</h4>
 
@@ -475,7 +478,7 @@ hatches angle (number)</p>
 
 <p>Example:</p>
 
-<pre><code>set params.rotation 45</code></pre>
+<pre><code class="language-none">set params.rotation 45</code></pre>
 
 <h4 id="toc_9"><a name="text"></a> text</h4>
 
@@ -484,7 +487,7 @@ the text you want to display in a polygon  </p>
 
 <p>Example:</p>
 
-<pre><code>set params.text &quot;enter your text here&quot;</code></pre>
+<pre><code class="language-none">set params.text &quot;enter your text here&quot;</code></pre>
 
 <h4 id="toc_10"><a name="fontsize"></a> fontsize</h4>
 
@@ -493,13 +496,13 @@ size of the font (number)</p>
 
 <p>Example:</p>
 
-<pre><code>set params.fontsize 12</code></pre>
+<pre><code class="language-none">set params.fontsize 12</code></pre>
 
 <h4 id="toc_11"><a name="fontcolor"></a> fontcolor (fillStyle)</h4>
 
 <p>Example:</p>
 
-<pre><code>set style.fillStyle orange  
+<pre><code class="language-none">set style.fillStyle orange  
 set style.fillStyle #FF7F00  
 set style.fillStyle &quot;rgb(255, 127, 0)&quot;  
 set style.fillStyle &quot;rgba(255, 127, 0, 0.8)&quot; </code></pre>
@@ -534,7 +537,7 @@ set style.fillStyle &quot;rgba(255, 127, 0, 0.8)&quot; </code></pre>
 
 <p>Example :</p>
 
-<pre><code>set name my-element-name
+<pre><code class="language-none">set name my-element-name
 set description &quot;here is my description&quot;
 set &quot;city population&quot; 1000000</code></pre>
 
@@ -545,7 +548,7 @@ get attributeName : get value for attributeName</p>
 
 <p>Example :</p>
 
-<pre><code>get
+<pre><code class="language-none">get
 get name</code></pre>
 
 <h3 id="toc_18"><a name="edit"></a> edit</h3>
@@ -553,13 +556,13 @@ get name</code></pre>
 <p>There is no <em>edit</em> button yet, but the functionality is here.
 To edit a key, type :</p>
 
-<pre><code>get your_key | edit | set your_key</code></pre>
+<pre><code class="language-none">get your_key | edit | set your_key</code></pre>
 
 <p>It will get the <em>your_key</em> value, open the editor with this value, and set the edited value to <em>your_key</em></p>
 
 <p>To edit <em>style</em> or <em>params</em> dictionary, do the same with :</p>
 
-<pre><code>get style | edit | set style
+<pre><code class="language-none">get style | edit | set style
 or
 get params | edit | set params</code></pre>
 
@@ -569,13 +572,13 @@ get params | edit | set params</code></pre>
 
 <p>Example:</p>
 
-<pre><code>del text</code></pre>
+<pre><code class="language-none">del text</code></pre>
 
 <p>Delete an attribute in <em>style</em> or <em>params</em>  </p>
 
 <p>For now you need to delete the entire <em>style</em> or <em>params</em> with :</p>
 
-<pre><code>del params
+<pre><code class="language-none">del params
 or
 del style</code></pre>
 
@@ -598,7 +601,7 @@ use [o] to zoom out</p>
 
 <p>Example:</p>
 
-<pre><code>draw | region set</code></pre>
+<pre><code class="language-none">draw | region set</code></pre>
 
 <p>will set the region viewport to the drawing extend</p>
 
@@ -615,7 +618,7 @@ Trace is usefull to creat segmented lines and polygons.</p>
 
 <p>To create a feature out of it, in a layer context, use :</p>
 
-<pre><code>trace | create</code></pre>
+<pre><code class="language-none">trace | create</code></pre>
 
 <p>It will draw a line and create a feature out of it.<br>
 Click on the first point to close the line and make a polygon.</p>
@@ -624,11 +627,11 @@ Click on the first point to close the line and make a polygon.</p>
 
 <p>To edit a feature geometry, use :</p>
 
-<pre><code>gg | trace | sg</code></pre>
+<pre><code class="language-none">gg | trace | sg</code></pre>
 
 <p>To duplicate a feature, use :</p>
 
-<pre><code>gg | trace | create</code></pre>
+<pre><code class="language-none">gg | trace | create</code></pre>
 
 <h3 id="toc_25"><a name="del_feature"></a> delete feature (del_feature)</h3>
 
@@ -642,7 +645,7 @@ Click on the first point to close the line and make a polygon.</p>
 
 <p>The argument is made of a valid path to be created.</p>
 
-<pre><code>attach /user_id/map_id/layer_id</code></pre>
+<pre><code class="language-none">attach /user_id/map_id/layer_id</code></pre>
 
 <p><code>/user_id/map_id</code> = the context where you want to attach the layer.<br>
 <code>layer_id</code>= the layer id.</p>
@@ -651,7 +654,7 @@ Click on the first point to close the line and make a polygon.</p>
 
 <p>The <code>detach</code> command <em>undo</em> what has been done by the <code>attach</code> command, and works the same way.</p>
 
-<pre><code>detach /user_id/map_id/layer_id</code></pre>
+<pre><code class="language-none">detach /user_id/map_id/layer_id</code></pre>
 
 <p>A subtlety about <em>compositions</em> ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that&#39;s created at the same time. It does mean that if you&#39;re willing to <em>remove</em> a layer, at the moment, your best option is to detach it from all maps it&#39;s attached to.</p>
 
@@ -675,7 +678,7 @@ If you want to change it, please refer to <a href="https://developer.mozilla.org
 
 <p>Exemple for no compositing :</p>
 
-<pre><code>set style.globalCompositeOperation source-over</code></pre>
+<pre><code class="language-none">set style.globalCompositeOperation source-over</code></pre>
 
 <h2 id="toc_32"><a name="import"></a> Import data (import)</h2>
 

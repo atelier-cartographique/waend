@@ -191,8 +191,8 @@ body {
   background-color: #E5E5E5;
   text-shadow: 0 0 6px black;
   letter-spacing: 1px;
-  font-size: 12pt;
-  font-family: "osp-dindin";
+  font-size: 14pt;
+  font-family: "dauphine_regular";
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 #page-title {
@@ -241,7 +241,7 @@ body {
   bottom: 0;
   width: 100%;
   height: 100%;
-  font-family: monospace;
+  font-family: "sansguiltmb";
   background-color: transparent;
 }
 #wc.fold {
@@ -263,10 +263,8 @@ body {
   overflow-y: hidden;
 }
 .wc-page-title {
-  font-size: 100%;
-  color: darkgrey;
+  color: #cecece;
   margin-bottom: 6px;
-  font-family: monospace;
 }
 .wc-page.wc-inactive {
   opacity: 0;
@@ -277,15 +275,16 @@ body {
 .wc-input {
   position: absolute;
   bottom: 0;
-  padding: 12px;
-  padding-top: 7px;
+  padding: 5px 12px;
   left: 0;
   border: 0;
   border-top: 1px solid grey;
-  font-size: 16pt;
+  font-size: 20pt;
   background-color: #F8F8F8;
   width: calc(100% - 24px);
-  font-family: monospace;
+  font-family: "dauphine_regular";
+  letter-spacing: 1px!important;
+  color: #4C4C4C;
 }
 .wc-input:focus {
   outline: none;
@@ -339,7 +338,7 @@ body {
 }
 .key-value .value {
   width: calc(100% - 75px - 6px);
-  font-family: monospace;
+  font-family: "sansguiltmb";
   font-size: 11pt;
   letter-spacing: 0.5px;
 }
@@ -347,7 +346,6 @@ body {
   position: absolute;
   right: 12px;
   top: 12px;
-  font-size: 125%;
   color: #ff00be;
   font-weight: normal;
   letter-spacing: 2px;
@@ -381,7 +379,7 @@ body {
   font-size: 75%;
   font-style: italic;
   letter-spacing: 0px;
-  font-family: monospace;
+  font-family: "sansguiltmb";
   text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
 }
 .hint.first-hint-line {
@@ -440,8 +438,8 @@ body {
 .wc-title .wc-context-shell:after {
   position: relative;
   display: block;
-  font-size: 8pt;
-  font-family: monospace;
+  font-size: 9pt;
+  font-family: "sansguiltmb";
   width: 40px;
   left: calc(50% - 20px);
   text-align: center;
@@ -512,7 +510,7 @@ body {
 }
 .wc-buttons-group {
   margin-top: 6px;
-  font-family: monospace;
+  font-family: "sansguiltmb";
   font-size: 9pt;
   width: auto;
 }
@@ -535,7 +533,7 @@ body {
 .wc-button {
   cursor: pointer;
   border-bottom: 1px solid transparent;
-  font-family: "osp-dindin";
+  font-family: "dauphine_regular";
 }
 .wc-button:first-child {
   padding-top: 3px;

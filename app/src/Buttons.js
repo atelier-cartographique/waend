@@ -44,9 +44,7 @@ var userButtons = {
 
 var shellButtons = {
     'help' : ['help'],
-    'login' : ['login'],
-    'register' : ['register'],
-    'get context infos': ['get']
+    'login' : ['login']
 };
 
 

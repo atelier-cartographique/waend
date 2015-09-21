@@ -5,6 +5,8 @@
 This is a quite rought help for now, it will be improved from time to time.  
 Feel free to give a hand !
 
+If you like to create a user acount, visit http://alpha.waend.com/register.
+
 
 
 1.   [Common commands](#commands)
@@ -51,6 +53,7 @@ Feel free to give a hand !
 ## <a name="commands"></a>Common commands
 
 - help : *help*
+- lookup : *lookup + a word will search for maps containing this word* 
 - set : *set something to something, often attribute to current context*
 - del : *delete + attribute name to delete*
 - get : *get current context attributes*

@@ -2,11 +2,6 @@
 
 ##SHORT TERM 
 
-###Styles
-- set colors
-- set number of lines
-- etc..
-
 
 ###Sweet interface
 - Buttons etc
@@ -29,7 +24,6 @@
 
 ###Typography
 - Stroke font
-- Text on path
 
 ###Suscribe to map & Notifications
 
