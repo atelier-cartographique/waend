@@ -1,0 +1,26 @@
+Wænd is a web platform for subjective and collaborative spatial publication.
+
+With Wænd you can create your maps from scratch, publish territorial representations from your very personal point of view, and collaborate on existing maps.  
+
+The platform is under development, and an alpha version is accessible at http://alpha.waend.com.
+
+Since Waend is still under construction, some parts can be a bit rough, unclear, or even buggy. But it works ! (See http://waend.com for some maps exemples)
+
+
+This guide will help you to walk the very first steps in it, and we hope it will help you to feel comfortable with this unusual web application.
+
+
+There are two surprising aspects you will discover : 
+
+- While most of the actions can be done by clicking on the menu buttons, the main tool to work on Wænd is a command line. You will have to type the commands. They are listed in the Help section. Try it, it’s easy and you won’t break anything. 
+
+- There is no map background : you will start on a blank page. It’s not a bug, but a choice we’ve made to wide-up the spectrum of what cartography could be. No map background means no influence from us on how a territory should be represented. You can do whatever you want. 
+
+
+Those aspects are quite radical choices and it can be a bit confusing at first, but it keeps the platform very open and flexible, with the least influence possible on your cartographic publications.
+
+We like to say that Wænd is not meant to create a map of the world, but a world of maps. 
+
+We hope to see you there !
+
+
