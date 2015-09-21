@@ -373,6 +373,37 @@ body {
 }
 .wc-error {
   color: #FF4B3B;
+  font-family: "dauphine_italic";
+  font-size: 11pt;
+  margin-left: 12px;
+}
+.wc-error {
+  -moz-animation: cssAnimation 0s ease-in 5s forwards;
+  /* Firefox */
+
+  -webkit-animation: cssAnimation 0s ease-in 5s forwards;
+  /* Safari and Chrome */
+
+  -o-animation: cssAnimation 0s ease-in 5s forwards;
+  /* Opera */
+
+  animation: cssAnimation 0s ease-in 5s forwards;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+@keyframes cssAnimation {
+  to {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+}
+@-webkit-keyframes cssAnimation {
+  to {
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
 }
 .wc-command {
   font-style: italic;
