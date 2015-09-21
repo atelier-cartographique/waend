@@ -333,7 +333,7 @@ var WebConsole = Terminal.extend({
                     }
 
                     titleComps.push(this.makeCommand({
-                        'args': ['cc /' + ctxPath.slice(0, pidx + 1).join('/')],
+                        'args': ['cc /' + ctxPath.slice(0, pidx + 1).join('/'), 'get'],
                         'text': '  > ' + names[pidx],
                         'attributes': {
                             'class': 'wc-context-' + titleTypes[pidx + 1]

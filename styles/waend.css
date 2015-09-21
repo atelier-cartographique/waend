@@ -376,23 +376,23 @@ body {
   display: inline-block !important;
 }
 .hint {
-  font-size: 75%;
-  font-style: italic;
+  font-family: "dauphine_italic";
+  font-size: 80%;
   letter-spacing: 0px;
-  font-family: "sansguiltmb";
-  text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
+  text-shadow: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 6px 8px 5px 8px;
+  display: inline-block;
+  color: #fbfbfb;
+  border-radius: 2px;
 }
-.hint.first-hint-line {
-  margin-top: 12px;
-  display: block;
+.hint a {
+  font-family: "dauphine_regular";
+  color: #fbfbfb;
+  text-decoration: none !important;
 }
-.hint.hint-exemple {
-  font-style: normal;
-  color: dimgrey;
-  font-size: 11pt;
-  display: block;
-  padding: 6px 0 4px 0;
-  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+.hint a:hover {
+  border-bottom: 1px solid blue;
 }
 .wc-title {
   position: absolute;

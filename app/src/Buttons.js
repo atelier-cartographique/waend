@@ -38,7 +38,7 @@ var userButtons = {
     'list maps': ['lg'],
     'upload media': ['media upload'],
     'browse medias': ['media list'],
-    'logout' : ['logout']
+    'my profile' : ['cc /me','lg']
 
 };
 
