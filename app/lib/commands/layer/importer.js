@@ -22,7 +22,7 @@ function setupDropZone (container) {
     dropbox.setAttribute('class', 'importer-dropzone');
     dropboxLabel.setAttribute('class', 'importer-dropzone-label');
 
-    dropboxLabel.innerHTML = 'Drop Zone';
+    dropboxLabel.innerHTML = 'Drag & drop your file here';
 
     dropbox.appendChild(dropboxLabel);
     container.appendChild(dropbox);
@@ -44,13 +44,7 @@ function setupHints (container) {
     var hints = document.createElement('div');
     hints.setAttribute('class', 'importer-hints');
     hints.innerHTML = [
-        '<p class="hint first-hint-line">drag and drop your GeoJSON file on map to import it</p>'
-        ,'<p class="hint">IMPORTANT :</p>'
-        ,'<p class="hint">Wænd currently does not support</p>'
-        ,'<p class="hint">multilines and multipolygons</p>'
-        ,'<p class="hint">nor points -yeah!-</p>'
-        ,'<p class="hint">Your datas should be in EPGS:4326 - WGS84</p>'
-        ,'<p class="hint">and we display them in EPSG:3857</p>'
+        '<span class="hint">Help : <a href="http://alpha.waend.com/documentation/help.html#import" target="_blank">Import Datas</a></span>'
     ].join(' ');
     container.appendChild(hints);
 }
