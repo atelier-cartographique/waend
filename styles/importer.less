@@ -1,30 +1,35 @@
 
+.importer-dropzone {
+    position: absolute;
+    margin: 0px auto 0px auto;
+    width: 100%;
+    height: 100%;
+    background-color: #F8F8F8;
+    // border: 3px solid @green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+    .importer-dropzone-label {
+        font-size: 25pt;
+        text-align: center;
+        width: 300px;
+        height: 300px;
+        text-shadow: none;
+        font-family: "dauphine";
+        color: @green;
+        line-height: 130%;
+    }
+}
+
+
 .importer-input{
     display: block;
     text-align: center;
     position: relative;
-    width: 50%;
+    width: 250px;
     margin: 24px auto;
-}
-
-
-.importer-dropzone {
-    position: relative;
-    margin: 12.5% auto 10px auto;
-    width: 50%;
-    height: 50%;
-    background-color: #F8F8F8;
-    border: 3px solid @green;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .importer-dropzone-label {
-        font-size: 25pt;
-        text-align: center;
-        width: 200px;
-        text-shadow: none;
-        font-family: "dauphine";
-    }
+    margin-top: 55vh;
 }
 
 .importer-progress {
@@ -52,6 +57,6 @@
 .importer-hints {
     position: absolute;
     width: 50%;
-    bottom: 90px;
+    bottom: 50px;
     left: 12px;
 }

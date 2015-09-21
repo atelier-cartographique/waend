@@ -165,4 +165,21 @@
 .key-description .value {
 }
 
-.hint {.flat-green;}
+.hint {
+    font-family: "dauphine_regular";
+    font-size: 11pt;
+    text-shadow: none;
+    display: inline-block;
+    color: @green;
+    margin-left: 65px;
+
+    a{ 
+      color: @green;
+      text-decoration: none !important;
+      display: inline-block;
+      border-bottom: 1px solid transparent;}
+
+    a:link{font-family: "dauphine_italic";}
+
+    a:hover{.link-hover}
+}

@@ -22,7 +22,7 @@ function setupDropZone (container) {
     dropbox.setAttribute('class', 'importer-dropzone');
     dropboxLabel.setAttribute('class', 'importer-dropzone-label');
 
-    dropboxLabel.innerHTML = 'Drag & drop your file here';
+    dropboxLabel.innerHTML = '-IMPORT DATAS- Drag & drop your GeoJSON here, or select a file';
 
     dropbox.appendChild(dropboxLabel);
     container.appendChild(dropbox);
