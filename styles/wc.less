@@ -59,21 +59,46 @@
 .wc-input{
     position: absolute;
     bottom: 0;
-    padding: 5px 12px;
+    padding: 5px 5px ;
     left: 0;
     border: 0;
     border-top: 1px solid grey;
     font-size: 16pt;
     background-color: @lightgrey;
-    width: calc(~"100% - 24px");
+    width: calc(~"100% - 10px");
     font-family: monospace;
     letter-spacing: 1px!important;
     color: #4C4C4C;
     margin: 0px;
     border-radius: 0px;
+    text-indent: 12px;
 
     &:focus {
         outline: none;
+    }
+
+    &::-webkit-input-placeholder {
+        text-indent: 0px;
+        font-size: 10pt;
+        line-height: 16pt;
+    }
+
+    &:-moz-placeholder { /* Firefox 18- */
+        text-indent: 0px;
+        font-size: 10pt;
+        line-height: 16pt;
+    }
+
+    &::-moz-placeholder {  /* Firefox 19+ */
+        text-indent: 0px;
+        font-size: 10pt;
+        line-height: 16pt;
+    }
+
+    &:-ms-input-placeholder {  
+        text-indent: 0px;
+        font-size: 10pt;
+        line-height: 16pt;
     }
 }
 
