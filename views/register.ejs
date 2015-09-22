@@ -3,48 +3,53 @@
     <title>wænd - register</title>
     <link rel="stylesheet" type="text/css" href="/styles/waend.css" />  
 </head>
-<body>
-<div class="bkg-img">
-    <div class="container logo">
-        <img src="/styles/imgs/logo-white.png">
-    </div>
-     
-
-      <div class="container login">
-        <form class="form-horizontal" role="form" action="/register" method="post">
-            <div class="list-group">
-                <input name="username" 
-                     type="email" 
-                     class="list-group-item" 
-                     id="inputEmail3" 
-                     placeholder="email" />
-
-                <input name="password" 
-                     type="password" 
-                     class="list-group-item" 
-                     id="inputPassword3" 
-                     placeholder="password" />
-
-                <input type="submit" 
-                     class="list-group-item btn-login" 
-                     value="register">
-            </div>
-        </form>
-    </div>
-
-
-    <div class="container text">
-        <div class="welcome">Welcome on Wænd!</div>
-        <div class="description">
-            <p>
-              
-            </p>
+<body id="register">
+        <div class="header">
+            <span class="logo">wænd<sup>alpha</sup></span>
         </div>
-    </div>
 
-    <div class="credits">
-        Initiated by <a href="http://atelier-cartographique.be">Atelier Cartographique</a>.
+
+
+        <div class="text">
+            <p>Create an account if you wish to publish maps on Wænd</p>
+            <br>
+            <p>You don't have to, but we invite you to use your real e-mail adress, since we might need to contact you from time to time, specialy if there are major changes on the platform.</p>
+        </div>
+
+
+        <div class="form-container">
+            <form class="form-horizontal" role="form" action="/register" method="post">
+                <div class="list-group">
+                    <input name="username" 
+                         type="email" 
+                         class="list-group-item" 
+                         id="inputEmail" 
+                         placeholder="email" />
+
+                    <input name="password" 
+                         type="password" 
+                         class="list-group-item" 
+                         id="inputPassword" 
+                         placeholder="password" />
+
+                    <input type="submit" 
+                         class="list-group-item btn-login" 
+                         value="Create account">
+                </div>
+            </form>
+        </div>
+
+        <div class="text">
+            <p>Keep in mind that you are registering on an alpha version, wich could be buggy, unclear, and subject to heavy transformations. (eg: there is no password recovery system yet, if you forget it... well, it's better to not forget it)</p>
+            <br>
+            Welcome, we hope you will enjoy it!</p>
+            <br>
+            <p>We will reply at contact@atelier-cartographique.be</p>
+        </div>
+
+
+    <div class="footer">
+        <div>Initiated by <a href="http://atelier-cartographique.be">Atelier Cartographique</a>.</div>
     </div>
-</div>
 </body>
 </html>

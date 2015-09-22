@@ -165,6 +165,18 @@ table {
   font-style: normal;
 }
 /**** VARIABLES ****/
+.link-hover {
+  border-bottom: 1px solid blue;
+}
+.linkwaend a {
+  text-decoration: none !important;
+}
+.linkwaend a:link {
+  font-family: "dauphine_italic";
+}
+.linkwaend a:hover {
+  border-bottom: 1px solid blue;
+}
 .white-text-shadow {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
@@ -187,9 +199,6 @@ table {
   -ms-hyphens: auto;
   hyphens: auto;
 }
-.link-hover {
-  border-bottom: 1px solid blue;
-}
 .flat-color {
   font-family: "dauphine_regular";
   font-size: 80%;
@@ -204,7 +213,6 @@ table {
   cursor: pointer;
 }
 .flat-color a {
-  color: #fbfbfb;
   text-decoration: none !important;
 }
 .flat-color a:link {
@@ -212,6 +220,9 @@ table {
 }
 .flat-color a:hover {
   border-bottom: 1px solid blue;
+}
+.flat-color a {
+  color: #fbfbfb;
 }
 .flat-green {
   font-family: "dauphine_regular";
@@ -228,7 +239,6 @@ table {
   cursor: pointer;
 }
 .flat-green a {
-  color: #fbfbfb;
   text-decoration: none !important;
 }
 .flat-green a:link {
@@ -236,6 +246,9 @@ table {
 }
 .flat-green a:hover {
   border-bottom: 1px solid blue;
+}
+.flat-green a {
+  color: #fbfbfb;
 }
 .flat-orange {
   font-family: "dauphine_regular";
@@ -252,7 +265,6 @@ table {
   cursor: pointer;
 }
 .flat-orange a {
-  color: #fbfbfb;
   text-decoration: none !important;
 }
 .flat-orange a:link {
@@ -260,6 +272,27 @@ table {
 }
 .flat-orange a:hover {
   border-bottom: 1px solid blue;
+}
+.flat-orange a {
+  color: #fbfbfb;
+}
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+input {
+  width: 300px;
+  font-size: 16pt;
+  font-family: "dauphine_regular";
+  padding: 12px;
+  border-radius: 3px;
+  border: 0px;
+  margin: 6px 0px;
+}
+input[type="submit"] {
+  background-color: #94e294;
+  cursor: pointer;
 }
 body {
   background-color: #E5E5E5;
@@ -305,6 +338,59 @@ body {
 }
 .wc-context-shell {
   color: #53a548 !important;
+}
+#register {
+  position: absolute;
+  background-color: #f8f8f8;
+  text-shadow: none;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+#register .header {
+  color: #5edbfc;
+  top: 12px;
+  width: 100%;
+  text-align: center;
+}
+#register .header .logo {
+  font-size: 100pt;
+}
+#register .header sup {
+  vertical-align: super;
+  font-size: 25%;
+}
+#register .header .subtitle {
+  font-size: 36pt;
+}
+#register .form-container {
+  width: 300px;
+  text-align: center;
+  margin: auto;
+}
+#register .text {
+  width: 500px;
+  text-align: center;
+  margin: auto;
+  padding: 24px 0px;
+}
+#register .footer {
+  font-size: 11pt;
+  position: absolute;
+  bottom: 12px;
+  left: 0px;
+  width: 100%;
+  text-align: center;
+  color: black;
+}
+#register .footer a {
+  text-decoration: none !important;
+}
+#register .footer a:link {
+  font-family: "dauphine_italic";
+}
+#register .footer a:hover {
+  border-bottom: 1px solid blue;
 }
 .wc-display {
   position: absolute;
@@ -354,7 +440,7 @@ body {
   border: 0;
   border-top: 1px solid grey;
   font-size: 20pt;
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
   width: calc(100% - 24px);
   font-family: "dauphine_regular";
   letter-spacing: 1px!important;
@@ -740,14 +826,14 @@ body {
   cursor: pointer;
 }
 .importer-dropzone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   margin: 0px auto 0px auto;
   width: 100%;
   height: 100%;
-  background-color: #F8F8F8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #f8f8f8;
   z-index: -1;
 }
 .importer-dropzone .importer-dropzone-label {
@@ -799,7 +885,6 @@ body {
   cursor: pointer;
 }
 .importer-cancel a {
-  color: #fbfbfb;
   text-decoration: none !important;
 }
 .importer-cancel a:link {
@@ -807,6 +892,9 @@ body {
 }
 .importer-cancel a:hover {
   border-bottom: 1px solid blue;
+}
+.importer-cancel a {
+  color: #fbfbfb;
 }
 .importer-hints {
   position: absolute;
