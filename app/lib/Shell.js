@@ -12,6 +12,7 @@
 
 var O = require('../../lib/object').Object,
     _ = require('underscore'),
+    url = require('url'),
     Bromise = require('bluebird'),
     Context = require('./Context'),
     User = require('./User'),
@@ -89,6 +90,36 @@ function cliSplit (str) {
 //     console.log('<'+str+'>', check, splitted.length, splitted);
 // }
 
+function getUrl () {
+    var purl = url.parse(window.location.href),
+        queryString = purl.query;
+
+    if (queryString) {
+        purl.query = {};
+        _.each(queryString.split('&'), function(pair){
+            var spair = pair.split('=');
+            purl.query[spair[0]] = window.decodeURIComponent(spair[1]);
+        });
+    }
+
+    // backbone based
+    var trailingSlash = /\/$/;
+    var routeStripper = /^[#\/]|\s+$/g;
+    var fragment = purl.pathname;
+    var root = FRAGMENT_ROOT.replace(trailingSlash, '');
+    if (!fragment.indexOf(root)) {
+        fragment = fragment.substr(root.length);
+    }
+    fragment.replace(routeStripper, '');
+    var path = fragment.split('/');
+    if(path[0].length === 0) {
+        path = path.slice(1);
+    }
+    purl.fragment = fragment;
+    purl.comps = path;
+    return purl;
+}
+
 function ShellError () {
     if(arguments.length > 0){
         console.error.apply(console, arguments);
@@ -131,29 +162,31 @@ var Shell = O.extend({
             window.onpopstate = popStateCallback;
         }
 
-        // backbone based
-        var trailingSlash = /\/$/;
-        var routeStripper = /^[#\/]|\s+$/g;
-        var fragment = window.location.pathname;
-        var root = FRAGMENT_ROOT.replace(trailingSlash, '');
-        if (!fragment.indexOf(root)) {
-            fragment = fragment.substr(root.length);
-        }
-        fragment.replace(routeStripper, '');
-        var path = fragment.split('/');
-        if(path[0].length === 0) {
-            path = path.slice(1);
-        }
+        var purl = getUrl();
         var startPath;
-        if ((fragment.length > 0) && (path.length > 0)) {
+        if ((purl.fragment.length > 0) && (purl.comps.length > 0)) {
             var after = _.noop;
-            startPath = path;
-            if (path.length === FEATURE) {
+            startPath = purl.comps;
+            if (purl.query && 'c' in purl.query) {
+                var command = purl.query.c,
+                    comps = purl.comps,
+                    pre;
+                if (comps.length === FEATURE) {
+                    pre = 'gg | region set';
+                }
+                after = function() {
+                    if (pre) {
+                        self.exec(pre);
+                    }
+                    self.exec(command);
+                };
+            }
+            else if (purl.comps.length === FEATURE) {
                 after = function() {
                     self.exec('gg | region set');
                 };
             }
-            this.historyPushContext(path).then(after);
+            this.historyPushContext(purl.comps).then(after);
         }
         this.historyStarted = startPath;
         this.emit('history:start', startPath);

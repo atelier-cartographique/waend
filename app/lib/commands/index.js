@@ -28,6 +28,7 @@ var commandModules = [
     require('./drawLine'),
     require('./trace'),
     require('./navigate'),
+    require('./view'),
     require('./media'),
     require('./select'),
     require('./close'),

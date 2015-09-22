@@ -188,11 +188,9 @@ table {
 }
 .word-wrap {
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -321,7 +319,6 @@ body {
   bottom: 0;
   /*padding: 24px;
     padding-top: 38px;*/
-
   background-color: transparent;
 }
 .wc-context-feature {
@@ -404,6 +401,9 @@ body {
   font-family: "sansguiltmb";
   background-color: transparent;
 }
+.wc-hide {
+  display: none;
+}
 #wc.fold {
   bottom: 64%;
   border-bottom: 1px solid;
@@ -452,7 +452,6 @@ body {
 .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
-
 }
 .wc-pending {
   color: #2B71FF;
@@ -466,13 +465,10 @@ body {
 .wc-error {
   -moz-animation: cssAnimation 0s ease-in 5s forwards;
   /* Firefox */
-
   -webkit-animation: cssAnimation 0s ease-in 5s forwards;
   /* Safari and Chrome */
-
   -o-animation: cssAnimation 0s ease-in 5s forwards;
   /* Opera */
-
   animation: cssAnimation 0s ease-in 5s forwards;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
@@ -518,11 +514,9 @@ body {
   color: #ff00be;
   display: inline-block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;

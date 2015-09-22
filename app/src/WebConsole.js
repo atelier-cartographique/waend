@@ -405,6 +405,7 @@ var WebConsole = Terminal.extend({
         mapBlock.appendChild(nav);
         mapBlock.appendChild(select);
         self.root.appendChild(mapBlock);
+        this.mapBlock = mapBlock;
     },
 
     internalCommand: function (str) {
@@ -546,6 +547,22 @@ var WebConsole = Terminal.extend({
 
     display: function () {
         return (new Display(this.root));
+    },
+
+    hide: function () {
+        this.container.setAttribute('class', 'wc-container wc-hide');
+        this.title.setAttribute('class','wc-title wc-hide');
+        this.pages.setAttribute('class', 'wc-pages wc-hide');
+        this.buttonsContainer.setAttribute('class','wc-buttons wc-hide');
+        this.mapBlock.setAttribute('class','wc-mapblock wc-hide');
+    },
+
+    show: function () {
+        this.container.setAttribute('class', 'wc-container');
+        this.title.setAttribute('class','wc-title');
+        this.pages.setAttribute('class', 'wc-pages');
+        this.buttonsContainer.setAttribute('class', 'wc-buttons');
+        this.mapBlock.setAttribute('class','wc-mapblock');
     }
 
 });
