@@ -175,6 +175,7 @@ var WebConsole = Terminal.extend({
         this._inputField = document.createElement('input');
         this._inputField.setAttribute('class', 'wc-input');
         this._inputField.setAttribute('type', 'text');
+        this._inputField.setAttribute('placeholder', '>');
         this.container.appendChild(this._inputField);
 
         // A bit of a trick to prevent keyup event to trigger on a display from here
