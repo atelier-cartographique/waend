@@ -60,7 +60,7 @@ function login (username, password) {
     else {
 
         var resolver = function (resolve, reject) {
-            stdout.write('username:');
+            stdout.write('e-mail:');
             terminal.input(stdin);
             stdin.read()
                 .then(function(username){
