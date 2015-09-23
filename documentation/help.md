@@ -8,6 +8,8 @@ Feel free to give a hand !
 If you like to create a user acount, visit http://alpha.waend.com/register.
 
 
+An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/waend-tutorial-09-2015_2.pdf" target="_blank">here</a>
+
 
 1.   [Common commands](#commands)
 
