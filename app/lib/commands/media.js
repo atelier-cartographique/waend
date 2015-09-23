@@ -177,10 +177,9 @@ function uploadMedia () {
             dropbox.addEventListener("drop", drop, false);
 
             // Select
-            input.addEventListener('change', function (files) {
+            input.addEventListener('change', function () {
                 (function () {
-                    handleFiles(files,
-                    resolve, reject);
+                    handleFiles(input.files, resolve, reject);
                 })();
             }, false);
 
