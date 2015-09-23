@@ -16,12 +16,44 @@ var _ = require('underscore'),
 var MEDIA_URL = config.public.mediaUrl;
 
 function setupDropZone (container) {
-    var dropbox = document.createElement('canvas');
-    dropbox.style.width = '100%';
-    dropbox.style.height = '100%';
-    dropbox.backgroundColor = 'transparent';
+    var dropbox = document.createElement('div'),
+        dropboxLabel = document.createElement('div');
+    dropbox.setAttribute('class', 'importer-dropzone');
+    dropboxLabel.setAttribute('class', 'importer-dropzone-label');
+
+    dropboxLabel.innerHTML = '<span>-UPLOAD MEDIAS-</span><br><span>Drag & drop your images here,</span><br><span>or select a file</span>';
+
+    dropbox.appendChild(dropboxLabel);
     container.appendChild(dropbox);
     return dropbox;
+}
+
+function setupInput (container) {
+    var input = document.createElement('input'),
+        inputWrapper = document.createElement('div');
+    inputWrapper.setAttribute('class', 'importer-input-wrapper');
+    input.setAttribute('class', 'importer-input');
+    input.setAttribute('type', 'file');
+    container.appendChild(input);
+    return input;
+}
+
+
+function setupCancel (container) {
+    var cancel = document.createElement('div');
+    cancel.setAttribute('class', 'importer-cancel');
+    cancel.innerHTML = '<a>cancel</a>';
+    container.appendChild(cancel);
+    return cancel;
+}
+
+function setupHints (container) {
+    var hints = document.createElement('div');
+    hints.setAttribute('class', 'importer-hints');
+    hints.innerHTML = [
+        '<span class="hint">You can import multiple files at once</span><br><span class="hint">Many images formats are supported, just try !</span>'
+    ].join(' ');
+    container.appendChild(hints);
 }
 
 
@@ -90,10 +122,9 @@ function uploadMedia () {
         stdout = shell.stdout,
         terminal = shell.terminal,
         display = terminal.display(),
-        dropbox = setupDropZone(display.node);
-
-    stdout.write('<span class="hint first-hint-line">Drag and Drop your media on the map to upload it</span>');
-    stdout.write('<span class="hint">Many formats are supported so, please try !</span>');
+        dropbox = setupDropZone(display.node),
+        input = setupInput(display.node),
+        cancel = setupCancel(display.node);
 
         var resolver = function (resolve, reject) {
             var dragenter = function (e) {
@@ -142,7 +173,23 @@ function uploadMedia () {
             dropbox.addEventListener("dragenter", dragenter, false);
             dropbox.addEventListener("dragover", dragover, false);
             dropbox.addEventListener("drop", drop, false);
+
+            // Select
+            input.addEventListener('change', function (e) {
+                (function () {
+                    handleFiles(input.files[0],
+                        resolve, reject);
+                })();
+            }, false);
+
+            // Cancel
+            cancel.addEventListener('click', function () {
+                display.end();
+                reject('Cancel');
+            }, false);
         };
+
+        setupHints(display.node);
 
         return (new Promise(resolver));
 }
