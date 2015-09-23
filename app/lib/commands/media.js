@@ -78,14 +78,16 @@ function listMedia () {
                     var imageUrl = MEDIA_URL + '/' + user.id+'/'+m + '/256';
                     var wrapper = document.createElement('div');
                     var style = [
-                        'width:256px;',
-                        'height:256px;',
+                        'width:200px;',
+                        'height:200px;',
                         'background-position: center center;',
                         'background-size: cover;',
                         'background-repeat: no-repeat;',
                         'background-image:url("'+imageUrl+'")'
                     ];
                     wrapper.setAttribute('style', style.join(''));
+                    wrapper.setAttribute('class', 'media-item');
+
                     var cmd0 = terminal.makeCommand({
                         'args' : ['media show ' + m],
                         'fragment' : wrapper
@@ -175,10 +177,10 @@ function uploadMedia () {
             dropbox.addEventListener("drop", drop, false);
 
             // Select
-            input.addEventListener('change', function (e) {
+            input.addEventListener('change', function (files) {
                 (function () {
-                    handleFiles(input.files[0],
-                        resolve, reject);
+                    handleFiles(files,
+                    resolve, reject);
                 })();
             }, false);
 
@@ -242,9 +244,11 @@ function pickMedia () {
 
     var display = terminal.display(),
         wrapper = document.createElement('div'),
+        title = document.createElement('div'),
         closer = document.createElement('div');
 
     wrapper.setAttribute('class', 'media-wrapper');
+    wrapper.innerHTML = '<div class="picker-title">Media picker</div>';
     closer.setAttribute('class', 'media-close');
     closer.innerHTML = ' close ';
 
@@ -273,15 +277,15 @@ function pickMedia () {
                     var imageUrl = MEDIA_URL + '/' + mid + '/256';
                     var pwrapper = document.createElement('div');
                     var style = [
-                        'width:256px;',
-                        'height:256px;',
+                        'width:200px;',
+                        'height:200px;',
                         'background-position: center center;',
                         'background-size: cover;',
                         'background-repeat: no-repeat;',
                         'background-image:url("'+imageUrl+'")'
                     ];
                     pwrapper.setAttribute('style', style.join(''));
-                    pwrapper.setAttribute('class', 'media-pick-item');
+                    pwrapper.setAttribute('class', 'media-item media-pick-item');
                     pwrapper.addEventListener('click', picker(mid), false);
 
                     wrapper.appendChild(pwrapper);
