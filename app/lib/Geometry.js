@@ -108,6 +108,10 @@ Extent.prototype.getArray = function () {
     return copy(this.extent);
 };
 
+Extent.prototype.getCoordinates = function () {
+    return copy(this.extent);
+};
+
 Extent.prototype.clone = function () {
     return (new Extent(this));
 };
@@ -129,6 +133,17 @@ Extent.prototype.normalize = function () {
         this.extent[3] = tmp;
     }
     return this;
+};
+
+Extent.prototype.bound = function (optExtent) {
+    var e = (new Extent(optExtent)).getCoordinates(),
+        result = new Array(4);
+
+    result[0] = Math.max(e[0], this.extent[0]);
+    result[1] = Math.max(e[1], this.extent[1]);
+    result[2] = Math.min(e[2], this.extent[2]);
+    result[3] = Math.min(e[3], this.extent[3]);
+    return (new Extent(result));
 };
 
 Extent.prototype.buffer = function (value) {

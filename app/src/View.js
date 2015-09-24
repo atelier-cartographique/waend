@@ -14,7 +14,8 @@
 var _ = require('underscore'),
     semaphore = require('../lib/Semaphore'),
     Geometry = require('../lib/Geometry'),
-    Transform = require('../lib/Transform');
+    Transform = require('../lib/Transform'),
+    region = require('../lib/Region');
 
 var document = window.document;
 
@@ -91,7 +92,10 @@ View.prototype.setTransform = function () {
 };
 
 View.prototype.getGeoExtent = function (projection) {
-    var pExtent = this.extent,
+    var pWorld = region.getWorldExtent().getCoordinates(),
+        minPWorld = projection.forward([pWorld[0], pWorld[1]]),
+        maxPWorld = projection.forward([pWorld[2], pWorld[3]]),
+        pExtent = this.extent.bound(minPWorld.concat(maxPWorld)),
         projectedMin = pExtent.getBottomLeft().getCoordinates(),
         projectedMax = pExtent.getTopRight().getCoordinates(),
         min = projection.inverse(projectedMin),

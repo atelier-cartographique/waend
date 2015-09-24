@@ -13,7 +13,7 @@ var _ = require('underscore'),
     region = require('../Region');
 
 
-function setRegion (north, east, south, west) {
+function setRegion (east, south, west, north) {
     var self = this,
         env = self.shell.env,
         terminal = self.shell.terminal;
@@ -55,11 +55,11 @@ function getCenter () {
 
 function printRegion (opt_format) {
     var r = region.get(),
-        NW = r.getTopLeft().getCoordinates(),
-        SE = r.getBottomRight().getCoordinates(),
+        NE = r.getTopRight().getCoordinates(),
+        SW = r.getBottomLeft().getCoordinates(),
         f = '%d %d %d %d';
 
-    this.sys.stdout.write(util.format(f, SE[0], SE[1], NW[0], NW[1]));
+    this.sys.stdout.write(util.format(f, SW[0], SW[1], NE[0], NE[1]));
     return this.end(r.getArray());
 }
 
@@ -67,8 +67,8 @@ function printRegion (opt_format) {
 function bufferRegion (arg) {
     var r = region.get();
 
-    r.buffer(arg || 0);
-    region.set(r);
+    r.buffer(parseFloat(arg) || 0);
+    region.push(r);
     return this.end(r.getArray());
 }
 

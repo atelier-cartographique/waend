@@ -14,8 +14,11 @@
 var _ = require('underscore'),
     semaphore = require('../lib/Semaphore'),
     Geometry = require('../lib/Geometry'),
+    Region = require('../lib/Region'),
+    Projection = require('proj4'),
     W = require('./Worker'),
-    Painter = require('./Painter');
+    Painter = require('./Painter'),
+    Proj3857 = Projection('EPSG:3857');
 
 /**
  *
@@ -103,7 +106,32 @@ CanvasRenderer.prototype.initWorker = function () {
     this.worker = worker;
 };
 
-CanvasRenderer.prototype.render = function (opt_extent) {
+CanvasRenderer.prototype.drawBackround = function () {
+    var we = Region.getWorldExtent(),
+        painter = this.painter,
+        tl = we.getTopLeft().getCoordinates(),
+        tr = we.getTopRight().getCoordinates(),
+        br = we.getBottomRight().getCoordinates(),
+        bl = we.getBottomLeft().getCoordinates(),
+        trans = this.view.transform.clone();
+
+    tl = trans.mapVec2(Proj3857.forward(tl));
+    tr = trans.mapVec2(Proj3857.forward(tr));
+    br = trans.mapVec2(Proj3857.forward(br));
+    bl = trans.mapVec2(Proj3857.forward(bl));
+
+    var coordinates = [ [tl, tr, br, bl] ];
+    console.log('world', coordinates[0]);
+
+    painter.save();
+    painter.set('strokeStyle', '#888');
+    painter.set('lineWidth', '0.5');
+    painter.set('fillStyle', '#FFF');
+    painter.drawPolygon(coordinates, ['closePath', 'stroke', 'fill']);
+    painter.restore();
+};
+
+CanvasRenderer.prototype.render = function (isBackground) {
     if (!this.isVisible()) {
         this.painter.clear();
         return;
@@ -121,6 +149,11 @@ CanvasRenderer.prototype.render = function (opt_extent) {
     this.renderId = this.getNewRenderId();
     // worker.on('worker:render_id', function(rid){
     this.painter.clear();
+
+    if (isBackground) {
+        this.drawBackround();
+    }
+
     console.log('RENDER START', this.renderId);
     var extent = this.view.getGeoExtent(this.proj);
     worker.on(this.renderId, this.dispatch, this);

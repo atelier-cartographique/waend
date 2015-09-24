@@ -14,9 +14,36 @@
 var _ = require('underscore'),
     semaphore = require('../lib/Semaphore'),
     Geometry = require('./Geometry'),
+    Projection = require('proj4'),
     O = require('../../lib/object').Object;
 
-var WORLD_EXTENT = new Geometry.Extent([-179.9, -85 ,179.9, 85]);
+
+function fequals (a, b, p) {
+    return (Math.abs(a - b) < p);
+}
+
+function maxVert () {
+    var Proj3857 = Projection('EPSG:3857');
+    var pt = [0, 0], r, ir;
+    var INC = 0.1;
+
+    var ret = 90;
+    for (var i = 80; i < 90; i += INC) {
+        pt = [180, i];
+        r = Proj3857.forward(pt);
+        ir = Proj3857.inverse(r);
+        if (!fequals(ir[1], pt[1], INC)) {
+            ret = i - INC;
+            break;
+        }
+    }
+    return ret
+}
+
+var horizMax = 180,
+    vertiMax = maxVert();
+
+var WORLD_EXTENT = new Geometry.Extent([-horizMax, -vertiMax, horizMax, vertiMax]);
 
 var Region = O.extend({
     initialize: function () {

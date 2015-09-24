@@ -71,8 +71,12 @@ Map.prototype.setVisibility = function (layerIds) {
 };
 
 Map.prototype.render = function () {
+    var isBackground = true;
     _.each(this.renderers, function(rdr){
-        rdr.render();
+        rdr.render(isBackground);
+        if (rdr.isVisible) {
+            isBackground = false;
+        }
     });
 };
 
