@@ -2,7 +2,7 @@
 wænd platform, http://www.waend.com
 
 
-## install
+## Install
 
 At the very first you need a running PostGIS enabled database, see http://postgis.net/install for instructions.
 
@@ -34,9 +34,20 @@ browserify app/src/libworker.js  > bin/libworker.js
 
 Hey, you're done!
 
-## run
+## Run
 
-The program does not serve assets. You have to provide them through other means, here we use nginx for this pupose.
+The program does not serve assets. You have to provide them through other means, here we use nginx for this purpose. 
+
+If needed, check if started with 
+
+```bash
+sudo service nginx status
+```
+and if needed, start it with
+
+```bash
+sudo service nginx start
+```
 
 Once it's set
 
@@ -44,4 +55,6 @@ Once it's set
 npm start
 ```
 
-got to http://your.host/register to create a new user, than enjoy http://your.host/map
+Go to http://your.host/register to create a new user, than enjoy http://your.host/map
+
+The your.host part can be configured, and used locally. By example, to be able to access it through http://waend.local, create a text file named waend.local in /etc/nginx/sites-enabled and copy the content of the example file documentation/site-enabled-example/waend.local. Edit it according to your own system (tip : the "pierre" must probably be changed...).
