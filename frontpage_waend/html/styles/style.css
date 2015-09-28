@@ -35,13 +35,11 @@ body{
 }
 
 h1 {
-    font-family: "osp-dindin";
     font-size: 200pt;
     color:#5EDBFC;
 }
 
 h2{
-    font-family: "osp-dindin";
     font-size:36pt;
     margin-bottom:30px;
     margin-top: 12px;
@@ -49,7 +47,6 @@ h2{
 }
 
 h3 {
-    font-family: "osp-dindin";
     font-size: 14pt;
     margin: 20px 10px 10px 0px;
     color: #5EDBFC
@@ -89,7 +86,6 @@ a:hover {
 
 
 .pitch{
-    font-family: "osp-dindin";
     font-size:36pt;
     padding-bottom: 36px;
     display: block;
