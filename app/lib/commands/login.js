@@ -47,7 +47,7 @@ function login (username, password) {
                             'lg'],
                         'text': 'my maps'
                     });
-                    stdout.write('Logged in ! Go to ', cmd1, ' or ', cmd2);
+                    stdout.write('Logged in - Go to ', cmd1, ' or ', cmd2);
                     return user;
             });
         });
