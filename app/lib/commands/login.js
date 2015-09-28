@@ -66,6 +66,7 @@ function login (username, password) {
                 .then(function(username){
                     stdout.write('password:');
                     terminal.input(stdin);
+                    document.getElementById("command-line").type="password";
                     stdin.read()
                         .then(function(pwd){
                         remoteLogin(username, pwd)
