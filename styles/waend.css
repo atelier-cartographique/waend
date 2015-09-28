@@ -377,11 +377,7 @@ body {
 }
 #register .footer {
   font-size: 11pt;
-  position: absolute;
-  bottom: 12px;
-  left: 0px;
-  width: 100%;
-  text-align: center;
+  margin: 24px 0px;
   color: black;
 }
 #register .footer a {
@@ -392,6 +388,10 @@ body {
 }
 #register .footer a:hover {
   border-bottom: 1px solid blue;
+}
+#register .footer a:link {
+  color: #000;
+  font-family: "dauphine_regular";
 }
 .wc-display {
   position: absolute;
