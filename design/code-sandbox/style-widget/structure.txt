@@ -10,6 +10,8 @@ x -->text
 if image
 	- clip : true/false
 	- adjust : none/fit/cover
+	- image picker
+	- upload
 
 else if text
 	- fontsize
@@ -24,6 +26,15 @@ else (default)
 
 
 Notes : 
+- undo !
 - everything is live, no preview : every change trigger the corresponding commands
 - get context infos if any, and fill the widget
 - only show what is usable (eg: if image, only clip and adjust)
+
+
+List with choices
+boolean
+Agles/ rotations
+
+
+Creation de feature --> trigger edit feature widget
