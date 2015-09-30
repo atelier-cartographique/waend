@@ -35,13 +35,19 @@ function login (username, password) {
             return binder.getMe()
                 .then(function(user){
                     shell.user = user;
-                    var cmd = terminal.makeCommand({
+                    var cmd1 = terminal.makeCommand({
+                        'args': [
+                            'cc /' + user.id,
+                            'get'],
+                        'text': 'my public infos'
+                    });
+                    var cmd2 = terminal.makeCommand({
                         'args': [
                             'cc /' + user.id,
                             'lg'],
-                        'text': 'my context'
+                        'text': 'my maps'
                     });
-                    stdout.write('OK login ', cmd);
+                    stdout.write('Logged in - Go to ', cmd1, ' or ', cmd2);
                     return user;
             });
         });
@@ -66,6 +72,7 @@ function login (username, password) {
                 .then(function(username){
                     stdout.write('password:');
                     terminal.input(stdin);
+                    document.getElementById("command-line").type="password";
                     stdin.read()
                         .then(function(pwd){
                         remoteLogin(username, pwd)

@@ -1,0 +1,29 @@
+x -->image
+	- upload
+	- media pick
+
+x -->text
+	- text area + submit
+
+
+
+if image
+	- clip : true/false
+	- adjust : none/fit/cover
+
+else if text
+	- fontsize
+	- fontcolor (fillStyle)
+
+else (default)
+	- color (strokeStyle)
+	- lineWidth
+	- hn
+	- step
+	- rotation
+
+
+Notes : 
+- everything is live, no preview : every change trigger the corresponding commands
+- get context infos if any, and fill the widget
+- only show what is usable (eg: if image, only clip and adjust)

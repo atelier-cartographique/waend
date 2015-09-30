@@ -38,6 +38,7 @@ var commandModules = [
     require('./delFeature'),
     require('./attach'),
     require('./detach'),
+    require('./styleWidget'),
     ];
 
 

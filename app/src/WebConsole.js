@@ -173,6 +173,7 @@ var WebConsole = Terminal.extend({
             this.container.removeChild(oldInput);
         }
         this._inputField = document.createElement('input');
+        this._inputField.setAttribute('id', 'command-line');
         this._inputField.setAttribute('class', 'wc-input');
         this._inputField.setAttribute('type', 'text');
         this._inputField.setAttribute('placeholder', '>');
