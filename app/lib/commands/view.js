@@ -304,7 +304,7 @@ Navigator.prototype.setupCanvas = function () {
 
     container.appendChild(this.canvas);
     this.canvas.setAttribute('tabindex', -1);
-    this.canvas.focus();
+    // this.canvas.focus();
     this.context = this.canvas.getContext('2d');
 
     var dispatcher = _.bind(this.dispatcher, this),
@@ -456,6 +456,8 @@ Navigator.prototype.getMode = function () {
 };
 
 Navigator.prototype.dispatcher = function (event) {
+    event.preventDefault();
+    event.stopPropagation();
     var type = event.type,
         mode = this.getMode();
 

@@ -178,20 +178,8 @@ var WebConsole = Terminal.extend({
         this._inputField.setAttribute('type', 'text');
         this._inputField.setAttribute('placeholder', '>');
         this.container.appendChild(this._inputField);
-
-        // A bit of a trick to prevent keyup event to trigger on a display from here
-        // var keyPressEvent;
-        // var keyUpHandler = function () {
-        //     if (keyPressEvent) {
-        //         listener(keyPressEvent);
-        //     }
-        // };
-        // this._inputField.addEventListener('keypress', function (event) {
-        //     keyPressEvent = event;
-        // }, false);
-        // this._inputField.addEventListener('keyup', keyUpHandler, false);
         this._inputField.addEventListener('keyup', listener, false);
-        this._inputField.focus();
+        return this._inputField;
     },
 
     setTitle: function () {
@@ -438,12 +426,12 @@ var WebConsole = Terminal.extend({
                 self.shell.exec(val)
                     .then(function(){
                         self.history.push(val);
-                        self.insertInput();
+                        self.insertInput().focus();
                         unlock();
                     })
                     .catch(function(err){
                         self.writeError(err);
-                        self.insertInput();
+                        self.insertInput().focus();
                         unlock();
                     });
             })
@@ -481,7 +469,9 @@ var WebConsole = Terminal.extend({
                 input = self._inputField,
                 val = input.value.trim();
             if(val.length === 0){
-                return self.insertInput();
+                var rinput = self.insertInput();
+                rinput.focus();
+                return rinput;
             }
             if (this.internalCommand(val)) {
                 return;
@@ -507,7 +497,7 @@ var WebConsole = Terminal.extend({
                     fdin.write(val);
             }
         };
-        self.insertInput(handler);
+        self.insertInput(handler).focus();
     },
 
     write: function () {
