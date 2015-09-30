@@ -1,0 +1,23 @@
+x -->image
+	- upload
+	- media pick
+
+x -->text
+	- text area
+
+
+
+if image
+	- clip : true/false
+	- adjust : none/fit/cover
+
+else if text
+	- fontsize
+	- fontcolor (fillStyle)
+
+else (default)
+	- color (strokeStyle)
+	- lineWidth
+	- hn
+	- step
+	- rotation
