@@ -30,11 +30,25 @@ function styleWidget (opt_txt) {
 
 
        var styleWidgetStep = document.createElement('input');
+       styleWidgetStep.setAttribute('id', 'styler-step');
        styleWidgetStep.setAttribute('placeholder', 'set haches step');
        styleWidgetStep.setAttribute('type', 'number');
        styleWidgetStep.setAttribute('step', 'any');
        styleWidgetStep.setAttribute('min', '0');
        styleWidgetWrapper.appendChild(styleWidgetStep);
+
+       var launchStep = document.getElementById("styler-step");
+       launchStep.onchange = function (){
+            var value = document.getElementById('styler-step').value;
+            var cmd = terminal.makeCommand({
+                'args': [
+                    'set params.step' + ' ' + value],
+                'text': 'almost there.. '
+            });
+
+            stdout.write(cmd);
+            console.log(value);
+       }
 
 
        var buttons = document.createElement('div');
