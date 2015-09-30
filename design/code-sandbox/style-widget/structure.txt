@@ -3,7 +3,7 @@ x -->image
 	- media pick
 
 x -->text
-	- text area
+	- text area + submit
 
 
 
@@ -21,3 +21,9 @@ else (default)
 	- hn
 	- step
 	- rotation
+
+
+Notes : 
+- everything is live, no preview : every change trigger the corresponding commands
+- get context infos if any, and fill the widget
+- only show what is usable (eg: if image, only clip and adjust)
