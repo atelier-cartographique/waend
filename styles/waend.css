@@ -1024,3 +1024,8 @@ body {
 .visible-wrapper .visible-no {
   border: 3px solid #D4D4D4;
 }
+.stylewidget-wrapper {
+  width: 324px;
+  background-color: #f8f8f8;
+  padding: 12px;
+}
