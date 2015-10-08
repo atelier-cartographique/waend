@@ -325,19 +325,19 @@ body {
   background-color: transparent;
 }
 .wc-context-feature {
-  color: #198cff !important;
+  color: #282f35 !important;
 }
 .wc-context-layer {
-  color: #2892d1 !important;
+  color: #39598c !important;
 }
 .wc-context-group {
-  color: #3698a4 !important;
+  color: #3f5f58 !important;
 }
 .wc-context-user {
-  color: #459f76 !important;
+  color: #cfb84c !important;
 }
 .wc-context-shell {
-  color: #53a548 !important;
+  color: #993358 !important;
 }
 #register {
   position: absolute;
@@ -525,7 +525,7 @@ body {
 .wc-command {
   font-style: italic;
   text-decoration: none;
-  color: #FF00BE;
+  color: #993358;
 }
 .wc-command:hover,
 .wc-command:focus {
@@ -546,7 +546,7 @@ body {
   font-size: 80%;
   text-align: right;
   padding-right: 6px;
-  color: #ff00be;
+  color: #993358;
   display: inline-block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
 
@@ -570,7 +570,7 @@ body {
   position: absolute;
   right: 12px;
   top: 12px;
-  color: #ff00be;
+  color: #993358;
   font-weight: normal;
   letter-spacing: 2px;
   text-align: right;
@@ -604,11 +604,11 @@ body {
   font-size: 11pt;
   text-shadow: none;
   display: inline-block;
-  color: #94e294;
+  color: #91b391;
   margin-left: 65px;
 }
 .hint a {
-  color: #94e294;
+  color: #91b391;
   text-decoration: none !important;
   display: inline-block;
   border-bottom: 1px solid transparent;
