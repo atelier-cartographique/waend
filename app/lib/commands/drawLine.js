@@ -19,6 +19,7 @@ var _ = require('underscore'),
 function setupCanvas (container) {
     console.log('drawLine.setupCanvas', container.getAttribute('id'));
     var canvas = document.createElement('canvas');
+    canvas.setAttribute('class', 'tool-draw');
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     canvas.backgroundColor = 'transparent';
