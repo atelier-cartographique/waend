@@ -21,7 +21,7 @@ var layerButtons = {
     'trace': ['trace | create'],
     'draw line': ['draw | create'],
     'draw zone': ['draw | close | create'],
-    'import data': ['import'],
+    'import datas': ['import','lf'],
     'list features': ['lf']
 };
 
