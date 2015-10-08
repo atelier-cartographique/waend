@@ -167,16 +167,16 @@ function iCreate () {
 
     stdout.write('select type:');
     if (1 === current.length) {
-        stdout.write('1 : group');
+        stdout.write('1 : create a group / map');
     }
     else if (2 === current.length) {
-        stdout.write('1 : group');
-        stdout.write('2 : layer');
+        stdout.write('1 : create a group / map');
+        stdout.write('2 : create a layer in current map');
     }
     else if (3 === current.length) {
-        stdout.write('1 : group');
-        stdout.write('2 : layer');
-        stdout.write('3 : feature');
+        stdout.write('1 : create a group / map');
+        stdout.write('2 : create a layer in current map');
+        stdout.write('3 : create a feature in current layer');
     }
 
     var cType = 0;
