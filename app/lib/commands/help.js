@@ -43,7 +43,19 @@ function help () {
             reject('Canceled');
         }, false);
 
+        var newWindowCloseButton = document.createElement('a');
+        newWindowCloseButton.setAttribute('class', 'help-open-new-window');
+        newWindowCloseButton.setAttribute('href', '/documentation/help.html');
+        newWindowCloseButton.setAttribute('target', 'blank');
+        newWindowCloseButton.innerHTML = 'Open in new window';
+
+        newWindowCloseButton.addEventListener('click', function(){
+            display.end();
+            reject('Canceled');
+        }, false);
+
         buttons.appendChild(closeButton);
+        buttons.appendChild(newWindowCloseButton);
         display.node.appendChild(buttons);
     };
 
