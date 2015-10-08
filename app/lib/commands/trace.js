@@ -256,6 +256,7 @@ Tracer.prototype.setupCanvas = function () {
         rect = container.getBoundingClientRect();
 
     this.canvas = document.createElement('canvas');
+    this.canvas.setAttribute('class', 'tool-trace');
     this.canvas.width = rect.width;
     this.canvas.height = rect.height;
     this.canvas.backgroundColor = 'rgba(256,256,256,0.5)';

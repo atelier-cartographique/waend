@@ -970,7 +970,8 @@ body {
   bottom: 50px;
   left: 12px;
 }
-canvas.tool-draw {
+canvas.tool-draw,
+canvas.tool-trace {
   cursor: crosshair;
   background-color: rgba(255, 255, 255, 0.3);
   -webkit-animation: fadein 1s;
