@@ -1,3 +1,5 @@
+![illustration map-layers](images/map-layers.png)
+
 #HELP WÆND
 
 This is a quite rought help for now, it will be improved from time to time.  
