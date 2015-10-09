@@ -527,14 +527,34 @@ Navigator.prototype.centerOn = function (pix) {
 
 
 
+function showGroupLegend(node, group) {
+    var wrapper = document.createElement('div'),
+        title = document.createElement('div'),
+        desc = document.createElement('div');
+
+    wrapper.setAttribute('class', 'view-group-wrapper');
+    title.setAttribute('class', 'view-group-title');
+    desc.setAttribute('class', 'view-group-wrapper');
+
+    title.innerHTML = group.get('name', 'Title');
+    desc.innerHTML = group.get('description', 'Description');
+
+    wrapper.appendChild(title);
+    wrapper.appendChild(desc);
+    node.appendChild(wrapper);
+}
+
 
 function view () {
     var self = this,
         shell = self.shell,
         stdout = shell.stdout,
         terminal = shell.terminal,
+        binder = self.binder,
         map = shell.env.map,
-        display = terminal.display();
+        display = terminal.display(),
+        userId = self.getUser(),
+        groupId = self.getGroup();
 
     terminal.hide();
     var options = {
@@ -548,10 +568,16 @@ function view () {
 
         var ender = function (extent) {
             display.end();
+            terminal.show();
             resolve(extent);
         };
 
         nav.start(ender);
+
+        binder.getGroup(userId, groupId)
+            .then(function(group){
+                showGroupLegend(display.node, group);
+            });
     };
 
     return (new Promise(resolver));
