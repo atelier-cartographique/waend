@@ -239,7 +239,7 @@ Tracer.prototype.setupButtons = function () {
     var container = this.options.container,
         buttonBlock = document.createElement('div');
 
-    buttonBlock.setAttribute('class', 'trace-buttons');
+    addClass(buttonBlock, 'trace-buttons');
     buttonBlock.appendChild(makeButton('Validate', 'validate', function(){
         this.end();
     }, this));
