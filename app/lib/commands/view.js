@@ -534,7 +534,7 @@ function showGroupLegend(node, group) {
 
     wrapper.setAttribute('class', 'view-group-wrapper');
     title.setAttribute('class', 'view-group-title');
-    desc.setAttribute('class', 'view-group-wrapper');
+    desc.setAttribute('class', 'view-group-description');
 
     title.innerHTML = group.get('name', 'Title');
     desc.innerHTML = group.get('description', 'Description');
