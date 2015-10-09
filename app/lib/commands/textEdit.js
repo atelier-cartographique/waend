@@ -45,10 +45,10 @@ function textEdit (opt_txt) {
         });
 
         var buttons = document.createElement('div');
-        buttons.setAttribute('class', 'edit-buttons');
+        buttons.setAttribute('class', 'edit-buttons push-button');
 
         var saveButton = document.createElement('div');
-        saveButton.setAttribute('class', 'edit-save');
+        saveButton.setAttribute('class', 'edit-validate push-validate');
         saveButton.innerHTML = 'validate';
 
         saveButton.addEventListener('click', function(){
@@ -59,7 +59,7 @@ function textEdit (opt_txt) {
         }, false);
 
         var cancelButton = document.createElement('div');
-        cancelButton.setAttribute('class', 'edit-cancel');
+        cancelButton.setAttribute('class', 'edit-cancel push-cancel');
         cancelButton.innerHTML = 'cancel';
 
         cancelButton.addEventListener('click', function(){

@@ -166,7 +166,7 @@ table {
 }
 /**** VARIABLES ****/
 .link-hover {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #282f35;
 }
 .linkwaend a {
   text-decoration: none !important;
@@ -175,7 +175,7 @@ table {
   font-family: "dauphine_italic";
 }
 .linkwaend a:hover {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #282f35;
 }
 .white-text-shadow {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
@@ -199,81 +199,143 @@ table {
   -ms-hyphens: auto;
   hyphens: auto;
 }
-.flat-color {
+.push-buttons {
   font-family: "dauphine_regular";
-  font-size: 80%;
+  font-size: 12pt;
   text-shadow: none;
+  text-align: center;
   padding: 6px 8px 5px 8px;
-  display: inline-block;
+  display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 150px;
+  min-width: 100px;
+  width: 100px;
 }
-.flat-color:hover {
+.push-buttons:hover {
   cursor: pointer;
 }
-.flat-color a {
+.push-buttons a {
   text-decoration: none !important;
 }
-.flat-color a:link {
+.push-buttons a:link {
   font-family: "dauphine_italic";
 }
-.flat-color a:hover {
-  border-bottom: 1px solid blue;
+.push-buttons a:hover {
+  border-bottom: 1px solid #282f35;
 }
-.flat-color a {
+.push-buttons a {
   color: #fbfbfb;
 }
-.flat-green {
+.push-validate {
   font-family: "dauphine_regular";
-  font-size: 80%;
+  font-size: 12pt;
   text-shadow: none;
+  text-align: center;
   padding: 6px 8px 5px 8px;
-  display: inline-block;
+  display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 150px;
+  min-width: 100px;
+  width: 100px;
   background-color: #3f5f58;
 }
-.flat-green:hover {
+.push-validate:hover {
   cursor: pointer;
 }
-.flat-green a {
+.push-validate a {
   text-decoration: none !important;
 }
-.flat-green a:link {
+.push-validate a:link {
   font-family: "dauphine_italic";
 }
-.flat-green a:hover {
-  border-bottom: 1px solid blue;
+.push-validate a:hover {
+  border-bottom: 1px solid #282f35;
 }
-.flat-green a {
+.push-validate a {
   color: #fbfbfb;
 }
-.flat-orange {
+.push-cancel {
   font-family: "dauphine_regular";
-  font-size: 80%;
+  font-size: 12pt;
   text-shadow: none;
+  text-align: center;
   padding: 6px 8px 5px 8px;
-  display: inline-block;
+  display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 150px;
-  background-color: #ff974c;
+  min-width: 100px;
+  width: 100px;
+  background-color: #993358;
 }
-.flat-orange:hover {
+.push-cancel:hover {
   cursor: pointer;
 }
-.flat-orange a {
+.push-cancel a {
   text-decoration: none !important;
 }
-.flat-orange a:link {
+.push-cancel a:link {
   font-family: "dauphine_italic";
 }
-.flat-orange a:hover {
-  border-bottom: 1px solid blue;
+.push-cancel a:hover {
+  border-bottom: 1px solid #282f35;
 }
-.flat-orange a {
+.push-cancel a {
+  color: #fbfbfb;
+}
+.push-edit {
+  font-family: "dauphine_regular";
+  font-size: 12pt;
+  text-shadow: none;
+  text-align: center;
+  padding: 6px 8px 5px 8px;
+  display: block;
+  color: #fbfbfb;
+  border-radius: 2px;
+  min-width: 100px;
+  width: 100px;
+  background-color: #39598c;
+}
+.push-edit:hover {
+  cursor: pointer;
+}
+.push-edit a {
+  text-decoration: none !important;
+}
+.push-edit a:link {
+  font-family: "dauphine_italic";
+}
+.push-edit a:hover {
+  border-bottom: 1px solid #282f35;
+}
+.push-edit a {
+  color: #fbfbfb;
+}
+.push-add {
+  font-family: "dauphine_regular";
+  font-size: 12pt;
+  text-shadow: none;
+  text-align: center;
+  padding: 6px 8px 5px 8px;
+  display: block;
+  color: #fbfbfb;
+  border-radius: 2px;
+  min-width: 100px;
+  width: 100px;
+  background-color: #ff974c;
+}
+.push-add:hover {
+  cursor: pointer;
+}
+.push-add a {
+  text-decoration: none !important;
+}
+.push-add a:link {
+  font-family: "dauphine_italic";
+}
+.push-add a:hover {
+  border-bottom: 1px solid #282f35;
+}
+.push-add a {
   color: #fbfbfb;
 }
 .center-content {
@@ -387,7 +449,7 @@ body {
   font-family: "dauphine_italic";
 }
 #register .footer a:hover {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #282f35;
 }
 #register .footer a:link {
   color: #000;
@@ -642,7 +704,7 @@ body {
   font-family: "dauphine_italic";
 }
 .hint a:hover {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #282f35;
 }
 .wc-title {
   position: absolute;
@@ -813,7 +875,7 @@ body {
 }
 .media-wrapper .picker-title {
   font-size: 20pt;
-  color: #5edbfc;
+  color: #39598c;
   position: absolute;
   top: 12px;
   left: 12px;
@@ -822,14 +884,15 @@ body {
 }
 .media-wrapper .media-close {
   font-family: "dauphine_regular";
-  font-size: 80%;
+  font-size: 12pt;
   text-shadow: none;
   padding: 6px 8px 5px 8px;
-  display: inline-block;
+  display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 150px;
-  background-color: #ff974c;
+  min-width: 100px;
+  width: 100px;
+  background-color: #993358;
   position: absolute;
   top: 12px;
   right: 36px;
@@ -845,7 +908,7 @@ body {
   font-family: "dauphine_italic";
 }
 .media-wrapper .media-close a:hover {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #282f35;
 }
 .media-wrapper .media-close a {
   color: #fbfbfb;
@@ -857,7 +920,7 @@ body {
   font-family: "dauphine_italic";
 }
 .media-wrapper .media-close a:hover {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #282f35;
 }
 .media-wrapper .media-item {
   display: inline-block;
@@ -891,21 +954,8 @@ body {
   width: auto;
   text-align: center;
 }
-.edit-buttons .edit-save {
-  color: #f8f8f8;
-  font-family: 'osp-dindin';
-  font-size: 200%;
-  cursor: pointer;
-  text-shadow: none;
-  border-bottom: 1px solid blue;
-}
 .edit-buttons .edit-cancel {
-  color: #f8f8f8;
-  font-family: 'osp-dindin';
-  font-size: 200%;
-  cursor: pointer;
-  text-shadow: none;
-  border-bottom: 1px solid red;
+  margin-top: 12px;
 }
 .help-wrapper {
   position: absolute;
@@ -970,14 +1020,14 @@ body {
 }
 .importer-cancel {
   font-family: "dauphine_regular";
-  font-size: 80%;
+  font-size: 12pt;
   text-shadow: none;
   padding: 6px 8px 5px 8px;
-  display: inline-block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 150px;
-  background-color: #ff974c;
+  min-width: 100px;
+  width: 100px;
+  background-color: #993358;
   display: block;
   width: 150px;
   text-align: center;
@@ -993,7 +1043,7 @@ body {
   font-family: "dauphine_italic";
 }
 .importer-cancel a:hover {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #282f35;
 }
 .importer-cancel a {
   color: #fbfbfb;
@@ -1080,29 +1130,17 @@ canvas.tool-trace {
 .visible-wrapper {
   position: relative;
   width: 33%;
+  min-width: 250px;
   height: 100%;
   margin: auto;
   overflow-y: auto;
 }
 .visible-wrapper .visible-cancel,
-.visible-wrapper .visible-submit {
-  position: absolute;
-  bottom: 24px;
-  color: white;
-  font-weight: bold;
-  font-size: 200%;
-  text-shadow: 0 0 6px black;
-  cursor: pointer;
+.visible-wrapper .visible-validate {
+  float: left;
 }
-.visible-wrapper .visible-cancel:hover,
-.visible-wrapper .visible-submit:hover {
-  color: blue;
-}
-.visible-wrapper .visible-submit {
-  left: 24px;
-}
-.visible-wrapper .visible-cancel {
-  left: 124px;
+.visible-wrapper .visible-validate {
+  margin-right: 12px;
 }
 .visible-wrapper .visible-layer {
   background-color: rgba(255, 255, 255, 0.2);

@@ -2,29 +2,22 @@
 .visible-wrapper {
     position: relative;
     width: 33%;
+    min-width: 250px;
     height: 100%;
     margin: auto;
     overflow-y:auto;
 
-    .visible-cancel, .visible-submit {
-        position: absolute;
-        bottom: 24px;
-        color: white;
-        font-weight: bold;
-        font-size: 200%;
-        text-shadow: 0 0 6px black;
-        cursor: pointer;
+    .visible-cancel, .visible-validate {
+        float: left;
     }
 
-    .visible-cancel:hover, .visible-submit:hover {
-        color: blue;
-    }
 
-    .visible-submit {
-        left:24px;
+    .visible-validate {
+        // left:24px;
+        margin-right: 12px;
     }
     .visible-cancel {
-        left:124px;
+        // left:124px;
     }
 
     .visible-layer {

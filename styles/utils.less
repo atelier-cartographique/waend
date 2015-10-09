@@ -99,7 +99,7 @@
 //                  -1px 1px 0 #fff;
 // }
 
-.link-hover {border-bottom: 1px solid blue;}
+.link-hover {border-bottom: 1px solid @grey;}
 
 .linkwaend {
   a{ 
@@ -159,15 +159,18 @@
 }
 
 
-.flat-color {
+
+.push-buttons {
     font-family: "dauphine_regular";
-    font-size: 80%;
+    font-size: 12pt;
     text-shadow: none;
+    text-align: center;
     padding: 6px 8px 5px 8px;
-    display: inline-block;
+    display: block;
     color: #fbfbfb;
     border-radius: 2px;
-    min-width: 150px;
+    min-width: 100px;
+    width: 100px;
 
     &:hover {
         cursor: pointer;
@@ -177,15 +180,26 @@
     a{color: #fbfbfb;}
 }
 
-.flat-green {
-  .flat-color;
+.push-validate {
+  .push-buttons;
   background-color: @green;
 }
 
-.flat-orange {
-  .flat-color;
+.push-cancel {
+  .push-buttons;
+  background-color: @red;
+}
+
+.push-edit {
+  .push-buttons;
+  background-color: @blue;
+}
+
+.push-add {
+  .push-buttons;
   background-color: @orange;
 }
+
 
 
 .center-content {

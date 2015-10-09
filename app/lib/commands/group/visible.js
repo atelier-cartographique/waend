@@ -91,10 +91,10 @@ function visible () {
 
     wrapper.setAttribute('class', 'visible-wrapper');
     list.setAttribute('class', 'visible-list');
-    cancelButton.setAttribute('class', 'visible-cancel');
-    submitButton.setAttribute('class', 'visible-submit');
-    submitButton.innerHTML = 'OK';
-    cancelButton.innerHTML = 'cancel';
+    cancelButton.setAttribute('class', 'visible-cancel push-cancel');
+    submitButton.setAttribute('class', 'visible-validate push-validate');
+    submitButton.innerHTML = '<a>validate</a>';
+    cancelButton.innerHTML = '<a>cancel</a>';
 
     wrapper.appendChild(list);
     wrapper.appendChild(submitButton);

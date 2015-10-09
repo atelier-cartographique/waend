@@ -18,6 +18,17 @@ var _ = require('underscore'),
 
 var Proj3857 = Projection('EPSG:3857');
 
+function addClass (elem, c) {
+    var ec = elem.getAttribute('class').split(' ');
+    ec.push(c);
+    elem.setAttribute('class', _.uniq(ec).join(' '));
+}
+
+function removeClass (elem, c) {
+    var ec = elem.getAttribute('class').split(' ');
+    elem.setAttribute('class', _.without(ec, c).join(' '));
+}
+
 var polygonProject = function (coordinates) {
     for (var i = 0; i < coordinates.length; i++) {
         var ringLength = coordinates[i].length;
@@ -194,10 +205,12 @@ var TRACER_MODES = [
     TracerModeEditPoint
 ];
 
-function makeButton (label, callback, ctx) {
+function makeButton (label, classSuffix, callback, ctx) {
     var button = document.createElement('div'),
         labelElement = document.createElement('span');
-    button.setAttribute('class', 'trace-button');
+
+    classSuffix = classSuffix ? '-' + classSuffix : ''; 
+    button.setAttribute('class', 'trace-button push' + classSuffix);
     labelElement.setAttribute('class', 'trace-button-label');
     labelElement.innerHTML = label;
 
@@ -227,20 +240,20 @@ Tracer.prototype.setupButtons = function () {
         buttonBlock = document.createElement('div');
 
     buttonBlock.setAttribute('class', 'trace-buttons');
-    buttonBlock.appendChild(makeButton('OK', function(){
+    buttonBlock.appendChild(makeButton('Validate', 'validate', function(){
         this.end();
     }, this));
-    buttonBlock.appendChild(makeButton('cancel', function(){
+    buttonBlock.appendChild(makeButton('Cancel', 'cancel', function(){
         this.clear();
         this.end();
     }, this));
 
     this.modeButtons = {
-        'NewPoint': makeButton('Add', function(){
+        'NewPoint': makeButton('Add point', 'add', function(){
             this.setMode('NewPoint');
         }, this),
 
-        'EditPoint': makeButton('Edit', function(){
+        'EditPoint': makeButton('Edit', 'edit', function(){
             this.setMode('EditPoint');
         }, this)
     };
@@ -484,9 +497,9 @@ Tracer.prototype.createMode = function (proto) {
 Tracer.prototype.setMode = function (modeName) {
     this.currentMode = modeName;
     for (var mb in this.modeButtons) {
-        this.modeButtons[mb].setAttribute('class', 'trace-button');
+        removeClass(this.modeButtons[mb], 'active');
     }
-    this.modeButtons[modeName].setAttribute('class', 'trace-button active');
+    addClass(this.modeButtons[modeName], 'active');
     return this;
 };
 
