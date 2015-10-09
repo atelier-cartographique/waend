@@ -9,7 +9,10 @@ If you like to create a user acount, visit http://alpha.waend.com/register.
 An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/waend-tutorial-09-2015_2.pdf" target="_blank">here</a>
 
 1.   [Generalities](#generalities)  
-1.1  [logic of map publishing](#logic)  
+1.1  [Logic of map publishing](#logic)  
+1.2  [Presentation of Wænd interface](#interface)  
+1.3  [Writting informations in Wænd : about datas & metadatas  
+](#metadata)
 
 2.   [Common commands](#commands)
 
@@ -56,6 +59,96 @@ An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/
 ![illustration map-layers](images/map-layers.png)
 
 
+
+
+
+
+
+###<a name="interface"></a>Presentation of Wænd interface 
+There are two surprising aspects you will discover : 
+
+- While most of the actions can be done by clicking on the menu buttons, the main tool to work on Wænd so far is a command line. To fully use the plateform, you will have to use this command line interface. Try it, it’s easy and you won’t break anything. The different commands are listed in this Help section.
+![illustration map-layers](images/CLI.png)  
+*exemple of command, used to set the description of an element*
+
+
+- There is no map background : you will start on a blank page. It’s not a bug, but a choice we’ve made to wide-up the spectrum of what cartography could be. No map background means no influence from us on how a territory should be represented. You can do whatever you want. 
+
+![illustration map-layers](images/map-thumb.png)  
+*exemple of maps created with wænd*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###<a name="metadatas"></a>Writting informations in Wænd : about datas & metadatas  
+
+There is basicaly two types of informations on wænd : 
+
+1- The datas you use to create your maps (images, texts, geo-datas, etc..). Those are the most visible ones.
+
+2- The informations attached to those elements, the metadatas. 
+Here are some exemples of what we call metadatas : 
+
+- the name of your profile  
+- the name and the description of your map
+- the age of a tree
+- the altitude of a building
+
+The meta-data are used at every level on waend : on your profile, maps, layers, and features.
+
+The next sections of the help explains how to work with metadatas on Wænd.
+
+#####main usage
+######1- legend
+
+A first usage of those datas is to give a name to things, eventualy a description or other relevant informations, so yourself and your map visitors can read and understand what is your map about.  
+It leads to a map legend.
+
+
+![illustration legend](images/get-legend.png)  
+*exemple of personalized metadatas*
+
+
+
+
+
+
+
+
+
+######2- style and parameters
+
+A second usage, a bit more complexe is about styling your datas. If you want a blue road, and a green cycle-way you have to set those color infomations to your road and cycle-way.
+
+![illustration legend style](images/get-style.png)  
+*exemple of style and parameters metadatas*
+
+
+
+
+
+
+
+######3- Processing / custom renderer
+
+A third usage is to use the elements metadatas to batch process the visualization, like using gradient color related to a specific infos (population, age, temperature etc.), real time modifications, and so on.
+ 
 
 ## <a name="commands"></a>Common commands
 
