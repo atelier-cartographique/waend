@@ -233,7 +233,7 @@ table {
   color: #fbfbfb;
   border-radius: 2px;
   min-width: 150px;
-  background-color: #94e294;
+  background-color: #3f5f58;
 }
 .flat-green:hover {
   cursor: pointer;
@@ -291,7 +291,7 @@ input {
   margin: 6px 0px;
 }
 input[type="submit"] {
-  background-color: #94e294;
+  background-color: #3f5f58;
   cursor: pointer;
 }
 body {
@@ -429,6 +429,9 @@ body {
 .wc-page-title {
   color: #cecece;
   margin-bottom: 6px;
+}
+.wc-line {
+  font-size: 10pt;
 }
 .wc-page.wc-inactive {
   opacity: 0;
@@ -571,6 +574,7 @@ body {
   right: 12px;
   top: 12px;
   color: #993358;
+  font-size: 11pt;
   font-weight: normal;
   letter-spacing: 2px;
   text-align: right;
@@ -586,7 +590,7 @@ body {
 .wc-nav:hover,
 .wc-select:hover,
 .wc-draw-zoom:hover {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #282f35;
 }
 .key-name {
   display: inline-block !important;
@@ -623,7 +627,7 @@ body {
   position: absolute;
   top: 12px;
   left: 12px;
-  font-size: 12pt;
+  font-size: 10pt;
   text-shadow: 0 0 6px #fff;
 }
 .wc-title a:link {
@@ -636,10 +640,10 @@ body {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-title a:last-child {
-  font-size: 125%;
+  font-size: 12pt;
 }
 .wc-title a:hover {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #282f35;
 }
 .wc-title .wc-context-feature:after {
   content: "feature";
@@ -736,16 +740,16 @@ body {
 .wc-buttons-group {
   margin-top: 6px;
   font-family: "sansguiltmb";
-  font-size: 9pt;
+  font-size: 10pt;
   width: auto;
 }
 .wc-buttons-group.wc-current .wc-button {
-  font-size: 15pt;
+  font-size: 12pt;
   transition-property: font-size;
   transition-duration: 0.5s;
 }
 .wc-buttons-group.wc-active .wc-button {
-  font-size: 12pt;
+  font-size: 10pt;
   transition-property: font-size;
   transition-duration: 0.5s;
 }
@@ -759,12 +763,21 @@ body {
   cursor: pointer;
   border-bottom: 1px solid transparent;
   font-family: "dauphine_regular";
+  width: intrinsic;
+  /* Safari/WebKit uses a non-standard name */
+
+  width: -moz-max-content;
+  /* Firefox/Gecko */
+
+  width: -webkit-max-content;
+  /* Chrome */
+
 }
 .wc-button:first-child {
   padding-top: 3px;
 }
 .wc-button:hover {
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid #282f35;
 }
 .media-wrapper {
   position: relative;
@@ -911,7 +924,7 @@ body {
   height: 300px;
   text-shadow: none;
   font-family: "dauphine";
-  color: #94e294;
+  color: #3f5f58;
   line-height: 130%;
 }
 .importer-input {
