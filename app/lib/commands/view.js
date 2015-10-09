@@ -564,7 +564,7 @@ function lookupResults(container) {
                     ctxPath = '/' + result.user_id + '/' + result.id;
 
                 elem.setAttribute('class', 'view-lookup-result');
-                anchor.setAttribute('href', '/map' + ctxPath);
+                anchor.setAttribute('href', '/map' + ctxPath + '?c=view');
                 anchor.innerHTML = name;
                 elem.appendChild(anchor);
                 container.appendChild(elem);
