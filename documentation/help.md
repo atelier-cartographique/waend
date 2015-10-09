@@ -1,5 +1,3 @@
-![illustration map-layers](images/map-layers.png)
-
 #HELP WÆND
 
 This is a quite rought help for now, it will be improved from time to time.  
@@ -10,45 +8,52 @@ If you like to create a user acount, visit http://alpha.waend.com/register.
 
 An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/waend-tutorial-09-2015_2.pdf" target="_blank">here</a>
 
+1.   [Generalities](#generalities)  
+1.1  [logic of map publishing](#logic)  
 
-1.   [Common commands](#commands)
+2.   [Common commands](#commands)
 
-2.   [Style attributes and parameters](#keys)  
-2.1  [name](#name)  
-2.3  [styles (style.)](#style)  
-2.4  [parameters (params.)](#params)  
-2.5  [hatches number (hn)](#hn)  
-2.6  [hatches step (step)](#step)  
-2.7  [hatches rotation (rotation)](#rotation)  
-2.8  [text](#text)  
-2.9  [fontsize](#fontsize)  
-2.10 [fontcolor](#fontcolor)  
-2.11 [image](#image)
+3.   [Style attributes and parameters](#keys)  
+3.1  [name](#name)  
+3.3  [styles (style.)](#style)  
+3.4  [parameters (params.)](#params)  
+3.5  [hatches number (hn)](#hn)  
+3.6  [hatches step (step)](#step)  
+3.7  [hatches rotation (rotation)](#rotation)  
+3.8  [text](#text)  
+3.9  [fontsize](#fontsize)  
+3.10 [fontcolor](#fontcolor)  
+3.11 [image](#image)
 
-3.   [Commands details](#commands-details)  
-3.1  [help](#help)  
-3.3  [list commands (lc)](#lc)  
-3.4  [set attribute (set)](#set)  
-3.5  [get attributes (get)](#get)  
-3.6  [edit text (edit)](#edit)  
-3.7  [delete attributes (del)](#del)  
-3.8  [navigate on map (navigate)](#navigate)  
-3.9  [select feature (select)](#select)  
-3.10 [draw](#draw)  
-3.11 [trace](#trace)  
-3.12 [edit geometry](#edit_geometry)  
-3.13 [del_feature](#del_feature)  
-3.14 [attach a layer to a map](#attach)  
-3.15 [detach a layer from a map](#detach)  
-3.16 [visibility of layers](#visible)  
+4.   [Commands details](#commands-details)  
+4.1  [help](#help)  
+4.3  [list commands (lc)](#lc)  
+4.4  [set attribute (set)](#set)  
+4.5  [get attributes (get)](#get)  
+4.6  [edit text (edit)](#edit)  
+4.7  [delete attributes (del)](#del)  
+4.8  [navigate on map (navigate)](#navigate)  
+4.9  [select feature (select)](#select)  
+4.10 [draw](#draw)  
+4.11 [trace](#trace)  
+4.12 [edit geometry](#edit_geometry)  
+4.13 [del_feature](#del_feature)  
+4.14 [attach a layer to a map](#attach)  
+4.15 [detach a layer from a map](#detach)  
+4.16 [visibility of layers](#visible)  
 
-4.   [Style tips & tricks](#style-tips)  
-4.1  [polygon fill color](#tip-fill)  
-4.2  [play with Composite Operation](#tip-composite)  
+5.   [Style tips & tricks](#style-tips)  
+5.1  [polygon fill color](#tip-fill)  
+5.2  [play with Composite Operation](#tip-composite)  
 
-5.   [Import Datas](#import)  
-5.1  [Working with GeoJSON](#GeoJSON)
+6.   [Import Datas](#import)  
+6.1  [Working with GeoJSON](#GeoJSON)
 
+
+## <a name="generalities"></a>Generalities
+
+###<a name="logic"></a>logic of map publishing
+![illustration map-layers](images/map-layers.png)
 
 
 
