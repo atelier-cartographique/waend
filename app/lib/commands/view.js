@@ -18,7 +18,11 @@ var _ = require('underscore'),
     Projection = require('proj4'),
     region = require('../Region'),
     semaphore = require('../Semaphore'),
-    turf = require('turf');
+    turf = require('turf'),
+    config = require('../../../config'),
+    Transport = require('../Transport');
+
+var API_URL = config.public.apiUrl;
 
 
 var Proj3857 = Projection('EPSG:3857');
@@ -545,6 +549,68 @@ function showGroupLegend(node, group) {
 }
 
 
+function lookupResults(container) {
+    var callback = function (data) {
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+        if('results' in data) {
+            for (var i = 0; i < data.results.length; i++) {
+                var elem = document.createElement('div'),
+                    anchor = document.createElement('a'),
+                    result = data.results[i],
+                    props = result.properties,
+                    name = props.name || result.id,
+                    ctxPath = '/' + result.user_id + '/' + result.id;
+
+                elem.setAttribute('class', 'view-lookup-result');
+                anchor.setAttribute('href', '/map' + ctxPath);
+                anchor.innerHTML = name;
+                elem.appendChild(anchor);
+                container.appendChild(elem);
+            }
+        }
+    };
+    return callback;
+}
+
+function lookupTerm (term, callback) {
+    var transport = new Transport();
+    transport
+        .get(API_URL + '/group/' + term)
+        .then(callback)
+        .catch(function(err){
+            console.error('lookupTerm', err);
+        });
+}
+
+function showLookup (node) {
+    var wrapper = document.createElement('div'),
+        input = document.createElement('input'),
+        button = document.createElement('button'),
+        results = document.createElement('div');
+
+    wrapper.setAttribute('class', 'view-lookup-wrapper');
+    input.setAttribute('class', 'view-lookup-input');
+    button.setAttribute('class', 'view-lookup-search');
+    results.setAttribute('class', 'view-lookup-results');
+
+    button.innerHTML = "search";
+
+    wrapper.appendChild(input);
+    wrapper.appendChild(button);
+    wrapper.appendChild(results);
+    node.appendChild(wrapper);
+
+    var lookup = function () {
+        var term = input.value.trim();
+        input.value = '';
+        lookupTerm(term, lookupResults(results));
+    };
+    button.addEventListener('click', lookup, false);
+}
+
+
 function view () {
     var self = this,
         shell = self.shell,
@@ -574,10 +640,12 @@ function view () {
 
         nav.start(ender);
 
+        showLookup(display.node);
         binder.getGroup(userId, groupId)
             .then(function(group){
                 showGroupLegend(display.node, group);
             });
+
     };
 
     return (new Promise(resolver));
