@@ -41,7 +41,7 @@ function setupInput (container) {
 
 function setupCancel (container) {
     var cancel = document.createElement('div');
-    cancel.setAttribute('class', 'importer-cancel');
+    cancel.setAttribute('class', 'importer-cancel push-cancel');
     cancel.innerHTML = '<a>cancel</a>';
     container.appendChild(cancel);
     return cancel;

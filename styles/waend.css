@@ -1019,34 +1019,7 @@ body {
   font-size: 142pt;
 }
 .importer-cancel {
-  font-family: "dauphine_regular";
-  font-size: 12pt;
-  text-shadow: none;
-  padding: 6px 8px 5px 8px;
-  color: #fbfbfb;
-  border-radius: 2px;
-  min-width: 100px;
-  width: 100px;
-  background-color: #993358;
-  display: block;
-  width: 150px;
-  text-align: center;
   margin: auto;
-}
-.importer-cancel:hover {
-  cursor: pointer;
-}
-.importer-cancel a {
-  text-decoration: none !important;
-}
-.importer-cancel a:link {
-  font-family: "dauphine_italic";
-}
-.importer-cancel a:hover {
-  border-bottom: 1px solid #282f35;
-}
-.importer-cancel a {
-  color: #fbfbfb;
 }
 .importer-hints {
   position: absolute;
