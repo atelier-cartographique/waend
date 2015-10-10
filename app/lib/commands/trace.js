@@ -19,13 +19,15 @@ var _ = require('underscore'),
 var Proj3857 = Projection('EPSG:3857');
 
 function addClass (elem, c) {
-    var ec = elem.getAttribute('class').split(' ');
+    var ecStr = elem.getAttribute('class');
+    var ec = ecStr ? ecStr.split(' ') : [];
     ec.push(c);
     elem.setAttribute('class', _.uniq(ec).join(' '));
 }
 
 function removeClass (elem, c) {
-    var ec = elem.getAttribute('class').split(' ');
+    var ecStr = elem.getAttribute('class');
+    var ec = ecStr ? ecStr.split(' ') : [];
     elem.setAttribute('class', _.without(ec, c).join(' '));
 }
 
@@ -209,7 +211,7 @@ function makeButton (label, classSuffix, callback, ctx) {
     var button = document.createElement('div'),
         labelElement = document.createElement('span');
 
-    classSuffix = classSuffix ? '-' + classSuffix : ''; 
+    classSuffix = classSuffix ? '-' + classSuffix : '';
     button.setAttribute('class', 'trace-button push' + classSuffix);
     labelElement.setAttribute('class', 'trace-button-label');
     labelElement.innerHTML = label;
