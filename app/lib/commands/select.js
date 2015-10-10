@@ -43,19 +43,21 @@ function select () {
             display.end();
             if (features) {
                 // resolve(features[0]);
-                for (var i =0 ; i < features.length; i++) {
-                    var f = features[i],
-                        id = f.id,
-                        name = f.has('name') ? ' - ' + f.get('name') : '',
-                        p = '/' + f.getPath().join('/');
-                    stdout.write(terminal.makeCommand({
-                        'args': [
-                            'cc '+p,
-                            'gg | region set',
-                            'get'
-                        ],
-                        'text': (id + name)
-                    }));
+                for (var i = 0 ; i < features.length; i++) {
+                    var f = features[i];
+                    if (f) {
+                        var id = f.id,
+                            name = f.has('name') ? ' - ' + f.get('name') : '',
+                            p = '/' + f.getPath().join('/');
+                        stdout.write(terminal.makeCommand({
+                            'args': [
+                                'cc '+p,
+                                'gg | region set',
+                                'get'
+                            ],
+                            'text': (id + name)
+                        }));
+                    }
                 }
                 resolve(features);
             }
