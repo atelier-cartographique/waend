@@ -15,8 +15,6 @@
      'set color': ['get color | edit | set style.strokeStyle'],
      'set text': ['get text | edit | set params.text'],
      'edit geometry' : ['gg | trace | sg'],
-     're-draw feature' : ['draw | sg'],
-     're-trace feature' : ['trace | sg'],
      'zoom to feature' : ['gg | region set']
 
  };
