@@ -512,7 +512,12 @@ Another option is to use <a href="http://www.qgis.org/en/site/" target="_blank">
 
 ###<a name="overpass"></a> Tips with Overpass Turbo
 
-#####Querie for everything in the selection box
+Use the wizard to help you building your query :   
+
+![illustration map-layers](images/overpass-wizard.png)
+
+
+#####Query for everything in the selection box
 
  	// gather results
  	(way({{bbox}}););
