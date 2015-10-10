@@ -366,7 +366,8 @@ Feel free to give a hand !</p>
 5.1  <a href="#tip-fill">polygon fill color</a><br>
 5.2  <a href="#tip-composite">play with Composite Operation</a>  </p></li>
 <li><p><a href="#import">Import Datas</a><br>
-6.1  <a href="#GeoJSON">Working with GeoJSON</a></p></li>
+6.1  <a href="#GeoJSON">Working with GeoJSON</a>
+6.2  <a href="#overpass">Help with Overpass Turbo</a></p></li>
 </ol>
 
 <h2 id="toc_1"><a name="generalities"></a>Generalities</h2>
@@ -781,6 +782,21 @@ The restrictions so far are :</p>
 <p>Another option is to use <a href="http://www.qgis.org/en/site/" target="_blank">Qgis</a>, a free and opensource GIS, that you can use for manipulating any kind of geo-datas.</p>
 
 <p><em>Good to know</em> : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  </p>
+
+<h3 id="toc_42"><a name="overpass"></a> Tips with Overpass Turbo</h3>
+
+<p>Use the wizard to help you building your query :   </p>
+
+<p><img src="images/overpass-wizard.png" alt="illustration map-layers"></p>
+
+<h5 id="toc_43">Query for everything in the selection box</h5>
+
+<pre><code class="language-none">// gather results
+(way({{bbox}}););
+// print results
+out body;
+&gt;;
+out skel qt;</code></pre>
 
 
 </body>
