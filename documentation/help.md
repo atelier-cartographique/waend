@@ -51,6 +51,7 @@ An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/
 
 6.   [Import Datas](#import)  
 6.1  [Working with GeoJSON](#GeoJSON)
+6.2  [Help with Overpass Turbo](#overpass)
 
 
 ## <a name="generalities"></a>Generalities
@@ -508,3 +509,15 @@ An easy way to create a GeoJSON file from your zone of interest is to use <a hre
 Another option is to use <a href="http://www.qgis.org/en/site/" target="_blank">Qgis</a>, a free and opensource GIS, that you can use for manipulating any kind of geo-datas.
 
 *Good to know* : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  
+
+###<a name="overpass"></a> Tips with Overpass Turbo
+
+#####Querie for everything in the selection box
+
+ 	// gather results
+ 	(way({{bbox}}););
+ 	// print results
+ 	out body;
+ 	>;
+ 	out skel qt;
+ 	
