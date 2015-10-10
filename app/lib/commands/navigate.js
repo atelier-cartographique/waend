@@ -418,8 +418,8 @@ Navigator.prototype.drawScale = function () {
         top = rect.height - 57,
 	thickness = 6,
         bottom = top + thickness,
-	lenght = right - left,
-	hw = ((lenght - 1) / 2) + left,
+	length = right - left,
+	hw = ((length - 1) / 2) + left,
         leftVec = this.map.getCoordinateFromPixel([left, top]),
         rightVec = this.map.getCoordinateFromPixel([right, top]),
         dist = turf.distance(turf.point(leftVec), turf.point(rightVec), 'kilometers') * 100000; // centimeters
@@ -463,8 +463,8 @@ Navigator.prototype.drawScale = function () {
     ctx.save();
     ctx.fillStyle = 'white';
     ctx.beginPath();
-    ctx.fillRect(left + 1, top + 1, (lenght / 2) - 1, (thickness / 2) - 1);
-    ctx.fillRect(hw + 1, top + (thickness / 2), (lenght / 2) - 1, (thickness / 2) - 1);
+    ctx.fillRect(left + 1, top + 1, (length / 2) - 1, (thickness / 2) - 1);
+    ctx.fillRect(hw + 1, top + (thickness / 2), (length / 2) - 1, (thickness / 2) - 1);
     ctx.restore();
 };
 

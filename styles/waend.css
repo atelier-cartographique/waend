@@ -188,11 +188,9 @@ table {
 }
 .word-wrap {
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -383,7 +381,6 @@ body {
   bottom: 0;
   /*padding: 24px;
     padding-top: 38px;*/
-
   background-color: transparent;
 }
 .wc-context-feature {
@@ -528,14 +525,12 @@ body {
 }
 .wc-input:-moz-placeholder {
   /* Firefox 18- */
-
   text-indent: 0px;
   font-size: 10pt;
   line-height: 16pt;
 }
 .wc-input::-moz-placeholder {
   /* Firefox 19+ */
-
   text-indent: 0px;
   font-size: 10pt;
   line-height: 16pt;
@@ -548,7 +543,6 @@ body {
 .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
-
 }
 .wc-pending {
   color: #2B71FF;
@@ -562,13 +556,10 @@ body {
 .wc-error {
   -moz-animation: cssAnimation 0s ease-in 10s forwards;
   /* Firefox */
-
   -webkit-animation: cssAnimation 0s ease-in 10s forwards;
   /* Safari and Chrome */
-
   -o-animation: cssAnimation 0s ease-in 10s forwards;
   /* Opera */
-
   animation: cssAnimation 0s ease-in 10s forwards;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
@@ -635,11 +626,9 @@ body {
   color: #993358;
   display: inline-block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -811,6 +800,37 @@ body {
 .navigate-select {
   border: 1px solid red;
 }
+.view-group-wrapper {
+  position: absolute;
+  left: 15px;
+  bottom: 33px;
+  width: 300px;
+}
+.view-group-wrapper .view-group-title {
+  font-size: 200%;
+  margin-bottom: 0.5em;
+}
+.view-lookup-wrapper {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+.view-lookup-wrapper .view-lookup-input {
+  font-size: 80%;
+  height: 8px;
+  margin: 12px;
+  padding: 9px;
+  border: 1px solid #eaeaea;
+  border-bottom: 1px solid black;
+}
+.view-lookup-wrapper .view-lookup-search {
+  height: 26px;
+}
+.view-lookup-wrapper .view-lookup-results {
+  padding: 23px;
+  padding-top: 0;
+  text-align: center;
+}
 .wc-buttons {
   position: absolute;
   bottom: 55px;
@@ -848,13 +868,10 @@ body {
   font-family: "dauphine_regular";
   width: intrinsic;
   /* Safari/WebKit uses a non-standard name */
-
   width: -moz-max-content;
   /* Firefox/Gecko */
-
   width: -webkit-max-content;
   /* Chrome */
-
 }
 .wc-button:first-child {
   padding-top: 3px;
@@ -1033,16 +1050,12 @@ canvas.tool-trace {
   background-color: rgba(255, 255, 255, 0.3);
   -webkit-animation: fadein 1s;
   /* Safari, Chrome and Opera > 12.1 */
-
   -moz-animation: fadein 1s;
   /* Firefox < 16 */
-
   -ms-animation: fadein 1s;
   /* Internet Explorer */
-
   -o-animation: fadein 1s;
   /* Opera < 12.1 */
-
   animation: fadein 1s;
 }
 @keyframes fadein {
