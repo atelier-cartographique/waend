@@ -74,7 +74,7 @@ function setupCreateData (binder, uid, gid, lid) {
     createData.lid = lid;
 }
 
-function create (feature, batchJob) {
+function create (feature) {
     var geom = new Geometry.Geometry(feature);
     var props = _.omit(feature.properties || {}, 'id');
     var geomType = geom.getType();
@@ -88,7 +88,7 @@ function create (feature, batchJob) {
 
         return createData.binder.setFeature(
             createData.uid, createData.gid, createData.lid,
-            data, batchJob
+            data, true
             );
     }
     console.error('importer unsupported geom type', geomType);
@@ -147,7 +147,7 @@ var handleFile = function (file, options, resolve, reject) {
                 var feature = features[index],
                     lastOne = index === lastIndex;
                 progress (arrayLength, index, options, feature);
-                return create(feature, !lastOne);
+                return create(feature);
             }, 0)
             .then(function(){
                 resolve();
@@ -155,6 +155,7 @@ var handleFile = function (file, options, resolve, reject) {
             .catch(reject)
             .finally(function(){
                 options.display.end();
+                createData.binder.changeParent(createData.lid);
             });
 
     };

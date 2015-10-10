@@ -51,7 +51,7 @@ function select () {
                             p = '/' + f.getPath().join('/');
                         stdout.write(terminal.makeCommand({
                             'args': [
-                                'cc '+p,
+                                'cc ' + p,
                                 'gg | region set',
                                 'get'
                             ],
