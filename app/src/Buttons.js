@@ -15,7 +15,8 @@
      'set color': ['get color | edit | set style.strokeStyle'],
      'set text': ['get text | edit | set params.text'],
      'edit geometry' : ['gg | trace | sg'],
-     'zoom to feature' : ['gg | region set']
+     'zoom to feature' : ['gg | region set'],
+     'delete feature' : ['del_feature', 'lf']
 
  };
 
@@ -38,8 +39,8 @@ var groupButtons = {
 var userButtons = {
     'add map': ['ic'],
     'list maps': ['lg'],
-    'upload media': ['media upload'],
-    'browse medias': ['media list'],
+    'upload image': ['media upload'],
+    'browse images': ['media list'],
     'my profile' : ['cc /me','lg']
 
 };
