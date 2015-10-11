@@ -38,7 +38,7 @@ var groupButtons = {
 
 var userButtons = {
     'add map': ['ic'],
-    'list maps': ['lg'],
+    'list my maps': ['lg'],
     'upload image': ['media upload'],
     'browse images': ['media list'],
     'my profile' : ['cc /me','lg']

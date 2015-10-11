@@ -50,10 +50,10 @@ function createGroup (uid, ctx, resolve, reject) {
                             ctx.binder.setGroup(uid, data)
                                 .then(function(model){
                                     var cmd = terminal.makeCommand({
-                                        args: ['cc /'+uid+'/'+model.id],
+                                        args: ['cc /'+uid+'/'+model.id,'get'],
                                         text: (model.get('name') || model.id)
                                     });
-                                    stdout.write(cmd);
+                                    stdout.write('created map : ', cmd);
                                     resolve(model);
                                 });
                         });
@@ -88,11 +88,11 @@ function createLayer (uid, gid, ctx, resolve, reject) {
                     binder.setLayer(uid, gid, data)
                         .then(function(model){
                             var cmd = terminal.makeCommand({
-                                args: ['cc /'+uid+'/'+gid+'/'+model.id],
+                                args: ['cc /'+uid+'/'+gid+'/'+model.id,'get'],
                                 text: (model.get('name') || model.id)
                             });
                             semaphore.signal('create:layer', model);
-                            stdout.write('created layer ', cmd);
+                            stdout.write('created layer : ', cmd);
                             resolve(model);
                         });
                 });
@@ -165,16 +165,20 @@ function iCreate () {
         stdin = self.sys.stdin,
         current = self.current();
 
-    stdout.write('select type:');
+    stdout.write('To confirm, type the number of your choice in the console');
+    stdout.write('To cancel, type anything else');
+    stdout.write('Press Enter to validate');
+    stdout.write('-');
+
     if (1 === current.length) {
-        stdout.write('1 : create a group / map');
+        stdout.write('1 : create a new map');
     }
     else if (2 === current.length) {
-        stdout.write('1 : create a group / map');
+        stdout.write('1 : create a new map');
         stdout.write('2 : create a layer in current map');
     }
     else if (3 === current.length) {
-        stdout.write('1 : create a group / map');
+        stdout.write('1 : create a new map');
         stdout.write('2 : create a layer in current map');
         stdout.write('3 : create a feature in current layer');
     }
