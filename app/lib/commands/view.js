@@ -586,18 +586,27 @@ function lookupTerm (term, callback) {
 
 function showLookup (node) {
     var wrapper = document.createElement('div'),
+        wrapperInput = document.createElement('div'),
         input = document.createElement('input'),
+        inputBottomLine = document.createElement('div'),
         button = document.createElement('button'),
         results = document.createElement('div');
 
     wrapper.setAttribute('class', 'view-lookup-wrapper');
+    wrapperInput.setAttribute('class', 'input-wrapper');
     input.setAttribute('class', 'view-lookup-input');
-    button.setAttribute('class', 'view-lookup-search');
+    input.setAttribute('type', 'text');
+    input.setAttribute('placeholder', 'search');
+    inputBottomLine.setAttribute('class', 'input-bottomLine');
+    button.setAttribute('class', 'view-lookup-search push-validate');
     results.setAttribute('class', 'view-lookup-results');
 
-    button.innerHTML = "search";
+    button.innerHTML = "submit";
 
-    wrapper.appendChild(input);
+    wrapperInput.appendChild(input);
+    wrapperInput.appendChild(inputBottomLine);
+
+    wrapper.appendChild(wrapperInput);
     wrapper.appendChild(button);
     wrapper.appendChild(results);
     node.appendChild(wrapper);

@@ -165,12 +165,13 @@
     font-size: 12pt;
     text-shadow: none;
     text-align: center;
-    padding: 6px 8px 5px 8px;
+    padding: 4px 10px 3px 10px;
     display: block;
     color: #fbfbfb;
     border-radius: 2px;
-    min-width: 100px;
-    width: 100px;
+    // min-width: 100px;
+    // width: 100px;
+    border: 0px;
 
     &:hover {
         cursor: pointer;
@@ -208,6 +209,37 @@
   align-items: center;
 }
 
+.input-wrapper {
+  margin: 6px 0px;
+
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    background-color: transparent;
+    padding: 5px 5px 0px 5px;
+    border-radius: 0px;
+    border: 0px;
+    width: calc(~"100% - 2px");
+
+    &:-webkit-autofill {
+      background-color: transparent !important;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+  }
+
+  .input-bottomLine {
+    height: 3px;
+    border: 1px solid #000;
+    border-top: 0px;
+    margin-top: -3px;
+  }
+}
+
 input {
   width: 300px;
   font-size: 16pt;
@@ -215,10 +247,11 @@ input {
   padding: 12px;
   border-radius: 3px;
   border: 0px;
-  margin: 6px 0px;
 
   &[type="submit"] {
     background-color: @green;
     cursor: pointer;
+    color:@lightgrey;
+    margin-top: 18px;
   }
 }

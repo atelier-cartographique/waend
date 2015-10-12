@@ -204,12 +204,11 @@ table {
   font-size: 12pt;
   text-shadow: none;
   text-align: center;
-  padding: 6px 8px 5px 8px;
+  padding: 4px 10px 3px 10px;
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 100px;
-  width: 100px;
+  border: 0px;
 }
 .push-buttons:hover {
   cursor: pointer;
@@ -231,12 +230,11 @@ table {
   font-size: 12pt;
   text-shadow: none;
   text-align: center;
-  padding: 6px 8px 5px 8px;
+  padding: 4px 10px 3px 10px;
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 100px;
-  width: 100px;
+  border: 0px;
   background-color: #3f5f58;
 }
 .push-validate:hover {
@@ -259,12 +257,11 @@ table {
   font-size: 12pt;
   text-shadow: none;
   text-align: center;
-  padding: 6px 8px 5px 8px;
+  padding: 4px 10px 3px 10px;
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 100px;
-  width: 100px;
+  border: 0px;
   background-color: #993358;
 }
 .push-cancel:hover {
@@ -287,12 +284,11 @@ table {
   font-size: 12pt;
   text-shadow: none;
   text-align: center;
-  padding: 6px 8px 5px 8px;
+  padding: 4px 10px 3px 10px;
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 100px;
-  width: 100px;
+  border: 0px;
   background-color: #39598c;
 }
 .push-edit:hover {
@@ -315,12 +311,11 @@ table {
   font-size: 12pt;
   text-shadow: none;
   text-align: center;
-  padding: 6px 8px 5px 8px;
+  padding: 4px 10px 3px 10px;
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 100px;
-  width: 100px;
+  border: 0px;
   background-color: #ff974c;
 }
 .push-add:hover {
@@ -343,6 +338,34 @@ table {
   justify-content: center;
   align-items: center;
 }
+.input-wrapper {
+  margin: 6px 0px;
+}
+.input-wrapper input[type="text"],
+.input-wrapper input[type="email"],
+.input-wrapper input[type="password"] {
+  background-color: transparent;
+  padding: 5px 5px 0px 5px;
+  border-radius: 0px;
+  border: 0px;
+  width: calc(100% - 2px);
+}
+.input-wrapper input[type="text"]:-webkit-autofill,
+.input-wrapper input[type="email"]:-webkit-autofill,
+.input-wrapper input[type="password"]:-webkit-autofill {
+  background-color: transparent !important;
+}
+.input-wrapper input[type="text"]:focus,
+.input-wrapper input[type="email"]:focus,
+.input-wrapper input[type="password"]:focus {
+  outline: none;
+}
+.input-wrapper .input-bottomLine {
+  height: 3px;
+  border: 1px solid #000;
+  border-top: 0px;
+  margin-top: -3px;
+}
 input {
   width: 300px;
   font-size: 16pt;
@@ -350,11 +373,12 @@ input {
   padding: 12px;
   border-radius: 3px;
   border: 0px;
-  margin: 6px 0px;
 }
 input[type="submit"] {
   background-color: #3f5f58;
   cursor: pointer;
+  color: #f8f8f8;
+  margin-top: 18px;
 }
 body {
   background-color: #E5E5E5;
@@ -826,16 +850,13 @@ body {
   top: 24px;
   right: 24px;
 }
-.view-lookup-wrapper .view-lookup-input {
-  font-size: 80%;
-  height: 8px;
-  margin: 12px;
-  padding: 9px;
-  border: 1px solid #eaeaea;
-  border-bottom: 1px solid black;
+.view-lookup-wrapper .input-wrapper {
+  float: left;
+  margin: 0px;
+  margin-right: 6px;
 }
-.view-lookup-wrapper .view-lookup-search {
-  height: 26px;
+.view-lookup-wrapper .input-wrapper input {
+  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .view-lookup-wrapper .view-lookup-results {
   padding: 23px;
@@ -917,12 +938,11 @@ body {
   font-family: "dauphine_regular";
   font-size: 12pt;
   text-shadow: none;
-  padding: 6px 8px 5px 8px;
+  padding: 4px 10px 3px 10px;
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  min-width: 100px;
-  width: 100px;
+  border: 0px;
   background-color: #993358;
   position: absolute;
   top: 12px;

@@ -20,21 +20,30 @@
         <div class="form-container">
             <form class="form-horizontal" role="form" action="/register" method="post">
                 <div class="list-group">
-                    <input name="username" 
-                         type="email" 
-                         class="list-group-item" 
-                         id="inputEmail" 
-                         placeholder="email" />
 
-                    <input name="password" 
-                         type="password" 
-                         class="list-group-item" 
-                         id="inputPassword" 
-                         placeholder="password" />
+                    <div class=input-wrapper>
+                        <input name="username" 
+                             type="email" 
+                             class="list-group-item" 
+                             id="inputEmail" 
+                             placeholder="email"
+                             autocomplete="off" />
+                        <div class="input-bottomLine"></div>
+                    </div>
+
+                    <div class=input-wrapper>
+                        <input name="password" 
+                             type="password" 
+                             class="list-group-item" 
+                             id="inputPassword" 
+                             placeholder="password" />
+                        <div class="input-bottomLine"></div>
+                    </div>
 
                     <input type="submit" 
-                         class="list-group-item btn-login" 
-                         value="Create account">
+                         id="createAccount" 
+                         class="list-group-item btn-login push" 
+                         value="Create account" />
                 </div>
             </form>
         </div>
