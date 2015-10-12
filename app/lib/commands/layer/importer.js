@@ -51,9 +51,9 @@ function setupHints (container) {
 
 
 function setupCancel (container) {
-    var cancel = document.createElement('div');
+    var cancel = document.createElement('button');
     cancel.setAttribute('class', 'importer-cancel push-cancel');
-    cancel.innerHTML = '<a>cancel</a>';
+    cancel.innerHTML = 'cancel';
     container.appendChild(cancel);
     return cancel;
 }
