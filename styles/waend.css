@@ -617,6 +617,7 @@ body {
   color: #cecece;
   margin-bottom: 6px;
   font-size: 12pt;
+  border-bottom: 1px solid #000;
 }
 .wc-line {
   font-size: 10pt;
