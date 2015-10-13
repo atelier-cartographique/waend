@@ -177,6 +177,11 @@ table {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
+.label {
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.5pt;
+}
 .white-text-shadow {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
@@ -600,6 +605,7 @@ body {
   bottom: 55px;
   left: 12px;
   background-color: transparent;
+  z-index: 1;
 }
 .wc-page {
   opacity: 1;
@@ -829,7 +835,7 @@ body {
 .wc-title {
   position: absolute;
   top: 12px;
-  left: 12px;
+  left: calc(100vw - 100vh);
   font-size: 10pt;
   text-shadow: 0 0 6px #fff;
 }
@@ -848,35 +854,6 @@ body {
 .wc-title a:hover {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
-}
-.wc-title .wc-context-feature:after {
-  content: "feature";
-}
-.wc-title .wc-context-layer:after {
-  content: "layer";
-}
-.wc-title .wc-context-group:after {
-  content: "group";
-}
-.wc-title .wc-context-user:after {
-  content: "user";
-}
-.wc-title .wc-context-shell:after {
-  content: "wænd";
-}
-.wc-title .wc-context-feature:after,
-.wc-title .wc-context-layer:after,
-.wc-title .wc-context-group:after,
-.wc-title .wc-context-user:after,
-.wc-title .wc-context-shell:after {
-  position: relative;
-  display: block;
-  font-size: 9pt;
-  font-family: "sansguiltmb";
-  width: 40px;
-  left: calc(50% - 20px);
-  text-align: center;
-  top: -3px;
 }
 .navigate-buttons {
   position: absolute;
@@ -995,9 +972,10 @@ body {
   cursor: pointer;
 }
 .credit-waend {
-  width: 40px;
   font-size: 9pt;
   text-transform: uppercase;
+  letter-spacing: 0.5pt;
+  width: 40px;
   position: absolute;
   bottom: 0px;
   right: 0px;
@@ -1015,28 +993,28 @@ body {
 }
 .wc-buttons {
   position: absolute;
-  bottom: 55px;
-  right: 12px;
-  text-align: right;
-  z-index: 123;
+  top: 0px;
+  left: 0;
+  z-index: 0;
   letter-spacing: 1px;
-  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  padding: 12px;
+  background-color: #fff;
+  width: calc(100vw - 100vh - 24px);
+  min-width: 200px;
+  text-shadow: none;
 }
 .wc-buttons-group {
-  margin-top: 6px;
-  font-family: "sansguiltmb";
-  font-size: 10pt;
-  width: auto;
+  margin-bottom: 6px;
 }
-.wc-buttons-group.wc-current .wc-button {
+.wc-buttons-group .wc-buttons-group-title-wrapper .wc-buttons-group-title-label {
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.5pt;
+}
+.wc-buttons-group .wc-buttons-group-title-wrapper .wc-buttons-group-title-value {
   font-size: 12pt;
-  transition-property: font-size;
-  transition-duration: 0.5s;
-}
-.wc-buttons-group.wc-active .wc-button {
-  font-size: 10pt;
-  transition-property: font-size;
-  transition-duration: 0.5s;
+  text-decoration: underline;
+  margin-left: 6px;
 }
 .wc-buttons-group.wc-inactive {
   display: none;
@@ -1048,15 +1026,8 @@ body {
   cursor: pointer;
   border-bottom: 1px solid transparent;
   font-family: "dauphine_regular";
-  width: intrinsic;
-  /* Safari/WebKit uses a non-standard name */
-
-  width: -moz-max-content;
-  /* Firefox/Gecko */
-
-  width: -webkit-max-content;
-  /* Chrome */
-
+  font-size: 10pt;
+  padding-left: 6px;
 }
 .wc-button:first-child {
   padding-top: 3px;

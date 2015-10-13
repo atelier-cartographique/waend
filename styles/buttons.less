@@ -1,31 +1,44 @@
 
 .wc-buttons {
     position: absolute;
-    bottom: 55px;
-    right: 12px;
-    text-align: right;
-    z-index: 123;
+    top: 0px;
+    left: 0;
+    z-index: 0;
     letter-spacing: 1px;
-    .white-text-shadow;
+    padding: 12px;
+    background-color: #fff;
+    width: calc(~"100vw - 100vh - 24px");
+    min-width: 200px;
+    text-shadow: none;
+    // .white-text-shadow;
 }
 
 .wc-buttons-group {
-    margin-top: 6px; 
-    font-family: "sansguiltmb";
-    font-size:10pt;
-    width: auto;
+    margin-bottom: 6px;
 
-    &.wc-current .wc-button{
-        font-size: 12pt;
-        transition-property: font-size;
-        transition-duration: 0.5s;
+    .wc-buttons-group-title-wrapper {
+        .wc-buttons-group-title-label {
+            .label;
+        }
+        .wc-buttons-group-title-value {
+            font-size: 12pt;
+            text-decoration: underline;
+            margin-left: 6px;
+        }
     }
 
-    &.wc-active .wc-button{
-        font-size: 10pt;
-        transition-property: font-size;
-        transition-duration: 0.5s;
-    }
+    // DISABLED ≠ SIZE FOR ACTIVE & ANIMATION
+    // &.wc-current .wc-button{
+    //     font-size: 12pt;
+    //     transition-property: font-size;
+    //     transition-duration: 0.5s;
+    // }
+
+    // &.wc-active .wc-button{
+    //     font-size: 10pt;
+    //     transition-property: font-size;
+    //     transition-duration: 0.5s;
+    // }
 
     &.wc-inactive {
         display: none;
@@ -39,10 +52,8 @@
     cursor: pointer;
     border-bottom: 1px solid transparent;
     font-family: "dauphine_regular";
-    width: intrinsic;           /* Safari/WebKit uses a non-standard name */
-    width: -moz-max-content;    /* Firefox/Gecko */
-    width: -webkit-max-content; /* Chrome */
-
+    font-size: 10pt;
+    padding-left: 6px;
 
     &:first-child{
         padding-top: 3px;

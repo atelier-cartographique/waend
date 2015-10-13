@@ -224,9 +224,28 @@ var WebConsole = Terminal.extend({
             var gn = groupKeys[gi],
                 buttonKeys = _.keys(buttons[gn]),
                 groupElement = document.createElement('div');
+                groupTitlewrapper = document.createElement('div');
+                groupTitlelabel = document.createElement('span');
+                groupTitlevalue = document.createElement('span');
 
+            groupTitlewrapper.setAttribute('class', 'wc-buttons-group-title-wrapper');
+            groupTitlelabel.setAttribute('class', 'wc-buttons-group-title-label');
+            groupTitlevalue.setAttribute('class', 'wc-buttons-group-title-value');
             groupElement.setAttribute('class','wc-buttons-group wc-inactive');
-            groupElement.appendChild(document.createTextNode(gn));
+
+
+            var grplabel = gn;
+            if (gn == "shell") {
+                var grplabel = "wænd";
+            };
+
+            groupTitlelabel.innerHTML = grplabel;
+            groupTitlevalue.innerHTML = "trimmed {···} name";
+
+            groupTitlewrapper.appendChild(groupTitlelabel);
+            groupTitlewrapper.appendChild(groupTitlevalue);
+            // groupElement.appendChild(document.createTextNode(gn));
+            groupElement.appendChild(groupTitlewrapper);
             self.buttonsContainer.appendChild(groupElement);
 
             groups[gn] = groupElement;
