@@ -685,9 +685,10 @@ body {
   color: black;
   font-family: "dauphine_italic";
   font-size: 8pt;
-  margin-left: 12px;
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
+  left: 12px;
+  z-index: 1;
 }
 .wc-error {
   -moz-animation: cssAnimation 0s ease-in 10s forwards;
@@ -1038,6 +1039,7 @@ body {
   font-family: "dauphine_regular";
   font-size: 10pt;
   padding-left: 6px;
+  display: table;
 }
 .wc-button:first-child {
   padding-top: 3px;
