@@ -946,8 +946,8 @@ body {
 }
 .view-lookup-wrapper {
   position: absolute;
-  top: 24px;
-  right: 24px;
+  top: 2px;
+  right: 5px;
 }
 .view-lookup-wrapper .input-wrapper {
   float: left;
@@ -986,6 +986,8 @@ body {
 .view-lookup-wrapper .view-lookup-results .view-lookup-result a {
   text-decoration: none !important;
   font-family: "dauphine_italic";
+  font-family: "dauphine_regular";
+  color: #000;
   padding: 2px 0px;
 }
 .view-lookup-wrapper .view-lookup-results .view-lookup-result a:hover {
