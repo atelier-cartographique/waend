@@ -69,14 +69,16 @@
     left: 15px;
     bottom: 33px;
     width: 300px;
-    .view-group-title {
-        font-size: 200%;
-        margin-bottom: 0.5em;
+    font-size: 12pt;
+
+    .view-group-label {
+        font-size: 9pt;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
     }
 
-    .view-group-description {
-
-    }
+    .view-group-title {}
+    .view-group-description {}
 }
 
 .view-lookup-wrapper {
@@ -92,18 +94,35 @@
         input {
             // background-color: rgba(255, 255, 255, 0.5);
             .white-text-shadow;
+            margin-bottom: -5px;
+            font-size: 12pt;
         }
     }
 
     .view-lookup-search {
+        .white-text-shadow;
+        font-size: 9pt;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+        border: 0px;
+        background: transparent;
+        padding-top: 11px;
+
+        &:hover {cursor: pointer;}
+        &:focus {outline: none;}
     }
 
     .view-lookup-results {
         padding: 23px;
         padding-top: 0;
         text-align: center;
+        font-size: 12pt;
         .view-lookup-result {
+            padding-bottom: 4px;
+
             a {
+                .linkwaend;
+                padding: 2px 0px;
 
             }
         }

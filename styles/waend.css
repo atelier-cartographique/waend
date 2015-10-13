@@ -167,15 +167,15 @@ table {
 /**** VARIABLES ****/
 .link-hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
-.linkwaend a {
+.linkwaend {
   text-decoration: none !important;
-}
-.linkwaend a:link {
   font-family: "dauphine_italic";
 }
-.linkwaend a:hover {
+.linkwaend:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .white-text-shadow {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
@@ -209,18 +209,15 @@ table {
   color: #fbfbfb;
   border-radius: 2px;
   border: 0px;
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
 }
 .push-buttons:hover {
   cursor: pointer;
 }
-.push-buttons a {
-  text-decoration: none !important;
-}
-.push-buttons a:link {
-  font-family: "dauphine_italic";
-}
-.push-buttons a:hover {
+.push-buttons:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .push-buttons a {
   color: #fbfbfb;
@@ -235,19 +232,16 @@ table {
   color: #fbfbfb;
   border-radius: 2px;
   border: 0px;
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
   background-color: #3f5f58;
 }
 .push-validate:hover {
   cursor: pointer;
 }
-.push-validate a {
-  text-decoration: none !important;
-}
-.push-validate a:link {
-  font-family: "dauphine_italic";
-}
-.push-validate a:hover {
+.push-validate:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .push-validate a {
   color: #fbfbfb;
@@ -262,19 +256,16 @@ table {
   color: #fbfbfb;
   border-radius: 2px;
   border: 0px;
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
   background-color: #993358;
 }
 .push-cancel:hover {
   cursor: pointer;
 }
-.push-cancel a {
-  text-decoration: none !important;
-}
-.push-cancel a:link {
-  font-family: "dauphine_italic";
-}
-.push-cancel a:hover {
+.push-cancel:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .push-cancel a {
   color: #fbfbfb;
@@ -289,19 +280,16 @@ table {
   color: #fbfbfb;
   border-radius: 2px;
   border: 0px;
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
   background-color: #39598c;
 }
 .push-edit:hover {
   cursor: pointer;
 }
-.push-edit a {
-  text-decoration: none !important;
-}
-.push-edit a:link {
-  font-family: "dauphine_italic";
-}
-.push-edit a:hover {
+.push-edit:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .push-edit a {
   color: #fbfbfb;
@@ -316,19 +304,16 @@ table {
   color: #fbfbfb;
   border-radius: 2px;
   border: 0px;
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
   background-color: #ff974c;
 }
 .push-add:hover {
   cursor: pointer;
 }
-.push-add a {
-  text-decoration: none !important;
-}
-.push-add a:link {
-  font-family: "dauphine_italic";
-}
-.push-add a:hover {
+.push-add:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .push-add a {
   color: #fbfbfb;
@@ -577,15 +562,12 @@ body {
   font-size: 11pt;
   margin: 24px 0px;
   color: black;
-}
-#register .footer a {
   text-decoration: none !important;
-}
-#register .footer a:link {
   font-family: "dauphine_italic";
 }
-#register .footer a:hover {
+#register .footer:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 #register .footer a:link {
   color: #000;
@@ -810,6 +792,7 @@ body {
 .wc-select:hover,
 .wc-draw-zoom:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .key-name {
   display: inline-block !important;
@@ -841,6 +824,7 @@ body {
 }
 .hint a:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .wc-title {
   position: absolute;
@@ -863,6 +847,7 @@ body {
 }
 .wc-title a:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .wc-title .wc-context-feature:after {
   content: "feature";
@@ -952,10 +937,12 @@ body {
   left: 15px;
   bottom: 33px;
   width: 300px;
+  font-size: 12pt;
 }
-.view-group-wrapper .view-group-title {
-  font-size: 200%;
-  margin-bottom: 0.5em;
+.view-group-wrapper .view-group-label {
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.5pt;
 }
 .view-lookup-wrapper {
   position: absolute;
@@ -969,11 +956,41 @@ body {
 }
 .view-lookup-wrapper .input-wrapper input {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  margin-bottom: -5px;
+  font-size: 12pt;
+}
+.view-lookup-wrapper .view-lookup-search {
+  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.5pt;
+  border: 0px;
+  background: transparent;
+  padding-top: 11px;
+}
+.view-lookup-wrapper .view-lookup-search:hover {
+  cursor: pointer;
+}
+.view-lookup-wrapper .view-lookup-search:focus {
+  outline: none;
 }
 .view-lookup-wrapper .view-lookup-results {
   padding: 23px;
   padding-top: 0;
   text-align: center;
+  font-size: 12pt;
+}
+.view-lookup-wrapper .view-lookup-results .view-lookup-result {
+  padding-bottom: 4px;
+}
+.view-lookup-wrapper .view-lookup-results .view-lookup-result a {
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
+  padding: 2px 0px;
+}
+.view-lookup-wrapper .view-lookup-results .view-lookup-result a:hover {
+  border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .wc-buttons {
   position: absolute;
@@ -1025,6 +1042,7 @@ body {
 }
 .wc-button:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .media-wrapper {
   position: relative;
@@ -1056,6 +1074,8 @@ body {
   border-radius: 2px;
   border: 0px;
   background-color: #993358;
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
   position: absolute;
   top: 12px;
   right: 36px;
@@ -1064,26 +1084,16 @@ body {
 .media-wrapper .media-close:hover {
   cursor: pointer;
 }
-.media-wrapper .media-close a {
-  text-decoration: none !important;
-}
-.media-wrapper .media-close a:link {
-  font-family: "dauphine_italic";
-}
-.media-wrapper .media-close a:hover {
+.media-wrapper .media-close:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .media-wrapper .media-close a {
   color: #fbfbfb;
 }
-.media-wrapper .media-close a {
-  text-decoration: none !important;
-}
-.media-wrapper .media-close a:link {
-  font-family: "dauphine_italic";
-}
-.media-wrapper .media-close a:hover {
+.media-wrapper .media-close:hover {
   border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .media-wrapper .media-item {
   display: inline-block;

@@ -533,18 +533,30 @@ Navigator.prototype.centerOn = function (pix) {
 
 function showGroupLegend(node, group) {
     var wrapper = document.createElement('div'),
-        title = document.createElement('div'),
-        desc = document.createElement('div');
+        titleWrapper = document.createElement('div'),
+        titleLabel = document.createElement('span'),
+        title = document.createElement('span'),
+        descLabel = document.createElement('span'),
+        desc = document.createElement('span');
 
     wrapper.setAttribute('class', 'view-group-wrapper');
+    titleWrapper.setAttribute('class', 'view-group-title-wrapper');
+    titleLabel.setAttribute('class', 'view-group-label');
     title.setAttribute('class', 'view-group-title');
+    descLabel.setAttribute('class', 'view-group-label');
     desc.setAttribute('class', 'view-group-description');
 
+    titleLabel.innerHTML = "name ";
     title.innerHTML = group.get('name', 'Title');
+    descLabel.innerHTML = "description — ";
     desc.innerHTML = group.get('description', 'Description');
 
-    wrapper.appendChild(title);
+
+    titleWrapper.appendChild(titleLabel);
+    titleWrapper.appendChild(title);
+    wrapper.appendChild(descLabel);
     wrapper.appendChild(desc);
+    wrapper.appendChild(titleWrapper);
     node.appendChild(wrapper);
 }
 
@@ -598,10 +610,10 @@ function showLookup (node) {
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', 'search');
     inputBottomLine.setAttribute('class', 'input-bottomLine');
-    button.setAttribute('class', 'view-lookup-search push-validate');
+    button.setAttribute('class', 'view-lookup-search');
     results.setAttribute('class', 'view-lookup-results');
 
-    button.innerHTML = "submit";
+    button.innerHTML = "lookup";
 
     wrapperInput.appendChild(input);
     wrapperInput.appendChild(inputBottomLine);

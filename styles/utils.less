@@ -99,15 +99,16 @@
 //                  -1px 1px 0 #fff;
 // }
 
-.link-hover {border-bottom: 1px solid @grey;}
+.link-hover {
+  border-bottom: 1px solid @grey;
+  cursor: pointer;
+}
 
 .linkwaend {
-  a{ 
-    text-decoration: none !important;}
+    text-decoration: none !important;
+    font-family: "dauphine_italic";
 
-  a:link{font-family: "dauphine_italic";}
-
-  a:hover{.link-hover}
+  &:hover{.link-hover}
 }
 
 
