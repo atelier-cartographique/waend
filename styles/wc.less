@@ -28,10 +28,11 @@
 
 .wc-pages{
     position: absolute;
-    width: 60%;
-    max-height: 50%;
+    width: calc(~"100vw - 100vh - 24px");
+    min-width: 250px;
+    max-height: 140px;
     overflow: auto;
-    bottom: 55px;
+    bottom: 40px;
     left:12px;
     background-color: transparent;
     z-index: 1;
@@ -46,6 +47,7 @@
 .wc-page-title {
     color: #cecece;
     margin-bottom: 6px;
+    font-size: 12pt;
 }
 
 .wc-line {
@@ -62,20 +64,22 @@
 
 .wc-input{
     position: absolute;
-    bottom: 0;
-    padding: 5px 5px ;
-    left: 0;
+    bottom: 12px;
+    left: 12px;
     border: 0;
-    border-top: 1px solid grey;
-    font-size: 16pt;
-    background-color: @lightgrey;
-    width: calc(~"100% - 10px");
+    border-bottom: 1px solid #000;
+    font-size: 10pt;
+    background-color: #fefefe;
+    width: calc(~"100vw - 100vh - 10px");
+    min-width: 250px;
     font-family: monospace;
     letter-spacing: 1px!important;
-    color: #4C4C4C;
     margin: 0px;
+    padding: 5px 5px;
     border-radius: 0px;
     text-indent: 12px;
+    z-index: 2;
+    resize: vertical; //for text-area..
 
     &:focus {
         outline: none;
@@ -119,8 +123,10 @@
 .wc-error{
     color: black;
     font-family: "dauphine_italic";
-    font-size: 9pt;
+    font-size: 8pt;
     margin-left: 12px;
+    position: absolute;
+    bottom: 0px;
 }
 
 //DIRTY WAY TO HIDE ERRORS AFTER 5s...
@@ -192,11 +198,10 @@
     display: -ms-inline-flexbox;
     display: inline-flex;
     display: inline-block;
-    margin-bottom: 6px;
+    margin-bottom: 2px;
 
     .key {
       width: 100px;
-      font-size: 80%;
       text-align: right;
       padding-right: 6px;
       color: @red;
@@ -206,8 +211,6 @@
 
     .value {
         width: calc(~"100% - 75px - 6px");
-        font-family: "sansguiltmb";
-        font-size: 11pt;
         letter-spacing: 0.5px;
     }
 }
@@ -254,11 +257,11 @@
 
 .hint {
     font-family: "dauphine_regular";
-    font-size: 11pt;
     text-shadow: none;
     display: inline-block;
     color: @colorHelp;
     margin-left: 65px;
+    margin-top: 6px;
 
     a{
       color: @colorHelp;
