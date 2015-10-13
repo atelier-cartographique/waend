@@ -1,7 +1,7 @@
 .wc-title{
     position: absolute;
     top: 12px;
-    left: calc(~"100vw - 100vh");
+    left: 12px;
     font-size: 10pt;
     text-shadow: 0 0 6px #fff;
 
@@ -15,9 +15,18 @@
         .white-text-shadow;
     }
 
+    /// TRICK UNTILL BREADCRUMB DISAPEAR
+    .wc-context-user:before { 
+        content: "";
+        width: calc(~"100vw - 100vh");
+        min-width: 250px;
+        display: inline-block;
+    }
+
     a:last-child{
         font-size: 12pt;
     }
+
 
     a:hover{
         .link-hover;
