@@ -992,6 +992,25 @@ body {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
+.credit-waend {
+  width: 40px;
+  font-size: 9pt;
+  text-transform: uppercase;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  text-align: right;
+}
+.credit-waend a {
+  text-decoration: none;
+  color: #000;
+}
+.credit-waend a:hover {
+  cursor: pointer;
+}
+.credit-waend a:focus {
+  outline: none;
+}
 .wc-buttons {
   position: absolute;
   bottom: 55px;

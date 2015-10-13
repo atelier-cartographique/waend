@@ -632,6 +632,20 @@ function showLookup (node) {
 }
 
 
+function waendCredit (node) {
+var waendCredit = document.createElement('div');
+    waendCredit.setAttribute('class', 'credit-waend');
+    waendCreditLink = document.createElement('a');
+    waendCreditLink.setAttribute('href', 'http://waend.com');
+    waendCreditLink.setAttribute('target', 'blank');
+    waendCreditLink.innerHTML = 'wænd';
+
+    waendCredit.appendChild(waendCreditLink);
+    node.appendChild(waendCredit);
+}
+
+
+
 function view () {
     var self = this,
         shell = self.shell,
@@ -666,11 +680,12 @@ function view () {
             .then(function(group){
                 showGroupLegend(display.node, group);
             });
-
+        waendCredit(display.node);
     };
 
     return (new Promise(resolver));
 }
+
 
 
 module.exports = exports = {
