@@ -593,23 +593,37 @@ set style.fillStyle &quot;rgba(255, 127, 0, 0.8)&quot; </code></pre>
 
 <p><em>application: polygon</em></p>
 
-<p>Set an image to be inserted at the polygon&#39;s location.</p>
+<p>Set an image to be inserted in the active polygon. 
+They are two paramters you can play with to adujst the relation of the image with the polygon : </p>
 
 <p><code>params.clip</code> boolean (default to true)</p>
 
 <p><code>params.adjust</code> &#39;none&#39; or &#39;fit&#39; or &#39;cover&#39; (default to &#39;none&#39;)</p>
 
-<h2 id="toc_21"><a name="commands-details"></a> Commands details</h2>
+<p>Here is an illustration of what it does :  </p>
 
-<h3 id="toc_22"><a name="help"></a> help</h3>
+<p><img src="images/params-image.png" alt="illustration map-layers"></p>
+
+<h5 id="toc_21"><a name="image"></a> tip : image on layer</h5>
+
+<p>If you set an image at the layer level, it will cover <em>all</em> your polygons with this image in that layer.<br>
+The parameters are used like described above, at the layer level.</p>
+
+<p>To do so, type at a layer level :  </p>
+
+<p><code>media pick | set params.image</code></p>
+
+<h2 id="toc_22"><a name="commands-details"></a> Commands details</h2>
+
+<h3 id="toc_23"><a name="help"></a> help</h3>
 
 <p>get help</p>
 
-<h3 id="toc_23"><a name="lc"></a> list comands (lc)</h3>
+<h3 id="toc_24"><a name="lc"></a> list comands (lc)</h3>
 
 <p>list commands  </p>
 
-<h3 id="toc_24"><a name="set"></a> set attribute (set)</h3>
+<h3 id="toc_25"><a name="set"></a> set attribute (set)</h3>
 
 <p>set attribute to current element (user, group, layer or feature).</p>
 
@@ -623,7 +637,7 @@ set style.fillStyle &quot;rgba(255, 127, 0, 0.8)&quot; </code></pre>
 set description &quot;here is my description&quot;
 set &quot;city population&quot; 1000000</code></pre>
 
-<h3 id="toc_25"><a name="get"></a> get attributes (get)</h3>
+<h3 id="toc_26"><a name="get"></a> get attributes (get)</h3>
 
 <p>get all attributes from current element
 get attributeName : get value for attributeName</p>
@@ -633,7 +647,7 @@ get attributeName : get value for attributeName</p>
 <pre><code class="language-none">get
 get name</code></pre>
 
-<h3 id="toc_26"><a name="edit"></a> edit</h3>
+<h3 id="toc_27"><a name="edit"></a> edit</h3>
 
 <p>There is no <em>edit</em> button yet, but the functionality is here.
 To edit a key, type :</p>
@@ -648,7 +662,7 @@ To edit a key, type :</p>
 or
 get params | edit | set params</code></pre>
 
-<h3 id="toc_27"><a name="del"></a> delete (del)</h3>
+<h3 id="toc_28"><a name="del"></a> delete (del)</h3>
 
 <p>Delete an attribute</p>
 
@@ -664,7 +678,7 @@ get params | edit | set params</code></pre>
 or
 del style</code></pre>
 
-<h3 id="toc_28"><a name="navigate"></a> navigate in map (navigate)</h3>
+<h3 id="toc_29"><a name="navigate"></a> navigate in map (navigate)</h3>
 
 <p>navigate in the map viewport<br>
 use keyboard arrows to navigate<br>
@@ -673,11 +687,11 @@ use [o] to zoom out</p>
 
 <p>Type [ESC] key to escape this mode.</p>
 
-<h3 id="toc_29"><a name="select"></a> select features (select)</h3>
+<h3 id="toc_30"><a name="select"></a> select features (select)</h3>
 
 <p>select a feature in the viewport</p>
 
-<h3 id="toc_30"><a name="draw"></a> draw</h3>
+<h3 id="toc_31"><a name="draw"></a> draw</h3>
 
 <p>draw with on map, usualy pipped with another command  </p>
 
@@ -687,7 +701,7 @@ use [o] to zoom out</p>
 
 <p>will set the region viewport to the drawing extend</p>
 
-<h3 id="toc_31"><a name="trace"></a> trace</h3>
+<h3 id="toc_32"><a name="trace"></a> trace</h3>
 
 <p>trace with on map, usualy pipped with another command.<br>
 Trace is usefull to creat segmented lines and polygons.</p>
@@ -705,7 +719,7 @@ Trace is usefull to creat segmented lines and polygons.</p>
 <p>It will draw a line and create a feature out of it.<br>
 Click on the first point to close the line and make a polygon.</p>
 
-<h3 id="toc_32"><a name="edit_geometry"></a> Edit geometry</h3>
+<h3 id="toc_33"><a name="edit_geometry"></a> Edit geometry</h3>
 
 <p>To edit a feature geometry, use :</p>
 
@@ -715,13 +729,13 @@ Click on the first point to close the line and make a polygon.</p>
 
 <pre><code class="language-none">gg | trace | create</code></pre>
 
-<h3 id="toc_33"><a name="del_feature"></a> delete feature (del_feature)</h3>
+<h3 id="toc_34"><a name="del_feature"></a> delete feature (del_feature)</h3>
 
 <p>In the context of a feature, and if you&#39;re granted to, the command will delete the current feature and bring you back to the parent layer context.</p>
 
 <p>In the context of a layer, you must give a feature ID in argument of the command.</p>
 
-<h3 id="toc_34"><a name="attach"></a> attach a layer to a map (attach)</h3>
+<h3 id="toc_35"><a name="attach"></a> attach a layer to a map (attach)</h3>
 
 <p>If you&#39;re the owner of the layer, the command will attach the said layer to a map. It doesn&#39;t <em>move</em> the layer but will <em>display</em> it within this other map.</p>
 
@@ -732,7 +746,7 @@ Click on the first point to close the line and make a polygon.</p>
 <p><code>/user_id/map_id</code> = the context where you want to attach the layer.<br>
 <code>layer_id</code>= the layer id.</p>
 
-<h3 id="toc_35"><a name="detach"></a> detach a layer from a map (detach)</h3>
+<h3 id="toc_36"><a name="detach"></a> detach a layer from a map (detach)</h3>
 
 <p>The <code>detach</code> command <em>undo</em> what has been done by the <code>attach</code> command, and works the same way.</p>
 
@@ -740,20 +754,20 @@ Click on the first point to close the line and make a polygon.</p>
 
 <p>A subtlety about <em>compositions</em> ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that&#39;s created at the same time. It does mean that if you&#39;re willing to <em>remove</em> a layer, at the moment, your best option is to detach it from all maps it&#39;s attached to.</p>
 
-<h3 id="toc_36"><a name="visible"></a> Visibility of layers (visible)</h3>
+<h3 id="toc_37"><a name="visible"></a> Visibility of layers (visible)</h3>
 
 <p>On a map context, type <code>visible</code> to chose which layers to display.</p>
 
-<h2 id="toc_37"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+<h2 id="toc_38"><a name="style-tips"></a> Style tips &amp; tricks</h2>
 
-<h3 id="toc_38"><a name="tip-fill"></a> polygon fill color</h3>
+<h3 id="toc_39"><a name="tip-fill"></a> polygon fill color</h3>
 
 <p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
 Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
 
 <p>You are done with a filled polygon !</p>
 
-<h3 id="toc_39"><a name="tip-composite"></a> Play with Composite Operation</h3>
+<h3 id="toc_40"><a name="tip-composite"></a> Play with Composite Operation</h3>
 
 <p>We use multiply compositing mode by default in layers.<br>
 If you want to change it, please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">Canvas MDN documentation</a></p>
@@ -762,9 +776,9 @@ If you want to change it, please refer to <a href="https://developer.mozilla.org
 
 <pre><code class="language-none">set style.globalCompositeOperation source-over</code></pre>
 
-<h2 id="toc_40"><a name="import"></a> Import data (import)</h2>
+<h2 id="toc_41"><a name="import"></a> Import data (import)</h2>
 
-<h3 id="toc_41"><a name="GeoJSON"></a> Working with GeoJSON</h3>
+<h3 id="toc_42"><a name="GeoJSON"></a> Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 
@@ -783,13 +797,13 @@ The restrictions so far are :</p>
 
 <p><em>Good to know</em> : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  </p>
 
-<h3 id="toc_42"><a name="overpass"></a> Tips with Overpass Turbo</h3>
+<h3 id="toc_43"><a name="overpass"></a> Tips with Overpass Turbo</h3>
 
 <p>Use the wizard to help you building your query :   </p>
 
 <p><img src="images/overpass-wizard.png" alt="illustration map-layers"></p>
 
-<h5 id="toc_43">Query for everything in the selection box</h5>
+<h5 id="toc_44">Query for everything in the selection box</h5>
 
 <pre><code class="language-none">// gather results
 (way({{bbox}}););

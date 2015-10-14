@@ -311,15 +311,45 @@ Example:
 	set style.fillStyle "rgb(255, 127, 0)"  
 	set style.fillStyle "rgba(255, 127, 0, 0.8)" 
 
-
 #### <a name="image"></a> image
 *application: polygon*
 
-Set an image to be inserted at the polygon's location.
+Set an image to be inserted in the active polygon. 
+They are two paramters you can play with to adujst the relation of the image with the polygon : 
 
 ```params.clip``` boolean (default to true)
 
 ```params.adjust``` 'none' or 'fit' or 'cover' (default to 'none')
+
+Here is an illustration of what it does :  
+  
+![illustration map-layers](images/params-image.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##### <a name="image"></a> tip : image on layer
+
+If you set an image at the layer level, it will cover *all* your polygons with this image in that layer.  
+The parameters are used like described above, at the layer level.
+
+To do so, type at a layer level :  
+
+```media pick | set params.image```
+
+
 
 ## <a name="commands-details"></a> Commands details
 
