@@ -92,4 +92,4 @@ And then install the desired version:
 brew install homebrew/versions/node012
 ```
 
-Which (at the time of this writing) installs node in version 0.12.7.
+Which installs the latest node 0.12.x
