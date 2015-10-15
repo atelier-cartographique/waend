@@ -177,16 +177,16 @@ var WebConsole = Terminal.extend({
         this._inputField.setAttribute('class', 'wc-input');
         this._inputField.setAttribute('type', 'text');
 
-        this._inputPrompt = document.createElement('div');
-        this._inputPrompt.setAttribute('class', 'wc-input-prompt');
-        this._inputPrompt.innerHTML='>';
+            inputPrompt = document.createElement('div');
+            inputPrompt.setAttribute('class', 'wc-input-prompt');
+            inputPrompt.innerHTML='>';
 
-        this._inputBottomline = document.createElement('div');
-        this._inputBottomline.setAttribute('class', 'wc-input-bottom-line');
+            inputBottomline = document.createElement('div');
+            inputBottomline.setAttribute('class', 'wc-input-bottom-line');
 
-        this.container.appendChild(this._inputPrompt);
+        this.container.appendChild(inputPrompt);
         this.container.appendChild(this._inputField);
-        this.container.appendChild(this._inputBottomline);
+        this.container.appendChild(inputBottomline);
         this._inputField.addEventListener('keyup', listener, false);
         return this._inputField;
     },
