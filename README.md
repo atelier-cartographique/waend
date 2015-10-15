@@ -58,3 +58,38 @@ npm start
 Go to http://your.host/register to create a new user, than enjoy http://your.host/map
 
 The your.host part can be configured, and used locally. By example, to be able to access it through http://waend.local, create a text file named waend.local in /etc/nginx/sites-enabled and copy the content of the example file documentation/site-enabled-example/waend.local. Edit it according to your own system (tip : the "pierre" must probably be changed...).
+
+### Errors & tips
+
+You will probably need node 10, the newer versions returns errors with some modules.  
+
+To install a specific version of node with brew, use : 
+
+```bash
+brew tap homebrew/versions
+```
+
+Then search for your desired package:
+
+```bash
+brew search node
+```
+
+This might give you the follow results:
+
+```bash
+homebrew/versions/node012
+homebrew/versions/node010
+homebrew/versions/node08
+homebrew/versions/node06
+homebrew/versions/node04
+node nodebrew leafnode nodenv
+```
+
+And then install the desired version:
+
+```bash
+brew install homebrew/versions/node012
+```
+
+Which (at the time of this writing) installs node in version 0.12.7.
