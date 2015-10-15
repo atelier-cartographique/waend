@@ -27,10 +27,10 @@ function listFeatures () {
             .then(function(features){
                 for(var i = 0; i < features.length; i++){
                     var feature = features[i];
-                    var fIdtrim = '{id:'+feature.id.substr(0, 3)+'\u2026'+'} ';
+                    var fIdtrim = '•'+feature.id.substr(0, 3)+'\u2026';
                     var fName = feature.get('name');
                         if (fName === '' || fName == null) { 
-                            fName = '- unnamed feature';
+                            fName = fIdtrim;
                         };
                     var cmd = terminal.makeCommand({
                         'args': [
@@ -39,7 +39,7 @@ function listFeatures () {
                             ],
                         'text': fName
                     });
-                    stdout.write(fIdtrim, cmd || '');
+                    stdout.write(cmd || '');
                 }
                 resolve();
             })

@@ -24,10 +24,10 @@ function listGroups () {
             .then(function(groups){
                 for(var i = 0; i < groups.length; i++){
                     var group = groups[i];
-                    var gIdtrim = '{id:'+group.id.substr(0, 3)+'\u2026'+'} ';
+                    var gIdtrim = '•'+group.id.substr(0, 3)+'\u2026';
                     var gName = group.get('name');
                         if (gName === '' || gName == null) { 
-                            gName = '- unnamed map';
+                            gName = gIdtrim;
                         };
                     var cmd = terminal.makeCommand({
                         'args': [
@@ -36,7 +36,7 @@ function listGroups () {
                             ],
                         'text': gName
                     });
-                    stdout.write(gIdtrim, cmd || '');
+                    stdout.write(cmd || '');
                 }
                 resolve();
             })

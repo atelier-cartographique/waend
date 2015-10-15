@@ -27,10 +27,10 @@ function listLayers () {
             .then(function(layers){
                 for(var i = 0; i < layers.length; i++){
                     var layer = layers[i];
-                    var lIdtrim = '{id:'+layer.id.substr(0, 3)+'\u2026'+'} ';
+                    var lIdtrim = '•'+layer.id.substr(0, 3)+'\u2026';
                     var lName = layer.get('name');
                         if (lName === '' || lName == null) { 
-                            lName = '- unnamed layer';
+                            lName = lIdtrim;
                         };
                     var cmd = terminal.makeCommand({
                         'args': [
@@ -38,7 +38,7 @@ function listLayers () {
                             'get'],
                         'text': lName
                     });
-                    stdout.write(lIdtrim, cmd || '');
+                    stdout.write(cmd || '');
                 }
                 resolve(_.map(layers, function(l){return l.id;}));
             })
