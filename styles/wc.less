@@ -26,24 +26,24 @@
 
 
 
-.wc-pages{
-    position: absolute;
-    width: calc(~"100vw - 100vh - 24px");
-    min-width: 250px;
-    max-height: 170px;
-    // overflow: auto;
-    bottom: 32px;
-    left:12px;
-    background-color: transparent;
-    z-index: 1;
+.wc-pages,
+.wc-page.wc-active{
+
 }
 
 .wc-page.wc-active {
+    position: absolute;
+    width: calc(~"100vw - 100vh - 24px");
+    min-width: 250px;
+    max-height: 165px;
+    // overflow: auto;
+    bottom: 30px;
+    left:12px;
+    background-color: transparent;
+    padding-top: 22px;
     border-bottom: 1px solid #000;
-    border-top: 15px solid #fff;
-    padding-top: 6px;
-    max-height: 170px;
     overflow-y: auto;
+    z-index: 1;
 }
 
 .wc-page {
