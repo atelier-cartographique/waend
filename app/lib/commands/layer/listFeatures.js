@@ -27,14 +27,19 @@ function listFeatures () {
             .then(function(features){
                 for(var i = 0; i < features.length; i++){
                     var feature = features[i];
+                    var fIdtrim = '{id:'+feature.id.substr(0, 3)+'\u2026'+'} ';
+                    var fName = feature.get('name');
+                        if (fName === '' || fName == null) { 
+                            fName = '- unnamed feature';
+                        };
                     var cmd = terminal.makeCommand({
                         'args': [
                             'cc /'+userId+'/'+groupId+'/'+layerId+'/'+feature.id,
                             'gg | region set'
                             ],
-                        'text': feature.id
+                        'text': fName
                     });
-                    stdout.write(cmd, ' ', feature.get('name') || '');
+                    stdout.write(fIdtrim, cmd || '');
                 }
                 resolve();
             })
