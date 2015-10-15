@@ -27,7 +27,8 @@ function listFeatures () {
             .then(function(features){
                 for(var i = 0; i < features.length; i++){
                     var feature = features[i];
-                    var fIdtrim = '•'+feature.id.substr(0, 3)+'\u2026';
+                    var fidL = feature.id.length; 
+                    var fIdtrim = '•'+feature.id.substr(0, 2)+'\u2026'+feature.id.substr(fidL - 2, fidL);
                     var fName = feature.get('name');
                         if (fName === '' || fName == null) { 
                             fName = fIdtrim;

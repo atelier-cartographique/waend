@@ -27,8 +27,8 @@ function listLayers () {
             .then(function(layers){
                 for(var i = 0; i < layers.length; i++){
                     var layer = layers[i];
-                    var lIdtrim = '•'+layer.id.substr(0, 3)+'\u2026';
-                    var lName = layer.get('name');
+                    var lidL = layer.id.length; 
+                    var lIdtrim = '•'+layer.id.substr(0, 2)+'\u2026'+layer.id.substr(lidL - 2, lidL);                    var lName = layer.get('name');
                         if (lName === '' || lName == null) { 
                             lName = lIdtrim;
                         };

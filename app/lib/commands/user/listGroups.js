@@ -24,8 +24,8 @@ function listGroups () {
             .then(function(groups){
                 for(var i = 0; i < groups.length; i++){
                     var group = groups[i];
-                    var gIdtrim = '•'+group.id.substr(0, 3)+'\u2026';
-                    var gName = group.get('name');
+                    var gidL = group.id.length; 
+                    var gIdtrim = '•'+group.id.substr(0, 2)+'\u2026'+group.id.substr(gidL - 2, gidL);                    var gName = group.get('name');
                         if (gName === '' || gName == null) { 
                             gName = gIdtrim;
                         };
