@@ -235,12 +235,19 @@ var WebConsole = Terminal.extend({
 
 
             var grplabel = gn;
-            if (gn == "shell") {
-                var grplabel = "wænd";
+            var grpname = 'name to be added';
+            if (gn == 'shell') {
+                var grplabel = 'wænd';
+                var grpname = '';
+            };
+            if (gn == 'group') {
+                var grplabel = 'map';
             };
 
+
+
             groupTitlelabel.innerHTML = grplabel;
-            groupTitlevalue.innerHTML = "trimmed {···} name";
+            groupTitlevalue.innerHTML = grpname;
 
             groupTitlewrapper.appendChild(groupTitlelabel);
             groupTitlewrapper.appendChild(groupTitlevalue);
@@ -577,5 +584,6 @@ var WebConsole = Terminal.extend({
     }
 
 });
+
 
 module.exports = exports = WebConsole;
