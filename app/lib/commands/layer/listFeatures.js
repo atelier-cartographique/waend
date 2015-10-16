@@ -36,7 +36,8 @@ function listFeatures () {
                     var cmd = terminal.makeCommand({
                         'args': [
                             'cc /'+userId+'/'+groupId+'/'+layerId+'/'+feature.id,
-                            'gg | region set'
+                            'gg | region set',
+                            'get'
                             ],
                         'text': fName
                     });

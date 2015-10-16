@@ -212,24 +212,24 @@
 
 
 .key-value {
-    display: -webkit-inline-flex;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    display: inline-block;
+    display: table;
     margin-bottom: 2px;
 
     .key {
-      width: 100px;
+      width: 75px;
       text-align: right;
       padding-right: 6px;
       color: @red;
-      display: inline-block;
+      display: table-cell;
+      vertical-align: top;
       .word-wrap;
     }
 
     .value {
         width: calc(~"100% - 75px - 6px");
         letter-spacing: 0.5px;
+        display: table-cell;
+        vertical-align: top;
     }
 }
 
@@ -252,25 +252,16 @@
 	margin-bottom: 0px;
 	border-bottom: 1px solid transparent; // to avoid glitch on over
 
-
 	&:hover {
 		.link-hover;
 	}
 }
 
 
-.key-name {
-    display: inline-block !important;
-
-    & .value {
-        font-size: 120%;
-        font-family: inherit;
-        letter-spacing: inherit;
-}
-    & .key {display: inline-block !important;}
-}
-
-.key-description .value {
+.key-name .value{
+    font-size: 120%;
+    font-family: inherit;
+    letter-spacing: inherit;
 }
 
 .hint {

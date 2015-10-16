@@ -335,42 +335,33 @@ Feel free to give a hand !</p>
 <li><p><a href="#generalities">Generalities</a><br>
 1.1  <a href="#logic">Logic of map publishing</a><br>
 1.2  <a href="#interface">Presentation of Wænd interface</a><br>
-1.3  <a href="#metadata">Writting informations in Wænd : about datas &amp; metadatas<br>
-</a></p></li>
-<li><p><a href="#commands">Common commands</a></p></li>
-<li><p><a href="#keys">Style attributes and parameters</a><br>
-3.1  <a href="#name">name</a><br>
-3.3  <a href="#style">styles (style.)</a><br>
-3.4  <a href="#params">parameters (params.)</a><br>
-3.5  <a href="#hn">hatches number (hn)</a><br>
-3.6  <a href="#step">hatches step (step)</a><br>
-3.7  <a href="#rotation">hatches rotation (rotation)</a><br>
-3.8  <a href="#text">text</a><br>
-3.9  <a href="#fontsize">fontsize</a><br>
-3.10 <a href="#fontcolor">fontcolor</a><br>
-3.11 <a href="#image">image</a></p></li>
-<li><p><a href="#commands-details">Commands details</a><br>
-4.1  <a href="#help">help</a><br>
-4.3  <a href="#lc">list commands (lc)</a><br>
-4.4  <a href="#set">set attribute (set)</a><br>
-4.5  <a href="#get">get attributes (get)</a><br>
-4.6  <a href="#edit">edit text (edit)</a><br>
-4.7  <a href="#del">delete attributes (del)</a><br>
-4.8  <a href="#navigate">navigate on map (navigate)</a><br>
-4.9  <a href="#select">select feature (select)</a><br>
-4.10 <a href="#draw">draw</a><br>
-4.11 <a href="#trace">trace</a><br>
-4.12 <a href="#edit_geometry">edit geometry</a><br>
-4.13 <a href="#del_feature">del_feature</a><br>
-4.14 <a href="#attach">attach a layer to a map</a><br>
-4.15 <a href="#detach">detach a layer from a map</a><br>
-4.16 <a href="#visible">visibility of layers</a>  </p></li>
+1.3  <a href="#metadata">Datas &amp; Metadatas</a><br>
+1.4  <a href="#structure">Structure of Wænd</a></p></li>
+<li><p><a href="#working-metadatas">Play with attributes / metadatas</a><br>
+3.1  <a href="#set">set attribute (set)</a><br>
+3.2  <a href="#get">get attributes (get)</a><br>
+3.3  <a href="#edit">edit attribute (edit)</a><br>
+3.4  <a href="#del">delete attribute (del)</a><br>
+3.5  <a href="#profile">Exemple : customize your profile</a>  </p></li>
+<li><p><a href="#feature">Play with features</a><br>
+4.1  <a href="#style-feature">style your features</a><br>
+4.2  <a href="#edit_geometry">edit feature geometry</a>  </p></li>
+<li><p><a href="#layer">Play with layers</a><br>
+5.1  <a href="#style-feature">style at layer level</a><br>
+5.3  <a href="#attach">attach a layer to another map</a><br>
+5.4  <a href="#detach">detach a layer from a map</a><br>
+5.5  <a href="#delete-layer">delete a layer</a>   </p></li>
+<li><p><a href="">Import Geo-Datas</a><br>
+5.1  <a href="#GeoJSON">Geo-Datas : Working with GeoJSON</a><br>
+5.2  <a href="#overpass">Geo-Datas : Help with Overpass Turbo</a> </p></li>
 <li><p><a href="#style-tips">Style tips &amp; tricks</a><br>
-5.1  <a href="#tip-fill">polygon fill color</a><br>
-5.2  <a href="#tip-composite">play with Composite Operation</a>  </p></li>
-<li><p><a href="#import">Import Datas</a><br>
-6.1  <a href="#GeoJSON">Working with GeoJSON</a>
-6.2  <a href="#overpass">Help with Overpass Turbo</a></p></li>
+6.1  <a href="#tip-fill">polygon fill color</a><br>
+6.2  <a href="#tip-composite">play with Composite Operation</a> </p></li>
+<li><p><a href="">Other</a><br>
+7.1  <a href="#search">Searching maps on Wænd</a><br>
+7.2  <a href="#share">Sharing maps</a><br>
+7.3  <a href="#embed">Embedding a map in another web-page</a>  </p></li>
+<li><p><a href="#commands-list">Memento : List of common commands</a> </p></li>
 </ol>
 
 <h2 id="toc_1"><a name="generalities"></a>Generalities</h2>
@@ -384,14 +375,18 @@ Feel free to give a hand !</p>
 <p>There are two surprising aspects you will discover : </p>
 
 <ul>
-<li><p>While most of the actions can be done by clicking on the menu buttons, the main tool to work on Wænd so far is a command line. To fully use the plateform, you will have to use this command line interface. Try it, it’s easy and you won’t break anything. The different commands are listed in this Help section.
-<img src="images/CLI.png" alt="illustration map-layers"><br>
-<em>exemple of command, used to set the description of an element</em></p></li>
-<li><p>There is no map background : you will start on a blank page. It’s not a bug, but a choice we’ve made to wide-up the spectrum of what cartography could be. No map background means no influence from us on how a territory should be represented. You can do whatever you want. </p></li>
+<li>While most of the actions can be done by clicking on the menu buttons, the main tool to work on Wænd so far is a command line. To fully use the plateform, you will have to use this command line interface. Try it, it’s easy and you won’t break anything. The different commands are listed in this Help section.</li>
+</ul>
+
+<p><img src="images/CLI.png" alt="illustration map-layers"><br>
+<em>exemple of command, used to set the description of an element</em></p>
+
+<ul>
+<li>There is no map background : you will start on a blank page. It’s not a bug, but a choice we’ve made to wide-up the spectrum of what cartography could be. No map background means no influence from us on how a territory should be represented. You can do whatever you want.<br></li>
 </ul>
 
 <p><img src="images/map-thumb.png" alt="illustration map-layers"><br>
-<em>exemple of maps created with wænd</em></p>
+<em>exemple of maps created with wænd</em> </p>
 
 <h3 id="toc_4"><a name="metadatas"></a>Writting informations in Wænd : about datas &amp; metadatas</h3>
 
@@ -411,13 +406,15 @@ Here are some exemples of what we call metadatas : </p>
 
 <p>The meta-data are used at every level on waend : on your profile, maps, layers, and features.</p>
 
+<p>Metadatas are also used to change the style of your features.</p>
+
 <p>The next sections of the help explains how to work with metadatas on Wænd.</p>
 
-<h5 id="toc_5">main usage</h5>
+<h5 id="toc_5">usage exemples</h5>
 
 <h6 id="toc_6">1- legend</h6>
 
-<p>A first usage of those datas is to give a name to things, eventualy a description or other relevant informations, so yourself and your map visitors can read and understand what is your map about.<br>
+<p>A first usage of those datas is to give a name to things, a description or other relevant informations, so yourself and your map visitors can read and understand what is your map about.<br>
 It leads to a map legend.</p>
 
 <p><img src="images/get-legend.png" alt="illustration legend"><br>
@@ -425,212 +422,19 @@ It leads to a map legend.</p>
 
 <h6 id="toc_7">2- style and parameters</h6>
 
-<p>A second usage, a bit more complexe is about styling your datas. If you want a blue road, and a green cycle-way you have to set those color infomations to your road and cycle-way.</p>
+<p>A second usage, is about styling your datas.<br>
+Eg : If you want a green park, you have will have to set this color infomation to your park feature.</p>
 
 <p><img src="images/get-style.png" alt="illustration legend style"><br>
 <em>exemple of style and parameters metadatas</em></p>
 
-<h6 id="toc_8">3- Processing / custom renderer</h6>
+<h2 id="toc_8"><a name="working-metadatas"></a> Play with attributes / metadatas</h2>
 
-<p>A third usage is to use the elements metadatas to batch process the visualization, like using gradient color related to a specific infos (population, age, temperature etc.), real time modifications, and so on.</p>
+<h3 id="toc_9"><a name="set"></a> Set attribute : <code>set</code></h3>
 
-<h2 id="toc_9"><a name="commands"></a>Common commands</h2>
+<p>Set attribute to current context (user, group, layer or feature).</p>
 
-<ul>
-<li>help : <em>help</em></li>
-<li>lookup : <em>lookup + a word will search for maps containing this word</em> </li>
-<li>set : <em>set something to something, often attribute to current context</em></li>
-<li>del : <em>delete + attribute name to delete</em></li>
-<li>get : <em>get current context attributes</em></li>
-<li>lg : <em>list groups</em></li>
-<li>ll : <em>list layer</em></li>
-<li>lf : <em>list features</em></li>
-<li>lc : <em>list command</em></li>
-<li>select : <em>select feature in viewport</em></li>
-<li>draw : <em>draw on map</em></li>
-<li>navigate : <em>navigate on map</em></li>
-<li>import : <em>import GeoJSON file (only imports feature of type &quot;Polygon&quot; and &quot;LineString&quot;)</em></li>
-<li>media upload : <em>upload image</em></li>
-<li>media list : <em>browse images</em></li>
-<li>media show [image_id]: <em>show image</em></li>
-<li>media pick : <em>select an image</em></li>
-</ul>
-
-<p>Pipe (|) is allowed to chain commands together.
-e.g:</p>
-
-<pre><code class="language-none">draw | close | create</code></pre>
-
-<p>to draw a line, close it to make a polygon, and save it.
-That&#39;s what the &quot;draw zone&quot; button does !</p>
-
-<pre><code class="language-none">media pick | set params.image</code></pre>
-
-<p>To attach an image to a feature.</p>
-
-<h2 id="toc_10"><a name="keys"></a> Style attributes and parameters</h2>
-
-<p>Every entities are attached a dictionary.
-One manipulates dictionary&#39;s values with the <code>get</code>, <code>set</code>,  <code>del</code> and <code>edit</code> commands.</p>
-
-<p>For more infos with those commands, see :  </p>
-
-<ul>
-<li><a href="#set">set attribute (set)</a><br></li>
-<li><a href="#get">get attributes (get)</a><br></li>
-<li><a href="#del">del attributes (del)</a><br></li>
-<li><a href="#edit">edit attributes (edit)</a><br></li>
-</ul>
-
-<p>Something to note here, from a key you can reference another key in the same dictionary by prefixing its path with the <em>@</em> character, e.g:</p>
-
-<pre><code class="language-javascript">{
-    &quot;params&quot; : {
-        &quot;text&quot; : &quot;@name&quot;
-    },
-    &quot;name&quot; : &quot;felicity street&quot;
-}</code></pre>
-
-<p>Something else is that you can address keys which are inside dictionaries with the dot notation, e.g:</p>
-
-<pre><code class="language-none">set style.strokeStyle blue</code></pre>
-
-<p>will results in</p>
-
-<pre><code class="language-javascript">{
-    &quot;style&quot;: {
-        &quot;strokeStyle&quot; : &quot;blue&quot;
-    }
-}</code></pre>
-
-<p>Note that feature&#39;s <em>style</em> and <em>params</em> dictionaries inherit from their layer&#39;s values.</p>
-
-<h3 id="toc_11"><a name="name"></a> name</h3>
-
-<p>The <em>name</em> key is often used across the platform to textualize items, if not found, the system will usually use item&#39;s identifier.</p>
-
-<h3 id="toc_12"><a name="style"></a> styles (style.)</h3>
-
-<p>The style dictionary is expected to hold feature&#39;s style informations. Keys here are <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">CanvasRenderingContext2D</a> properties.</p>
-
-<p>color example:</p>
-
-<pre><code class="language-none">set style.strokeStyle orange  
-set style.strokeStyle #FF7F00  
-set style.strokeStyle &quot;rgb(255, 127, 0)&quot;  
-set style.strokeStyle &quot;rgba(255, 127, 0, 0.8)&quot;  </code></pre>
-
-<p>line width example:
-<code>
-set style.lineWidth 5
-</code>  </p>
-
-<p><strong>exception</strong></p>
-
-<p>If you want to play with dashed lines,
-setLineDash has to be written our way :
-<code>
-set style.lineDash 2 10
-</code>
-where 2 is the dash length, and 10 the gap.</p>
-
-<h3 id="toc_13"><a name="params"></a> parameters (params.)</h3>
-
-<p>Holds parameters to feed the <em>rendering program</em>. The default renderer processes the following keys in the <em>params</em> dictionary.</p>
-
-<h4 id="toc_14"><a name="hn"></a> hatches number (hn)</h4>
-
-<p>application: polygon<br>
-number of hatches per polygon (number)</p>
-
-<p>Example:</p>
-
-<pre><code class="language-none">set params.hn 150</code></pre>
-
-<h4 id="toc_15"><a name="step"></a> hatches step (step)</h4>
-
-<p><em>application: polygon</em><br>
-steps value between hatches (number)</p>
-
-<p>Example:</p>
-
-<pre><code class="language-none">set params.step 10</code></pre>
-
-<h4 id="toc_16"><a name="rotation"></a> hatches rotation (rotation)</h4>
-
-<p><em>application: polygon</em><br>
-hatches angle (number)</p>
-
-<p>Example:</p>
-
-<pre><code class="language-none">set params.rotation 45</code></pre>
-
-<h4 id="toc_17"><a name="text"></a> text</h4>
-
-<p><em>application: line / polygon</em><br>
-the text you want to display in a polygon  </p>
-
-<p>Example:</p>
-
-<pre><code class="language-none">set params.text &quot;enter your text here&quot;</code></pre>
-
-<h4 id="toc_18"><a name="fontsize"></a> fontsize</h4>
-
-<p><em>application: line / polygon</em><br>
-size of the font (number)</p>
-
-<p>Example:</p>
-
-<pre><code class="language-none">set params.fontsize 12</code></pre>
-
-<h4 id="toc_19"><a name="fontcolor"></a> fontcolor (fillStyle)</h4>
-
-<p>Example:</p>
-
-<pre><code class="language-none">set style.fillStyle orange  
-set style.fillStyle #FF7F00  
-set style.fillStyle &quot;rgb(255, 127, 0)&quot;  
-set style.fillStyle &quot;rgba(255, 127, 0, 0.8)&quot; </code></pre>
-
-<h4 id="toc_20"><a name="image"></a> image</h4>
-
-<p><em>application: polygon</em></p>
-
-<p>Set an image to be inserted in the active polygon. 
-They are two paramters you can play with to adujst the relation of the image with the polygon : </p>
-
-<p><code>params.clip</code> boolean (default to true)</p>
-
-<p><code>params.adjust</code> &#39;none&#39; or &#39;fit&#39; or &#39;cover&#39; (default to &#39;none&#39;)</p>
-
-<p>Here is an illustration of what it does :  </p>
-
-<p><img src="images/params-image.png" alt="illustration map-layers"></p>
-
-<h5 id="toc_21"><a name="image"></a> tip : image on layer</h5>
-
-<p>If you set an image at the layer level, it will cover <em>all</em> your polygons with this image in that layer.<br>
-The parameters are used like described above, at the layer level.</p>
-
-<p>To do so, type at a layer level :  </p>
-
-<p><code>media pick | set params.image</code></p>
-
-<h2 id="toc_22"><a name="commands-details"></a> Commands details</h2>
-
-<h3 id="toc_23"><a name="help"></a> help</h3>
-
-<p>get help</p>
-
-<h3 id="toc_24"><a name="lc"></a> list comands (lc)</h3>
-
-<p>list commands  </p>
-
-<h3 id="toc_25"><a name="set"></a> set attribute (set)</h3>
-
-<p>set attribute to current element (user, group, layer or feature).</p>
-
-<p>[set] is very usefull to qualify your datas, to give informations about your maps, etc.</p>
+<p>Use <code>set</code> to qualify things, to give informations about your maps, etc.</p>
 
 <p>Multiple words must be surronded by &quot;quotes&quot;.</p>
 
@@ -640,148 +444,192 @@ The parameters are used like described above, at the layer level.</p>
 set description &quot;here is my description&quot;
 set &quot;city population&quot; 1000000</code></pre>
 
-<h3 id="toc_26"><a name="get"></a> get attributes (get)</h3>
+<h3 id="toc_10"><a name="get"></a> Get attributes : <code>get</code></h3>
 
-<p>get all attributes from current element
-get attributeName : get value for attributeName</p>
+<p>The command <code>get</code> is very usefull : it displays all attributes from current element.</p>
 
-<p>Example :</p>
+<p>You can also specify wich attribute value you want to show. </p>
 
-<pre><code class="language-none">get
-get name</code></pre>
+<p>Examples :</p>
 
-<h3 id="toc_27"><a name="edit"></a> edit</h3>
+<p><code>get</code> will show all the attributes of the current context</p>
 
-<p>There is no <em>edit</em> button yet, but the functionality is here.
-To edit a key, type :</p>
+<p><code>get name</code> will show the value of the <code>name</code> attribute</p>
 
-<pre><code class="language-none">get your_key | edit | set your_key</code></pre>
+<h3 id="toc_11"><a name="edit"></a> Edit : <code>edit</code></h3>
 
-<p>It will get the <em>your_key</em> value, open the editor with this value, and set the edited value to <em>your_key</em></p>
+<p>There is no <em>edit</em> button yet, but the functionality is here.<br>
+To edit a specific attribute, we use the pipe <code>|</code> sign to chain commands together :</p>
 
-<p>To edit <em>style</em> or <em>params</em> dictionary, do the same with :</p>
+<pre><code class="language-none">get attribute_name | edit | set attribute_name</code></pre>
 
-<pre><code class="language-none">get style | edit | set style
-or
-get params | edit | set params</code></pre>
+<p>Eg :  <code>get name | edit | set name</code> will <em>get the name value</em>, <em>open the editor</em> with the name value in it, and <em>set the new value</em> as name. </p>
 
-<h3 id="toc_28"><a name="del"></a> delete (del)</h3>
+<h3 id="toc_12"><a name="del"></a> Delete attribute: <code>del attributeName</code></h3>
 
-<p>Delete an attribute</p>
+<p>The command <code>del attributeName</code> will remove the attribute.</p>
 
 <p>Example:</p>
 
-<pre><code class="language-none">del text</code></pre>
-
-<p>Delete an attribute in <em>style</em> or <em>params</em>  </p>
-
-<p>For now you need to delete the entire <em>style</em> or <em>params</em> with :</p>
-
-<pre><code class="language-none">del params
+<pre><code class="language-none">del description
 or
-del style</code></pre>
+del name</code></pre>
 
-<h3 id="toc_29"><a name="navigate"></a> navigate in map (navigate)</h3>
+<h3 id="toc_13"><a name="profile"></a> Exemple : customize your profile</h3>
 
-<p>navigate in the map viewport<br>
-use keyboard arrows to navigate<br>
-use [i] to zoom in<br>
-use [o] to zoom out</p>
+<p>1- Click on the USER link in the menu to go in your user context.<br>
+2- In the command line, type <code>set name &quot;the name you want on Wænd&quot;</code> and press enter to validate.<br>
+3- Then type <code>get</code>. Your name is here !<br>
+4- You can add more informations on your profile doing this way, it&#39;s completely free. Just remember that your profil is public.  </p>
 
-<p>Type [ESC] key to escape this mode.</p>
+<h2 id="toc_14"><a name="feature"></a> Play with features</h2>
 
-<h3 id="toc_30"><a name="select"></a> select features (select)</h3>
+<h3 id="toc_15"><a name="style-feature"></a>Style your features</h3>
 
-<p>select a feature in the viewport</p>
+<h4 id="toc_16">1- Style hatches</h4>
 
-<h3 id="toc_31"><a name="draw"></a> draw</h3>
+<p>Used commands : </p>
 
-<p>draw with on map, usualy pipped with another command  </p>
+<p>Line color :  <code>set style.strokeStyle</code> + any html color value<br>
+Line width :  <code>set style.lineWidth</code> + number (in meter)</p>
 
-<p>Example:</p>
+<p>hatches number :  <code>set params.hn</code> + number<br>
+hatches rotation :  <code>set params.rotation</code> + number (angle)
+hatches step : <code>set params.step</code> + number (in meter)</p>
 
-<pre><code class="language-none">draw | region set</code></pre>
+<p>Exemples : </p>
 
-<p>will set the region viewport to the drawing extend</p>
+<pre><code class="language-none">line color (value can be any HTML color value): 
+set style.strokeStyle orange  
+set style.strokeStyle #FF7F00  
+set style.strokeStyle &quot;rgb(255, 127, 0)&quot;  
+set style.strokeStyle &quot;rgba(255, 127, 0, 1)&quot;  
 
-<h3 id="toc_32"><a name="trace"></a> trace</h3>
+line width : 
+set style.lineWidth 15
 
-<p>trace with on map, usualy pipped with another command.<br>
-Trace is usefull to creat segmented lines and polygons.</p>
+Hatches number : 
+set params.hn 32
 
-<p>keys:
-- <code>enter</code> validate geometry and exit
-- <code>escape</code> cancel geometry and exit
-- <code>e</code> enters edit mode (moving control points)
-- <code>n</code> enters append mode (click to add points)</p>
+Hatches rotation :
+set params.rotation -45
 
-<p>To create a feature out of it, in a layer context, use :</p>
+Hatches step : 
+set params.step 10</code></pre>
 
-<pre><code class="language-none">trace | create</code></pre>
+<p>Here is an illustration of what it does :  </p>
 
-<p>It will draw a line and create a feature out of it.<br>
-Click on the first point to close the line and make a polygon.</p>
+<p><img src="images/exemple-hatches-style.png" alt="illustration map-layers"></p>
 
-<h3 id="toc_33"><a name="edit_geometry"></a> Edit geometry</h3>
+<h4 id="toc_17">2- Style text</h4>
 
-<p>To edit a feature geometry, use :</p>
+<p>Used commands : </p>
 
-<pre><code class="language-none">gg | trace | sg</code></pre>
+<p>Font size :  <code>set params.fontsize</code> +  number (in meters)<br>
+Font color :  <code>set style.fillStyle</code> + any html color value </p>
 
-<p>To duplicate a feature, use :</p>
+<p>Exemples : </p>
 
-<pre><code class="language-none">gg | trace | create</code></pre>
+<pre><code class="language-none">Font size (value in meters): 
+set params.fontsize 12.6  
 
-<h3 id="toc_34"><a name="del_feature"></a> delete feature (del_feature)</h3>
+Font color (value can be any HTML color value) :
+set style.fillStyle orange  
+set style.fillStyle #FF7F00  
+set style.fillStyle &quot;rgb(255, 127, 0)&quot;  
+set style.fillStyle &quot;rgba(255, 127, 0, 1)&quot;  </code></pre>
 
-<p>In the context of a feature, and if you&#39;re granted to, the command will delete the current feature and bring you back to the parent layer context.</p>
+<p>Here is an illustration of what it does :  </p>
 
-<p>In the context of a layer, you must give a feature ID in argument of the command.</p>
+<p><img src="images/exemple-text-style.png" alt="illustration map-layers"></p>
 
-<h3 id="toc_35"><a name="attach"></a> attach a layer to a map (attach)</h3>
+<h4 id="toc_18">3- Style image</h4>
+
+<p>Used commands : </p>
+
+<p>adjust :  <code>set params.adjust</code> +  none OR cover OR fit (default is &quot;none&quot;)<br>
+clip :  <code>set params.clip</code> + true OR false (default is &quot;true&quot;)</p>
+
+<p>Exemples : </p>
+
+<pre><code class="language-none">Adjust : 
+set params.adjust none  
+set params.adjust cover  
+set params.adjust fit  
+
+Clip : 
+set params.clip true
+set params.clip false   </code></pre>
+
+<p>Here is an illustration of what it does :  </p>
+
+<p><img src="images/params-image.png" alt="illustration map-layers"></p>
+
+<h3 id="toc_19"><a name="edit_geometry"></a> Edit feature geometry</h3>
+
+<p>To edit feature geometry, we use the commands :<br>
+<code>gg</code> to get the geometry of that feature<br>
+<code>sg</code> to save the geometry of that feature  </p>
+
+<p>To edit a feature geometry, type : <code>gg | trace | sg</code>  </p>
+
+<p>To edit + duplicate a feature, type : <code>gg | trace | create</code>  </p>
+
+<p>To re-trace a feature in polygon mode, type : <code>trace | sg</code>  </p>
+
+<p>To re-draw a freehand line, type : <code>draw | sg</code></p>
+
+<p>To re-draw a freehand shape, type : <code>draw | close | sg</code></p>
+
+<h2 id="toc_20"><a name="layer"></a> Play with layer</h2>
+
+<h3 id="toc_21"><a name="layer-style"></a> Style at layer level</h3>
+
+<p>You can use all the style attribute explained on the feature section at a layer level.  </p>
+
+<p>By doing so your style will apply on <em>every features</em> belonging to that layer.<br>
+You can override the layer style at a feature level.</p>
+
+<p>Here is an illustration of what it does :  </p>
+
+<p><img src="images/exemple-layer-style.png" alt="illustration map-layers"></p>
+
+<p>This style is applied on the layer &quot;Many sunny parcs&quot;.
+They are all green, with -45° rotation, except one, wich has specific style.</p>
+
+<h3 id="toc_22"><a name="attach"></a> attach a layer to a map : <code>attach</code></h3>
 
 <p>If you&#39;re the owner of the layer, the command will attach the said layer to a map. It doesn&#39;t <em>move</em> the layer but will <em>display</em> it within this other map.</p>
 
 <p>The argument is made of a valid path to be created.</p>
 
-<pre><code class="language-none">attach /user_id/map_id/layer_id</code></pre>
+<p>Let say you are the author of a layerA, and you want to attach it to a mapZ :</p>
 
-<p><code>/user_id/map_id</code> = the context where you want to attach the layer.<br>
-<code>layer_id</code>= the layer id.</p>
+<pre><code class="language-none">attach /userZ_id/mapZ_id/layerA_id</code></pre>
 
-<h3 id="toc_36"><a name="detach"></a> detach a layer from a map (detach)</h3>
+<p>How it works :</p>
+
+<p><code>/userZ_id/mapZ_id</code> : the context <em>where</em> you want to attach the layer.  </p>
+
+<p><code>layerA_id</code> : the id of the layer you <em>own</em> and you want to attach somewhere.</p>
+
+<h3 id="toc_23"><a name="detach"></a> detach a layer from a map : <code>detach</code></h3>
 
 <p>The <code>detach</code> command <em>undo</em> what has been done by the <code>attach</code> command, and works the same way.</p>
 
-<pre><code class="language-none">detach /user_id/map_id/layer_id</code></pre>
+<p>To detach layerA from mapZ, do :</p>
 
-<p>A subtlety about <em>compositions</em> ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that&#39;s created at the same time. It does mean that if you&#39;re willing to <em>remove</em> a layer, at the moment, your best option is to detach it from all maps it&#39;s attached to.</p>
+<pre><code class="language-none">detach /userZ_id/mapZ_id/layerA_id</code></pre>
 
-<h3 id="toc_37"><a name="visible"></a> Visibility of layers (visible)</h3>
+<h3 id="toc_24"><a name="delete-layer"></a> Delete a layer - See <code>detach</code></h3>
 
-<p>On a map context, type <code>visible</code> to chose which layers to display.</p>
+<p>A subtlety about <em>compositions</em> ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that&#39;s created at the same time.  </p>
 
-<h2 id="toc_38"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+<p>It does mean that if you&#39;re willing to <em>remove</em> a layer, at the moment, your best option is to detach it from all maps it&#39;s attached to.</p>
 
-<h3 id="toc_39"><a name="tip-fill"></a> polygon fill color</h3>
+<h2 id="toc_25"><a name="import"></a> Import Geo-datas</h2>
 
-<p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
-Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
-
-<p>You are done with a filled polygon !</p>
-
-<h3 id="toc_40"><a name="tip-composite"></a> Play with Composite Operation</h3>
-
-<p>We use multiply compositing mode by default in layers.<br>
-If you want to change it, please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">Canvas MDN documentation</a></p>
-
-<p>Exemple for no compositing :</p>
-
-<pre><code class="language-none">set style.globalCompositeOperation source-over</code></pre>
-
-<h2 id="toc_41"><a name="import"></a> Import data (import)</h2>
-
-<h3 id="toc_42"><a name="GeoJSON"></a> Working with GeoJSON</h3>
+<h3 id="toc_26"><a name="GeoJSON"></a> Working with GeoJSON</h3>
 
 <p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
 
@@ -800,13 +648,13 @@ The restrictions so far are :</p>
 
 <p><em>Good to know</em> : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  </p>
 
-<h3 id="toc_43"><a name="overpass"></a> Tips with Overpass Turbo</h3>
+<h3 id="toc_27"><a name="overpass"></a> Tips with Overpass Turbo</h3>
 
 <p>Use the wizard to help you building your query :   </p>
 
 <p><img src="images/overpass-wizard.png" alt="illustration map-layers"></p>
 
-<h5 id="toc_44">Query for everything in the selection box</h5>
+<h5 id="toc_28">Query for everything in the selection box</h5>
 
 <pre><code class="language-none">// gather results
 (way({{bbox}}););
@@ -814,6 +662,80 @@ The restrictions so far are :</p>
 out body;
 &gt;;
 out skel qt;</code></pre>
+
+<h2 id="toc_29"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+
+<h3 id="toc_30"><a name="tip-fill"></a> polygon fill color</h3>
+
+<p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
+Set <code>style.lineWidth</code> to 3000 (the line will be 3000m wide)</p>
+
+<p>You are done with a filled polygon !</p>
+
+<h3 id="toc_31"><a name="tip-composite"></a> Play with Composite Operation</h3>
+
+<p>We use multiply compositing mode by default in layers.<br>
+If you want to change it, please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">Canvas MDN documentation</a></p>
+
+<p>Exemple for no compositing :</p>
+
+<pre><code class="language-none">set style.globalCompositeOperation source-over</code></pre>
+
+<h3 id="toc_32"><a name="image"></a>Image at layer level</h3>
+
+<p>If you set an image at the layer level, it will cover <em>all</em> your polygons with this image in that layer.<br>
+The parameters are used like described above, at the layer level.</p>
+
+<p>To do so, type at a layer level :  </p>
+
+<p><code>media pick | set params.image</code></p>
+
+<h2 id="toc_33"><a name="share"></a> Sharing maps</h2>
+
+<h3 id="toc_34"><a name="view"></a> Share map link in &quot;view mode</h3>
+
+<p>To share a map, you can just send the url of your map.<br>
+To share it in <em>view mode</em>, just add <code>?c=view</code> at the end of the URL.  </p>
+
+<h3 id="toc_35"><a name="embed"></a> Embedding a map in another web-page</h3>
+
+<p>You can embed maps in web pages using iframes.<br>
+To embed your map in view mode, you have to add <code>?c=view</code> at the end of the URL.  </p>
+
+<p>Your iframe will look like : </p>
+
+<pre><code class="language-none">&lt;iframe style=&quot;position: absolute; top: -9999em; visibility: hidden;&quot; onload=&quot;this.style.position=&#39;static&#39;; this.style.visibility=&#39;visible&#39;;&quot; src=&quot;http://alpha.waend.com/map/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994?c=view&quot; height=&quot;600px&quot; width=&quot;1000px&quot;&gt;&lt;/iframe&gt;</code></pre>
+
+<h2 id="toc_36"><a name="commands-details"></a> Memento : List of common commands</h2>
+
+<h5 id="toc_37">General attribute commands :</h5>
+
+<p><code>set</code> : set something to something, often attribute to current context<br>
+<code>get</code> : get current context attributes / metadatas<br>
+<code>edit</code> : open text editor<br>
+<code>del</code> : delete + attribute name to delete  </p>
+
+<h5 id="toc_38">Style commands :</h5>
+
+<p>Line color :  <code>set style.strokeStyle</code> + any html color value<br>
+Line width :  <code>set style.lineWidth</code> + number (in meter)</p>
+
+<p>hatches numbers :  <code>set params.hn</code> + number<br>
+hatches rotation :  <code>set params.rotation</code> + number (angle)
+hatches step : <code>set params.step</code> + number (in meter)</p>
+
+<p>Font size :  <code>set params.fontsize</code> +  number (in meter)<br>
+Font color :  <code>set style.fillStyle</code> + any html color value  </p>
+
+<h5 id="toc_39">Other commands :</h5>
+
+<p>Search on Wænd : <code>lookup</code> + a word</p>
+
+<h5 id="toc_40">Good to know :</h5>
+
+<p>Pipe (|) is allowed to chain commands together.  </p>
+
+<p>e.g: The command <code>get name | edit | set name</code> will <em>get the name value</em>, <em>open the editor</em> with the name value in it, and <em>set the new value</em> as name.  </p>
 
 
 </body>
