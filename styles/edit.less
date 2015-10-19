@@ -1,11 +1,20 @@
 .edit-buttons {
-    position: absolute;
-    top: 55px;
-    margin-left: calc(550px + 48px);
-    width: auto;
+	position: absolute;
+    width: 50%;
+    min-width: 500px;
+    max-width: 800px;
     text-align: center;
+    background: @lightgrey;
+    border: 24px solid @lightgrey;
+    border-top: 10px solid @lightgrey;
+    border-bottom: 0px ;
+    top: 25px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
 
-    .edit-save {}
-    .edit-cancel {margin-top:12px;}
-
+    .edit-validate,
+    .edit-cancel {
+    	display: inline-block
+    }
 }
