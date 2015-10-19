@@ -23,6 +23,10 @@ function setupCanvas (container) {
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     canvas.backgroundColor = 'transparent';
+    var hints = document.createElement('div');
+    hints.setAttribute('class', 'draw-hints');
+    hints.innerHTML = "click and hold on map to draw";
+    container.appendChild(hints);
     container.appendChild(canvas);
     paper.setup(canvas);
     paper.view.draw();
@@ -37,8 +41,6 @@ function drawLine () {
         display = terminal.display();
 
     setupCanvas(display.node);
-
-    stdout.write('<span class="hint first-hint-line">click and hold on map to draw</span>');
 
     var resolver = function (resolve, reject) {
 
