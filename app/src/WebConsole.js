@@ -15,6 +15,7 @@ var _ = require('underscore'),
     Terminal = require('../lib/Terminal'),
     semaphore = require('../lib/Semaphore'),
     Mutex = require('../lib/Mutex'),
+    helpers = require('../lib/helpers'),
     buttons = require('./Buttons'),
     Promise = require('bluebird');
 
@@ -264,7 +265,10 @@ var WebConsole = Terminal.extend({
             groupElement.appendChild(groupTitlewrapper);
             self.buttonsContainer.appendChild(groupElement);
 
-            groups[gn] = groupElement;
+            groups[gn] = {
+                container: groupElement,
+                title: groupTitlevalue
+            };
 
             for (bi = 0 ; bi < buttonKeys.length; bi++) {
                 var bn = buttonKeys[bi],
@@ -280,93 +284,46 @@ var WebConsole = Terminal.extend({
         semaphore.on('shell:change:context', function(sctx, ctxPath){
             for (var gi = 0; gi < groupKeys.length; gi++) {
                 var gn = groupKeys[gi],
-                    elem = groups[gn];
+                    elem = groups[gn].container
+                    title = groups[gn].title;
+
                 if (elem) {
                     elem.setAttribute('class', 'wc-buttons-group wc-inactive');
                 }
             }
 
-            if (groups.shell) {
-                groups.shell.setAttribute('class',
-                                'wc-buttons-group wc-context-shell wc-active');
-
-            }
-
-            if (1 === sctx) {
-                if (groups.user) {
-                    groups.user.setAttribute('class',
-                            'wc-buttons-group wc-context-user wc-current');
-                }
-            }
-            else if (2 === sctx) {
-                if (groups.user) {
-                    groups.user.setAttribute('class',
-                            'wc-buttons-group wc-context-user wc-active ');
-                }
-                if (groups.group) {
-                    groups.group.setAttribute('class',
-                            'wc-buttons-group wc-context-group wc-current');
-                }
-            }
-            else if (3 === sctx) {
-                if (groups.user) {
-                    groups.user.setAttribute('class',
-                            'wc-buttons-group wc-context-user wc-active');
-                }
-                if (groups.group) {
-                    groups.group.setAttribute('class',
-                            'wc-buttons-group wc-context-group wc-active');
-                }
-                if (groups.layer) {
-                    groups.layer.setAttribute('class',
-                            'wc-buttons-group wc-context-layer wc-current');
-                }
-            }
-            else if (4 === sctx) {
-                if (groups.user) {
-                    groups.user.setAttribute('class',
-                            'wc-buttons-group wc-context-user wc-active');
-                }
-                if (groups.group) {
-                    groups.group.setAttribute('class',
-                            'wc-buttons-group wc-context-group wc-active');
-                }
-                if (groups.layer) {
-                    groups.layer.setAttribute('class',
-                            'wc-buttons-group wc-context-layer wc-active');
-                }
-                if (groups.feature) {
-                    groups.feature.setAttribute('class',
-                            'wc-buttons-group wc-context-feature wc-current');
-                }
-            }
-
-            var titleType = titleTypes[ctxPath.length - 1];
-            var names = new Array(ctxPath.length);
-            var titleComps = [];
-            if(ctxPath.length > 0){
-                for (var pidx = 0; pidx < ctxPath.length; pidx++) {
-                    var id = ctxPath[pidx];
+            var makeContextLink = function (pidx) {
+                    var id = ctxPath[pidx],
+                        name;
                     if (Bind.get().db.has(id)) {
                         var model = Bind.get().db.get(id);
-                        if (model.get('name')) {
-                            names[pidx] = model.get('name');
-                        }
-                        else {
-                            names[pidx] = id;
-                        }
+                        name = helpers.getModelName(model);
                     }
-
-                    titleComps.push(this.makeCommand({
+                    return self.makeCommand({
                         'args': ['cc /' + ctxPath.slice(0, pidx + 1).join('/'), 'get'],
-                        'text': '  > ' + names[pidx],
-                        'attributes': {
-                            'class': 'wc-context-' + titleTypes[pidx + 1]
-                        }
-                    }));
+                        'text': name
+                    });
+            };
+
+            for (var gi = 0; gi < (sctx + 1); gi++) {
+                var gn = groupKeys[gi],
+                    elem = groups[gn].container
+                    title = groups[gn].title;
+
+                if (elem) {
+                    var klass = 'wc-buttons-'+ gn +' wc-active';
+                    if (gi === sctx) {
+                        klass += ' wc-current';
+                    }
+                    elem.setAttribute('class', klass);
+                }
+
+                if ((gi > 0) && title) {
+                    var cmd = makeContextLink(gi - 1);
+                    title.innerHTML = '';
+                    title.appendChild(cmd.toDomFragment());
                 }
             }
-            this.setTitle.apply(this, titleComps);
         }, this);
     },
 
