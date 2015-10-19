@@ -27,14 +27,21 @@ function listFeatures () {
             .then(function(features){
                 for(var i = 0; i < features.length; i++){
                     var feature = features[i];
+                    var fidL = feature.id.length; 
+                    var fIdtrim = '•'+feature.id.substr(0, 2)+'\u2026'+feature.id.substr(fidL - 2, fidL);
+                    var fName = feature.get('name');
+                        if (fName === '' || fName == null) { 
+                            fName = fIdtrim;
+                        };
                     var cmd = terminal.makeCommand({
                         'args': [
                             'cc /'+userId+'/'+groupId+'/'+layerId+'/'+feature.id,
-                            'gg | region set'
+                            'gg | region set',
+                            'get'
                             ],
-                        'text': feature.id
+                        'text': fName
                     });
-                    stdout.write(cmd, ' ', feature.get('name') || '');
+                    stdout.write(cmd || '');
                 }
                 resolve();
             })

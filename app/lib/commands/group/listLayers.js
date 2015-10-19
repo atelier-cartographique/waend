@@ -27,13 +27,18 @@ function listLayers () {
             .then(function(layers){
                 for(var i = 0; i < layers.length; i++){
                     var layer = layers[i];
+                    var lidL = layer.id.length; 
+                    var lIdtrim = '•'+layer.id.substr(0, 2)+'\u2026'+layer.id.substr(lidL - 2, lidL);                    var lName = layer.get('name');
+                        if (lName === '' || lName == null) { 
+                            lName = lIdtrim;
+                        };
                     var cmd = terminal.makeCommand({
                         'args': [
                             'cc /'+userId+'/'+groupId+'/'+layer.id,
                             'get'],
-                        'text': layer.id
+                        'text': lName
                     });
-                    stdout.write(cmd, ' ', layer.get('name') || '');
+                    stdout.write(cmd || '');
                 }
                 resolve(_.map(layers, function(l){return l.id;}));
             })

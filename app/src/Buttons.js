@@ -37,7 +37,7 @@
      'Trace': ['trace | create'],
      'Draw line': ['draw | create'],
      'Draw zone': ['draw | close | create'],
-     'Import datas': ['import','lf'],
+     'Import geo-datas': ['import','lf'],
      'List features': ['lf']
  };
 

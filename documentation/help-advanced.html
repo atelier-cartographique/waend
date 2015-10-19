@@ -1,0 +1,853 @@
+<!DOCTYPE html><html>
+
+<head>
+<meta charset="utf-8">
+<title>help</title>
+<style type="text/css">
+@font-face {
+  font-family: "dauphine_regular";
+  src: url('fonts/dauphine_regular-webfont.eot');
+  src: url('fonts/dauphine_regular-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/dauphine_regular-webfont.woff2') format('woff2'), url('fonts/dauphine_regular-webfont.woff') format('woff'), url('fonts/dauphine_regular-webfont.ttf') format('truetype'), url('fonts/dauphine_regular-webfont.svg#dauphine_regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "dauphine_italic";
+  src: url('fonts/dauphine_italic-webfont.eot');
+  src: url('fonts/dauphine_italic-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/dauphine_italic-webfont.woff2') format('woff2'), url('fonts/dauphine_italic-webfont.woff') format('woff'), url('fonts/dauphine_italic-webfont.ttf') format('truetype'), url('fonts/dauphine_italic-webfont.svg#dauphine_italic') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "dauphine_regular",Helvetica, arial, sans-serif;
+  font-size: 12pt;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; 
+  max-width: 700px;
+  }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #39598C; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; 
+  border: 1px solid #eee;}
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+}
+</style>
+</head>
+<body>
+<h1 id="toc_0">HELP WÆND</h1>
+
+<p>This is a quite rought help for now, it will be improved from time to time.<br>
+Feel free to give a hand !</p>
+
+<p>If you like to create a user acount, visit http://alpha.waend.com/register.</p>
+
+<p>An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/waend-tutorial-09-2015_2.pdf" target="_blank">here</a></p>
+
+<ol>
+<li><p><a href="#generalities">Generalities</a><br>
+1.1  <a href="#logic">Logic of map publishing</a><br>
+1.2  <a href="#interface">Presentation of Wænd interface</a><br>
+1.3  <a href="#metadata">Writting informations in Wænd : about datas &amp; metadatas<br>
+</a></p></li>
+<li><p><a href="#commands">Common commands</a></p></li>
+<li><p><a href="#commands-details">Commands details</a><br>
+3.1  <a href="#help">help</a><br>
+3.3  <a href="#lc">list commands (lc)</a><br>
+3.4  <a href="#set">set attribute (set)</a><br>
+3.5  <a href="#get">get attributes (get)</a><br>
+3.6  <a href="#edit">edit text (edit)</a><br>
+3.7  <a href="#del">delete attributes (del)</a><br>
+3.8  <a href="#navigate">navigate on map (navigate)</a><br>
+3.9  <a href="#select">select feature (select)</a><br>
+3.10 <a href="#draw">hand draw line or shape</a><br>
+3.11 <a href="#trace">trace line and polygon</a><br>
+3.12 <a href="#edit_geometry">edit geometry</a><br>
+3.13 <a href="#del_feature">del_feature</a><br>
+3.14 <a href="#attach">attach a layer to a map</a><br>
+3.15 <a href="#detach">detach a layer from a map</a><br>
+3.16 <a href="#delete-layer">delete a layer</a><br>
+3.17 <a href="#visible">visibility of layers</a>  </p></li>
+<li><p><a href="#keys">Style attributes and parameters</a><br>
+4.1  <a href="#name">name</a><br>
+4.3  <a href="#style">styles (style.)</a><br>
+4.4  <a href="#params">parameters (params.)</a><br>
+4.5  <a href="#hn">hatches number (hn)</a><br>
+4.6  <a href="#step">hatches step (step)</a><br>
+4.7  <a href="#rotation">hatches rotation (rotation)</a><br>
+4.8  <a href="#text">text</a><br>
+4.9  <a href="#fontsize">fontsize</a><br>
+4.10 <a href="#fontcolor">fontcolor</a><br>
+4.11 <a href="#image">image</a></p></li>
+<li><p><a href="#style-tips">Style tips &amp; tricks</a><br>
+5.1  <a href="#tip-fill">polygon fill color</a><br>
+5.2  <a href="#tip-composite">play with Composite Operation</a>  </p></li>
+<li><p><a href="#import">Import Datas</a><br>
+6.1  <a href="#GeoJSON">Working with GeoJSON</a>
+6.2  <a href="#overpass">Help with Overpass Turbo</a></p></li>
+<li><p><a href="#share">Sharing maps</a><br>
+7.1  <a href="#view">Share map link in &quot;view mode&quot;</a><br>
+7.2   <a href="#embed">Embedding a map in another web-page</a>  </p></li>
+</ol>
+
+<h2 id="toc_1"><a name="generalities"></a>Generalities</h2>
+
+<h3 id="toc_2"><a name="logic"></a>logic of map publishing</h3>
+
+<p><img src="images/map-layers.png" alt="illustration map-layers"></p>
+
+<h3 id="toc_3"><a name="interface"></a>Presentation of Wænd interface</h3>
+
+<p>There are two surprising aspects you will discover : </p>
+
+<ul>
+<li>While most of the actions can be done by clicking on the menu buttons, the main tool to work on Wænd so far is a command line. To fully use the plateform, you will have to use this command line interface. Try it, it’s easy and you won’t break anything. The different commands are listed in this Help section.</li>
+</ul>
+
+<p><img src="images/CLI.png" alt="illustration map-layers"><br>
+<em>exemple of command, used to set the description of an element</em></p>
+
+<ul>
+<li>There is no map background : you will start on a blank page. It’s not a bug, but a choice we’ve made to wide-up the spectrum of what cartography could be. No map background means no influence from us on how a territory should be represented. You can do whatever you want.<br></li>
+</ul>
+
+<p><img src="images/map-thumb.png" alt="illustration map-layers"><br>
+<em>exemple of maps created with wænd</em> </p>
+
+<h3 id="toc_4"><a name="metadatas"></a>Writting informations in Wænd : about datas &amp; metadatas</h3>
+
+<p>There is basicaly two types of informations on wænd : </p>
+
+<p>1- The datas you use to create your maps (images, texts, geo-datas, etc..). Those are the most visible ones.</p>
+
+<p>2- The informations attached to those elements, the metadatas. 
+Here are some exemples of what we call metadatas : </p>
+
+<ul>
+<li>the name of your profile<br></li>
+<li>the name and the description of your map</li>
+<li>the age of a tree</li>
+<li>the altitude of a building</li>
+</ul>
+
+<p>The meta-data are used at every level on waend : on your profile, maps, layers, and features.</p>
+
+<p>The next sections of the help explains how to work with metadatas on Wænd.</p>
+
+<h5 id="toc_5">main usage</h5>
+
+<h6 id="toc_6">1- legend</h6>
+
+<p>A first usage of those datas is to give a name to things, eventualy a description or other relevant informations, so yourself and your map visitors can read and understand what is your map about.<br>
+It leads to a map legend.</p>
+
+<p><img src="images/get-legend.png" alt="illustration legend"><br>
+<em>exemple of personalized metadatas</em></p>
+
+<h6 id="toc_7">2- style and parameters</h6>
+
+<p>A second usage, a bit more complexe is about styling your datas. If you want a blue road, and a green cycle-way you have to set those color infomations to your road and cycle-way.</p>
+
+<p><img src="images/get-style.png" alt="illustration legend style"><br>
+<em>exemple of style and parameters metadatas</em></p>
+
+<h6 id="toc_8">3- Processing / custom renderer</h6>
+
+<p>A third usage is to use the elements metadatas to batch process the visualization, like using gradient color related to a specific infos (population, age, temperature etc.), real time modifications, and so on.</p>
+
+<h2 id="toc_9"><a name="commands"></a>Common commands</h2>
+
+<ul>
+<li>help : <em>help</em></li>
+<li>lookup : <em>lookup + a word will search for maps containing this word</em> </li>
+<li>set : <em>set something to something, often attribute to current context</em></li>
+<li>del : <em>delete + attribute name to delete</em></li>
+<li>get : <em>get current context attributes</em></li>
+<li>lg : <em>list groups</em></li>
+<li>ll : <em>list layer</em></li>
+<li>lf : <em>list features</em></li>
+<li>lc : <em>list command</em></li>
+<li>select : <em>select feature in viewport</em></li>
+<li>draw : <em>draw on map</em></li>
+<li>navigate : <em>navigate on map</em></li>
+<li>import : <em>import GeoJSON file (only imports feature of type &quot;Polygon&quot; and &quot;LineString&quot;)</em></li>
+<li>media upload : <em>upload image</em></li>
+<li>media list : <em>browse images</em></li>
+<li>media show [image_id]: <em>show image</em></li>
+<li>media pick : <em>select an image</em></li>
+</ul>
+
+<p>Pipe (|) is allowed to chain commands together.
+e.g:</p>
+
+<pre><code class="language-none">draw | close | create</code></pre>
+
+<p>to draw a line, close it to make a polygon, and save it.
+That&#39;s what the &quot;draw zone&quot; button does !</p>
+
+<h2 id="toc_10"><a name="commands-details"></a> Commands details</h2>
+
+<h3 id="toc_11"><a name="help"></a> Help : <code>help</code></h3>
+
+<p>get help</p>
+
+<h3 id="toc_12"><a name="lc"></a> List comands : <code>lc</code></h3>
+
+<p>list commands  </p>
+
+<h3 id="toc_13"><a name="set"></a> Set attribute : <code>set</code></h3>
+
+<p>set attribute to current element (user, group, layer or feature).</p>
+
+<p>[set] is very usefull to qualify your datas, to give informations about your maps, etc.</p>
+
+<p>Multiple words must be surronded by &quot;quotes&quot;.</p>
+
+<p>Example :</p>
+
+<pre><code class="language-none">set name my-element-name
+set description &quot;here is my description&quot;
+set &quot;city population&quot; 1000000</code></pre>
+
+<h3 id="toc_14"><a name="get"></a> Get attributes : <code>get</code></h3>
+
+<p>get all attributes from current element<br>
+get attributeName : get value for attributeName</p>
+
+<p>Example :</p>
+
+<p><code>get</code> will show all the attributes of the current context</p>
+
+<p><code>get name</code> will show the value of the <code>name</code> attribute</p>
+
+<h3 id="toc_15"><a name="edit"></a> Edit : <code>edit</code></h3>
+
+<p>There is no <em>edit</em> button yet, but the functionality is here.
+To edit a key, type :</p>
+
+<pre><code class="language-none">get your_key | edit | set your_key</code></pre>
+
+<p>It will get the <em>your_key</em> value, open the editor with this value, and set the edited value to <em>your_key</em></p>
+
+<p>To edit <em>style</em> or <em>params</em> dictionary, do the same with :</p>
+
+<pre><code class="language-none">get style | edit | set style
+or
+get params | edit | set params</code></pre>
+
+<h3 id="toc_16"><a name="del"></a> Delete attribute: <code>del attributeName</code></h3>
+
+<h6 id="toc_17">Delete an attribute</h6>
+
+<p>Example:</p>
+
+<pre><code class="language-none">del description</code></pre>
+
+<h6 id="toc_18">Delete an attribute in <em>style</em> or <em>params</em></h6>
+
+<p>For now you need to delete the entire <em>style</em> or <em>params</em> with :</p>
+
+<pre><code class="language-none">del params
+or
+del style</code></pre>
+
+<h3 id="toc_19"><a name="navigate"></a> Navigate in map : <code>navigate</code></h3>
+
+<p>navigate in the map viewport<br>
+use keyboard arrows to navigate<br>
+use [i] to zoom in<br>
+use [o] to zoom out</p>
+
+<p>Type [ESC] key to escape this mode.</p>
+
+<h3 id="toc_20"><a name="select"></a> select features : <code>select</code></h3>
+
+<p>select a feature in the viewport</p>
+
+<h3 id="toc_21"><a name="draw"></a>Hand draw line or shape : <code>draw</code></h3>
+
+<p>draw with on map, usualy pipped with another command  </p>
+
+<p>Example:</p>
+
+<pre><code class="language-none">draw | region set</code></pre>
+
+<p>will set the region viewport to the drawing extend</p>
+
+<h3 id="toc_22"><a name="trace"></a>Trace line or polygon : <code>trace</code></h3>
+
+<p>trace with on map, usualy pipped with another command.<br>
+Trace is usefull to creat segmented lines and polygons.</p>
+
+<p>keys:
+- <code>enter</code> validate geometry and exit
+- <code>escape</code> cancel geometry and exit
+- <code>e</code> enters edit mode (moving control points)
+- <code>n</code> enters append mode (click to add points)</p>
+
+<p>To create a feature out of it, in a layer context, use :</p>
+
+<pre><code class="language-none">trace | create</code></pre>
+
+<p>It will draw a line and create a feature out of it.<br>
+Click on the first point to close the line and make a polygon.</p>
+
+<h3 id="toc_23"><a name="edit_geometry"></a> Edit geometry</h3>
+
+<p>To edit a feature geometry, use :</p>
+
+<pre><code class="language-none">gg | trace | sg</code></pre>
+
+<p>To duplicate a feature, use :</p>
+
+<pre><code class="language-none">gg | trace | create</code></pre>
+
+<h3 id="toc_24"><a name="del_feature"></a> delete feature : <code>del_feature</code></h3>
+
+<p>In the context of a feature, and if you&#39;re granted to, the command will delete the current feature and bring you back to the parent layer context.</p>
+
+<p>In the context of a layer, you must give a feature ID in argument of the command.</p>
+
+<h3 id="toc_25"><a name="attach"></a> attach a layer to a map : <code>attach</code></h3>
+
+<p>If you&#39;re the owner of the layer, the command will attach the said layer to a map. It doesn&#39;t <em>move</em> the layer but will <em>display</em> it within this other map.</p>
+
+<p>The argument is made of a valid path to be created.</p>
+
+<p>Let say you are the author of a layerA, and you want to attach it to a mapZ :</p>
+
+<pre><code class="language-none">attach /userZ_id/mapZ_id/layerA_id</code></pre>
+
+<p>How it works :</p>
+
+<p><code>/userZ_id/mapZ_id</code> : the context <em>where</em> you want to attach the layer.  </p>
+
+<p><code>layerA_id</code> : the id of the layer you <em>own</em> and you want to attach somewhere.</p>
+
+<h3 id="toc_26"><a name="detach"></a> detach a layer from a map : <code>detach</code></h3>
+
+<p>The <code>detach</code> command <em>undo</em> what has been done by the <code>attach</code> command, and works the same way.</p>
+
+<p>To detach layerA from mapZ, do :</p>
+
+<pre><code class="language-none">detach /userZ_id/mapZ_id/layerA_id</code></pre>
+
+<h3 id="toc_27"><a name="delete-layer"></a> Delete a layer - See <code>detach</code></h3>
+
+<p>A subtlety about <em>compositions</em> ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that&#39;s created at the same time.  </p>
+
+<p>It does mean that if you&#39;re willing to <em>remove</em> a layer, at the moment, your best option is to detach it from all maps it&#39;s attached to.</p>
+
+<h3 id="toc_28"><a name="visible"></a> Visibility of layers : <code>visible</code></h3>
+
+<p>On a map context, type <code>visible</code> to chose which layers to display.</p>
+
+<h2 id="toc_29"><a name="keys"></a> Style attributes and parameters</h2>
+
+<p>Every entities are attached a dictionary.
+One manipulates dictionary&#39;s values with the <code>get</code>, <code>set</code>,  <code>del</code> and <code>edit</code> commands.</p>
+
+<p>For more infos with those commands, see :  </p>
+
+<ul>
+<li><a href="#set">set attribute (set)</a><br></li>
+<li><a href="#get">get attributes (get)</a><br></li>
+<li><a href="#del">del attributes (del)</a><br></li>
+<li><a href="#edit">edit attributes (edit)</a><br></li>
+</ul>
+
+<p>Something to note here, from a key you can reference another key in the same dictionary by prefixing its path with the <em>@</em> character, e.g:</p>
+
+<pre><code class="language-javascript">{
+    &quot;params&quot; : {
+        &quot;text&quot; : &quot;@name&quot;
+    },
+    &quot;name&quot; : &quot;felicity street&quot;
+}</code></pre>
+
+<p>Something else is that you can address keys which are inside dictionaries with the dot notation, e.g:</p>
+
+<pre><code class="language-none">set style.strokeStyle blue</code></pre>
+
+<p>will results in</p>
+
+<pre><code class="language-javascript">{
+    &quot;style&quot;: {
+        &quot;strokeStyle&quot; : &quot;blue&quot;
+    }
+}</code></pre>
+
+<p>Note that feature&#39;s <em>style</em> and <em>params</em> dictionaries inherit from their layer&#39;s values.</p>
+
+<h3 id="toc_30"><a name="name"></a> name</h3>
+
+<p>The <em>name</em> key is often used across the platform to textualize items, if not found, the system will usually use item&#39;s identifier.</p>
+
+<h3 id="toc_31"><a name="style"></a> styles (style.)</h3>
+
+<p>The style dictionary is expected to hold feature&#39;s style informations. Keys here are <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">CanvasRenderingContext2D</a> properties.</p>
+
+<p>color example:</p>
+
+<pre><code class="language-none">set style.strokeStyle orange  
+set style.strokeStyle #FF7F00  
+set style.strokeStyle &quot;rgb(255, 127, 0)&quot;  
+set style.strokeStyle &quot;rgba(255, 127, 0, 0.8)&quot;  </code></pre>
+
+<p>line width example:
+<code>
+set style.lineWidth 5
+</code>  </p>
+
+<p><strong>exception</strong></p>
+
+<p>If you want to play with dashed lines,
+setLineDash has to be written our way :
+<code>
+set style.lineDash 2 10
+</code>
+where 2 is the dash length, and 10 the gap.</p>
+
+<h3 id="toc_32"><a name="params"></a> parameters (params.)</h3>
+
+<p>Holds parameters to feed the <em>rendering program</em>. The default renderer processes the following keys in the <em>params</em> dictionary.</p>
+
+<h4 id="toc_33"><a name="hn"></a> hatches number (hn)</h4>
+
+<p>application: polygon<br>
+number of hatches per polygon (number)</p>
+
+<p>Example:</p>
+
+<pre><code class="language-none">set params.hn 150</code></pre>
+
+<h4 id="toc_34"><a name="step"></a> hatches step (step)</h4>
+
+<p><em>application: polygon</em><br>
+steps value between hatches (number)</p>
+
+<p>Example:</p>
+
+<pre><code class="language-none">set params.step 10</code></pre>
+
+<h4 id="toc_35"><a name="rotation"></a> hatches rotation (rotation)</h4>
+
+<p><em>application: polygon</em><br>
+hatches angle (number)</p>
+
+<p>Example:</p>
+
+<pre><code class="language-none">set params.rotation 45</code></pre>
+
+<h4 id="toc_36"><a name="text"></a> text</h4>
+
+<p><em>application: line / polygon</em><br>
+the text you want to display in a polygon  </p>
+
+<p>Example:</p>
+
+<pre><code class="language-none">set params.text &quot;enter your text here&quot;</code></pre>
+
+<h4 id="toc_37"><a name="fontsize"></a> fontsize</h4>
+
+<p><em>application: line / polygon</em><br>
+size of the font (number)</p>
+
+<p>Example:</p>
+
+<pre><code class="language-none">set params.fontsize 12</code></pre>
+
+<h4 id="toc_38"><a name="fontcolor"></a> fontcolor (fillStyle)</h4>
+
+<p>Example:</p>
+
+<pre><code class="language-none">set style.fillStyle orange  
+set style.fillStyle #FF7F00  
+set style.fillStyle &quot;rgb(255, 127, 0)&quot;  
+set style.fillStyle &quot;rgba(255, 127, 0, 0.8)&quot; </code></pre>
+
+<h4 id="toc_39"><a name="image"></a> image</h4>
+
+<p><em>application: polygon</em></p>
+
+<p>Set an image to be inserted in the active polygon. 
+They are two paramters you can play with to adujst the relation of the image with the polygon : </p>
+
+<p><code>params.clip</code> boolean (default to true)</p>
+
+<p><code>params.adjust</code> &#39;none&#39; or &#39;fit&#39; or &#39;cover&#39; (default to &#39;none&#39;)</p>
+
+<p>Here is an illustration of what it does :  </p>
+
+<p><img src="images/params-image.png" alt="illustration map-layers"></p>
+
+<h5 id="toc_40"><a name="image"></a> tip : image on layer</h5>
+
+<p>If you set an image at the layer level, it will cover <em>all</em> your polygons with this image in that layer.<br>
+The parameters are used like described above, at the layer level.</p>
+
+<p>To do so, type at a layer level :  </p>
+
+<p><code>media pick | set params.image</code></p>
+
+<h2 id="toc_41"><a name="style-tips"></a> Style tips &amp; tricks</h2>
+
+<h3 id="toc_42"><a name="tip-fill"></a> polygon fill color</h3>
+
+<p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
+Set <code>style.lineWidth</code> to 3000 (the line will be 3000px wide)</p>
+
+<p>You are done with a filled polygon !</p>
+
+<h3 id="toc_43"><a name="tip-composite"></a> Play with Composite Operation</h3>
+
+<p>We use multiply compositing mode by default in layers.<br>
+If you want to change it, please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">Canvas MDN documentation</a></p>
+
+<p>Exemple for no compositing :</p>
+
+<pre><code class="language-none">set style.globalCompositeOperation source-over</code></pre>
+
+<h2 id="toc_44"><a name="import"></a> Import data (import)</h2>
+
+<h3 id="toc_45"><a name="GeoJSON"></a> Working with GeoJSON</h3>
+
+<p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
+
+<p>We currently only support GeoJSON format.
+The restrictions so far are :</p>
+
+<ul>
+<li>no multipolygons</li>
+<li>no multilines</li>
+<li>no points</li>
+</ul>
+
+<p>An easy way to create a GeoJSON file from your zone of interest is to use <a href="http://overpass-turbo.eu/" target="_blank">http://overpass-turbo.eu/</a>, it is a powerfull online tool quickly export data from OpenStreetMap.</p>
+
+<p>Another option is to use <a href="http://www.qgis.org/en/site/" target="_blank">Qgis</a>, a free and opensource GIS, that you can use for manipulating any kind of geo-datas.</p>
+
+<p><em>Good to know</em> : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  </p>
+
+<h3 id="toc_46"><a name="overpass"></a> Tips with Overpass Turbo</h3>
+
+<p>Use the wizard to help you building your query :   </p>
+
+<p><img src="images/overpass-wizard.png" alt="illustration map-layers"></p>
+
+<h5 id="toc_47">Query for everything in the selection box</h5>
+
+<pre><code class="language-none">// gather results
+(way({{bbox}}););
+// print results
+out body;
+&gt;;
+out skel qt;</code></pre>
+
+<h2 id="toc_48"><a name="share"></a> Sharing maps</h2>
+
+<h3 id="toc_49"><a name="view"></a> Share map link in &quot;view mode</h3>
+
+<p>To share a map, you can just send the url of your map.<br>
+To share it in <em>view mode</em>, just add <code>?c=view</code> at the end of the URL.  </p>
+
+<h3 id="toc_50"><a name="embed"></a> Embedding a map in another web-page</h3>
+
+<p>You can embed maps in web pages using iframes.<br>
+To embed your map in view mode, you have to add <code>?c=view</code> at the end of the URL.  </p>
+
+<p>Your iframe will look like : </p>
+
+<pre><code class="language-none">&lt;iframe style=&quot;position: absolute; top: -9999em; visibility: hidden;&quot; onload=&quot;this.style.position=&#39;static&#39;; this.style.visibility=&#39;visible&#39;;&quot; src=&quot;http://alpha.waend.com/map/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994?c=view&quot; height=&quot;600px&quot; width=&quot;1000px&quot;&gt;&lt;/iframe&gt;</code></pre>
+
+
+</body>
+
+</html>

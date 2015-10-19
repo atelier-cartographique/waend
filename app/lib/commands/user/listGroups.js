@@ -24,14 +24,19 @@ function listGroups () {
             .then(function(groups){
                 for(var i = 0; i < groups.length; i++){
                     var group = groups[i];
+                    var gidL = group.id.length; 
+                    var gIdtrim = '•'+group.id.substr(0, 2)+'\u2026'+group.id.substr(gidL - 2, gidL);                    var gName = group.get('name');
+                        if (gName === '' || gName == null) { 
+                            gName = gIdtrim;
+                        };
                     var cmd = terminal.makeCommand({
                         'args': [
                             'cc /'+userId+'/'+group.id,
                             'get'
                             ],
-                        'text': group.id
+                        'text': gName
                     });
-                    stdout.write(cmd, ' ', group.get('name') || '');
+                    stdout.write(cmd || '');
                 }
                 resolve();
             })

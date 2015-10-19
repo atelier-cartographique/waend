@@ -597,15 +597,17 @@ body {
   bottom: 64%;
   border-bottom: 1px solid;
 }
-.wc-pages {
+.wc-page.wc-active {
   position: absolute;
   width: calc(100vw - 100vh - 24px);
   min-width: 250px;
-  max-height: 140px;
-  overflow: auto;
-  bottom: 40px;
+  max-height: 165px;
+  bottom: 30px;
   left: 12px;
   background-color: transparent;
+  padding-top: 22px;
+  border-bottom: 1px solid #000;
+  overflow-y: auto;
   z-index: 1;
 }
 .wc-page {
@@ -614,10 +616,16 @@ body {
   overflow-y: hidden;
 }
 .wc-page-title {
-  color: #cecece;
-  margin-bottom: 6px;
-  font-size: 12pt;
+  position: absolute;
+  width: 100%;
+  background-color: #FFF;
+  padding-bottom: 3px;
+  margin-top: -22px;
+  color: #8A8A8A;
+  font-size: 9pt;
   border-bottom: 1px solid #000;
+  text-align: right;
+  text-shadow: none;
 }
 .wc-line {
   font-size: 10pt;
@@ -628,12 +636,21 @@ body {
   transition-property: opacity, transform;
   transition-duration: 1s;
 }
+.wc-input-prompt {
+  font-family: "dauphine_regular";
+  position: absolute;
+  bottom: 14px;
+  left: 11px;
+  font-size: 8pt;
+  z-index: 3;
+  text-shadow: none;
+}
 .wc-input {
   position: absolute;
+  height: 18px;
   bottom: 12px;
   left: 12px;
   border: 0;
-  border-bottom: 1px solid #000;
   font-size: 10pt;
   background-color: #fefefe;
   width: calc(100vw - 100vh - 34px);
@@ -641,38 +658,25 @@ body {
   font-family: monospace;
   letter-spacing: 1px!important;
   margin: 0px;
-  padding: 5px 5px;
+  padding: 0px;
   border-radius: 0px;
-  text-indent: 12px;
+  text-indent: 8px;
   z-index: 2;
-  resize: vertical;
 }
 .wc-input:focus {
   outline: none;
 }
-.wc-input::-webkit-input-placeholder {
-  text-indent: 0px;
-  font-size: 10pt;
-  line-height: 16pt;
-}
-.wc-input:-moz-placeholder {
-  /* Firefox 18- */
-
-  text-indent: 0px;
-  font-size: 10pt;
-  line-height: 16pt;
-}
-.wc-input::-moz-placeholder {
-  /* Firefox 19+ */
-
-  text-indent: 0px;
-  font-size: 10pt;
-  line-height: 16pt;
-}
-.wc-input:-ms-input-placeholder {
-  text-indent: 0px;
-  font-size: 10pt;
-  line-height: 16pt;
+.wc-input-bottom-line {
+  position: absolute;
+  bottom: 11px;
+  left: 7px;
+  width: calc(100vw - 100vh - 26px);
+  min-width: 250px;
+  border: 1px solid #000;
+  border-top: 0px;
+  height: 3px;
+  z-index: 12;
+  padding: 0 3px;
 }
 .wc-input.wc-inactive {
   color: #252525;
@@ -753,18 +757,16 @@ body {
   display: none;
 }
 .key-value {
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  display: inline-block;
+  display: table;
   margin-bottom: 2px;
 }
 .key-value .key {
-  width: 100px;
+  width: 75px;
   text-align: right;
   padding-right: 6px;
   color: #993358;
-  display: inline-block;
+  display: table-cell;
+  vertical-align: top;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
 
   -ms-word-break: break-all;
@@ -780,6 +782,8 @@ body {
 .key-value .value {
   width: calc(100% - 75px - 6px);
   letter-spacing: 0.5px;
+  display: table-cell;
+  vertical-align: top;
 }
 .wc-mapblock {
   position: absolute;
@@ -805,16 +809,10 @@ body {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
-.key-name {
-  display: inline-block !important;
-}
 .key-name .value {
   font-size: 120%;
   font-family: inherit;
   letter-spacing: inherit;
-}
-.key-name .key {
-  display: inline-block !important;
 }
 .hint {
   font-family: "dauphine_regular";
