@@ -24,7 +24,7 @@ function init () {
         wc = new WebConsole(elementWC),
         layer = new LayerProvider(),
         source = new SourceProvider(),
-        wmap = new WMap({'root':elementMap});
+        wmap = new WMap({'root': elementMap});
 
     wc.start();
     wc.shell.env.map = wmap; // there might be a better way, but we want this result.

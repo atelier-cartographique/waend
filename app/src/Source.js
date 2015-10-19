@@ -68,35 +68,35 @@ var Source = BaseSource.extend({
             });
     },
 
-        toJSON : function () {
-            var features = this.getFeatures(),
-                a = new Array(features.length),
-                layerData = this.layer.getData(),
-                layerStyle = layerData.style || {},
-                layerParams = layerData.params || {};
+    toJSON : function () {
+        var features = this.getFeatures(),
+            a = new Array(features.length),
+            layerData = this.layer.getData(),
+            layerStyle = layerData.style || {},
+            layerParams = layerData.params || {};
 
-            for (var i = 0; i < features.length; i++) {
-                var f = JSON.parse(features[i].toJSON()),
-                    props = f.properties;
-                if ('style' in props) {
-                    _.defaults(props.style, layerStyle);
-                }
-                else {
-                    props.style = layerStyle;
-                }
-                if ('params' in props) {
-                    _.defaults(props.params, layerParams);
-                }
-                else {
-                    props.params = layerParams;
-                }
-                a[i] = f;
+        for (var i = 0; i < features.length; i++) {
+            var f = JSON.parse(features[i].toJSON()),
+                props = f.properties;
+            if ('style' in props) {
+                _.defaults(props.style, layerStyle);
             }
-
-
-            return a;
-
+            else {
+                props.style = layerStyle;
+            }
+            if ('params' in props) {
+                _.defaults(props.params, layerParams);
+            }
+            else {
+                props.params = layerParams;
+            }
+            a[i] = f;
         }
+
+
+        return a;
+
+    }
 
 });
 

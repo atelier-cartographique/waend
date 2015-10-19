@@ -26,12 +26,23 @@ function View (options) {
     this.layers = [];
     this.canvas = [];
     this.contexts = [];
+    this.resize();
 
+    window.addEventListener('resize', _.bind(this.resize, this));
+}
+
+
+View.prototype.resize = function () {
     var rect = this.getRect();
     this.size = _.pick(rect, 'width', 'height');
     this.setTransform();
-}
-
+    for (var cidx = 0; cidx < this.canvas.length; cidx++) {
+        var canvas = this.canvas[cidx];
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+    }
+    semaphore.signal('please:map:render');
+};
 
 View.prototype.getRect = function () {
     return this.root.getBoundingClientRect();
@@ -152,7 +163,7 @@ View.prototype.getContext = function (layerId) {
 
 View.prototype.createCanvas = function (layerId) {
     var canvas = document.createElement('canvas'),
-        rect = this.root.getBoundingClientRect();
+        rect = this.getRect();
 
     canvas.id = layerId;
     canvas.width = rect.width;
