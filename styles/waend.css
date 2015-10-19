@@ -213,19 +213,13 @@ table {
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  border: 0px;
-  text-decoration: none !important;
-  font-family: "dauphine_italic";
+  border: 1px solid #000;
+  background-color: #fff;
+  margin: 6px;
 }
 .push-buttons:hover {
   cursor: pointer;
-}
-.push-buttons:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
-}
-.push-buttons a {
-  color: #fbfbfb;
+  background-color: #dfdfdf;
 }
 .push-validate {
   font-family: "dauphine_regular";
@@ -236,20 +230,14 @@ table {
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  border: 0px;
-  text-decoration: none !important;
-  font-family: "dauphine_italic";
-  background-color: #3f5f58;
+  border: 1px solid #000;
+  background-color: #fff;
+  margin: 6px;
+  color: #3f5f58;
 }
 .push-validate:hover {
   cursor: pointer;
-}
-.push-validate:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
-}
-.push-validate a {
-  color: #fbfbfb;
+  background-color: #dfdfdf;
 }
 .push-cancel {
   font-family: "dauphine_regular";
@@ -260,20 +248,14 @@ table {
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  border: 0px;
-  text-decoration: none !important;
-  font-family: "dauphine_italic";
-  background-color: #993358;
+  border: 1px solid #000;
+  background-color: #fff;
+  margin: 6px;
+  color: #993358;
 }
 .push-cancel:hover {
   cursor: pointer;
-}
-.push-cancel:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
-}
-.push-cancel a {
-  color: #fbfbfb;
+  background-color: #dfdfdf;
 }
 .push-edit {
   font-family: "dauphine_regular";
@@ -284,20 +266,14 @@ table {
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  border: 0px;
-  text-decoration: none !important;
-  font-family: "dauphine_italic";
-  background-color: #39598c;
+  border: 1px solid #000;
+  background-color: #fff;
+  margin: 6px;
+  color: #39598c;
 }
 .push-edit:hover {
   cursor: pointer;
-}
-.push-edit:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
-}
-.push-edit a {
-  color: #fbfbfb;
+  background-color: #dfdfdf;
 }
 .push-add {
   font-family: "dauphine_regular";
@@ -308,20 +284,14 @@ table {
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  border: 0px;
-  text-decoration: none !important;
-  font-family: "dauphine_italic";
-  background-color: #ff974c;
+  border: 1px solid #000;
+  background-color: #fff;
+  margin: 6px;
+  color: #ff974c;
 }
 .push-add:hover {
   cursor: pointer;
-}
-.push-add:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
-}
-.push-add a {
-  color: #fbfbfb;
+  background-color: #dfdfdf;
 }
 .center-content {
   display: flex;
@@ -1093,8 +1063,10 @@ body {
   display: block;
   color: #fbfbfb;
   border-radius: 2px;
-  border: 0px;
-  background-color: #993358;
+  border: 1px solid #000;
+  background-color: #fff;
+  margin: 6px;
+  color: #993358;
   text-decoration: none !important;
   font-family: "dauphine_italic";
   position: absolute;
@@ -1104,13 +1076,7 @@ body {
 }
 .media-wrapper .media-close:hover {
   cursor: pointer;
-}
-.media-wrapper .media-close:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
-}
-.media-wrapper .media-close a {
-  color: #fbfbfb;
+  background-color: #dfdfdf;
 }
 .media-wrapper .media-close:hover {
   border-bottom: 1px solid #282f35;
@@ -1138,8 +1104,11 @@ body {
 
   /* Opera < 12.1 */
 
-  width: 100%;
+  position: absolute;
+  display: block;
+  overflow: hidden;
   height: 100%;
+  width: 100%;
 }
 @keyframes fadein {
   from {
@@ -1181,29 +1150,37 @@ body {
     opacity: 1;
   }
 }
-.CodeMirror .CodeMirror-sizer {
-  width: 550px;
-  margin-left: 12px!important;
+.CodeMirror .CodeMirror-scroll {
+  width: 50%;
+  min-width: 500px;
+  max-width: 800px;
   background: #f8f8f8;
-  border: 0px;
-  padding: 12px!important;
-  top: 55px;
-  min-height: 50px!important;
-  max-height: calc(100vh - 110px);
-  overflow-y: auto;
+  height: calc(100vh - 160px);
+  margin: auto;
+  margin-top: 61px;
+  border: 24px solid #f8f8f8;
 }
 .CodeMirror .CodeMirror-code {
   text-shadow: none;
 }
 .edit-buttons {
   position: absolute;
-  top: 55px;
-  margin-left: calc(598px);
-  width: auto;
+  width: 50%;
+  min-width: 500px;
+  max-width: 800px;
   text-align: center;
+  background: #f8f8f8;
+  border: 24px solid #f8f8f8;
+  border-top: 10px solid #f8f8f8;
+  border-bottom: 0px ;
+  top: 25px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 }
+.edit-buttons .edit-validate,
 .edit-buttons .edit-cancel {
-  margin-top: 12px;
+  display: inline-block;
 }
 .help-wrapper {
   position: absolute;
