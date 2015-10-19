@@ -184,8 +184,7 @@ function resolver (options) {
           var dt = e.dataTransfer;
           var files = dt.files;
 
-          handleFile(files[0], options.container,
-              resolve, reject);
+          handleFile(files[0], options, resolve, reject);
         };
 
         options.dropbox.addEventListener("dragenter", dragenter, false);

@@ -153,6 +153,87 @@ InputHistory.prototype.forward = function () {
 };
 
 
+function Loader (text) {
+    this.text = text || 'loading';
+    this.init();
+}
+
+Loader.prototype.init = function () {
+    var element = document.createElement('div'),
+        textElement = document.createElement('div'),
+        itemsElement = document.createElement('div');
+    textElement.innerHTML = this.text;
+    this.items = [];
+    for (var i = 0; i < 100; i++) {
+        var item = document.createElement('div');
+        helpers.addClass(item, 'wc-loader-item');
+        itemsElement.appendChild(item);
+        this.items.push(item);
+    }
+    element.appendChild(textElement);
+    element.appendChild(itemsElement);
+    helpers.addClass(element, 'wc-loader');
+    helpers.addClass(textElement, 'wc-loader-text');
+    helpers.addClass(itemsElement, 'wc-loader-items');
+    this.element = element;
+    return this;
+};
+
+Loader.prototype.start = function () {
+    var self = this;
+    self.running = true;
+    var start = null,
+        idx = 0,
+        r = 100,
+        dir = true;
+    function step (ts) {
+        if (self.running) {
+            var offset = start ? ts - start : r;
+            if (offset < r) {
+                return window.requestAnimationFrame(step);
+            }
+            start = ts;
+            if (dir) {
+                for (var i = 0; i < idx; i++) {
+                    var item = self.items[i];
+                    item.style.backgroundColor = 'grey';
+                }
+                for (var i = idx + 1; i < self.items.length; i++) {
+                    var item = self.items[i];
+                    item.style.backgroundColor = 'transparent';
+                }
+                self.items[idx].style.backgroundColor = 'black';
+                idx += 1;
+                if (idx === self.items.length) {
+                    dir = false;
+                }
+            }
+            else {
+                idx -= 1;
+                for (var i = 0; i < idx; i++) {
+                    var item = self.items[i];
+                    item.style.backgroundColor = 'transparent';
+                }
+                for (var i = idx + 1; i < self.items.length; i++) {
+                    var item = self.items[i];
+                    item.style.backgroundColor = 'grey';
+                }
+                self.items[idx].style.backgroundColor = 'black';
+                if (idx === 0) {
+                    dir = true;
+                }
+            }
+            window.requestAnimationFrame(step);
+        }
+    }
+    window.requestAnimationFrame(step);
+};
+
+Loader.prototype.stop = function () {
+    this.running = false;
+};
+
+
 function isKeyCode (event, kc) {
     return (kc === event.which || kc === event.keyCode);
 }
@@ -358,15 +439,13 @@ var WebConsole = Terminal.extend({
         this.setMapBlock();
         this.history = new InputHistory();
         var self = this;
-        // self.container.addEventListener('click', function(e){
-        //     if(self._inputField){
-        //         self._inputField.focus();
-        //     }
-        // });
+
         self.shell.stdout.on('data', self.write, self);
         self.shell.stderr.on('data', self.writeError, self);
 
         semaphore.on('please:terminal:run', this.runCommand, this);
+        semaphore.on('start:loader', this.startLoader, this);
+        semaphore.on('stop:loader', this.stopLoader, this);
     },
 
     setMapBlock: function () {
@@ -578,7 +657,24 @@ var WebConsole = Terminal.extend({
         this.pages.setAttribute('class', 'wc-pages');
         this.buttonsContainer.setAttribute('class', 'wc-buttons');
         this.mapBlock.setAttribute('class','wc-mapblock');
-    }
+    },
+
+    startLoader: function (text) {
+        if (this.loader) {
+            return null;
+        }
+        this.loader = new Loader(text);
+        this.root.appendChild(this.loader.element);
+        this.loader.start();
+    },
+
+    stopLoader: function (text) {
+        if (this.loader) {
+            this.loader.stop();
+            this.root.removeChild(this.loader.element);
+            this.loader = null;
+        }
+    },
 
 });
 

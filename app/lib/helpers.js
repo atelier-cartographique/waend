@@ -8,6 +8,7 @@
  *
  */
 
+var _ = require('underscore');
 
 module.exports.getModelName = function (model) {
     if (model.get('name')) {
@@ -16,3 +17,16 @@ module.exports.getModelName = function (model) {
     var id = model.id || '00000000';
     return '•' + id.substr(0, 6);
 };
+
+module.exports.addClass = function (elem, c) {
+    var ecStr = elem.getAttribute('class');
+    var ec = ecStr ? ecStr.split(' ') : [];
+    ec.push(c);
+    elem.setAttribute('class', _.uniq(ec).join(' '));
+}
+
+module.exports.removeClass = function (elem, c) {
+    var ecStr = elem.getAttribute('class');
+    var ec = ecStr ? ecStr.split(' ') : [];
+    elem.setAttribute('class', _.without(ec, c).join(' '));
+}

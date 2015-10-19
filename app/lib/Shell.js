@@ -429,7 +429,6 @@ var Shell = O.extend({
             user = self._contexts[USER].data,
             bind = Bind.get();
 
-        //console.log('shell.setGroup', groupId);
         var prm = bind.getGroup(user.id, groupId)
             .then(function(groupData){
                 self._contexts[GROUP] = new Group({

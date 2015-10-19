@@ -35,6 +35,7 @@ var _ = require('underscore'),
     config = require('../../config'),
     region = require('./Region'),
     Geometry = require('./Geometry'),
+    semaphore = require('./Semaphore'),
     Promise = require("bluebird");
 
 
@@ -269,9 +270,11 @@ var Bind = O.extend({
                     db.record([userId, groupId, layer.id, feature.id], f);
                 }
             }
+            semaphore.signal('stop:loader');
             return g;
         };
         var url = API_URL+path;
+        semaphore.signal('start:loader', 'downloading map data');
         return this.transport.get(url, {parse: pr});
     },
 

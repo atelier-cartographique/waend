@@ -193,11 +193,9 @@ table {
 }
 .word-wrap {
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -372,18 +370,18 @@ input[type="submit"] {
 }
 .fade-in {
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
 }
 @keyframes fadein {
   from {
@@ -429,18 +427,18 @@ input[type="submit"] {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
 }
 @keyframes fadein {
   from {
@@ -509,7 +507,6 @@ body {
   bottom: 0;
   /*padding: 24px;
     padding-top: 38px;*/
-
   background-color: transparent;
 }
 .wc-context-feature {
@@ -678,7 +675,6 @@ body {
 .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
-
 }
 .wc-pending {
   color: #2B71FF;
@@ -695,13 +691,10 @@ body {
 .wc-error {
   -moz-animation: cssAnimation 0s ease-in 10s forwards;
   /* Firefox */
-
   -webkit-animation: cssAnimation 0s ease-in 10s forwards;
   /* Safari and Chrome */
-
   -o-animation: cssAnimation 0s ease-in 10s forwards;
   /* Opera */
-
   animation: cssAnimation 0s ease-in 10s forwards;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
@@ -765,11 +758,9 @@ body {
   display: table-cell;
   vertical-align: top;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -782,11 +773,9 @@ body {
   display: table-cell;
   vertical-align: top;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -842,6 +831,24 @@ body {
 .hint a:hover {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
+}
+.wc-loader {
+  position: absolute;
+  top: 20%;
+  right: 20%;
+  bottom: 20%;
+  left: 20%;
+  padding: 34px;
+  z-index: 1000;
+}
+.wc-loader .wc-loader-items .wc-loader-item {
+  display: inline-block;
+  width: 1%;
+  height: 4px;
+}
+.wc-loader .wc-loader-text {
+  text-align: center;
+  font-size: 200%;
 }
 .wc-title {
   position: absolute;
@@ -1126,18 +1133,18 @@ body {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   width: 100%;
   height: 100%;
 }
@@ -1232,18 +1239,18 @@ body {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   position: absolute;
   margin: 0px auto 0px auto;
   width: 100%;
@@ -1335,19 +1342,27 @@ canvas.tool-draw,
 canvas.tool-trace {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
+  /* Safari, Chrome and Opera > 12.1 */
+  /* Firefox < 16 */
+  /* Internet Explorer */
+  /* Opera < 12.1 */
+  /* Firefox < 16 */
+  /* Safari, Chrome and Opera > 12.1 */
+  /* Internet Explorer */
+  /* Opera < 12.1 */
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   cursor: crosshair;
 }
 @keyframes fadein {
