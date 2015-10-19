@@ -784,6 +784,17 @@ body {
   letter-spacing: 0.5px;
   display: table-cell;
   vertical-align: top;
+  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 }
 .wc-mapblock {
   position: absolute;
@@ -1013,18 +1024,28 @@ body {
   height: 100vh;
   text-shadow: none;
 }
-.wc-buttons-group {
-  margin-bottom: 6px;
-}
-.wc-buttons-group .wc-buttons-group-title-wrapper .wc-buttons-group-title-label {
+.wc-buttons-group-title-wrapper .wc-buttons-group-title-label {
   font-size: 9pt;
   text-transform: uppercase;
   letter-spacing: 0.5pt;
 }
-.wc-buttons-group .wc-buttons-group-title-wrapper .wc-buttons-group-title-value {
+.wc-buttons-group-title-wrapper .wc-buttons-group-title-value a,
+.wc-buttons-group-title-wrapper .wc-buttons-group-title-value a:link,
+.wc-buttons-group-title-wrapper .wc-buttons-group-title-value a:visited,
+.wc-buttons-group-title-wrapper .wc-buttons-group-title-value a:hover {
   font-size: 12pt;
   text-decoration: underline;
   margin-left: 6px;
+  color: #000;
+  font-family: "dauphine_regular";
+  font-style: normal;
+}
+.wc-active {
+  margin-bottom: 5px;
+}
+.wc-current {
+  padding-left: 6px;
+  border-left: 1px dotted #000;
 }
 .wc-buttons-group.wc-inactive {
   display: none;
