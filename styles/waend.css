@@ -589,7 +589,6 @@ body {
   height: 100%;
   font-family: "sansguiltmb";
   background-color: transparent;
-  border-left: 274px solid rgba(255, 255, 255, 0.5);
 }
 .wc-hide {
   display: none;
@@ -1211,7 +1210,7 @@ body {
   top: 0;
   right: 0;
   left: 0;
-  bottom: 46px;
+  bottom: 0;
 }
 .help-wrapper iframe {
   width: 100%;

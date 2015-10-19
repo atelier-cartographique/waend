@@ -415,7 +415,7 @@ Navigator.prototype.drawScale = function () {
 
     var left = 13,
         right = 74,
-        top = rect.height - 57,
+        top = rect.height - 17,
 	thickness = 6,
         bottom = top + thickness,
 	length = right - left,
