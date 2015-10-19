@@ -21,7 +21,7 @@ var Bind = require('../lib/Bind'),
 function init () {
     var elementWC = document.querySelector('#wc'),
         elementMap = document.querySelector('#map'),
-        wc = new WebConsole(elementWC),
+        wc = new WebConsole(elementWC, elementMap),
         layer = new LayerProvider(),
         source = new SourceProvider(),
         wmap = new WMap({'root': elementMap});
@@ -42,7 +42,7 @@ function init () {
 }
 
 document.onreadystatechange = function () {
-    if (document.readyState == "interactive") {
+    if (document.readyState === "interactive") {
         init();
     }
 };

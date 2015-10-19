@@ -29,6 +29,7 @@ function View (options) {
     this.resize();
 
     window.addEventListener('resize', _.bind(this.resize, this));
+    semaphore.on('map:resize', this.resize, this);
 }
 
 

@@ -657,7 +657,6 @@ function view () {
         userId = self.getUser(),
         groupId = self.getGroup();
 
-    terminal.hide();
     var options = {
         'container': display.node,
         'map': map
@@ -669,7 +668,6 @@ function view () {
 
         var ender = function (extent) {
             display.end();
-            terminal.show();
             resolve(extent);
         };
 

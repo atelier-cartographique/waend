@@ -83,6 +83,14 @@ function Display (container) {
     this._root.appendChild(this.node);
 }
 
+Display.prototype.setFinalizer = function(cb, ctx) {
+    this.finalizer = {
+        callback: cb,
+        context: ctx
+    };
+    return this;
+}
+
 Display.prototype.end = function () {
     if (this._ended) {
         throw (new Error('Display Already Ended, check your event handlers :)'));
@@ -92,6 +100,9 @@ Display.prototype.end = function () {
         el = this.node;
     container.removeChild(el);
     this._ended = true;
+    if (this.finalizer) {
+        this.finalizer.callback.call(this.finalizer.context);
+    }
 };
 
 
@@ -160,8 +171,9 @@ var WebConsole = Terminal.extend({
         },
     },
 
-    initialize: function (container) {
+    initialize: function (container, mapContainer) {
         this.root = container;
+        this.mapContainer = mapContainer;
         this.lines = [];
         this.history = [];
         this.commandMutex = new Mutex();
@@ -530,7 +542,26 @@ var WebConsole = Terminal.extend({
     },
 
     display: function () {
-        return (new Display(this.root));
+        var display = new Display(this.root),
+            mc = this.mapContainer,
+            savedTop = mc.style.top,
+            savedRight = mc.style.right,
+            savedBottom = mc.style.bottom,
+            savedLeft = mc.style.left;
+        this.hide();
+        mc.style.top = 0;
+        mc.style.right = 0;
+        mc.style.bottom = 0;
+        mc.style.left = 0;
+        display.setFinalizer(function () {
+            mc.style.top = savedTop;
+            mc.style.right = savedRight;
+            mc.style.bottom = savedBottom;
+            mc.style.left = savedLeft;
+            this.show();
+        }, this);
+        semaphore.signal('map:resize');
+        return display;
     },
 
     hide: function () {
