@@ -26,7 +26,6 @@ function Painter (view, layerId) {
     this.stateInc = 0;
     this.clear();
 
-    this.context.globalCompositeOperation = 'multiply';
 }
 
 Painter.prototype.handlers = {
@@ -72,6 +71,7 @@ Painter.prototype.clear = function () {
     this.resetTransform();
     this.resetClip();
     this.context.clearRect(0, 0, this.view.size.width, this.view.size.height);
+    this.context.globalCompositeOperation = 'multiply';
 };
 //
 // Painter.prototype.mapPoint = function (p) {
