@@ -347,7 +347,7 @@ var Shell = O.extend({
         // this.stdin.dump();
         // this.stdout.dump();
         // this.stderr.dump();
-
+        this.env.DELIVERED = null;
         if(1 == cls.length){
             return this.execOne(cls[0]);
         }
