@@ -27,7 +27,7 @@
  var groupButtons = {
      'List layers' : ['ll'],
      'Add layer': ['ic'],
-     'Show/Hide layers': ['visible | set visible'],
+     'Show - Hide layers': ['visible | set visible'],
      'Re-order layers': ['visible | edit | set visible'],
      'Set map extent': ['region get | set extent']
  };
