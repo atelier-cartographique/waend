@@ -228,10 +228,25 @@ NavigatorModeBase.prototype.mousemove = function (event) {
         // ctx.stroke();
         //
         // ctx.translate(sp[0] - hp[0], sp[1] - hp[1]); got to understand this, but it does not work atm.
+        var cData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height),
+            data = cData.data;
         this.navigator.map.getView()
             .forEachImage(function(imageData){
-                ctx.putImageData(imageData, hp[0] - sp[0], hp[1] - sp[1]);
+                var thisData = imageData.data,
+                    alpha;
+                for (var i = 0; i < data.length; i += 4) {
+                    alpha = thisData[i + 3] / 255,
+                        r = i,
+                        g = i + 1,
+                        b = i + 2;
+                    if (alpha > 0) {
+                        data[r] = (data[r] * (1 - alpha)) + (thisData[r] * alpha);
+                        data[g] = (data[g] * (1 - alpha)) + (thisData[g] * alpha);
+                        data[b] = (data[b] * (1 - alpha)) + (thisData[b] * alpha);
+                    }
+                }
             });
+        ctx.putImageData(cData, hp[0] - sp[0], hp[1] - sp[1]);
         ctx.restore();
         if (!this.isMoving) {
             this.isMoving = true;
