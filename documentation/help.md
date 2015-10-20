@@ -11,8 +11,9 @@ An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/
 1. [Generalities](#generalities)  
 1.1  [Logic of map publishing](#logic)  
 1.2  [Presentation of Wænd interface](#interface)  
-1.3  [Datas & Metadatas](#metadata)  
-1.4  [Structure of Wænd](#structure)
+1.3  [Structure of Wænd](#structure)  
+1.4  [Datas & Metadatas](#metadata)  
+
  
 2.  [Play with attributes / metadatas](#working-metadatas)  
 3.1  [set attribute (set)](#set)  
@@ -93,6 +94,22 @@ There are two surprising aspects you will discover :
 
 
 
+
+
+
+###<a name="structure"></a>Wænd structure
+
+Waend structure is pretty simple, it goes like russian dolls : 
+
+User account / Map  x / Layer y / Feature z  
+
+A user account host maps.  
+A map host layers.  
+A layer host features.
+
+We call each of them "context" (User context, map context, etc.)
+Features are the most simple a-map élément : like a parc, or an image.
+While maps are groups of layers, we also call them "groups".
 
 
 
@@ -466,6 +483,38 @@ Use the wizard to help you building your query :
 ![illustration map-layers](images/overpass-wizard.png)
 
 
+Exemples : 
+
+#####Query for buildings in selection box
+
+	[out:json][timeout:25];
+	// gather results
+	(
+	  // query part for: “building”
+	  way["building"]({{bbox}});
+	  relation["building"]({{bbox}});
+	);
+	// print results
+	out body;
+	>;
+	out skel qt;
+ 	
+#####Query for all roads in selection box
+
+	[out:json][timeout:25];
+	// gather results
+	(
+	  // query part for: “highway”
+	  node["highway"]({{bbox}});
+	  way["highway"]({{bbox}});
+	  relation["highway"]({{bbox}});
+	);
+	// print results
+	out body;
+	>;
+	out skel qt;
+
+
 #####Query for everything in the selection box
 
  	// gather results
@@ -475,10 +524,15 @@ Use the wizard to help you building your query :
  	>;
  	out skel qt;
  	
- 	
-
 
 ##<a name="style-tips"></a> Style tips & tricks
+
+### Color generators
+
+Many colors generators exists online, giving you the HTML value you would need. 
+
+Here are two of them: [coolors.co](https://coolors.co/) and [paletton.com](http://paletton.com/)
+
 
 ###<a name="tip-fill"></a> polygon fill color
 
