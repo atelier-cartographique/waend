@@ -47,15 +47,21 @@ function select () {
                     var f = features[i];
                     if (f) {
                         var id = f.id,
-                            name = f.has('name') ? ' - ' + f.get('name') : '',
+                            fidL = f.id.length, 
+                            fidTrim = '•'+f.id.substr(0, 2)+'\u2026'+f.id.substr(fidL - 2, fidL);
+
+                            name = f.has('name') ? f.get('name') : '',
                             p = '/' + f.getPath().join('/');
+
+                            if (name ==='' || name == null) {
+                                name = fidTrim;
+                            };
                         stdout.write(terminal.makeCommand({
                             'args': [
                                 'cc ' + p,
-                                'gg | region set',
-                                'get'
+                                'gg | region set | get'
                             ],
-                            'text': (id + name)
+                            'text': (name)
                         }));
                     }
                 }

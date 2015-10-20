@@ -9,7 +9,9 @@
  */
 
 
-var Promise = require("bluebird");
+var Promise = require("bluebird"),
+    helpers = require('../../helpers');
+
 
 function listFeatures () {
     var self = this,
@@ -27,11 +29,12 @@ function listFeatures () {
             .then(function(features){
                 for(var i = 0; i < features.length; i++){
                     var feature = features[i];
-                    var fidL = feature.id.length; 
-                    var fIdtrim = '•'+feature.id.substr(0, 2)+'\u2026'+feature.id.substr(fidL - 2, fidL);
+                    // var fidL = feature.id.length; 
+                    // var fIdtrim = '•'+feature.id.substr(0, 2)+'\u2026'+feature.id.substr(fidL - 2, fidL);
                     var fName = feature.get('name');
-                        if (fName === '' || fName == null) { 
-                            fName = fIdtrim;
+                        if (Bind.get().db.has(id)) { 
+                            var model = Bind.get().db.get(id);
+                            fName = helpers.getModelName(model);
                         };
                     var cmd = terminal.makeCommand({
                         'args': [
