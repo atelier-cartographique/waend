@@ -27,6 +27,11 @@ function postLogin(req, res){
     res.redirect('/');
 }
 
+function postLogout(req, res){
+    req.logout();
+    res.redirect('/');
+}
+
 function renderLogin(req, res){
     res.render('login', {email:''});
 }
@@ -40,8 +45,13 @@ function register (req, res) {
         password = req.body.password;
 
     auth.register(email, password)
-        .then(function(){
-            res.redirect('/map');
+        .then(function(user){
+            req.login(user, function(err){
+                if (err) {
+                    console.error('auto login after register:', err);
+                }
+                res.redirect('/map');
+            });
         })
         .catch(function(err){
             res.status(500).render('registerFailed', {
@@ -60,6 +70,7 @@ module.exports = exports = function(router, app){
 
 
     // POSTs
-    router.post('/login',  authenticate, postLogin);
+    router.post('/login', authenticate, postLogin);
+    router.post('/logout', postLogout);
     router.post('/register', register);
 };

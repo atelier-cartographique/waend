@@ -365,15 +365,19 @@ var WebConsole = Terminal.extend({
 
             for (bi = 0 ; bi < buttonKeys.length; bi++) {
                 var bn = buttonKeys[bi],
-                
                     buttonElement = document.createElement('div');
-
-                var bnNoSpace = bn.replace(/\s+/g, '');
-                var bnClass = bnNoSpace.toLowerCase();
-                buttonElement.setAttribute('class','wc-button ' + 'icon-' + bnClass);
-                buttonElement.appendChild(document.createTextNode(bn));
-                buttonElement.addEventListener('click', cmdHandler(gn, bn));
-                groupElement.appendChild(buttonElement);
+                if (_.isFunction(buttons[gn][bn])) {
+                    buttons[gn][bn](self, buttonElement);
+                    groupElement.appendChild(buttonElement);
+                }
+                else {
+                    var bnNoSpace = bn.replace(/\s+/g, '');
+                    var bnClass = bnNoSpace.toLowerCase();
+                    buttonElement.setAttribute('class','wc-button ' + 'icon-' + bnClass);
+                    buttonElement.appendChild(document.createTextNode(bn));
+                    buttonElement.addEventListener('click', cmdHandler(gn, bn));
+                    groupElement.appendChild(buttonElement);
+                }
             }
         }
 

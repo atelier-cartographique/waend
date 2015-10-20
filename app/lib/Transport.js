@@ -173,8 +173,8 @@ var Transport = O.extend({
     },
 
     _write: function(verb, url, postOptions) {
-        var transport = this.transport,
-            getOptions = getOptions || {};
+        var transport = this.transport;
+        postOptions = postOptions || {};
 
         var resolver = function (resolve, reject) {
             var errorhandler = function (evt, xhr) {

@@ -112,7 +112,7 @@ function getUrl () {
     }
     fragment.replace(routeStripper, '');
     var path = fragment.split('/');
-    if(path[0].length === 0) {
+    while(path.length > 0 && path[0].length === 0) {
         path = path.slice(1);
     }
     purl.fragment = fragment;
@@ -401,6 +401,10 @@ var Shell = O.extend({
         return userName;
     },
 
+    getUser: function () {
+        return this.user;
+    },
+
     setUser: function (userId) {
         //console.log('shell.setUser', userId);
         var self = this,
@@ -513,9 +517,14 @@ var Shell = O.extend({
 
     loadUser: function (path) {
         //console.log('shell.loadUser', path);
-        var userName = this.getUserId(path[0]);
+        try {
+            var userName = this.getUserId(path[0]);
+            return this.setUser(userName);
+        }
+        catch (err) {
+            return Bromise.reject('invalid user id');
+        }
 
-        return this.setUser(userName);
     },
 
     loadGroup: function (path) {
@@ -563,7 +572,7 @@ var Shell = O.extend({
     loginUser: function (u) {
         var self = this;
         self.user = u;
-        semaphore.signal('login', u);
+        semaphore.signal('user:login', u);
 
         var next = function (startPath) {
             if (!startPath) {
@@ -577,6 +586,11 @@ var Shell = O.extend({
         else {
             self.once('history:start', next);
         }
+    },
+
+    logoutUser: function () {
+        self.user = null;
+        semaphore.signal('user:logout');
     }
 
 });

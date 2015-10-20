@@ -34,7 +34,8 @@ function login (username, password) {
         }).then(function(){
             return binder.getMe()
                 .then(function(user){
-                    shell.user = user;
+                    // shell.user = user;
+                    shell.loginUser(user);
                     var cmd1 = terminal.makeCommand({
                         'args': [
                             'cc /' + user.id,

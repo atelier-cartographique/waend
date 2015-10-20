@@ -13,6 +13,7 @@
 var commandModules = [
     require('./listCommands'),
     require('./login'),
+    require('./logout'),
     require('./echo'),
     require('./read'),
     require('./changeContext'),

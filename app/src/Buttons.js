@@ -8,9 +8,35 @@
  *
  */
 
+var semaphore = require('../lib/Semaphore');
+
+function loginButton(console, button) {
+    var isLogged = false;
+    button.setAttribute('class','wc-button icon-login');
+    button.innerHTML = 'Login';
+
+    button.addEventListener('click', function(){
+        if(!isLogged) {
+            console.runCommand('login');
+        }
+        else {
+            console.runCommand('logout');
+        }
+    });
+
+    semaphore.on('user:login', function (user) {
+        isLogged = true;
+        button.innerHTML = 'Logout';
+    });
+    semaphore.on('user:logout', function () {
+        isLogged = false;
+        button.innerHTML = 'Login';
+    });
+}
+
  var shellButtons = {
      'Help' : ['help'],
-     'Login' : ['login'],
+     'Login' : loginButton,
      'About' : ['cc /2232525b-a8cb-4579-af24-2b5629ba43b5/3a7f695b-cd37-43f4-9a7a-efb1e422aef8?c=view']
  };
 
