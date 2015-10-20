@@ -16,30 +16,31 @@ An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/
 
  
 2.  [Play with attributes / metadatas](#working-metadatas)  
-3.1  [set attribute (set)](#set)  
-3.2  [get attributes (get)](#get)  
-3.3  [edit attribute (edit)](#edit)  
-3.4  [delete attribute (del)](#del)  
+3.1  [Set attribute (set)](#set)  
+3.2  [Get attributes (get)](#get)  
+3.3  [Edit attribute (edit)](#edit)  
+3.4  [Delete attribute (del)](#del)  
 3.5  [Exemple : customize your profile](#profile)  
 
 3.  [Play with features](#feature)   
-4.1  [style your features](#style-feature)   
-4.2  [edit feature geometry](#edit_geometry)  
+4.1  [Style your features](#style-feature)   
+4.2  [Edit feature geometry](#edit_geometry)  
 
 
 4.  [Play with layers](#layer)  
-5.1  [style at layer level](#style-feature)  
-5.3  [attach a layer to another map](#attach)  
-5.4  [detach a layer from a map](#detach)   
-5.5  [delete a layer](#delete-layer)   
+5.1  [Style at layer level](#style-feature)  
+5.3  [Attach a layer to another map](#attach)  
+5.4  [Detach a layer from a map](#detach)   
+5.5  [Delete a layer](#delete-layer)   
 
 5. 	[Import Geo-Datas]()  
 5.1  [Geo-Datas : Working with GeoJSON](#GeoJSON)    
 5.2  [Geo-Datas : Help with Overpass Turbo](#overpass) 
 
 6.  [Style tips & tricks](#style-tips)  
-6.1  [polygon fill color](#tip-fill)  
-6.2  [play with Composite Operation](#tip-composite) 
+6.1  [HTML color generators ](#tip-colorgenerator)  
+6.2  [Polygon fill color](#tip-fill)  
+6.3  [Play with Composite Operation](#tip-composite) 
 
 7. [Other]()   
 7.1  [Searching maps on Wænd](#search)   
@@ -527,7 +528,7 @@ Exemples :
 
 ##<a name="style-tips"></a> Style tips & tricks
 
-### Color generators
+###<a name="tip-colorgenerator"></a>HTML Color generators
 
 Many colors generators exists online, giving you the HTML value you would need. 
 
