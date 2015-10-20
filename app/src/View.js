@@ -215,6 +215,14 @@ View.prototype.removeLayer = function (layer) {
     }
 };
 
-
+View.prototype.forEachImage = function (fn, ctx) {
+    var rect = this.getRect();
+    for (var i = 0; i < this.contexts.length; i++) {
+        var source = this.contexts[i],
+            img = source.getImageData(0, 0, rect.width, rect.height);
+        // context.putImageData(img, 0, 0);
+        fn.call(ctx, img);
+    }
+};
 
 module.exports = exports = View;

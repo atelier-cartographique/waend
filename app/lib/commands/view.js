@@ -199,32 +199,40 @@ NavigatorModeBase.prototype.mousemove = function (event) {
         // this.select.style.top = tl[1] + 'px';
         // this.select.style.width = extent.getWidth() + 'px';
         // this.select.style.height = extent.getHeight() + 'px';
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.save();
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(sp[0], sp[1]);
-        ctx.lineTo(hp[0], hp[1]);
-
-        var tr0 = new Transform(),
-            tr1 = new Transform(),
-            mpX = sp[0] + ((hp[0] - sp[0]) * 0.9),
-            mpY = sp[1] + ((hp[1] - sp[1]) * 0.9),
-            mp0 = [mpX, mpY],
-            mp1 = [mpX, mpY];
-
-        tr0.rotate(60, hp);
-        tr1.rotate(-60, hp);
-        tr0.mapVec2(mp0);
-        tr1.mapVec2(mp1);
-
-        ctx.lineTo(mp0[0], mp0[1]);
-        ctx.lineTo(mp1[0], mp1[1]);
-        ctx.lineTo(hp[0], hp[1]);
-
-        ctx.stroke();
-        ctx.restore()
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        // ctx.strokeStyle = 'black';
+        // ctx.lineWidth = 1;
+        // ctx.beginPath();
+        // ctx.moveTo(sp[0], sp[1]);
+        // ctx.lineTo(hp[0], hp[1]);
+        //
+        // var tr0 = new Transform(),
+        //     tr1 = new Transform(),
+        //     mpX = sp[0] + ((hp[0] - sp[0]) * 0.9),
+        //     mpY = sp[1] + ((hp[1] - sp[1]) * 0.9),
+        //     mp0 = [mpX, mpY],
+        //     mp1 = [mpX, mpY];
+        //
+        // tr0.rotate(60, hp);
+        // tr1.rotate(-60, hp);
+        // tr0.mapVec2(mp0);
+        // tr1.mapVec2(mp1);
+        //
+        // ctx.lineTo(mp0[0], mp0[1]);
+        // ctx.lineTo(mp1[0], mp1[1]);
+        // ctx.lineTo(hp[0], hp[1]);
+        //
+        // ctx.stroke();
+        //
+        // ctx.translate(sp[0] - hp[0], sp[1] - hp[1]); got to understand this, but it does not work atm.
+        this.navigator.map.getView()
+            .forEachImage(function(imageData){
+                ctx.putImageData(imageData, hp[0] - sp[0], hp[1] - sp[1]);
+            });
+        ctx.restore();
         if (!this.isMoving) {
             this.isMoving = true;
             // this.select.style.display = 'block';
