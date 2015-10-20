@@ -175,14 +175,14 @@ NavigatorModeBase.prototype.mousedown = function (event) {
     event.stopPropagation();
     this.startPoint = [event.clientX, event.clientY];
     this.isStarted = true;
-    if (!this.select) {
-        this.select = document.createElement('div');
-        this.select.setAttribute('class', 'navigate-select');
-        this.select.style.position = 'absolute';
-        this.select.style.pointerEvents = 'none';
-        this.select.style.display = 'none';
-        this.navigator.options.container.appendChild(this.select);
-    }
+    // if (!this.select) {
+    //     this.select = document.createElement('div');
+    //     this.select.setAttribute('class', 'navigate-select');
+    //     this.select.style.position = 'absolute';
+    //     this.select.style.pointerEvents = 'none';
+    //     this.select.style.display = 'none';
+    //     this.navigator.options.container.appendChild(this.select);
+    // }
 
 };
 
@@ -191,17 +191,43 @@ NavigatorModeBase.prototype.mousemove = function (event) {
     if (this.isStarted) {
         var sp = this.startPoint,
             hp = [event.clientX, event.clientY],
-            extent = new Geometry.Extent(sp.concat(hp));
+            extent = new Geometry.Extent(sp.concat(hp)),
+            ctx = this.navigator.context;
         extent.normalize();
         var tl = extent.getBottomLeft().getCoordinates();
-        this.select.style.left = tl[0] + 'px';
-        this.select.style.top = tl[1] + 'px';
-        this.select.style.width = extent.getWidth() + 'px';
-        this.select.style.height = extent.getHeight() + 'px';
+        // this.select.style.left = tl[0] + 'px';
+        // this.select.style.top = tl[1] + 'px';
+        // this.select.style.width = extent.getWidth() + 'px';
+        // this.select.style.height = extent.getHeight() + 'px';
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.save();
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(sp[0], sp[1]);
+        ctx.lineTo(hp[0], hp[1]);
 
+        var tr0 = new Transform(),
+            tr1 = new Transform(),
+            mpX = sp[0] + ((hp[0] - sp[0]) * 0.9),
+            mpY = sp[1] + ((hp[1] - sp[1]) * 0.9),
+            mp0 = [mpX, mpY],
+            mp1 = [mpX, mpY];
+
+        tr0.rotate(60, hp);
+        tr1.rotate(-60, hp);
+        tr0.mapVec2(mp0);
+        tr1.mapVec2(mp1);
+
+        ctx.lineTo(mp0[0], mp0[1]);
+        ctx.lineTo(mp1[0], mp1[1]);
+        ctx.lineTo(hp[0], hp[1]);
+
+        ctx.stroke();
+        ctx.restore()
         if (!this.isMoving) {
             this.isMoving = true;
-            this.select.style.display = 'block';
+            // this.select.style.display = 'block';
         }
 
     }
@@ -211,20 +237,36 @@ NavigatorModeBase.prototype.mouseup = function (event) {
     if (this.isStarted) {
         var endPoint = [event.clientX, event.clientY],
             startPoint = this.startPoint,
-            dist = vecDist(startPoint, endPoint);
+            dist = vecDist(startPoint, endPoint),
+            map = this.navigator.map,
+            extent = new Geometry.Extent(startPoint.concat(endPoint)),
+            ctx = this.navigator.context;
+        extent.normalize();
+        var tl = extent.getBottomLeft().getCoordinates();
 
-        if (dist > 2) {
-            var TI = this.navigator.transform.inverse(),
-                extent = unprojectExtent(transformExtent(startPoint.concat(endPoint), TI));
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-            region.push(extent);
+        if (dist > 4) {
+            // var TI = this.navigator.transform.inverse(),
+            //     extent = unprojectExtent(transformExtent(startPoint.concat(endPoint), TI));
+            //
+            // region.push(extent);
+            var startCoordinates = map.getCoordinateFromPixel(startPoint),
+                endCoordinates = map.getCoordinateFromPixel(endPoint);
+            var T = new Transform(),
+                extent = region.get();
+
+            T.translate(startCoordinates[0] - endCoordinates[0],
+                        startCoordinates[1] - endCoordinates[1]);
+            transformRegion(T, extent);
         }
         else {
             this.navigator.centerOn(startPoint);
         }
         this.isStarted = false;
         this.isMoving = false;
-        this.select.style.display = 'none';
+        // this.select.style.display = 'none';
+
     }
 };
 
