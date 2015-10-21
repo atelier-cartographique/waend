@@ -11,7 +11,7 @@
 var Hyph = require('hypher'),
     en = require('hyphenation.en-us'),
     hyph = new Hyph(en),
-    Font = require('./Font');
+    Font = require('./Belgika');
 
 function Text (str, fontName) {
     this._string = str;
@@ -26,61 +26,12 @@ function Text (str, fontName) {
             this.clusters.push(hc[c]);
         }
     }
-    this._pendings = [];
-    fontName = fontName || 'default';
-    Font.select(fontName, function (f) {
-        this.font = f;
-        this.ready = true;
-        for (var i = 0; i < this._pendings.length; i++) {
-            var pending = this._pendings[i],
-                fn = pending[0],
-                ctx = pending[1];
-            fn.call(ctx, this);
-        }
-        this._pendings = [];
-    }, this);
+    this.font = new Font();
 }
 
 Text.prototype.whenReady = function (fn, ctx) {
-    if(!this.ready) {
-        this._pendings.push([fn, ctx]);
-    }
-    else {
-        fn.call(ctx, this);
-    }
+    fn.call(ctx, this);
 };
-
-/*
-opentype.js getPath flips Ys, it's fair. but as long as we flip the viewport to
-accomodate with a weird OL3 behaviour, ther's no point to flip glyphs.
-*/
-function getPath (x, y, fontSize) {
-    var scale, p, commands, cmd;
-    x = x !== undefined ? x : 0;
-    y = y !== undefined ? y : 0;
-    fontSize = fontSize !== undefined ? fontSize : 72;
-    scale = 1 / this.font.unitsPerEm * fontSize;
-    p = new Font.Path();
-    commands = this.path.commands;
-    for (var i = 0; i < commands.length; i += 1) {
-        cmd = commands[i];
-        if (cmd.type === 'M') {
-            p.moveTo(x + (cmd.x * scale), y + (cmd.y * scale));
-        } else if (cmd.type === 'L') {
-            p.lineTo(x + (cmd.x * scale), y + (cmd.y * scale));
-        } else if (cmd.type === 'Q') {
-            p.quadraticCurveTo(x + (cmd.x1 * scale), y + (cmd.y1 * scale),
-                               x + (cmd.x * scale), y + (cmd.y * scale));
-        } else if (cmd.type === 'C') {
-            p.curveTo(x + (cmd.x1 * scale), y + (cmd.y1 * scale),
-                      x + (cmd.x2 * scale), y + (cmd.y2 * scale),
-                      x + (cmd.x * scale), y + (cmd.y * scale));
-        } else if (cmd.type === 'Z') {
-            p.closePath();
-        }
-    }
-    return p;
-}
 
 
 function vecDist (v1, v2) {
@@ -132,9 +83,9 @@ Text.prototype.draw = function (fontsz, segments, offset, mergeSegments) {
         gc = this.font.stringToGlyphs(clusters[ii]);
         for (var iii = gOffset; iii < gc.length; iii++) {
             g = gc[iii];
-            sa = g.advanceWidth * scale;
+            sa = g.width * scale;
             if (sa < vecDist(curPos, endPos)) {
-                currentPath = getPath.apply(g, [curPos[0], curPos[1], fontsz]);
+                currentPath = g.getPath(curPos[0], curPos[1], fontsz);
                 currentPath.segment = cs;
                 currentPath.pos = curPos;
                 currentPath.nextPos = vecAdd(curPos, endPos, sa);

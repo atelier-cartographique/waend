@@ -19,6 +19,10 @@ function Program (ctx) {
         ctx.processStyle(props, new ctx.Transform(fm));
     };
 
+    var startTextFeature = function (props, fm) {
+        ctx.processStyle(props, new ctx.Transform(fm), ['lineWidth']);
+    };
+
     var endFeature = function () {
         ctx.emit('restore');
     };
@@ -33,12 +37,13 @@ function Program (ctx) {
 
 
     ctx.linestring = function (coordinates, props, fm) {
-        startFeature(props, fm);
         var txt = getParameter(props, 'text');
         if (txt) {
+            startTextFeature(props, fm);
             textedLine(coordinates, props, fm);
         }
         else {
+            startFeature(props, fm);
             var T = new ctx.Transform(fm);
             ctx.lineProject(coordinates);
             ctx.lineTransform(T, coordinates);
@@ -146,16 +151,18 @@ function Program (ctx) {
     };
 
     ctx.polygon = function (coordinates, props, fm) {
-        startFeature(props, fm);
         var img = getParameter(props, 'image'),
             txt = getParameter(props, 'text');
         if (img) {
+            startFeature(props, fm);
             imagedPolygon(coordinates, img, props, fm);
         }
         else if (txt) {
+            startTextFeature(props, fm);
             textedPolygon(coordinates, props, fm);
         }
         else {
+            startFeature(props, fm);
             hatchedPolygon(coordinates, props, fm);
         }
         endFeature();

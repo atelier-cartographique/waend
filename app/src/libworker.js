@@ -309,7 +309,7 @@ function drawTextInPolygon (T, polygon, txt, fs) {
                     for (var ii = 0; ii < p.commands.length; ii++) {
                         instructions.push(transformCommand([tfn], p.commands[ii]));
                     }
-                    instructions.push(['fill']);
+                    instructions.push(['stroke']);
                 }
             }
             startSegment += 1;
@@ -476,53 +476,13 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
                     instructions.push(transformCommand([ident], p.commands[ii]));
 
                 }
-                instructions.push(['fill']);
+                instructions.push(['stroke']);
                 emit('instructions', instructions);
                 emit('restore');
             }
         }
     };
-    //
-    // var proceedDebug = function () {
-    //     // translator = (new Transform()).translate(ttr[0], ttr[1]).mapVec2Fn();
-    //     if (segments.length > 0) {
-    //         var result = t.draw(fs, segments, tOffsets, true),
-    //             paths = result[1],
-    //             TT, rotator, angle, p, pos,
-    //             ident = (new Transform()).mapVec2Fn();
-    //
-    //         tOffsets = result[0];
-    //
-    //         // pos = T.mapVec2([0, 0]);
-    //         for (var i = 360; i > 0; i-=8) {
-    //             instructions = [];
-    //             emit('save');
-    //             p = paths[4];
-    //             // pos = T.mapVec2([-p.pos[0], -p.pos[1]]);
-    //             pos = [p.pos[0] + (ttr[0] / tsc[0]), p.pos[1] + (ttr[1] / tsc[1])];
-    //             angle = i;
-    //             TT = new Transform();
-    //             TT.multiply(translate);
-    //             TT.rotate(angle, pos);
-    //             TT.multiply(scale);
-    //             emit.apply(self, ['transform'].concat(TT.flatMatrix()));
-    //             // TT.scale(tsi[0], tsi[1]);
-    //             rotator = TT.mapVec2Fn('rot');
-    //             // console.log('zero', rotator([0,0]));
-    //             instructions.push(['beginPath']);
-    //             for (var ii = 0; ii < p.commands.length; ii++) {
-    //                 instructions.push(transformCommand([ident], p.commands[ii]));
-    //
-    //             }
-    //             instructions.push(['fill']);
-    //             emit('instructions', instructions);
-    //             emit('restore');
-    //         }
-    //     }
-    //     // emit('instructions', instructions);
-    // };
 
-    // t.whenReady(proceedDebug);
     t.whenReady(proceed);
 }
 
@@ -551,21 +511,30 @@ function getProperty (props, key, def) {
     return val;
 }
 
-function processStyle (props, T) {
+
+function scaler (k, val, s, nsl) {
+    if (underscore.indexOf(nsl, k) < 0) {
+        return val * s;
+    }
+    return val;
+}
+
+function processStyle (props, T, notScaleList) {
+    notScaleList = notScaleList || [];
     var scale = T.getScale()[0];
     emit('save');
     if ('style' in props) {
         var style = props.style, val;
         for (var k in style) {
-            val = getProperty(props, 'style.'+k, null);
+            val = getProperty(props, 'style.' + k, null);
             if (val) {
                 if (underscore.isNumber(val)) {
-                    var tv = val * scale;
+                    var tv = scaler(k, val, scale, notScaleList);
                     emit('set', k, tv);
                 }
                 else if ('dashLine' === k) {
-                    var tv0 = val[0] * scale,
-                        tv1 = val[1] * scale;
+                    var tv0 = scaler(k, val[0], scale, notScaleList),
+                        tv1 = scaler(k, val[1], scale, notScaleList);
                     emit('set', 'dashLine', [tv0, tv1]);
                 }
                 else {
@@ -573,9 +542,6 @@ function processStyle (props, T) {
                 }
             }
         }
-        // underscore.each(style, function(value, key){
-        //     emit('set', key, value);
-        // });
     }
 }
 
