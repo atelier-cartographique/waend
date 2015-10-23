@@ -193,9 +193,11 @@ table {
 }
 .word-wrap {
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -340,18 +342,18 @@ input[type="submit"] {
 }
 .fade-in {
   -webkit-animation: fadein 0.5s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
-  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
-  /* Internet Explorer */
   -o-animation: fadein 0.5s;
-  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
 }
 @keyframes fadein {
   from {
@@ -397,18 +399,18 @@ input[type="submit"] {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
-  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
-  /* Internet Explorer */
   -o-animation: fadein 0.5s;
-  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
 }
 @keyframes fadein {
   from {
@@ -485,6 +487,7 @@ body {
   bottom: 0;
   /*padding: 24px;
     padding-top: 38px;*/
+
   background-color: transparent;
 }
 .wc-context-feature {
@@ -583,19 +586,15 @@ body {
   right: -200px;
   transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
-.wc-element.wc-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+.wc-element.wc-pages {
+  opacity: 1;
+  width: 100%;
+  overflow-y: hidden;
   width: 250px;
 }
-.wc-element.wc-container.wc-hide {
-  left: -250px;
-  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
-}
-.wc-element.wc-container .wc-page.wc-active {
+.wc-element.wc-pages .wc-page.wc-active {
   position: absolute;
-  width: 100%;
+  width: 250px;
   max-height: 130px;
   bottom: 30px;
   left: 12px;
@@ -603,14 +602,15 @@ body {
   padding-top: 22px;
   border-bottom: 1px solid #000;
   overflow-y: auto;
-  z-index: 1;
+  z-index: 10;
 }
-.wc-element.wc-container .wc-page {
-  opacity: 1;
-  width: 100%;
-  overflow-y: hidden;
+.wc-element.wc-pages .wc-page.wc-inactive {
+  opacity: 0;
+  transform: translateX(-50%);
+  transition-property: opacity, transform;
+  transition-duration: 1s;
 }
-.wc-element.wc-container .wc-page-title {
+.wc-element.wc-pages .wc-page-title {
   position: absolute;
   width: 100%;
   background-color: #FFF;
@@ -622,14 +622,82 @@ body {
   text-align: right;
   text-shadow: none;
 }
-.wc-element.wc-container .wc-line {
+.wc-element.wc-pages .wc-line {
   font-size: 10pt;
 }
-.wc-element.wc-container .wc-page.wc-inactive {
-  opacity: 0;
-  transform: translateX(-50%);
-  transition-property: opacity, transform;
-  transition-duration: 1s;
+.wc-element.wc-pages .wc-line a {
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
+  color: #000;
+}
+.wc-element.wc-pages .wc-line a:hover {
+  border-bottom: 1px solid #282f35;
+  cursor: pointer;
+}
+.wc-element.wc-pages .wc-line .key-value .key {
+  padding-right: 6px;
+  color: #993358;
+  display: block;
+  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+.wc-element.wc-pages .wc-line .key-value .value {
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 6px;
+  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+.wc-element.wc-pages .wc-line .hint {
+  font-family: "dauphine_regular";
+  text-shadow: none;
+  display: inline-block;
+  color: #91b391;
+}
+.wc-element.wc-pages .wc-line .hint a {
+  color: #91b391;
+  text-decoration: none !important;
+  display: inline-block;
+  border-bottom: 1px solid transparent;
+  margin-bottom: 6px;
+}
+.wc-element.wc-pages .wc-line .hint a:link {
+  font-family: "dauphine_italic";
+}
+.wc-element.wc-pages .wc-line .hint a:hover {
+  border-bottom: 1px solid #282f35;
+  cursor: pointer;
+}
+.wc-element.wc-pages .hidden {
+  display: none;
+}
+.wc-element.wc-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 250px;
+}
+.wc-element.wc-container.wc-hide {
+  left: -250px;
+  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-container .wc-input-prompt {
   font-family: "dauphine_regular";
@@ -674,6 +742,7 @@ body {
 .wc-element.wc-container .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
+
 }
 .wc-element.wc-container .wc-pending {
   color: #2B71FF;
@@ -742,45 +811,6 @@ body {
 .wc-element.wc-container .wc-command:focus {
   border-bottom: 1px solid;
 }
-.wc-element.wc-container .hidden {
-  display: none;
-}
-.wc-element.wc-container .key-value {
-  display: table;
-  margin-bottom: 2px;
-}
-.wc-element.wc-container .key-value .key {
-  width: 75px;
-  text-align: right;
-  padding-right: 6px;
-  color: #993358;
-  display: table-cell;
-  vertical-align: top;
-  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-  -ms-word-break: break-all;
-  word-break: break-all;
-  /* Non standard for webkit */
-  word-break: break-word;
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  -ms-hyphens: auto;
-  hyphens: auto;
-}
-.wc-element.wc-container .key-value .value {
-  width: calc(100% - 75px - 6px);
-  letter-spacing: 0.5px;
-  display: table-cell;
-  vertical-align: top;
-  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-  -ms-word-break: break-all;
-  word-break: break-all;
-  /* Non standard for webkit */
-  word-break: break-word;
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  -ms-hyphens: auto;
-  hyphens: auto;
-}
 .wc-nav,
 .wc-select,
 .wc-draw-zoom {
@@ -791,32 +821,6 @@ body {
 .wc-nav:hover,
 .wc-select:hover,
 .wc-draw-zoom:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
-}
-.key-name .value {
-  font-size: 120%;
-  font-family: inherit;
-  letter-spacing: inherit;
-}
-.hint {
-  font-family: "dauphine_regular";
-  text-shadow: none;
-  display: inline-block;
-  color: #91b391;
-  margin-left: 65px;
-  margin-top: 6px;
-}
-.hint a {
-  color: #91b391;
-  text-decoration: none !important;
-  display: inline-block;
-  border-bottom: 1px solid transparent;
-}
-.hint a:link {
-  font-family: "dauphine_italic";
-}
-.hint a:hover {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
@@ -1217,18 +1221,18 @@ body {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
-  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
-  /* Internet Explorer */
   -o-animation: fadein 0.5s;
-  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   position: absolute;
   display: block;
   overflow: hidden;
@@ -1334,18 +1338,18 @@ body {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
-  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
-  /* Internet Explorer */
   -o-animation: fadein 0.5s;
-  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   position: absolute;
   margin: 0px auto 0px auto;
   width: 100%;
@@ -1437,27 +1441,19 @@ canvas.tool-draw,
 canvas.tool-trace {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
-  /* Safari, Chrome and Opera > 12.1 */
-  /* Firefox < 16 */
-  /* Internet Explorer */
-  /* Opera < 12.1 */
-  /* Firefox < 16 */
-  /* Safari, Chrome and Opera > 12.1 */
-  /* Internet Explorer */
-  /* Opera < 12.1 */
   -webkit-animation: fadein 0.5s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
-  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
-  /* Internet Explorer */
   -o-animation: fadein 0.5s;
-  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   cursor: crosshair;
 }
 @keyframes fadein {

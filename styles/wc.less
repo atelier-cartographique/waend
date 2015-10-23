@@ -40,40 +40,30 @@
         }
     }
 
-    &.wc-container {
-        position: absolute;
-        bottom: 0;
-        left: 0;
+    &.wc-pages {
+        opacity: 1;
+        width: 100%;
+        overflow-y: hidden;
         width: @widthMenuLeft;
-
-        &.wc-hide {
-            left: -@widthMenuLeft;
-            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
-        }
-
-        .wc-pages,
-        .wc-page.wc-active{
-
-        }
 
         .wc-page.wc-active {
             position: absolute;
-            width: 100%;
+            width: @widthMenuLeft;
             max-height: 130px;
-            // overflow: auto;
             bottom: 30px;
             left:12px;
             background-color: transparent;
             padding-top: 22px;
             border-bottom: 1px solid #000;
             overflow-y: auto;
-            z-index: 1;
+            z-index: 10;
         }
 
-        .wc-page {
-            opacity: 1;
-            width: 100%;
-            overflow-y: hidden;
+        .wc-page.wc-inactive {
+            opacity: 0;
+            transform: translateX(-50%);
+            transition-property: opacity, transform;
+            transition-duration: 1s;
         }
 
         .wc-page-title {
@@ -91,16 +81,61 @@
 
         .wc-line {
             font-size: 10pt;
+            a{
+                .linkwaend;
+                color: #000;
+            }
+
+            .key-value {
+                .key {
+                  padding-right: 6px;
+                  color: @red;
+                  display: block;
+                  .word-wrap;
+                }
+
+                .value {
+                    letter-spacing: 0.5px;
+                    display: block;
+                    margin-bottom: 6px;
+                    .word-wrap;
+                }
+            }
+
+            .hint {
+                font-family: "dauphine_regular";
+                text-shadow: none;
+                display: inline-block;
+                color: @colorHelp;
+
+                a{
+                  color: @colorHelp;
+                  text-decoration: none !important;
+                  display: inline-block;
+                  border-bottom: 1px solid transparent;
+                  margin-bottom: 6px;
+                }
+
+                a:link{font-family: "dauphine_italic";}
+
+                a:hover{.link-hover}
+            }
         }
 
+        .hidden {display: none;}
 
-        .wc-page.wc-inactive {
-            opacity: 0;
-            transform: translateX(-50%);
-            transition-property: opacity, transform;
-            transition-duration: 1s;
+    }
+
+    &.wc-container {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: @widthMenuLeft;
+
+        &.wc-hide {
+            left: -@widthMenuLeft;
+            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
         }
-
 
         .wc-input-prompt {
             font-family: "dauphine_regular";
@@ -183,34 +218,6 @@
             border-bottom: 1px solid;
         }
 
-        .hidden {
-            display: none;
-        }
-
-
-        .key-value {
-            display: table;
-            margin-bottom: 2px;
-
-            .key {
-              width: 75px;
-              text-align: right;
-              padding-right: 6px;
-              color: @red;
-              display: table-cell;
-              vertical-align: top;
-              .word-wrap;
-            }
-
-            .value {
-                width: calc(~"100% - 75px - 6px");
-                letter-spacing: 0.5px;
-                display: table-cell;
-                vertical-align: top;
-                .word-wrap;
-            }
-        }
-
     }
 
 }
@@ -228,32 +235,6 @@
 	&:hover {
 		.link-hover;
 	}
-}
-
-
-.key-name .value{
-    font-size: 120%;
-    font-family: inherit;
-    letter-spacing: inherit;
-}
-
-.hint {
-    font-family: "dauphine_regular";
-    text-shadow: none;
-    display: inline-block;
-    color: @colorHelp;
-    margin-left: 65px;
-    margin-top: 6px;
-
-    a{
-      color: @colorHelp;
-      text-decoration: none !important;
-      display: inline-block;
-      border-bottom: 1px solid transparent;}
-
-    a:link{font-family: "dauphine_italic";}
-
-    a:hover{.link-hover}
 }
 
 
