@@ -41,17 +41,24 @@
     }
 
     &.wc-pages {
-        opacity: 1;
-        width: 100%;
+        position: absolute;
+        bottom: 30px;
+        left:12px;
+        display: block;
         overflow-y: hidden;
         width: @widthMenuLeft;
+        height: 131px;
+
+        &.wc-hide {
+            left: -@widthMenuLeft;
+            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+        }
 
         .wc-page.wc-active {
             position: absolute;
+            bottom: 0;
             width: @widthMenuLeft;
-            max-height: 130px;
-            bottom: 30px;
-            left:12px;
+            max-height: 108px;
             background-color: transparent;
             padding-top: 22px;
             border-bottom: 1px solid #000;
@@ -133,7 +140,7 @@
         width: @widthMenuLeft;
 
         &.wc-hide {
-            left: -@widthMenuLeft;
+            left: -@widthMenuLeft - 50px;
             transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
         }
 

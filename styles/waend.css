@@ -587,17 +587,23 @@ body {
   transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-pages {
-  opacity: 1;
-  width: 100%;
+  position: absolute;
+  bottom: 30px;
+  left: 12px;
+  display: block;
   overflow-y: hidden;
   width: 250px;
+  height: 131px;
+}
+.wc-element.wc-pages.wc-hide {
+  left: -250px;
+  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-pages .wc-page.wc-active {
   position: absolute;
+  bottom: 0;
   width: 250px;
-  max-height: 130px;
-  bottom: 30px;
-  left: 12px;
+  max-height: 108px;
   background-color: transparent;
   padding-top: 22px;
   border-bottom: 1px solid #000;
@@ -696,7 +702,7 @@ body {
   width: 250px;
 }
 .wc-element.wc-container.wc-hide {
-  left: -250px;
+  left: -300px;
   transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-container .wc-input-prompt {
@@ -1040,9 +1046,6 @@ body {
   color: #000;
   font-family: "dauphine_regular";
   font-style: normal;
-}
-.wc-active {
-  margin-bottom: 5px;
 }
 .wc-current {
   padding-left: 6px;
