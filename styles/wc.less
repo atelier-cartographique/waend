@@ -13,12 +13,6 @@
     background-color: transparent;
 }
 
-.wc-hide {
-    display: none;
-}
-
-
-
 #wc.fold {
     bottom: 64%;
     border-bottom: 1px solid;
@@ -26,222 +20,203 @@
 
 
 
-.wc-pages,
-.wc-page.wc-active{
-
-}
-
-.wc-page.wc-active {
-    position: absolute;
-    width: @widthMenuLeft;
-    max-height: 130px;
-    // overflow: auto;
-    bottom: 30px;
-    left:12px;
-    background-color: transparent;
-    padding-top: 22px;
-    border-bottom: 1px solid #000;
-    overflow-y: auto;
-    z-index: 1;
-}
-
-.wc-page {
-    opacity: 1;
-    width: 100%;
-    overflow-y: hidden;
-}
-
-.wc-page-title {
-    position: absolute;
-    width: 100%;
-    background-color: #FFF;
-    padding-bottom: 3px;
-    margin-top: -22px;
-    color: #8A8A8A;
-    font-size: 9pt;
-    border-bottom: 1px solid #000;
-    text-align: right;
-    text-shadow: none;
-}
-
-.wc-line {
-    font-size: 10pt;
-}
 
 
-.wc-page.wc-inactive {
-    opacity: 0;
-    transform: translateX(-50%);
-    transition-property: opacity, transform;
-    transition-duration: 1s;
-}
+.wc-element {
+    &.wc-mapblock {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        color: @red;
+        font-size: 11pt;
+        font-weight: normal;
+        letter-spacing: 2px;
+        text-align: right;
+        .white-text-shadow;
 
-
-.wc-input-prompt {
-    font-family: "dauphine_regular";
-    position: absolute;
-    bottom: 14px;
-    left: 11px;
-    font-size: 8pt;
-    z-index: 3;
-    text-shadow: none;
-}
-
-.wc-input{
-    position: absolute;
-    height: 18px;
-    bottom: 12px;
-    left: 12px;
-    border: 0;
-    // border-bottom: 1px solid #000;
-    font-size: 10pt;
-    background-color: #fefefe;
-    width: @widthMenuLeft;
-    font-family: monospace;
-    letter-spacing: 1px!important;
-    margin: 0px;
-    padding: 0px;
-    border-radius: 0px;
-    text-indent: 8px;
-    z-index: 2;
-
-    &:focus {
-        outline: none;
-    }
-}
-
-.wc-input-bottom-line {
-    position: absolute;
-    bottom: 11px;
-    left: 7px;
-    width: @widthMenuLeft;
-    border: 1px solid #000;
-    border-top: 0px;
-    height: 3px;
-    z-index: 12;
-    padding: 0 3px;
-}
-
-.wc-input.wc-inactive {
-    color:#252525;
-    /*display: none;*/
-}
-
-
-
-
-.wc-pending{
-    color: #2B71FF;
-}
-
-.wc-error{
-    color: black;
-    font-family: "dauphine_italic";
-    font-size: 8pt;
-    position: absolute;
-    bottom: 0;
-    left: 12px;
-    z-index: 1;
-}
-
-//DIRTY WAY TO HIDE ERRORS AFTER 5s...
-
-.wc-error{
-    -moz-animation: cssAnimation 0s ease-in 10s forwards;
-    /* Firefox */
-    -webkit-animation: cssAnimation 0s ease-in 10s forwards;
-    /* Safari and Chrome */
-    -o-animation: cssAnimation 0s ease-in 10s forwards;
-    /* Opera */
-    animation: cssAnimation 0s ease-in 10s forwards;
-    -webkit-animation-fill-mode: forwards;
-    animation-fill-mode: forwards;
-}
-@keyframes cssAnimation {
-    to {
-        width:0;
-        height:0;
-        overflow:hidden;
-    }
-}
-@-webkit-keyframes cssAnimation {
-    to {
-        width:0;
-        height:0;
-        visibility:hidden;
-    }
-}
-@-moz-keyframes cssAnimation {
-    to {
-        width:0;
-        height:0;
-        overflow:hidden;
-    }
-}
-@-ms-keyframes cssAnimation {
-    to {
-        width:0;
-        height:0;
-        visibility:hidden;
-    }
-}
-@-o-keyframes cssAnimation {
-    to {
-        width:0;
-        height:0;
-        visibility:hidden;
-    }
-}
-
-
-.wc-command{
-    font-style: italic;
-    text-decoration: none;
-    color: @red;
-}
-.wc-command:hover, .wc-command:focus{
-    border-bottom: 1px solid;
-}
-
-.hidden {
-    display: none;
-}
-
-
-.key-value {
-    display: table;
-    margin-bottom: 2px;
-
-    .key {
-      width: 75px;
-      text-align: right;
-      padding-right: 6px;
-      color: @red;
-      display: table-cell;
-      vertical-align: top;
-      .word-wrap;
+        &.wc-hide {
+            right: -200px;
+            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+        }
     }
 
-    .value {
-        width: calc(~"100% - 75px - 6px");
-        letter-spacing: 0.5px;
-        display: table-cell;
-        vertical-align: top;
-        .word-wrap;
+    &.wc-container {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: @widthMenuLeft;
+
+        &.wc-hide {
+            left: -@widthMenuLeft;
+            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+        }
+
+        .wc-pages,
+        .wc-page.wc-active{
+
+        }
+
+        .wc-page.wc-active {
+            position: absolute;
+            width: 100%;
+            max-height: 130px;
+            // overflow: auto;
+            bottom: 30px;
+            left:12px;
+            background-color: transparent;
+            padding-top: 22px;
+            border-bottom: 1px solid #000;
+            overflow-y: auto;
+            z-index: 1;
+        }
+
+        .wc-page {
+            opacity: 1;
+            width: 100%;
+            overflow-y: hidden;
+        }
+
+        .wc-page-title {
+            position: absolute;
+            width: 100%;
+            background-color: #FFF;
+            padding-bottom: 3px;
+            margin-top: -22px;
+            color: #8A8A8A;
+            font-size: 9pt;
+            border-bottom: 1px solid #000;
+            text-align: right;
+            text-shadow: none;
+        }
+
+        .wc-line {
+            font-size: 10pt;
+        }
+
+
+        .wc-page.wc-inactive {
+            opacity: 0;
+            transform: translateX(-50%);
+            transition-property: opacity, transform;
+            transition-duration: 1s;
+        }
+
+
+        .wc-input-prompt {
+            font-family: "dauphine_regular";
+            position: absolute;
+            bottom: 14px;
+            left: 11px;
+            font-size: 8pt;
+            z-index: 3;
+            text-shadow: none;
+        }
+
+        .wc-input{
+            position: absolute;
+            height: 18px;
+            bottom: 12px;
+            left: 12px;
+            border: 0;
+            // border-bottom: 1px solid #000;
+            font-size: 10pt;
+            background-color: #fefefe;
+            width: 100%;
+            font-family: monospace;
+            letter-spacing: 1px!important;
+            margin: 0px;
+            padding: 0px;
+            border-radius: 0px;
+            text-indent: 8px;
+            z-index: 2;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .wc-input-bottom-line {
+            position: absolute;
+            bottom: 11px;
+            left: 7px;
+            width: 100%;
+            border: 1px solid #000;
+            border-top: 0px;
+            height: 3px;
+            z-index: 12;
+            padding: 0 3px;
+        }
+
+        .wc-input.wc-inactive {
+            color:#252525;
+            /*display: none;*/
+        }
+
+
+
+
+        .wc-pending{
+            color: #2B71FF;
+        }
+
+        .wc-error{
+            color: black;
+            font-family: "dauphine_italic";
+            font-size: 8pt;
+            position: absolute;
+            bottom: 0;
+            left: 12px;
+            z-index: 1;
+        }
+
+        //DIRTY WAY TO HIDE ERRORS AFTER 5s...
+
+        .wc-error{ -moz-animation: cssAnimation 0s ease-in 10s forwards; /* Firefox */ -webkit-animation: cssAnimation 0s ease-in 10s forwards; /* Safari and Chrome */ -o-animation: cssAnimation 0s ease-in 10s forwards; /* Opera */ animation: cssAnimation 0s ease-in 10s forwards; -webkit-animation-fill-mode: forwards; animation-fill-mode: forwards; } @keyframes cssAnimation { to { width:0; height:0; overflow:hidden; } } @-webkit-keyframes cssAnimation { to { width:0; height:0; visibility:hidden; } } @-moz-keyframes cssAnimation { to { width:0; height:0; overflow:hidden; } } @-ms-keyframes cssAnimation { to { width:0; height:0; visibility:hidden; } } @-o-keyframes cssAnimation { to { width:0; height:0; visibility:hidden; } }
+
+
+        .wc-command{
+            font-style: italic;
+            text-decoration: none;
+            color: @red;
+        }
+        .wc-command:hover, .wc-command:focus{
+            border-bottom: 1px solid;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+
+        .key-value {
+            display: table;
+            margin-bottom: 2px;
+
+            .key {
+              width: 75px;
+              text-align: right;
+              padding-right: 6px;
+              color: @red;
+              display: table-cell;
+              vertical-align: top;
+              .word-wrap;
+            }
+
+            .value {
+                width: calc(~"100% - 75px - 6px");
+                letter-spacing: 0.5px;
+                display: table-cell;
+                vertical-align: top;
+                .word-wrap;
+            }
+        }
+
     }
+
 }
 
-.wc-mapblock {
-    position: absolute;
-    right: 12px;
-    top: 12px;
-    color: @red;
-    font-size: 11pt;
-    font-weight: normal;
-    letter-spacing: 2px;
-    text-align: right;
-    .white-text-shadow;
-}
+
+
 
 .wc-nav,
 .wc-select,

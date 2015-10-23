@@ -1,17 +1,23 @@
 
-.wc-buttons {
-    position: absolute;
-    top: 0px;
-    left: 0;
-    z-index: 0;
-    letter-spacing: 1px;
-    padding: 12px;
-    background-color: #fff;
-    width: @widthMenuLeft;
-    height: 100vh;
-    text-shadow: none;
-    border-right: double #000;
-    // .white-text-shadow;
+.wc-element {
+    &.wc-buttons {
+        position: absolute;
+        top: 0px;
+        left: 0;
+        z-index: 0;
+        letter-spacing: 1px;
+        padding: 12px;
+        background-color: #fff;
+        width: @widthMenuLeft;
+        height: 100vh;
+        text-shadow: none;
+        border-right: double #000;
+        // .white-text-shadow;
+        &.wc-hide {
+            left: -(@widthMenuLeft + 32px);
+            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+        }
+    }
 }
 
 .wc-buttons-group-title-wrapper {
@@ -67,4 +73,3 @@
 .wc-button:hover {
     .link-hover;
 }
-
