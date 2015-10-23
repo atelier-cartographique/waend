@@ -41,10 +41,11 @@ function renderRegister (req, res) {
 }
 
 function register (req, res) {
-    var email = req.body.username,
-        password = req.body.password;
+    var email = req.body.email,
+        password = req.body.password,
+        name = req.body.username;
 
-    auth.register(email, password)
+    auth.register(email, password, name)
         .then(function(user){
             req.login(user, function(err){
                 if (err) {
