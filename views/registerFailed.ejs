@@ -2,15 +2,68 @@
 <head>
     <title>wænd - register</title>
     <link rel="stylesheet" type="text/css" href="/styles/waend.css" />  
+    <script type="text/javascript">
+    (function () {
+
+        var init = function () {
+            var checkPass = function () { 
+                var pass1 =  document.getElementById('inputPassword');
+                var pass2 =  document.getElementById('inputPasswordBis');
+                var message = document.getElementById('confirmMessage');
+                var submit = document.getElementById('createAccount');
+
+                if(pass2.value.length > 0) {
+                    message.innerHTML="null";
+                    submit.style.opacity = "0";
+                    submit.disabled = true;
+
+                    if(pass1.value != pass2.value) {
+                        console.log('NOO !');
+                        message.innerHTML="Password does not match.";
+                        submit.style.opacity = "0";
+                        submit.disabled = true;
+                    }
+                    else {
+                        console.log('Yes !');
+                        message.innerHTML="Password match !";
+                        message.style.color="green";
+                        submit.style.opacity = "1";
+                        submit.style.transition = "opacity 1.5s"
+                        submit.disabled = false;
+                    }
+                }
+        
+        
+                
+            };
+
+            var p1 = document.getElementById('inputPassword');
+            p1.addEventListener('keyup', checkPass, false);
+
+            var p2 = document.getElementById('inputPasswordBis');
+            p2.addEventListener('keyup', checkPass, false);
+        };
+
+
+        document.onreadystatechange = function () {
+            if (document.readyState === "interactive") {
+                init();
+            }
+        };
+
+    })();
+
+    </script>
 </head>
 <body id="register">
         <div class="header">
             <span class="logo">wænd<sup>alpha</sup></span>
         </div>
 
+
+
         <div class="text">
-            <p style="color: red;">An error occurred, please try again</p>
-            <br>
+            <p style="color:red;">An error occured, please try again</p>
             <p>Create an account if you wish to publish maps on Wænd</p>
             <br>
             <p>You don't have to, but we invite you to use your real e-mail adress, since we might need to contact you from time to time, specialy if there are major changes on the platform.</p>
@@ -20,21 +73,47 @@
         <div class="form-container">
             <form class="form-horizontal" role="form" action="/register" method="post">
                 <div class="list-group">
-                    <input name="username" 
-                         type="email" 
-                         class="list-group-item" 
-                         id="inputEmail" 
-                         placeholder="email" />
 
-                    <input name="password" 
-                         type="password" 
-                         class="list-group-item" 
-                         id="inputPassword" 
-                         placeholder="password" />
+                    <div class=input-wrapper>
+                        <input name="username" 
+                             type="email" 
+                             class="list-group-item" 
+                             id="inputEmail" 
+                             placeholder="email"
+                             autocomplete="off" />
+                        <div class="input-bottomLine"></div>
+                    </div>
+
+                    <div class=input-wrapper>
+                        <input name="password" 
+                             type="password" 
+                             class="list-group-item" 
+                             id="inputPassword" 
+                             placeholder="password"
+                             required = "required" />
+                        <div class="input-bottomLine"></div>
+                    </div>
+
+                    <div class=input-wrapper>
+                        <input name="passwordBis" 
+                             type="password" 
+                             class="list-group-item" 
+                             id="inputPasswordBis" 
+                             placeholder="verify password"
+                             required = "required" />
+                        <div class="input-bottomLine"></div>
+
+                        <div id="confirmMessage" 
+                             style="color: red; font-size: 9pt; margin-top: 12px;"></div>
+                    </div>
+
 
                     <input type="submit" 
-                         class="list-group-item btn-login" 
-                         value="Create account">
+                         id="createAccount" 
+                         class="list-group-item btn-login push" 
+                         value="Create account"
+                         disabled="true"
+                         style="opacity:0;" />
                 </div>
             </form>
         </div>
