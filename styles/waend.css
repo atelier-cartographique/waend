@@ -1055,6 +1055,7 @@ body {
 }
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
+  font-family: "dauphine_regular";
   font-style: normal;
   speak: none;
   font-weight: normal;
@@ -1135,13 +1136,17 @@ body {
   content: "t";
 }
 .icon-editgeometry:before {
-  content: "-";
+  content: "e";
 }
 .icon-zoomtofeature:before {
-  content: "-";
+  content: "\2192";
 }
 .icon-deletefeature:before {
-  content: "-";
+  content: "x";
+}
+.icon-lookup:before {
+  content: "\e850";
+  font-size: 15pt;
 }
 .media-wrapper {
   position: relative;
