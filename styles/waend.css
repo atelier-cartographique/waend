@@ -468,7 +468,7 @@ body {
   right: 0;
   bottom: 0;
   background-color: white;
-  transition: all 0.8s;
+  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 #map.wc-fullscreen {
   top: 0;
@@ -1016,10 +1016,11 @@ body {
   height: 100vh;
   text-shadow: none;
   border-right: double #000;
+  transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-buttons.wc-hide {
   left: -282px;
-  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+  transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-buttons-group-title-wrapper .wc-buttons-group-title-label {
   font-size: 9pt;

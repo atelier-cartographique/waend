@@ -33,7 +33,7 @@ function postLogout(req, res){
 }
 
 function renderLogin(req, res){
-    res.render('login', {email:''});
+    res.render('login', {email: ''});
 }
 
 function renderRegister (req, res) {

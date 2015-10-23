@@ -20,6 +20,13 @@ module.exports.getModelName = function (model) {
 
 // DOM
 
+module.exports.setAttributes = function (elem, attrs) {
+    _.each(attrs, function (val, k) {
+        elem.setAttribute(k, val);
+    });
+    return elem;
+};
+
 module.exports.addClass = function (elem, c) {
     var ecStr = elem.getAttribute('class');
     var ec = ecStr ? ecStr.split(' ') : [];
@@ -32,6 +39,27 @@ module.exports.removeClass = function (elem, c) {
     var ec = ecStr ? ecStr.split(' ') : [];
     elem.setAttribute('class', _.without(ec, c).join(' '));
 }
+
+
+// DOM+
+
+module.exports.makeButton = function (label, attrs, callback, ctx) {
+    var button = document.createElement('div'),
+        labelElement = document.createElement('span');
+    exports.addClass(labelElement, 'label');
+    labelElement.innerHTML = label;
+
+    exports.setAttributes(button, attrs);
+
+    if (callback) {
+        button.addEventListener('click', function(event){
+            callback.call(ctx, event);
+        }, false);
+    }
+
+    button.appendChild(labelElement);
+    return button;
+};
 
 
 // GEOM

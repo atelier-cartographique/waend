@@ -13,9 +13,10 @@
         text-shadow: none;
         border-right: double #000;
         // .white-text-shadow;
+        transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
         &.wc-hide {
             left: -(@widthMenuLeft + 32px);
-            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+            transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
         }
     }
 }

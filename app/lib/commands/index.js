@@ -22,6 +22,7 @@ var commandModules = [
     require('./getAttribute'),
     require('./delAttribute'),
     require('./create'),
+    require('./createGroup'),
     require('./region'),
     require('./zoom'),
     require('./pan'),
