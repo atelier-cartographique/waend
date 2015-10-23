@@ -570,7 +570,7 @@ body {
 .wc-page.wc-active {
   position: absolute;
   width: 250px;
-  max-height: 165px;
+  max-height: 130px;
   bottom: 30px;
   left: 12px;
   background-color: transparent;
