@@ -557,7 +557,6 @@ body {
   bottom: 0;
   width: 100%;
   height: 100%;
-  font-family: "sansguiltmb";
   background-color: transparent;
 }
 .wc-hide {
@@ -949,6 +948,7 @@ body {
   border: 0px;
   background: transparent;
   padding-top: 11px;
+  font-family: "dauphine_regular";
 }
 .view-lookup-wrapper .view-lookup-search:hover {
   cursor: pointer;
