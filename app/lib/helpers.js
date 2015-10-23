@@ -18,6 +18,8 @@ module.exports.getModelName = function (model) {
     return '•' + id.substr(0, 6);
 };
 
+// DOM
+
 module.exports.addClass = function (elem, c) {
     var ecStr = elem.getAttribute('class');
     var ec = ecStr ? ecStr.split(' ') : [];
@@ -30,3 +32,24 @@ module.exports.removeClass = function (elem, c) {
     var ec = ecStr ? ecStr.split(' ') : [];
     elem.setAttribute('class', _.without(ec, c).join(' '));
 }
+
+
+// GEOM
+
+module.exports.vecDist = function (v1, v2) {
+    var dx = v2[0] - v1[0],
+        dy = v2[1] - v1[1];
+    return Math.sqrt((dx*dx) + (dy*dy));
+};
+
+module.exports.vecAdd = function (v1, v2, a) {
+    var t = a / vecDist(v1, v2),
+        rx = v1[0] + (v2[0] - v1[0]) * t,
+        ry = v1[1] + (v2[1] - v1[1]) * t;
+    return [rx, ry];
+};
+
+module.exports.vecEquals = function (v1, v2, eps) {
+    eps = eps || 0.00000001;
+    return (exports.vecDist(v1, v2) < eps);
+};

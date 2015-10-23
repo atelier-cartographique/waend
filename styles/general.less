@@ -18,6 +18,15 @@ body{
     right:0;
     bottom: 0;
     background-color: white;
+    transition: all 0.8s;
+
+    &.wc-fullscreen {
+        top:0;
+        left:0;
+        right:0;
+        bottom: 0;
+        transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+    }
 }
 
 #wc{
@@ -36,14 +45,3 @@ body{
 .wc-context-group   { color: @colorGroup   !important;}
 .wc-context-user    { color: @colorUser    !important;}
 .wc-context-shell   { color: @colorWaend   !important;}
-
-
-
-
-
-
-
-
-
-
-

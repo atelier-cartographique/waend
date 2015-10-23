@@ -20,6 +20,8 @@ var _ = require('underscore'),
     Promise = require('bluebird');
 
 var document = window.document;
+var addClass = helpers.addClass,
+    removeClass = helpers.removeClass;
 
 var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
 
@@ -166,15 +168,15 @@ Loader.prototype.init = function () {
     this.items = [];
     for (var i = 0; i < 100; i++) {
         var item = document.createElement('div');
-        helpers.addClass(item, 'wc-loader-item');
+        addClass(item, 'wc-loader-item');
         itemsElement.appendChild(item);
         this.items.push(item);
     }
     element.appendChild(textElement);
     element.appendChild(itemsElement);
-    helpers.addClass(element, 'wc-loader');
-    helpers.addClass(textElement, 'wc-loader-text');
-    helpers.addClass(itemsElement, 'wc-loader-items');
+    addClass(element, 'wc-loader');
+    addClass(textElement, 'wc-loader-text');
+    addClass(itemsElement, 'wc-loader-items');
     this.element = element;
     return this;
 };
@@ -285,23 +287,24 @@ var WebConsole = Terminal.extend({
         return this._inputField;
     },
 
+    // deprecated
     setTitle: function () {
-        var title = this.title;
-        while (title.firstChild) {
-            title.removeChild(title.firstChild);
-        }
-        var element = document.createElement('div');
-        for(var i=0; i < arguments.length; i++){
-            var fragment = arguments[i];
-            if(fragment instanceof WebCommand){
-                element.appendChild(fragment.toDomFragment());
-            }
-            else{
-                var textElement = document.createTextNode(fragment.toString());
-                element.appendChild(textElement);
-            }
-        }
-        title.appendChild(element);
+        // var title = this.title;
+        // while (title.firstChild) {
+        //     title.removeChild(title.firstChild);
+        // }
+        // var element = document.createElement('div');
+        // for(var i=0; i < arguments.length; i++){
+        //     var fragment = arguments[i];
+        //     if(fragment instanceof WebCommand){
+        //         element.appendChild(fragment.toDomFragment());
+        //     }
+        //     else{
+        //         var textElement = document.createTextNode(fragment.toString());
+        //         element.appendChild(textElement);
+        //     }
+        // }
+        // title.appendChild(element);
     },
 
     setButtons: function () {
@@ -318,7 +321,7 @@ var WebConsole = Terminal.extend({
         };
 
         self.buttonsContainer = document.createElement('div');
-        self.buttonsContainer.setAttribute('class','wc-buttons');
+        addClass(self.buttonsContainer, 'wc-buttons wc-element');
         self.root.appendChild(self.buttonsContainer);
 
         var groupKeys = _.keys(buttons);
@@ -331,10 +334,10 @@ var WebConsole = Terminal.extend({
                 groupTitlelabel = document.createElement('span');
                 groupTitlevalue = document.createElement('span');
 
-            groupTitlewrapper.setAttribute('class', 'wc-buttons-group-title-wrapper');
-            groupTitlelabel.setAttribute('class', 'wc-buttons-group-title-label');
-            groupTitlevalue.setAttribute('class', 'wc-buttons-group-title-value');
-            groupElement.setAttribute('class','wc-buttons-group wc-inactive');
+            addClass(groupTitlewrapper, 'wc-buttons-group-title-wrapper');
+            addClass(groupTitlelabel, 'wc-buttons-group-title-label');
+            addClass(groupTitlevalue, 'wc-buttons-group-title-value');
+            addClass(groupElement, 'wc-buttons-group wc-inactive');
 
 
             var grplabel = gn;
@@ -428,19 +431,15 @@ var WebConsole = Terminal.extend({
     },
 
     start: function () {
-        this.title = document.createElement('div');
         this.container = document.createElement('div');
         this.pages = document.createElement('div');
 
-        this.container.setAttribute('class', 'wc-container');
-        this.title.setAttribute('class','wc-title');
-        this.pages.setAttribute('class', 'wc-pages');
+        addClass(this.container, 'wc-container wc-element');
+        addClass(this.pages, 'wc-pages wc-element');
 
-        this.root.appendChild(this.title);
         this.root.appendChild(this.container);
         this.root.appendChild(this.pages);
 
-        this.setTitle('/shell');
         this.insertInput();
         this.setButtons();
         this.setMapBlock();
@@ -449,6 +448,11 @@ var WebConsole = Terminal.extend({
 
         self.shell.stdout.on('data', self.write, self);
         self.shell.stderr.on('data', self.writeError, self);
+
+
+        this.mapContainer.addEventListener('transitionend', function(){
+            semaphore.signal('map:resize');
+        }, false);
 
         semaphore.on('please:terminal:run', this.runCommand, this);
         semaphore.on('start:loader', this.startLoader, this);
@@ -466,10 +470,10 @@ var WebConsole = Terminal.extend({
         select.innerHTML = 'select';
         drawZoom.innerHTML = 'draw zoom';
 
-        mapBlock.setAttribute('class', 'wc-mapblock');
-        nav.setAttribute('class', 'wc-nav');
-        select.setAttribute('class', 'wc-select');
-        drawZoom.setAttribute('class', 'wc-draw-zoom');
+        addClass(mapBlock, 'wc-mapblock wc-element');
+        addClass(nav, 'wc-nav wc-element');
+        addClass(select, 'wc-select wc-element');
+        addClass(drawZoom, 'wc-draw-zoom wc-element');
 
         nav.addEventListener('click', function(){
             self.runCommand('navigate');
@@ -629,41 +633,32 @@ var WebConsole = Terminal.extend({
 
     display: function () {
         var display = new Display(this.root),
-            mc = this.mapContainer,
-            savedTop = mc.style.top,
-            savedRight = mc.style.right,
-            savedBottom = mc.style.bottom,
-            savedLeft = mc.style.left;
+            mc = this.mapContainer;
         this.hide();
-        mc.style.top = 0;
-        mc.style.right = 0;
-        mc.style.bottom = 0;
-        mc.style.left = 0;
+        addClass(mc, 'wc-fullscreen');
         display.setFinalizer(function () {
-            mc.style.top = savedTop;
-            mc.style.right = savedRight;
-            mc.style.bottom = savedBottom;
-            mc.style.left = savedLeft;
+            removeClass(mc, 'wc-fullscreen');
             this.show();
+            // semaphore.signal('map:resize');
         }, this);
-        semaphore.signal('map:resize');
+        // _.defer(function(){
+        //     semaphore.signal('map:resize');
+        // });
         return display;
     },
 
     hide: function () {
-        this.container.setAttribute('class', 'wc-container wc-hide');
-        this.title.setAttribute('class','wc-title wc-hide');
-        this.pages.setAttribute('class', 'wc-pages wc-hide');
-        this.buttonsContainer.setAttribute('class','wc-buttons wc-hide');
-        this.mapBlock.setAttribute('class','wc-mapblock wc-hide');
+        addClass(this.container, 'wc-hide');
+        addClass(this.pages, 'wc-hide');
+        addClass(this.buttonsContainer, 'wc-hide');
+        addClass(this.mapBlock, 'wc-hide');
     },
 
     show: function () {
-        this.container.setAttribute('class', 'wc-container');
-        this.title.setAttribute('class','wc-title');
-        this.pages.setAttribute('class', 'wc-pages');
-        this.buttonsContainer.setAttribute('class', 'wc-buttons');
-        this.mapBlock.setAttribute('class','wc-mapblock');
+        removeClass(this.container, 'wc-hide');
+        removeClass(this.pages, 'wc-hide');
+        removeClass(this.buttonsContainer, 'wc-hide');
+        removeClass(this.mapBlock, 'wc-hide');
     },
 
     startLoader: function (text) {
