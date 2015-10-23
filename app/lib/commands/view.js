@@ -644,7 +644,7 @@ function showLookup (node) {
     input.setAttribute('type', 'text');
     input.setAttribute('placeholder', 'search');
     inputBottomLine.setAttribute('class', 'input-bottomLine');
-    button.setAttribute('class', 'view-lookup-search');
+    button.setAttribute('class', 'view-lookup-search icon-lookup');
     results.setAttribute('class', 'view-lookup-results');
 
     button.innerHTML = "lookup";
