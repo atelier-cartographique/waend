@@ -42,49 +42,60 @@
 
     &.wc-pages {
         position: absolute;
-        bottom: 30px;
-        left:12px;
+        left: 290px;
+        bottom: 34px;
+        width: 600px;
+        height: 50%;
         display: block;
         overflow-y: hidden;
-        width: @widthMenuLeft;
-        height: 131px;
 
         &.wc-hide {
-            left: -@widthMenuLeft;
+            left: -600px;
             transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
         }
 
-        .wc-page.wc-active {
+        .wc-page {
+            display: block;
             position: absolute;
+            right: 0;
             bottom: 0;
-            width: @widthMenuLeft;
-            max-height: 108px;
+            left: 0;
+            padding: 6px 12px;
             background-color: transparent;
-            padding-top: 22px;
-            border-bottom: 1px solid #000;
             overflow-y: auto;
+            overflow-x: hidden;
             z-index: 10;
+            // border-bottom: 1px solid #000;
+
+            &.wc-active{
+                opacity: 1;
+                transform: none;
+            }
+
+            &.wc-inactive {
+                opacity: 0;
+                transform: translateY(50%);
+                transition-property: opacity, transform;
+                transition-duration: 1s;
+            }
+
+            &.hidden {
+                display: none;
+            }
+
+            .wc-page-title {
+                width: 100%;
+                background-color: transparent;
+                padding-bottom: 3px;
+                color: #8A8A8A;
+                font-size: 11pt;
+                // border-bottom: 1px solid #8A8A8A;
+                text-align: left;
+                text-shadow: none;
+                margin-bottom: 6px;
+            }
         }
 
-        .wc-page.wc-inactive {
-            opacity: 0;
-            transform: translateX(-50%);
-            transition-property: opacity, transform;
-            transition-duration: 1s;
-        }
-
-        .wc-page-title {
-            position: absolute;
-            width: 100%;
-            background-color: #FFF;
-            padding-bottom: 3px;
-            margin-top: -22px;
-            color: #8A8A8A;
-            font-size: 9pt;
-            border-bottom: 1px solid #000;
-            text-align: right;
-            text-shadow: none;
-        }
 
         .wc-line {
             font-size: 10pt;
@@ -129,18 +140,16 @@
             }
         }
 
-        .hidden {display: none;}
-
     }
 
     &.wc-container {
         position: absolute;
         bottom: 0;
-        left: 0;
-        width: @widthMenuLeft;
+        left: 280px;
+        width: 632px;
 
         &.wc-hide {
-            left: -@widthMenuLeft - 50px;
+            left: -632px;
             transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
         }
 

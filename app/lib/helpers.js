@@ -40,6 +40,17 @@ module.exports.removeClass = function (elem, c) {
     elem.setAttribute('class', _.without(ec, c).join(' '));
 }
 
+module.exports.emptyElement = function (elem) {
+    while (elem.firstChild) {
+        elem.removeChild(elem.firstChild);
+    }
+    return elem;
+};
+
+module.exports.px = function (val) {
+    val = val || 0;
+    return val.toString() + 'px';
+};
 
 // DOM+
 
