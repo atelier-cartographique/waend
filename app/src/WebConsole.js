@@ -324,6 +324,7 @@ var WebConsole = Terminal.extend({
             var closePager = function (ev) {
                 ev.stopPropagation();
                 emptyElement(pager);
+                removeClass(pager, 'wc-active');
                 addClass(pager, 'wc-inactive');
             };
             var dockPage = function (ev) {
@@ -332,6 +333,7 @@ var WebConsole = Terminal.extend({
             };
             return (function () {
                 emptyElement(pager);
+                removeClass(pager, 'wc-inactive');
                 addClass(pager, 'wc-active');
                 var pagerBtns = document.createElement('div'),
                     closeBtn = document.createElement('span'),
