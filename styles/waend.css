@@ -570,7 +570,7 @@ body {
 }
 .wc-element.wc-mapblock {
   position: absolute;
-  right: 12px;
+  left: 36%;
   top: 12px;
   color: #993358;
   font-size: 11pt;
@@ -580,8 +580,23 @@ body {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-element.wc-mapblock.wc-hide {
-  right: -200px;
+  top: -64px;
   transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+}
+.wc-element.wc-mapblock .wc-nav,
+.wc-element.wc-mapblock .wc-select,
+.wc-element.wc-mapblock .wc-draw-zoom {
+  display: inline-block;
+  cursor: pointer;
+  margin-bottom: 0px;
+  border-bottom: 1px solid transparent;
+  margin: 0 1em;
+}
+.wc-element.wc-mapblock .wc-nav:hover,
+.wc-element.wc-mapblock .wc-select:hover,
+.wc-element.wc-mapblock .wc-draw-zoom:hover {
+  border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .wc-element.wc-pages {
   position: absolute;
@@ -852,19 +867,6 @@ body {
 .wc-element.wc-container .wc-command:hover,
 .wc-element.wc-container .wc-command:focus {
   border-bottom: 1px solid;
-}
-.wc-nav,
-.wc-select,
-.wc-draw-zoom {
-  cursor: pointer;
-  margin-bottom: 0px;
-  border-bottom: 1px solid transparent;
-}
-.wc-nav:hover,
-.wc-select:hover,
-.wc-draw-zoom:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
 }
 .wc-loader {
   position: absolute;

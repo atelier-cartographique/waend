@@ -597,9 +597,9 @@ var WebConsole = Terminal.extend({
         drawZoom.innerHTML = 'draw zoom';
 
         addClass(mapBlock, 'wc-mapblock wc-element');
-        addClass(nav, 'wc-nav wc-element');
-        addClass(select, 'wc-select wc-element');
-        addClass(drawZoom, 'wc-draw-zoom wc-element');
+        addClass(nav, 'wc-nav');
+        addClass(select, 'wc-select');
+        addClass(drawZoom, 'wc-draw-zoom');
 
         nav.addEventListener('click', function(){
             self.runCommand('navigate');

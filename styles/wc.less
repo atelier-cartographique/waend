@@ -25,7 +25,7 @@
 .wc-element {
     &.wc-mapblock {
         position: absolute;
-        right: 12px;
+        left: 36%;
         top: 12px;
         color: @red;
         font-size: 11pt;
@@ -35,8 +35,19 @@
         .white-text-shadow;
 
         &.wc-hide {
-            right: -200px;
+            top: -64px;
             transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+        }
+
+        .wc-nav, .wc-select, .wc-draw-zoom {
+            display: inline-block;
+            cursor: pointer;
+            margin-bottom: 0px;
+            border-bottom: 1px solid transparent; // to avoid glitch on over
+            margin: 0 1em;
+            &:hover {
+                .link-hover;
+            }
         }
     }
 
@@ -283,21 +294,6 @@
 
     }
 
-}
-
-
-
-
-.wc-nav,
-.wc-select,
-.wc-draw-zoom {
-	cursor: pointer;
-	margin-bottom: 0px;
-	border-bottom: 1px solid transparent; // to avoid glitch on over
-
-	&:hover {
-		.link-hover;
-	}
 }
 
 
