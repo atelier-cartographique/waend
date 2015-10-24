@@ -691,6 +691,20 @@ body {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
+.wc-element.wc-dock {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 200px;
+}
+.wc-element.wc-dock .wc-dock-page .wc-close {
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page {
+  font-size: 60%;
+}
 .wc-element.wc-container {
   position: absolute;
   bottom: 0;

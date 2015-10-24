@@ -110,6 +110,33 @@ Display.prototype.end = function () {
 };
 
 
+function Dock (options) {
+    this.container = options.container;
+}
+
+Dock.prototype.detachPage = function (pageWrapper) {
+    this.container.removeChild(pageWrapper);
+};
+
+Dock.prototype.addPage = function (page) {
+    var wrapper = document.createElement('div'),
+        closeBtn = document.createElement('div');
+
+    closeBtn.innerHTML = 'close';
+    addClass(wrapper, 'wc-dock-page');
+    addClass(closeBtn, 'wc-close');
+
+    var detacher = function () {
+        this.detachPage(wrapper);
+    };
+
+    closeBtn.addEventListener('click', _.bind(detacher, this), false);
+    wrapper.appendChild(closeBtn);
+    wrapper.appendChild(page);
+    this.container.appendChild(wrapper);
+};
+
+
 function InputHistory (options) {
     this.commands = [];
     this.currentIndex = -1;
@@ -328,7 +355,11 @@ var WebConsole = Terminal.extend({
                 addClass(pager, 'wc-inactive');
             };
             var dockPage = function (ev) {
-                //TODO atm just closing
+                ev.stopPropagation();
+                var page = pager.wcPage;
+                if (page) {
+                    self.dock.addPage(page);
+                }
                 closePager(ev);
             };
             return (function () {
@@ -432,6 +463,10 @@ var WebConsole = Terminal.extend({
                     else if ('embed' === spec.type) {
                         var pager = document.createElement('div');
                         addClass(pager, 'wc-button-pager');
+                        pager.attachPage = function (page) {
+                            this.appendChild(page);
+                            this.wcPage = page;
+                        };
                         buttonElement.addEventListener(
                             'click',
                             pagerHandler(buttonElement, pager, spec.command)
@@ -492,12 +527,19 @@ var WebConsole = Terminal.extend({
     start: function () {
         this.container = document.createElement('div');
         this.pages = document.createElement('div');
+        this.dockContainer = document.createElement('div');
 
         addClass(this.container, 'wc-container wc-element');
         addClass(this.pages, 'wc-pages wc-element');
+        addClass(this.dockContainer, 'wc-dock wc-element');
 
         this.root.appendChild(this.container);
         this.root.appendChild(this.pages);
+        this.root.appendChild(this.dockContainer);
+
+        this.dock = new Dock({
+            container: this.dockContainer
+        });
 
         this.insertInput();
         this.setButtons();
@@ -599,7 +641,12 @@ var WebConsole = Terminal.extend({
         addClass(page, 'wc-page wc-active');
 
         if (pager) {
-            pager.appendChild(page);
+            if (_.isFunction(pager.attachPage)) {
+                pager.attachPage(page);
+            }
+            else {
+                pager.appendChild(page);
+            }
         }
         else {
             var title = document.createElement('div');
