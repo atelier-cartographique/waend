@@ -34,12 +34,40 @@ module.exports.addClass = function (elem, c) {
     elem.setAttribute('class', _.uniq(ec).join(' '));
 }
 
+module.exports.toggleClass = function (elem, c) {
+    var ecStr = elem.getAttribute('class');
+    var ec = ecStr ? ecStr.split(' ') : [];
+    if (_.indexOf(ec, c) < 0) {
+        exports.addClass(elem, c);
+    }
+    else {
+        exports.removeClass(elem, c);
+    }
+}
+
+module.exports.hasClass = function (elem, c) {
+    var ecStr = elem.getAttribute('class');
+    var ec = ecStr ? ecStr.split(' ') : [];
+    return !(_.indexOf(ec, c) < 0) 
+}
+
 module.exports.removeClass = function (elem, c) {
     var ecStr = elem.getAttribute('class');
     var ec = ecStr ? ecStr.split(' ') : [];
     elem.setAttribute('class', _.without(ec, c).join(' '));
 }
 
+module.exports.emptyElement = function (elem) {
+    while (elem.firstChild) {
+        elem.removeChild(elem.firstChild);
+    }
+    return elem;
+};
+
+module.exports.px = function (val) {
+    val = val || 0;
+    return val.toString() + 'px';
+};
 
 // DOM+
 

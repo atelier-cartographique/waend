@@ -21,7 +21,11 @@ var _ = require('underscore'),
 
 var document = window.document;
 var addClass = helpers.addClass,
-    removeClass = helpers.removeClass;
+    removeClass = helpers.removeClass,
+    emptyElement = helpers.emptyElement,
+    hasClass = helpers.hasClass,
+    toggleClass = helpers.toggleClass,
+    px = helpers.px;
 
 var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
 
@@ -105,6 +109,52 @@ Display.prototype.end = function () {
     if (this.finalizer) {
         this.finalizer.callback.call(this.finalizer.context);
     }
+};
+
+
+function Dock (options) {
+    this.container = options.container;
+}
+
+Dock.prototype.detachPage = function (pageWrapper) {
+    this.container.removeChild(pageWrapper);
+};
+
+Dock.prototype.addPage = function (page) {
+    var wrapper = document.createElement('div'),
+        buttons = document.createElement('div'),
+        closeBtn = document.createElement('div'),
+        collapseBtn = document.createElement('div');
+
+    closeBtn.innerHTML = 'close';
+    collapseBtn.innerHTML = 'collapse';
+    addClass(wrapper, 'wc-dock-page');
+    addClass(buttons, 'wc-dock-buttons');
+    addClass(closeBtn, 'wc-close');
+    addClass(collapseBtn, 'wc-collapse');
+
+    var detacher = function () {
+        this.detachPage(wrapper);
+    };
+
+    var collapser = function () {
+        if (hasClass(page, 'wc-collapsed')) {
+            collapseBtn.innerHTML = 'collapse';
+        }
+        else {
+            collapseBtn.innerHTML = 'expand';
+        }
+        toggleClass(page, 'wc-collapsed');
+    };
+
+    closeBtn.addEventListener('click', _.bind(detacher, this), false);
+    collapseBtn.addEventListener('click', collapser, false);
+
+    buttons.appendChild(closeBtn);
+    buttons.appendChild(collapseBtn);
+    wrapper.appendChild(buttons);
+    wrapper.appendChild(page);
+    this.container.appendChild(wrapper);
 };
 
 
@@ -309,15 +359,52 @@ var WebConsole = Terminal.extend({
 
     setButtons: function () {
         var self = this;
-        var cmdHandler = function () {
-            var group = arguments[0],
-                name = arguments[1],
-                cmds = buttons[group][name];
-            return function () {
+        var cmdHandler = function (cmds) {
+            return (function () {
                 for (var i = 0; i < cmds.length; i++) {
                     self.runCommand(cmds[i]);
                 }
+            });
+        };
+        var displayHandler = cmdHandler;
+
+        var pagerHandler = function (button, pager, cmds) {
+            var closePager = function (ev) {
+                ev.stopPropagation();
+                emptyElement(pager);
+                removeClass(pager, 'wc-active');
+                addClass(pager, 'wc-inactive');
             };
+            var dockPage = function (ev) {
+                ev.stopPropagation();
+                var page = pager.wcPage;
+                if (page) {
+                    self.dock.addPage(page);
+                }
+                closePager(ev);
+            };
+            return (function () {
+                emptyElement(pager);
+                removeClass(pager, 'wc-inactive');
+                addClass(pager, 'wc-active');
+                var pagerBtns = document.createElement('div'),
+                    closeBtn = document.createElement('span'),
+                    dockBtn = document.createElement('span');
+                closeBtn.innerHTML = 'close';
+                dockBtn.innerHTML = 'dock';
+                closeBtn.addEventListener('click', closePager, false);
+                dockBtn.addEventListener('click', dockPage, false);
+                pagerBtns.appendChild(closeBtn);
+                pagerBtns.appendChild(dockBtn);
+                pager.appendChild(pagerBtns);
+
+                var rect = button.getBoundingClientRect();
+                pager.style.top = px(rect.top);
+                pager.style.left = px(rect.right);
+                for (var i = 0; i < cmds.length; i++) {
+                    self.runCommand(cmds[i], pager);
+                }
+            });
         };
 
         self.buttonsContainer = document.createElement('div');
@@ -368,17 +455,45 @@ var WebConsole = Terminal.extend({
 
             for (bi = 0 ; bi < buttonKeys.length; bi++) {
                 var bn = buttonKeys[bi],
+                    spec = buttons[gn][bn],
                     buttonElement = document.createElement('div');
-                if (_.isFunction(buttons[gn][bn])) {
-                    buttons[gn][bn](self, buttonElement);
+                addClass(buttonElement, 'wc-button');
+
+                if ('function' === spec.type) {
+                    spec.command(self, buttonElement);
                     groupElement.appendChild(buttonElement);
                 }
                 else {
                     var bnNoSpace = bn.replace(/\s+/g, '');
                     var bnClass = bnNoSpace.toLowerCase();
-                    buttonElement.setAttribute('class','wc-button ' + 'icon-' + bnClass);
+                    addClass(buttonElement, 'icon-' + bnClass);
                     buttonElement.appendChild(document.createTextNode(bn));
-                    buttonElement.addEventListener('click', cmdHandler(gn, bn));
+
+                    if('shell' === spec.type) {
+                        buttonElement.addEventListener(
+                            'click',
+                            cmdHandler(spec.command)
+                        );
+                    }
+                    else if ('display' === spec.type) {
+                        buttonElement.addEventListener(
+                            'click',
+                            displayHandler(spec.command)
+                        );
+                    }
+                    else if ('embed' === spec.type) {
+                        var pager = document.createElement('div');
+                        addClass(pager, 'wc-button-pager');
+                        pager.attachPage = function (page) {
+                            this.appendChild(page);
+                            this.wcPage = page;
+                        };
+                        buttonElement.addEventListener(
+                            'click',
+                            pagerHandler(buttonElement, pager, spec.command)
+                        );
+                        buttonElement.appendChild(pager);
+                    }
                     groupElement.appendChild(buttonElement);
                 }
             }
@@ -433,12 +548,23 @@ var WebConsole = Terminal.extend({
     start: function () {
         this.container = document.createElement('div');
         this.pages = document.createElement('div');
+        this.pagesTitle = document.createElement('div');
+        this.dockContainer = document.createElement('div');
 
         addClass(this.container, 'wc-container wc-element');
         addClass(this.pages, 'wc-pages wc-element');
+        addClass(this.pagesTitle, 'wc-title');
+        addClass(this.dockContainer, 'wc-dock wc-element');
+
+        this.pages.appendChild(this.pagesTitle);
 
         this.root.appendChild(this.container);
         this.root.appendChild(this.pages);
+        this.root.appendChild(this.dockContainer);
+
+        this.dock = new Dock({
+            container: this.dockContainer
+        });
 
         this.insertInput();
         this.setButtons();
@@ -471,9 +597,9 @@ var WebConsole = Terminal.extend({
         drawZoom.innerHTML = 'draw zoom';
 
         addClass(mapBlock, 'wc-mapblock wc-element');
-        addClass(nav, 'wc-nav wc-element');
-        addClass(select, 'wc-select wc-element');
-        addClass(drawZoom, 'wc-draw-zoom wc-element');
+        addClass(nav, 'wc-nav');
+        addClass(select, 'wc-select');
+        addClass(drawZoom, 'wc-draw-zoom');
 
         nav.addEventListener('click', function(){
             self.runCommand('navigate');
@@ -507,52 +633,78 @@ var WebConsole = Terminal.extend({
         return true;
     },
 
-    runCommand: function (val) {
+    runCommand: function (val, pager) {
         var self = this,
             input = self._inputField;
 
         self.commandMutex
             .get()
             .then(function(unlock){
-                input.setAttribute('class', 'wc-input wc-pending');
-                self.pageStart(val);
+                try {
+                    addClass(input, 'wc-pending');
+                    self.pageStart(val, pager);
+                }
+                catch(err) {
+                    unlock();
+                    throw err;
+                }
 
                 self.shell.exec(val)
                     .then(function(){
                         self.history.push(val);
                         self.insertInput().focus();
-                        unlock();
                     })
                     .catch(function(err){
                         self.writeError(err);
                         self.insertInput().focus();
-                        unlock();
-                    });
+                    })
+                    .finally(unlock);
             })
             .catch(function(err){
                 console.error('get mutex', err);
             });
     },
 
-    pageStart: function (cmd) {
-        var page = document.createElement('div'),
-            title = document.createElement('div');
+    pageStart: function (cmd, pager) {
+        var page = document.createElement('div');
 
-        page.setAttribute('class', 'wc-page wc-active');
-        title.setAttribute('class', 'wc-page-title');
-        title.appendChild(document.createTextNode(cmd));
-        page.appendChild(title);
+        addClass(page, 'wc-page wc-active');
 
-        if (this.currentPage) {
-            var cp = this.currentPage;
-            cp.addEventListener('transitionend', function(){
-                cp.setAttribute('class', 'hidden');
-            }, false);
-            cp.setAttribute('class', 'wc-page wc-inactive');
+        if (pager) {
+            if (_.isFunction(pager.attachPage)) {
+                pager.attachPage(page);
+            }
+            else {
+                pager.appendChild(page);
+            }
         }
+        else {
+            var self = this,
+                title = document.createElement('div'),
+                docker = document.createElement('span');
 
+            emptyElement(this.pagesTitle);
+            docker.innerHTML = 'dock';
+            addClass(docker, 'wc-page-docker');
+            docker.addEventListener('click', function(ev){
+                self.pagesTitle.removeChild(title);
+                self.dock.addPage(page);
+                self.currentPage = null;
+            }, false);
+            addClass(title, 'wc-page-title');
+            title.appendChild(document.createTextNode(cmd));
+            title.appendChild(docker);
+            this.pagesTitle.appendChild(title);
+            if (this.currentPage) {
+                var cp = this.currentPage;
+                try {
+                    self.pages.removeChild(cp);
+                }
+                catch (err) { }
+            }
+            this.pages.appendChild(page);
+        }
         this.currentPage = page;
-        this.pages.appendChild(page);
     },
 
 
@@ -652,6 +804,7 @@ var WebConsole = Terminal.extend({
         addClass(this.pages, 'wc-hide');
         addClass(this.buttonsContainer, 'wc-hide');
         addClass(this.mapBlock, 'wc-hide');
+        addClass(this.dockContainer, 'wc-hide');
     },
 
     show: function () {
@@ -659,6 +812,7 @@ var WebConsole = Terminal.extend({
         removeClass(this.pages, 'wc-hide');
         removeClass(this.buttonsContainer, 'wc-hide');
         removeClass(this.mapBlock, 'wc-hide');
+        removeClass(this.dockContainer, 'wc-hide');
     },
 
     startLoader: function (text) {

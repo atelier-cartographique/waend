@@ -35,46 +35,121 @@ function loginButton(console, button) {
 }
 
  var shellButtons = {
-     'Help' : ['help'],
-     'Login' : loginButton,
-     'About' : ['cc /2232525b-a8cb-4579-af24-2b5629ba43b5/3a7f695b-cd37-43f4-9a7a-efb1e422aef8?c=view']
+     'Help' : {
+         type: 'display',
+         command: ['help']
+     },
+     'Login' : {
+         type: 'function',
+         command: loginButton
+     },
+     'About' : {
+         type: 'shell',
+         command: ['cc /2232525b-a8cb-4579-af24-2b5629ba43b5/3a7f695b-cd37-43f4-9a7a-efb1e422aef8', 'view'],
+     },
  };
 
 
  var userButtons = {
-     'List maps': ['lg'],
-     'Add map': ['ic'],
-     'Upload image': ['media upload'],
-     'Browse images': ['media list'],
-     'My profile' : ['cc /me','lg']
+     'List maps': {
+        type: 'embed',
+        command: ['lg']
+     },
+     'Add map': {
+        type: 'display',
+        command: ['mkgroup']
+    },
+     'Upload image': {
+         type: 'display',
+         command: ['media upload']
+     },
+     'Browse images': {
+         type: 'display',
+         command: ['media pick']
+     },
+     'My profile' : {
+         type: 'shell',
+         command: ['cc /me', 'get']
+     }
 
  };
 
  var groupButtons = {
-     'List layers' : ['ll'],
-     'Add layer': ['ic'],
-     'Show - Hide layers': ['visible | set visible'],
-     'Re-order layers': ['visible | edit | set visible'],
-     'Set map extent': ['region get | set extent']
+     'List layers' : {
+         type: 'embed',
+         command: ['ll']
+     },
+     'Add layer': {
+         type: 'display',
+         commmand: ['mklayer']
+     },
+     'Show - Hide layers': {
+         type: 'display',
+         command: ['visible | set visible']
+     },
+     'Re-order layers': {
+         type: 'display',
+         command: ['visible | edit | set visible']
+     },
+     'Set map extent': {
+         type: 'shell',
+         command: ['region get | set extent']
+     }
  };
 
 
  var layerButtons = {
-     'Trace': ['trace | create'],
-     'Draw line': ['draw | create'],
-     'Draw zone': ['draw | close | create'],
-     'Import geo-datas': ['import','lf'],
-     'List features': ['lf']
+     'Trace': {
+         type: 'display',
+         command: ['trace | create']
+     },
+     'Draw line': {
+         type: 'display',
+         command: ['draw | create']
+     },
+     'Draw zone': {
+         type: 'display',
+         command: ['draw | close | create']
+     },
+     'Import geo-datas': {
+         type: 'display',
+         command: ['import','lf']
+     },
+     'List features': {
+         type: 'embed',
+         command: ['lf']
+     }
  };
 
  var featureButtons = {
-     'Set name': ['get name | edit | set name'],
-     'Set image': ['media pick | set params.image'],
-     'Set color': ['get color | edit | set style.strokeStyle'],
-     'Set text': ['get text | edit | set params.text'],
-     'Edit geometry' : ['gg | trace | sg'],
-     'Zoom to feature' : ['gg | region set'],
-     'Delete feature' : ['del_feature', 'lf']
+     'Set name': {
+         type: 'display',
+         command: ['get name | edit | set name']
+     },
+     'Set image': {
+         type: 'display',
+         command: ['media pick | set params.image']
+     },
+     'Set color': {
+         type: 'display',
+         command: ['get color | edit | set style.strokeStyle']
+     },
+     'Set text': {
+         type: 'display',
+         command: ['get text | edit | set params.text']
+     },
+     'Edit geometry' : {
+         type: 'display',
+         command: ['gg | trace | sg']
+     },
+     'Zoom to feature' : {
+         type: 'shell',
+         command: ['gg | region set']
+     },
+     'Delete feature' : {
+         type: 'shell',
+         command: ['del_feature', 'lf']
+     }
 
  };
 

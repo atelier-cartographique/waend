@@ -18,56 +18,74 @@
             left: -(@widthMenuLeft + 32px);
             transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
         }
+
+
+        .wc-buttons-group-title-wrapper {
+            .wc-buttons-group-title-label {
+                .label;
+            }
+            .wc-buttons-group-title-value a,
+            .wc-buttons-group-title-value a:link,
+            .wc-buttons-group-title-value a:visited,
+            .wc-buttons-group-title-value a:hover{
+                font-size: 12pt;
+                text-decoration: underline;
+                margin-left: 6px;
+                color: #000;
+                font-family: "dauphine_regular";
+                font-style: normal;
+            }
+
+        }
+
+        .wc-current {
+            padding-left: 6px;
+            border-left: 1px dotted #000;
+        }
+
+
+
+        .wc-buttons-group {
+
+            &.wc-inactive {
+                display: none;
+                font-size: 0pt;
+                transition-property: font-size;
+                transition-duration: 0.5s;
+            }
+        }
+
+        .wc-button {
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            font-family: "dauphine_regular";
+            font-size: 10pt;
+            padding-left: 6px;
+            display: table;
+
+            &:first-child{
+                padding-top: 3px;
+            }
+
+            .wc-button-pager {
+                display:none;
+                position: absolute;
+
+                &.wc-active {
+                    display: block;
+                    width: 400px;
+                    border-left: 1px solid black;
+                    padding-left: 1em;
+                    margin-left: 3em;
+                }
+                &.wc-inactive {
+                    display:none;
+                }
+            }
+        }
+
+        .wc-button:hover {
+            .link-hover;
+        }
     }
-}
-
-.wc-buttons-group-title-wrapper {
-    .wc-buttons-group-title-label {
-        .label;
-    }
-    .wc-buttons-group-title-value a,
-    .wc-buttons-group-title-value a:link,
-    .wc-buttons-group-title-value a:visited,
-    .wc-buttons-group-title-value a:hover{
-        font-size: 12pt;
-        text-decoration: underline;
-        margin-left: 6px;
-        color: #000;
-        font-family: "dauphine_regular";
-        font-style: normal;
-    }
-}
-
-
-.wc-current {
-    padding-left: 6px;
-    border-left: 1px dotted #000;
-}
-
-
-.wc-buttons-group {
-
-    &.wc-inactive {
-        display: none;
-        font-size: 0pt;
-        transition-property: font-size;
-        transition-duration: 0.5s;
-    }
-}
-
-.wc-button {
-    cursor: pointer;
-    border-bottom: 1px solid transparent;
-    font-family: "dauphine_regular";
-    font-size: 10pt;
-    padding-left: 6px;
-    display: table;
-
-    &:first-child{
-        padding-top: 3px;
-    }
-}
-
-.wc-button:hover {
-    .link-hover;
 }

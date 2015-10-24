@@ -193,11 +193,9 @@ table {
 }
 .word-wrap {
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -342,18 +340,18 @@ input[type="submit"] {
 }
 .fade-in {
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
 }
 @keyframes fadein {
   from {
@@ -399,18 +397,18 @@ input[type="submit"] {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
 }
 @keyframes fadein {
   from {
@@ -487,7 +485,6 @@ body {
   bottom: 0;
   /*padding: 24px;
     padding-top: 38px;*/
-
   background-color: transparent;
 }
 .wc-context-feature {
@@ -573,7 +570,7 @@ body {
 }
 .wc-element.wc-mapblock {
   position: absolute;
-  right: 12px;
+  left: 36%;
   top: 12px;
   color: #993358;
   font-size: 11pt;
@@ -583,50 +580,77 @@ body {
   text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-element.wc-mapblock.wc-hide {
-  right: -200px;
+  top: -64px;
   transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+}
+.wc-element.wc-mapblock .wc-nav,
+.wc-element.wc-mapblock .wc-select,
+.wc-element.wc-mapblock .wc-draw-zoom {
+  display: inline-block;
+  cursor: pointer;
+  margin-bottom: 0px;
+  border-bottom: 1px solid transparent;
+  margin: 0 1em;
+}
+.wc-element.wc-mapblock .wc-nav:hover,
+.wc-element.wc-mapblock .wc-select:hover,
+.wc-element.wc-mapblock .wc-draw-zoom:hover {
+  border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .wc-element.wc-pages {
   position: absolute;
-  bottom: 30px;
-  left: 12px;
+  left: 290px;
+  bottom: 34px;
+  width: 600px;
+  max-height: 80%;
   display: block;
-  overflow-y: hidden;
-  width: 250px;
-  height: 131px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .wc-element.wc-pages.wc-hide {
-  left: -250px;
+  left: -600px;
   transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
-.wc-element.wc-pages .wc-page.wc-active {
-  position: absolute;
-  bottom: 0;
-  width: 250px;
-  max-height: 108px;
+.wc-element.wc-pages .wc-title {
+  width: 100%;
   background-color: transparent;
-  padding-top: 22px;
-  border-bottom: 1px solid #000;
+  padding-bottom: 3px;
+  color: #8A8A8A;
+  text-align: left;
+}
+.wc-element.wc-pages .wc-title .wc-page-title {
+  text-shadow: none;
+  margin-bottom: 6px;
+  font-size: 13pt;
+}
+.wc-element.wc-pages .wc-title .wc-page-docker {
+  text-align: right;
+  cursor: pointer;
+  font-size: 11pt;
+  padding-left: 1em;
+}
+.wc-element.wc-pages .wc-title .wc-page-docker:hover {
+  color: black;
+}
+.wc-element.wc-pages .wc-page {
+  display: block;
+  padding: 6px 12px;
   overflow-y: auto;
-  z-index: 10;
+  overflow-x: hidden;
+}
+.wc-element.wc-pages .wc-page.wc-active {
+  opacity: 1;
+  transform: none;
 }
 .wc-element.wc-pages .wc-page.wc-inactive {
   opacity: 0;
-  transform: translateX(-50%);
+  transform: translateY(50%);
   transition-property: opacity, transform;
   transition-duration: 1s;
 }
-.wc-element.wc-pages .wc-page-title {
-  position: absolute;
-  width: 100%;
-  background-color: #FFF;
-  padding-bottom: 3px;
-  margin-top: -22px;
-  color: #8A8A8A;
-  font-size: 9pt;
-  border-bottom: 1px solid #000;
-  text-align: right;
-  text-shadow: none;
+.wc-element.wc-pages .wc-page.hidden {
+  display: none;
 }
 .wc-element.wc-pages .wc-line {
   font-size: 10pt;
@@ -645,11 +669,9 @@ body {
   color: #993358;
   display: block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -661,11 +683,9 @@ body {
   display: block;
   margin-bottom: 6px;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -692,17 +712,49 @@ body {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
-.wc-element.wc-pages .hidden {
-  display: none;
+.wc-element.wc-dock {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 200px;
+  max-height: 100%;
+  padding: 12px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.wc-element.wc-dock.wc-hide {
+  right: -200px;
+  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+}
+.wc-element.wc-dock .wc-dock-page .wc-dock-buttons {
+  font-weight: bold;
+  text-align: center;
+}
+.wc-element.wc-dock .wc-dock-page .wc-dock-buttons .wc-close {
+  display: inline-block;
+  cursor: pointer;
+}
+.wc-element.wc-dock .wc-dock-page .wc-dock-buttons .wc-collapse {
+  display: inline-block;
+  cursor: pointer;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page {
+  font-size: 60%;
+  height: auto;
+  overflow: hidden;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page.wc-collapsed {
+  height: 0;
+  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-container {
   position: absolute;
   bottom: 0;
-  left: 0;
-  width: 250px;
+  left: 280px;
+  width: 632px;
 }
 .wc-element.wc-container.wc-hide {
-  left: -300px;
+  left: -632px;
   transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-container .wc-input-prompt {
@@ -748,7 +800,6 @@ body {
 .wc-element.wc-container .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
-
 }
 .wc-element.wc-container .wc-pending {
   color: #2B71FF;
@@ -817,19 +868,6 @@ body {
 .wc-element.wc-container .wc-command:focus {
   border-bottom: 1px solid;
 }
-.wc-nav,
-.wc-select,
-.wc-draw-zoom {
-  cursor: pointer;
-  margin-bottom: 0px;
-  border-bottom: 1px solid transparent;
-}
-.wc-nav:hover,
-.wc-select:hover,
-.wc-draw-zoom:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
-}
 .wc-loader {
   position: absolute;
   top: 20%;
@@ -847,35 +885,6 @@ body {
 .wc-loader .wc-loader-text {
   text-align: center;
   font-size: 200%;
-}
-.wc-title {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  font-size: 10pt;
-  text-shadow: 0 0 6px #fff;
-}
-.wc-title a:link {
-  display: inline-block;
-  font-size: 100%;
-  text-decoration: none !important;
-  margin-right: 3px;
-  height: 20px;
-  line-height: 20px;
-  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
-}
-.wc-title .wc-context-user:before {
-  content: "";
-  width: calc(100vw - 100vh);
-  min-width: 250px;
-  display: inline-block;
-}
-.wc-title a:last-child {
-  font-size: 12pt;
-}
-.wc-title a:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
 }
 .navigate-buttons {
   position: absolute;
@@ -1032,15 +1041,15 @@ body {
   left: -282px;
   transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
-.wc-buttons-group-title-wrapper .wc-buttons-group-title-label {
+.wc-element.wc-buttons .wc-buttons-group-title-wrapper .wc-buttons-group-title-label {
   font-size: 9pt;
   text-transform: uppercase;
   letter-spacing: 0.5pt;
 }
-.wc-buttons-group-title-wrapper .wc-buttons-group-title-value a,
-.wc-buttons-group-title-wrapper .wc-buttons-group-title-value a:link,
-.wc-buttons-group-title-wrapper .wc-buttons-group-title-value a:visited,
-.wc-buttons-group-title-wrapper .wc-buttons-group-title-value a:hover {
+.wc-element.wc-buttons .wc-buttons-group-title-wrapper .wc-buttons-group-title-value a,
+.wc-element.wc-buttons .wc-buttons-group-title-wrapper .wc-buttons-group-title-value a:link,
+.wc-element.wc-buttons .wc-buttons-group-title-wrapper .wc-buttons-group-title-value a:visited,
+.wc-element.wc-buttons .wc-buttons-group-title-wrapper .wc-buttons-group-title-value a:hover {
   font-size: 12pt;
   text-decoration: underline;
   margin-left: 6px;
@@ -1048,17 +1057,17 @@ body {
   font-family: "dauphine_regular";
   font-style: normal;
 }
-.wc-current {
+.wc-element.wc-buttons .wc-current {
   padding-left: 6px;
   border-left: 1px dotted #000;
 }
-.wc-buttons-group.wc-inactive {
+.wc-element.wc-buttons .wc-buttons-group.wc-inactive {
   display: none;
   font-size: 0pt;
   transition-property: font-size;
   transition-duration: 0.5s;
 }
-.wc-button {
+.wc-element.wc-buttons .wc-button {
   cursor: pointer;
   border-bottom: 1px solid transparent;
   font-family: "dauphine_regular";
@@ -1066,10 +1075,24 @@ body {
   padding-left: 6px;
   display: table;
 }
-.wc-button:first-child {
+.wc-element.wc-buttons .wc-button:first-child {
   padding-top: 3px;
 }
-.wc-button:hover {
+.wc-element.wc-buttons .wc-button .wc-button-pager {
+  display: none;
+  position: absolute;
+}
+.wc-element.wc-buttons .wc-button .wc-button-pager.wc-active {
+  display: block;
+  width: 400px;
+  border-left: 1px solid black;
+  padding-left: 1em;
+  margin-left: 3em;
+}
+.wc-element.wc-buttons .wc-button .wc-button-pager.wc-inactive {
+  display: none;
+}
+.wc-element.wc-buttons .wc-button:hover {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
@@ -1229,18 +1252,18 @@ body {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   position: absolute;
   display: block;
   overflow: hidden;
@@ -1346,18 +1369,18 @@ body {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   position: absolute;
   margin: 0px auto 0px auto;
   width: 100%;
@@ -1449,19 +1472,27 @@ canvas.tool-draw,
 canvas.tool-trace {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
+  /* Safari, Chrome and Opera > 12.1 */
+  /* Firefox < 16 */
+  /* Internet Explorer */
+  /* Opera < 12.1 */
+  /* Firefox < 16 */
+  /* Safari, Chrome and Opera > 12.1 */
+  /* Internet Explorer */
+  /* Opera < 12.1 */
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   cursor: crosshair;
 }
 @keyframes fadein {
