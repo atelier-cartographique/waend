@@ -1168,6 +1168,10 @@ body {
   content: "\e850";
   font-size: 15pt;
 }
+.icon-zoomin:before {
+  content: "\e851";
+  font-size: 20pt;
+}
 .media-wrapper {
   position: relative;
   padding: 72px 12px;
