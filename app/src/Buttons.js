@@ -46,7 +46,7 @@ function loginButton(console, button) {
      'About' : {
          type: 'shell',
          command: ['cc /2232525b-a8cb-4579-af24-2b5629ba43b5/3a7f695b-cd37-43f4-9a7a-efb1e422aef8', 'view'],
-     }
+     },
  };
 
 

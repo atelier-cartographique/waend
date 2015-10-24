@@ -23,6 +23,8 @@ var document = window.document;
 var addClass = helpers.addClass,
     removeClass = helpers.removeClass,
     emptyElement = helpers.emptyElement,
+    hasClass = helpers.hasClass,
+    toggleClass = helpers.toggleClass,
     px = helpers.px;
 
 var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
@@ -120,18 +122,37 @@ Dock.prototype.detachPage = function (pageWrapper) {
 
 Dock.prototype.addPage = function (page) {
     var wrapper = document.createElement('div'),
-        closeBtn = document.createElement('div');
+        buttons = document.createElement('div'),
+        closeBtn = document.createElement('div'),
+        collapseBtn = document.createElement('div');
 
     closeBtn.innerHTML = 'close';
+    collapseBtn.innerHTML = 'collapse';
     addClass(wrapper, 'wc-dock-page');
+    addClass(buttons, 'wc-dock-buttons');
     addClass(closeBtn, 'wc-close');
+    addClass(collapseBtn, 'wc-collapse');
 
     var detacher = function () {
         this.detachPage(wrapper);
     };
 
+    var collapser = function () {
+        if (hasClass(page, 'wc-collapsed')) {
+            collapseBtn.innerHTML = 'collapse';
+        }
+        else {
+            collapseBtn.innerHTML = 'expand';
+        }
+        toggleClass(page, 'wc-collapsed');
+    };
+
     closeBtn.addEventListener('click', _.bind(detacher, this), false);
-    wrapper.appendChild(closeBtn);
+    collapseBtn.addEventListener('click', collapser, false);
+
+    buttons.appendChild(closeBtn);
+    buttons.appendChild(collapseBtn);
+    wrapper.appendChild(buttons);
     wrapper.appendChild(page);
     this.container.appendChild(wrapper);
 };
@@ -527,11 +548,15 @@ var WebConsole = Terminal.extend({
     start: function () {
         this.container = document.createElement('div');
         this.pages = document.createElement('div');
+        this.pagesTitle = document.createElement('div');
         this.dockContainer = document.createElement('div');
 
         addClass(this.container, 'wc-container wc-element');
         addClass(this.pages, 'wc-pages wc-element');
+        addClass(this.pagesTitle, 'wc-title');
         addClass(this.dockContainer, 'wc-dock wc-element');
+
+        this.pages.appendChild(this.pagesTitle);
 
         this.root.appendChild(this.container);
         this.root.appendChild(this.pages);
@@ -615,20 +640,25 @@ var WebConsole = Terminal.extend({
         self.commandMutex
             .get()
             .then(function(unlock){
-                addClass(input, 'wc-pending');
-                self.pageStart(val, pager);
+                try {
+                    addClass(input, 'wc-pending');
+                    self.pageStart(val, pager);
+                }
+                catch(err) {
+                    unlock();
+                    throw err;
+                }
 
                 self.shell.exec(val)
                     .then(function(){
                         self.history.push(val);
                         self.insertInput().focus();
-                        unlock();
                     })
                     .catch(function(err){
                         self.writeError(err);
                         self.insertInput().focus();
-                        unlock();
-                    });
+                    })
+                    .finally(unlock);
             })
             .catch(function(err){
                 console.error('get mutex', err);
@@ -649,17 +679,28 @@ var WebConsole = Terminal.extend({
             }
         }
         else {
-            var title = document.createElement('div');
+            var self = this,
+                title = document.createElement('div'),
+                docker = document.createElement('span');
+
+            emptyElement(this.pagesTitle);
+            docker.innerHTML = 'dock';
+            addClass(docker, 'wc-page-docker');
+            docker.addEventListener('click', function(ev){
+                self.pagesTitle.removeChild(title);
+                self.dock.addPage(page);
+                self.currentPage = null;
+            }, false);
             addClass(title, 'wc-page-title');
             title.appendChild(document.createTextNode(cmd));
-            page.appendChild(title);
+            title.appendChild(docker);
+            this.pagesTitle.appendChild(title);
             if (this.currentPage) {
                 var cp = this.currentPage;
-                cp.addEventListener('transitionend', function(){
-                    addClass(cp, 'hidden');
-                }, false);
-                removeClass(cp, 'wc-active');
-                addClass(cp, 'wc-inactive');
+                try {
+                    self.pages.removeChild(cp);
+                }
+                catch (err) { }
             }
             this.pages.appendChild(page);
         }
@@ -763,6 +804,7 @@ var WebConsole = Terminal.extend({
         addClass(this.pages, 'wc-hide');
         addClass(this.buttonsContainer, 'wc-hide');
         addClass(this.mapBlock, 'wc-hide');
+        addClass(this.dockContainer, 'wc-hide');
     },
 
     show: function () {
@@ -770,6 +812,7 @@ var WebConsole = Terminal.extend({
         removeClass(this.pages, 'wc-hide');
         removeClass(this.buttonsContainer, 'wc-hide');
         removeClass(this.mapBlock, 'wc-hide');
+        removeClass(this.dockContainer, 'wc-hide');
     },
 
     startLoader: function (text) {

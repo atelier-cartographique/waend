@@ -45,27 +45,42 @@
         left: 290px;
         bottom: 34px;
         width: 600px;
-        height: 50%;
+        max-height: 80%;
         display: block;
-        overflow-y: hidden;
+        overflow-y: auto;
+        overflow-x: hidden;
 
         &.wc-hide {
             left: -600px;
             transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
         }
+        .wc-title {
+            width: 100%;
+            background-color: transparent;
+            padding-bottom: 3px;
+            color: #8A8A8A;
+            text-align: left;
 
+            .wc-page-title {
+                text-shadow: none;
+                margin-bottom: 6px;
+                font-size: 13pt;
+            }
+            .wc-page-docker {
+                text-align: right;
+                cursor: pointer;
+                font-size: 11pt;
+                padding-left: 1em;
+                &:hover {
+                    color: black;
+                }
+            }
+        }
         .wc-page {
             display: block;
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            left: 0;
             padding: 6px 12px;
-            background-color: transparent;
             overflow-y: auto;
             overflow-x: hidden;
-            z-index: 10;
-            // border-bottom: 1px solid #000;
 
             &.wc-active{
                 opacity: 1;
@@ -83,17 +98,7 @@
                 display: none;
             }
 
-            .wc-page-title {
-                width: 100%;
-                background-color: transparent;
-                padding-bottom: 3px;
-                color: #8A8A8A;
-                font-size: 11pt;
-                // border-bottom: 1px solid #8A8A8A;
-                text-align: left;
-                text-shadow: none;
-                margin-bottom: 6px;
-            }
+
         }
 
 
@@ -147,16 +152,39 @@
         right: 0;
         top: 0;
         width: 200px;
+        max-height: 100%;
+        padding: 12px 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        &.wc-hide {
+            right: -200px;
+            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+        }
 
         .wc-dock-page {
-            .wc-close {
-                text-align: center;
-                cursor: pointer;
+            .wc-dock-buttons {
                 font-weight: bold;
+                text-align: center;
+                .wc-close {
+                    display: inline-block;
+                    cursor: pointer;
+                }
+
+                .wc-collapse {
+                    display: inline-block;
+                    cursor: pointer;
+                }
             }
 
             .wc-page {
                 font-size: 60%;
+                height: auto;
+                overflow: hidden;
+                &.wc-collapsed {
+                    height: 0;
+                    transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+                }
             }
         }
     }
