@@ -452,6 +452,33 @@ input[type="submit"] {
     opacity: 1;
   }
 }
+.grp-form {
+  width: 324px;
+  background: #f8f8f8;
+  margin: auto;
+  margin-top: 61px;
+  border: 24px solid #f8f8f8;
+}
+.grp-form:before {
+  content: "Add a new map";
+  text-align: center;
+  width: 300px;
+  display: block;
+  padding-bottom: 24px;
+}
+.grp-form .grp-input-title {
+  margin-bottom: 12px;
+}
+.grp-button-wrapper {
+  width: 324px;
+  margin: auto;
+  background: #f8f8f8;
+  border: 24px solid #f8f8f8;
+}
+.grp-button-wrapper .button {
+  width: 128px;
+  display: inline-block;
+}
 body {
   background-color: #E5E5E5;
   text-shadow: 0 0 6px black;

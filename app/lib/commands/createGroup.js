@@ -42,9 +42,16 @@ function makeForm(node) {
 
     setAttributes(title, {
         'type': 'text',
-        'class': 'grp-input-title'
+        'class': 'grp-input-title',
+        'placeholder': 'map name'
     });
-    addClass(desc, 'grp-input-description');
+
+    setAttributes(desc, {
+        'class': 'grp-input-description',
+        'rows': '7',
+        'cols': '50',
+        'placeholder': 'map description'
+    });
     addClass(form, 'grp-form');
 
     form.appendChild(title);
