@@ -77,7 +77,7 @@
 @colorUser:    @yellow; 
 @colorWaend:   @red;   
 
-@widthMenuLeft : 250px;
+@widthMenuLeft : 155px;
 
 
 
@@ -120,12 +120,7 @@
 
 
 .white-text-shadow {
-    text-shadow: 0 0 10px #fff, 
-                 0 0 10px #fff, 
-                 0 0 10px #fff, 
-                 0 0 10px #fff,
-                 0 0 10px #fff, 
-                 0 0 10px #fff, 
+    text-shadow: 0 0 1px #fff, 
                  1px 1px #fff, 
                  -1px -1px 0 #fff, 
                  1px -1px 0 #fff, 
@@ -315,4 +310,41 @@ input {
   background: @graticule;
   background-position: -50px -50px;
   .fade-in;
+}
+
+
+
+/////// WIDGETS - A trier
+
+.grp-form {
+  width: 324px;
+  background: @lightgrey ;
+  // height: calc(~"100vh - 160px");
+  margin: auto;
+  margin-top: 61px;
+  border: 24px solid @lightgrey;
+
+  &:before {
+      content: "Add a new map";
+      text-align: center;
+      width: 300px;
+      display: block;
+      padding-bottom: 24px;
+  }
+
+  .grp-input-title {
+    margin-bottom: 12px;
+  }
+}
+
+.grp-button-wrapper {
+  width: 324px;
+  margin: auto;
+  background: @lightgrey ;
+  border: 24px solid @lightgrey;
+  
+  .button {
+      width: 128px;
+      display: inline-block;
+  }
 }

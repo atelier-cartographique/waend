@@ -130,8 +130,8 @@ Dock.prototype.addPage = function (page) {
     collapseBtn.innerHTML = 'collapse';
     addClass(wrapper, 'wc-dock-page');
     addClass(buttons, 'wc-dock-buttons');
-    addClass(closeBtn, 'wc-close');
-    addClass(collapseBtn, 'wc-collapse');
+    addClass(closeBtn, 'wc-close icon-close');
+    addClass(collapseBtn, 'wc-collapse icon-collapse');
 
     var detacher = function () {
         this.detachPage(wrapper);
@@ -140,9 +140,12 @@ Dock.prototype.addPage = function (page) {
     var collapser = function () {
         if (hasClass(page, 'wc-collapsed')) {
             collapseBtn.innerHTML = 'collapse';
+            collapseBtn.className = 'wc-collapse icon-collapse';
         }
         else {
             collapseBtn.innerHTML = 'expand';
+            collapseBtn.className = 'wc-expand icon-expand';
+
         }
         toggleClass(page, 'wc-collapsed');
     };
@@ -390,8 +393,11 @@ var WebConsole = Terminal.extend({
                 var pagerBtns = document.createElement('div'),
                     closeBtn = document.createElement('span'),
                     dockBtn = document.createElement('span');
+                pagerBtns.className = 'pager-actions';
+                closeBtn.className = 'pager-action-close icon-close';
                 closeBtn.innerHTML = 'close';
-                dockBtn.innerHTML = 'dock';
+                dockBtn.className = 'pager-action-dock icon-docker';
+                dockBtn.innerHTML = 'dock it';
                 closeBtn.addEventListener('click', closePager, false);
                 dockBtn.addEventListener('click', dockPage, false);
                 pagerBtns.appendChild(closeBtn);
@@ -400,7 +406,7 @@ var WebConsole = Terminal.extend({
 
                 var rect = button.getBoundingClientRect();
                 pager.style.top = px(rect.top);
-                pager.style.left = px(rect.right);
+                // pager.style.left = px(rect.right);
                 for (var i = 0; i < cmds.length; i++) {
                     self.runCommand(cmds[i], pager);
                 }
@@ -686,10 +692,9 @@ var WebConsole = Terminal.extend({
                 docker = document.createElement('span');
 
             emptyElement(pager);
-            emptyElement(pagesTitle);
-
-            docker.innerHTML = 'dock';
-            addClass(docker, 'wc-page-docker');
+            emptyElement(this.pagesTitle);
+            docker.innerHTML = 'dock it';
+            addClass(docker, 'wc-page-docker icon-docker');
             docker.addEventListener('click', function(ev){
                 self.pagesTitle.removeChild(title);
                 self.dock.addPage(page);

@@ -24,10 +24,10 @@ var addClass = helpers.addClass,
 function makeButtons(node, okCallback, cancelCallback) {
     var wrapper = document.createElement('div'),
         okBtn = makeButton('OK', {
-            'class': 'button grp-button-ok'
+            'class': 'button grp-button-ok push-validate'
         }, okCallback),
         cancelBtn = makeButton('Cancel', {
-            'class': 'button grp-button-cancel'
+            'class': 'button grp-button-cancel push-cancel'
         }, cancelCallback);
     addClass(wrapper, 'grp-button-wrapper');
     wrapper.appendChild(okBtn);
@@ -42,9 +42,16 @@ function makeForm(node) {
 
     setAttributes(title, {
         'type': 'text',
-        'class': 'grp-input-title'
+        'class': 'grp-input-title',
+        'placeholder': 'map name'
     });
-    addClass(desc, 'grp-input-description');
+
+    setAttributes(desc, {
+        'class': 'grp-input-description',
+        'rows': '7',
+        'cols': '50',
+        'placeholder': 'map description'
+    });
     addClass(form, 'grp-form');
 
     form.appendChild(title);

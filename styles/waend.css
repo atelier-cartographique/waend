@@ -183,7 +183,7 @@ table {
   letter-spacing: 0.5pt;
 }
 .white-text-shadow {
-  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .yellow-text-shadow {
   text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
@@ -450,13 +450,40 @@ input[type="submit"] {
     opacity: 1;
   }
 }
+.grp-form {
+  width: 324px;
+  background: #f8f8f8;
+  margin: auto;
+  margin-top: 61px;
+  border: 24px solid #f8f8f8;
+}
+.grp-form:before {
+  content: "Add a new map";
+  text-align: center;
+  width: 300px;
+  display: block;
+  padding-bottom: 24px;
+}
+.grp-form .grp-input-title {
+  margin-bottom: 12px;
+}
+.grp-button-wrapper {
+  width: 324px;
+  margin: auto;
+  background: #f8f8f8;
+  border: 24px solid #f8f8f8;
+}
+.grp-button-wrapper .button {
+  width: 128px;
+  display: inline-block;
+}
 body {
   background-color: #E5E5E5;
   text-shadow: 0 0 6px black;
   letter-spacing: 1px;
   font-size: 14pt;
   font-family: "dauphine_regular";
-  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 #page-title {
   display: none;
@@ -464,7 +491,7 @@ body {
 #map {
   position: absolute;
   top: 0;
-  left: 274px;
+  left: 179px;
   right: 0;
   bottom: 0;
   background-color: white;
@@ -577,7 +604,7 @@ body {
   font-weight: normal;
   letter-spacing: 2px;
   text-align: right;
-  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-element.wc-mapblock.wc-hide {
   top: -64px;
@@ -600,7 +627,7 @@ body {
 }
 .wc-element.wc-pages {
   position: absolute;
-  left: 290px;
+  left: 195px;
   bottom: 34px;
   width: 600px;
   max-height: 80%;
@@ -722,35 +749,116 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
 }
+.wc-element.wc-dock:before {
+  content: "DOCK";
+  font-size: 8pt;
+  text-align: center;
+  display: block;
+  margin-top: -8px;
+  padding-bottom: 2px;
+}
 .wc-element.wc-dock.wc-hide {
   right: -200px;
   transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
+.wc-element.wc-dock .wc-dock-page {
+  margin-bottom: 12px;
+  padding: 6px;
+  background: #fff;
+  margin-right: 6px;
+  border: 1px solid #000;
+}
 .wc-element.wc-dock .wc-dock-page .wc-dock-buttons {
-  font-weight: bold;
-  text-align: center;
+  font-size: 9pt;
+  text-transform: uppercase;
+  padding-bottom: 6px;
 }
 .wc-element.wc-dock .wc-dock-page .wc-dock-buttons .wc-close {
   display: inline-block;
   cursor: pointer;
+  margin-right: 12px;
 }
 .wc-element.wc-dock .wc-dock-page .wc-dock-buttons .wc-collapse {
   display: inline-block;
   cursor: pointer;
 }
+.wc-element.wc-dock .wc-dock-page .wc-dock-buttons .wc-expand {
+  display: inline-block;
+  cursor: pointer;
+}
 .wc-element.wc-dock .wc-dock-page .wc-page {
-  font-size: 60%;
-  height: auto;
+  font-size: 10pt;
+  max-height: 9999px;
   overflow: hidden;
+  border-left: 1px dashed #000;
+  padding-left: 6px;
+  transition: max-height 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-dock .wc-dock-page .wc-page.wc-collapsed {
-  height: 0;
-  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+  max-height: 0px;
+  transition: max-height 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+}
+.wc-element.wc-dock .wc-dock-page .wc-page a {
+  color: #000;
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
+}
+.wc-element.wc-dock .wc-dock-page .wc-page a:hover {
+  border-bottom: 1px solid #282f35;
+  cursor: pointer;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .key-value .key {
+  padding-right: 6px;
+  color: #993358;
+  display: block;
+  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .key-value .value {
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 6px;
+  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .hint {
+  font-family: "dauphine_regular";
+  text-shadow: none;
+  display: inline-block;
+  color: #91b391;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .hint a {
+  color: #91b391;
+  text-decoration: none !important;
+  display: inline-block;
+  border-bottom: 1px solid transparent;
+  margin-bottom: 6px;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .hint a:link {
+  font-family: "dauphine_italic";
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .hint a:hover {
+  border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .wc-element.wc-container {
   position: absolute;
   bottom: 0;
-  left: 280px;
+  left: 185px;
   width: 632px;
 }
 .wc-element.wc-container.wc-hide {
@@ -760,11 +868,13 @@ body {
 .wc-element.wc-container .wc-input-prompt {
   font-family: "dauphine_regular";
   position: absolute;
-  bottom: 14px;
-  left: 11px;
+  bottom: 12px;
+  left: 8px;
   font-size: 8pt;
   z-index: 3;
   text-shadow: none;
+  padding: 5px 3px 2px 3px;
+  background-color: #fefefe;
 }
 .wc-element.wc-container .wc-input {
   position: absolute;
@@ -795,7 +905,7 @@ body {
   border-top: 0px;
   height: 3px;
   z-index: 12;
-  padding: 0 3px;
+  padding: 0 2px;
 }
 .wc-element.wc-container .wc-input.wc-inactive {
   color: #252525;
@@ -963,12 +1073,12 @@ body {
   margin-right: 6px;
 }
 .view-lookup-wrapper .input-wrapper input {
-  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
   margin-bottom: -5px;
   font-size: 12pt;
 }
 .view-lookup-wrapper .view-lookup-search {
-  text-shadow: 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 0 0 10px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
   font-size: 9pt;
   text-transform: uppercase;
   letter-spacing: 0.5pt;
@@ -1031,14 +1141,14 @@ body {
   letter-spacing: 1px;
   padding: 12px;
   background-color: #fff;
-  width: 250px;
+  width: 155px;
   height: 100vh;
   text-shadow: none;
-  border-right: double #000;
+  border-right: solid 1px #000;
   transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-buttons.wc-hide {
-  left: -282px;
+  left: -187px;
   transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-buttons .wc-buttons-group-title-wrapper .wc-buttons-group-title-label {
@@ -1078,16 +1188,46 @@ body {
 .wc-element.wc-buttons .wc-button:first-child {
   padding-top: 3px;
 }
+.wc-element.wc-buttons .wc-button:last-child {
+  margin-bottom: 6px;
+}
 .wc-element.wc-buttons .wc-button .wc-button-pager {
   display: none;
   position: absolute;
+  left: 179px;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active {
   display: block;
-  width: 400px;
-  border-left: 1px solid black;
-  padding-left: 1em;
-  margin-left: 3em;
+  width: 155px;
+  background: #FFF;
+  padding: 6px;
+  border: 1px solid #000;
+  border-left: 1px solid #fff;
+}
+.wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .pager-actions span {
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 12px;
+  font-size: 9pt;
+  text-transform: uppercase;
+}
+.wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .pager-actions span .pager-action-close {
+  margin-right: 24px;
+}
+.wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page {
+  border-left: 1px dashed black;
+  padding-left: 6px;
+}
+.wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page a {
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  color: #000;
+}
+.wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page a:hover {
+  border-bottom: 1px solid #282f35;
+  cursor: pointer;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-inactive {
   display: none;
@@ -1179,17 +1319,45 @@ body {
   content: "t";
 }
 .icon-editgeometry:before {
-  content: "e";
+  content: "\e863";
 }
 .icon-zoomtofeature:before {
   content: "\2192";
 }
 .icon-deletefeature:before {
-  content: "x";
+  content: "\e864";
+}
+.icon-docker:before {
+  content: "\2197";
+  margin: 0px;
+}
+.icon-close:before {
+  content: "\e864";
+  margin: 0px;
+}
+.icon-collapse:before {
+  content: "\2191";
+  margin: 0px;
+}
+.icon-expand:before {
+  content: "\2193";
+  margin: 0px;
 }
 .icon-lookup:before {
   content: "\e850";
   font-size: 15pt;
+}
+.icon-zoomin:before {
+  content: "\e851";
+  font-size: 20pt;
+}
+.icon-zoomout:before {
+  content: "\e852";
+  font-size: 20pt;
+}
+.icon-zoomjonction:before {
+  content: "\e853";
+  font-size: 20pt;
 }
 .media-wrapper {
   position: relative;
