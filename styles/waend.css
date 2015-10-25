@@ -466,7 +466,7 @@ body {
 #map {
   position: absolute;
   top: 0;
-  left: 174px;
+  left: 179px;
   right: 0;
   bottom: 0;
   background-color: white;
@@ -603,7 +603,7 @@ body {
 }
 .wc-element.wc-pages {
   position: absolute;
-  left: 190px;
+  left: 195px;
   bottom: 34px;
   width: 600px;
   max-height: 80%;
@@ -743,14 +743,15 @@ body {
 }
 .wc-element.wc-dock .wc-dock-page {
   margin-bottom: 12px;
-  padding-left: 6px;
+  padding: 6px;
+  background: #fff;
+  margin-right: 6px;
+  border: 1px solid #000;
 }
 .wc-element.wc-dock .wc-dock-page .wc-dock-buttons {
   font-size: 9pt;
   text-transform: uppercase;
-  margin-bottom: 12px;
-  border-top: 1px dashed #000;
-  padding-top: 12px;
+  padding-bottom: 6px;
 }
 .wc-element.wc-dock .wc-dock-page .wc-dock-buttons .wc-close {
   display: inline-block;
@@ -767,14 +768,15 @@ body {
 }
 .wc-element.wc-dock .wc-dock-page .wc-page {
   font-size: 10pt;
-  height: auto;
+  max-height: 9999px;
   overflow: hidden;
   border-left: 1px dashed #000;
   padding-left: 6px;
+  transition: max-height 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-dock .wc-dock-page .wc-page.wc-collapsed {
-  height: 0;
-  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+  max-height: 0px;
+  transition: max-height 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-dock .wc-dock-page .wc-page a {
   color: #000;
@@ -785,10 +787,62 @@ body {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
+.wc-element.wc-dock .wc-dock-page .wc-page .key-value .key {
+  padding-right: 6px;
+  color: #993358;
+  display: block;
+  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .key-value .value {
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 6px;
+  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .hint {
+  font-family: "dauphine_regular";
+  text-shadow: none;
+  display: inline-block;
+  color: #91b391;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .hint a {
+  color: #91b391;
+  text-decoration: none !important;
+  display: inline-block;
+  border-bottom: 1px solid transparent;
+  margin-bottom: 6px;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .hint a:link {
+  font-family: "dauphine_italic";
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .hint a:hover {
+  border-bottom: 1px solid #282f35;
+  cursor: pointer;
+}
 .wc-element.wc-container {
   position: absolute;
   bottom: 0;
-  left: 180px;
+  left: 185px;
   width: 632px;
 }
 .wc-element.wc-container.wc-hide {
@@ -1072,14 +1126,14 @@ body {
   letter-spacing: 1px;
   padding: 12px;
   background-color: #fff;
-  width: 150px;
+  width: 155px;
   height: 100vh;
   text-shadow: none;
   border-right: solid 1px #000;
   transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-buttons.wc-hide {
-  left: -182px;
+  left: -187px;
   transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-buttons .wc-buttons-group-title-wrapper .wc-buttons-group-title-label {
@@ -1125,12 +1179,15 @@ body {
 .wc-element.wc-buttons .wc-button .wc-button-pager {
   display: none;
   position: absolute;
-  left: 175px;
+  left: 179px;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active {
   display: block;
-  width: 400px;
-  padding-left: 6px;
+  width: 155px;
+  background: #FFF;
+  padding: 6px;
+  border: 1px solid #000;
+  border-left: 1px solid #fff;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .pager-actions span {
   text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;

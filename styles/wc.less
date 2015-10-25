@@ -184,14 +184,16 @@
 
         .wc-dock-page {
             margin-bottom: 12px;
-            padding-left: 6px;
+            padding: 6px;
+            background: #fff;
+            margin-right: 6px;
+            border: 1px solid #000;
 
             .wc-dock-buttons {
                 font-size: 9pt;
                 text-transform: uppercase;
-                margin-bottom: 12px;
-                border-top: 1px dashed #000;
-                padding-top: 12px;
+                padding-bottom: 6px;
+
                 .wc-close {
                     display: inline-block;
                     cursor: pointer;
@@ -211,19 +213,58 @@
 
             .wc-page {
                 font-size: 10pt;
-                height: auto;
+                // height: auto;
+                max-height: 9999px;
                 overflow: hidden;
                 border-left: 1px dashed #000;
                 padding-left: 6px;
+                transition: max-height 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+
 
                 &.wc-collapsed {
-                    height: 0;
-                    transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+                    // height: 0px;
+                    max-height: 0px;
+                    transition: max-height 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
                 }
 
                 a {
                     color: #000;
                     .linkwaend;
+                }
+
+                .key-value {
+                    .key {
+                      padding-right: 6px;
+                      color: @red;
+                      display: block;
+                      .word-wrap;
+                    }
+
+                    .value {
+                        letter-spacing: 0.5px;
+                        display: block;
+                        margin-bottom: 6px;
+                        .word-wrap;
+                    }
+                }
+
+                .hint {
+                    font-family: "dauphine_regular";
+                    text-shadow: none;
+                    display: inline-block;
+                    color: @colorHelp;
+
+                    a{
+                      color: @colorHelp;
+                      text-decoration: none !important;
+                      display: inline-block;
+                      border-bottom: 1px solid transparent;
+                      margin-bottom: 6px;
+                    }
+
+                    a:link{font-family: "dauphine_italic";}
+
+                    a:hover{.link-hover}
                 }
             }
         }
