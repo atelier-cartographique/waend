@@ -11,7 +11,7 @@
         width: @widthMenuLeft;
         height: 100vh;
         text-shadow: none;
-        border-right: double #000;
+        border-right: solid 1px #000;
         // .white-text-shadow;
         transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
         &.wc-hide {
@@ -66,21 +66,51 @@
             &:first-child{
                 padding-top: 3px;
             }
+            &:last-child{
+                margin-bottom: 6px;
+            }
 
             .wc-button-pager {
                 display:none;
                 position: absolute;
+                left: 175px;
 
                 &.wc-active {
                     display: block;
                     width: 400px;
-                    border-left: 1px solid black;
-                    padding-left: 1em;
-                    margin-left: 3em;
+                    padding-left: 6px;
+                    // margin-left: 3em;
+
+                    .pager-actions {
+                        span { 
+                            .white-text-shadow;
+                            display: inline-block;
+                            margin-right: 5px;
+                            margin-bottom: 12px; 
+                            font-size: 9pt;
+                            text-transform: uppercase;
+
+                            & .pager-action-close {
+                                margin-right: 24px;
+                            }
+                        }
+                    }
+
+                    .wc-page {
+                        border-left: 1px dashed black;
+                        padding-left: 6px;
+                        a {
+                            .linkwaend;
+                            .white-text-shadow;
+                            color: #000;
+                        }
+                    }
                 }
                 &.wc-inactive {
                     display:none;
                 }
+
+
             }
         }
 
