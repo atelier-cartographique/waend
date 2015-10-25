@@ -59,7 +59,7 @@ function getPath (x, y, fontSize) {
     x = x !== undefined ? x : 0;
     y = y !== undefined ? y : 0;
     fontSize = fontSize !== undefined ? fontSize : 72;
-    scale = 1 / this.font.unitsPerEm * fontSize;
+    scale = 1 / this.path.unitsPerEm * fontSize;
     p = new Font.Path();
     commands = this.path.commands;
     for (var i = 0; i < commands.length; i += 1) {

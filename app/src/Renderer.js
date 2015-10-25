@@ -85,7 +85,7 @@ CanvasRenderer.prototype.initWorker = function () {
     // }
 
 
-
+    var ts;
 
     worker.start();
     this.layer.on('update', function(){
@@ -96,12 +96,16 @@ CanvasRenderer.prototype.initWorker = function () {
     }, this);
 
     worker.once('data:init', function(){
+    console.log('R' + this.id, 'sent data in', _.now() - ts);
         this.isReady = true;
         if (this.pendingUpdate) {
             this.render();
         }
     }, this);
+    ts = _.now()
     var data = this.layer.toJSON();
+    console.log('R' + this.id, 'got data in', _.now() - ts);
+    ts = _.now();
     worker.post('init:data', data);
     this.worker = worker;
 };

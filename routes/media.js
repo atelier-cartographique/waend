@@ -25,9 +25,7 @@ var STEPS =
   128,
   256,
   512,
-  1024,
-  // 2048,
-  // 4096
+  1024
   ];
 
 var STEPS_SZ = STEPS.length;

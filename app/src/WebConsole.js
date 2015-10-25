@@ -680,10 +680,14 @@ var WebConsole = Terminal.extend({
         }
         else {
             var self = this,
+                pager = this.pages,
+                pagesTitle = pager.removeChild(this.pagesTitle),
                 title = document.createElement('div'),
                 docker = document.createElement('span');
 
-            emptyElement(this.pagesTitle);
+            emptyElement(pager);
+            emptyElement(pagesTitle);
+
             docker.innerHTML = 'dock';
             addClass(docker, 'wc-page-docker');
             docker.addEventListener('click', function(ev){
@@ -694,15 +698,10 @@ var WebConsole = Terminal.extend({
             addClass(title, 'wc-page-title');
             title.appendChild(document.createTextNode(cmd));
             title.appendChild(docker);
-            this.pagesTitle.appendChild(title);
-            if (this.currentPage) {
-                var cp = this.currentPage;
-                try {
-                    self.pages.removeChild(cp);
-                }
-                catch (err) { }
-            }
-            this.pages.appendChild(page);
+
+            pagesTitle.appendChild(title);
+            pager.appendChild(pagesTitle);
+            pager.appendChild(page);
         }
         this.currentPage = page;
     },
