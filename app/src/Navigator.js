@@ -1,5 +1,5 @@
 /*
- * app/lib/commands/view.js
+ * app/lib/src/Navigator.js
  *
  *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
@@ -13,17 +13,14 @@
 var _ = require('underscore'),
     util = require('util'),
     Promise = require('bluebird'),
-    Geometry = require('../Geometry'),
-    Transform = require('../Transform'),
+    Geometry = require('../lib/Geometry'),
+    Transform = require('../lib/Transform'),
     Projection = require('proj4'),
-    region = require('../Region'),
-    semaphore = require('../Semaphore'),
+    region = require('../lib/Region'),
+    semaphore = require('../lib/Semaphore'),
     turf = require('turf'),
-    config = require('../../../config'),
-    Transport = require('../Transport'),
-    helpers = require('../helpers');
-
-var API_URL = config.public.apiUrl;
+    Transport = require('../lib/Transport'),
+    helpers = require('../lib/helpers');
 
 
 var Proj3857 = Projection('EPSG:3857');
@@ -31,7 +28,8 @@ var Proj3857 = Projection('EPSG:3857');
 var projectExtent = helpers.projectExtent,
     unprojectExtent = helpers.unprojectExtent,
     transformExtent = helpers.transformExtent,
-    vecDist = helpers.vecDist;
+    vecDist = helpers.vecDist,
+    px = helpers.px;
 
 function isKeyCode (event, kc) {
     return (kc === event.which || kc === event.keyCode);
@@ -42,7 +40,7 @@ function getStep (extent) {
         height = extent.getHeight(),
         diag = Math.sqrt((width*width) + (height*height));
 
-    return (diag / 10);
+    return (diag / 20);
 
 }
 
@@ -52,26 +50,6 @@ function transformRegion (T, opt_extent) {
     var SW = T.mapVec2([extent[0], extent[1]]);
     var newExtent = [SW[0], SW[1], NE[0], NE[1]];
     region.push(newExtent);
-}
-
-function makeButton (label, attrs, callback, ctx) {
-    var button = document.createElement('div'),
-        labelElement = document.createElement('span');
-    labelElement.setAttribute('class', 'label');
-    labelElement.innerHTML = label;
-
-    _.each(attrs, function (val, k) {
-        button.setAttribute(k, val);
-    });
-
-    if (callback) {
-        button.addEventListener('click', function(event){
-            callback.call(ctx, event);
-        }, false);
-    }
-
-    button.appendChild(labelElement);
-    return button;
 }
 
 
@@ -95,10 +73,7 @@ NavigatorMode.prototype.keypress = function (event) {
 
 
 NavigatorMode.prototype.keyup = function (event) {
-    if (isKeyCode(event, 27)) { // escape
-        this.navigator.end();
-    }
-    else if (isKeyCode(event, 38)) {
+    if (isKeyCode(event, 38)) {
         this.navigator.south();
     }
     else if (isKeyCode(event, 40)) {
@@ -112,6 +87,19 @@ NavigatorMode.prototype.keyup = function (event) {
     }
 };
 
+NavigatorMode.prototype.getMouseEventPos = function (ev) {
+    if (ev instanceof MouseEvent) {
+        var target = ev.target,
+            trect = target.getBoundingClientRect(),
+            node = this.navigator.getNode(),
+            nrect = node.getBoundingClientRect();
+            return [
+                ev.clientX - (nrect.left - trect.left),
+                ev.clientY - (nrect.top - trect.top)
+            ];
+    }
+    return [0, 0];
+}
 
 function NavigatorModeBase () {
     NavigatorMode.apply(this, arguments);
@@ -152,58 +140,47 @@ NavigatorModeBase.prototype.wheel = function (event) {
 NavigatorModeBase.prototype.mousedown = function (event) {
     event.preventDefault();
     event.stopPropagation();
-    this.startPoint = [event.clientX, event.clientY];
+    this.startPoint = this.getMouseEventPos(event);
     this.isStarted = true;
-    // if (!this.select) {
-    //     this.select = document.createElement('div');
-    //     this.select.setAttribute('class', 'navigate-select');
-    //     this.select.style.position = 'absolute';
-    //     this.select.style.pointerEvents = 'none';
-    //     this.select.style.display = 'none';
-    //     this.navigator.options.container.appendChild(this.select);
-    // }
-
 };
 
 
 NavigatorModeBase.prototype.mousemove = function (event) {
     if (this.isStarted) {
         var sp = this.startPoint,
-            hp = [event.clientX, event.clientY],
+            hp = this.getMouseEventPos(event),
             extent = new Geometry.Extent(sp.concat(hp)),
             ctx = this.navigator.context;
         extent.normalize();
         var tl = extent.getBottomLeft().getCoordinates();
-        if (this.previewImageData) {
-            ctx.save();
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-            ctx.putImageData(this.previewImageData, hp[0] - sp[0], hp[1] - sp[1]);
-            ctx.restore();
-        }
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.save();
+        ctx.strokeStyle = '#0092FF';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(sp[0], sp[1]);
+        ctx.lineTo(hp[0], hp[1]);
+
+        var tr0 = new Transform(),
+            tr1 = new Transform(),
+            mpX = sp[0] + ((hp[0] - sp[0]) * 0.9),
+            mpY = sp[1] + ((hp[1] - sp[1]) * 0.9),
+            mp0 = [mpX, mpY],
+            mp1 = [mpX, mpY];
+
+        tr0.rotate(60, hp);
+        tr1.rotate(-60, hp);
+        tr0.mapVec2(mp0);
+        tr1.mapVec2(mp1);
+
+        ctx.lineTo(mp0[0], mp0[1]);
+        ctx.lineTo(mp1[0], mp1[1]);
+        ctx.lineTo(hp[0], hp[1]);
+
+        ctx.stroke();
+        ctx.restore();
         if (!this.isMoving) {
             this.isMoving = true;
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-            this.previewImageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
-            var data = this.previewImageData.data;
-            this.navigator.map.getView()
-                .forEachImage(function(imageData){
-                    var thisData = imageData.data,
-                        alpha;
-                    for (var i = 0; i < data.length; i += 4) {
-                        alpha = thisData[i + 3] / 255,
-                            r = i,
-                            g = i + 1,
-                            b = i + 2;
-                        if (alpha > 0) {
-                            data[r] = (data[r] * (1 - alpha)) + (thisData[r] * alpha);
-                            data[g] = (data[g] * (1 - alpha)) + (thisData[g] * alpha);
-                            data[b] = (data[b] * (1 - alpha)) + (thisData[b] * alpha);
-                        }
-                    }
-                });
-
         }
 
     }
@@ -211,7 +188,7 @@ NavigatorModeBase.prototype.mousemove = function (event) {
 
 NavigatorModeBase.prototype.mouseup = function (event) {
     if (this.isStarted) {
-        var endPoint = [event.clientX, event.clientY],
+        var endPoint = this.getMouseEventPos(event),
             startPoint = this.startPoint,
             dist = vecDist(startPoint, endPoint),
             map = this.navigator.map,
@@ -237,7 +214,7 @@ NavigatorModeBase.prototype.mouseup = function (event) {
         }
         this.isStarted = false;
         this.isMoving = false;
-        this.previewImageData = null;
+        this.navigator.draw();
     }
 };
 
@@ -251,10 +228,9 @@ function Navigator (options) {
     this.options = options;
     this.setupModes();
     this.setupCanvas();
-    this.setupButtons();
+    // this.setupButtons();
     this.map = options.map;
-
-    var view = options.map.getView();
+    var view = options.view;
 
     Object.defineProperty(this, 'transform', {
         get: function () {
@@ -262,7 +238,12 @@ function Navigator (options) {
         }
     });
 }
-
+Navigator.prototype.events = [
+    'click', 'dblclick',
+    'mousedown', 'mousemove', 'mouseup',
+    'keypress', 'keydown', 'keyup',
+    'wheel'
+    ];
 
 Navigator.prototype.setupButtons = function () {
     var container = this.options.container,
@@ -316,24 +297,31 @@ Navigator.prototype.setupCanvas = function () {
     this.canvas.height = rect.height;
     this.canvas.backgroundColor = 'transparent';
     this.canvas.style.position = 'absolute';
-    this.canvas.style.top = '0';
-    this.canvas.style.left = '0';
+    this.canvas.style.top = 0;
+    this.canvas.style.left = 0;
 
     container.appendChild(this.canvas);
     this.canvas.setAttribute('tabindex', -1);
     // this.canvas.focus();
     this.context = this.canvas.getContext('2d');
 
-    var dispatcher = _.bind(this.dispatcher, this),
-        events = [
-            'click', 'dblclick',
-            'mousedown', 'mousemove', 'mouseup',
-            'keypress', 'keydown', 'keyup',
-            'wheel'
-            ];
-    for (var i = 0; i < events.length; i++) {
-        this.canvas.addEventListener(events[i], dispatcher, false);
+    var dispatcher = _.bind(this.dispatcher, this);
+    for (var i = 0; i < this.events.length; i++) {
+        this.canvas.addEventListener(this.events[i], dispatcher, false);
     }
+};
+
+
+Navigator.prototype.resize = function () {
+    var container = this.options.container;
+        rect = container.getBoundingClientRect();
+    this.canvas.width = rect.width;
+    this.canvas.height = rect.height;
+    this.draw();
+};
+
+Navigator.prototype.getNode = function () {
+    return this.canvas;
 };
 
 Navigator.prototype.setupModes = function () {
@@ -347,9 +335,10 @@ Navigator.prototype.clear = function () {
     this.context.clearRect(0, 0, rect.width, rect.height);
 };
 
-Navigator.prototype.start = function (ender) {
-    this.ender = ender;
+Navigator.prototype.start = function () {
+    this.isStarted = true;
     this.setMode('ModeBase');
+    this.draw();
 };
 
 Navigator.prototype.end = function () {
@@ -373,22 +362,25 @@ Navigator.prototype.drawScale = function () {
     this.transform.mapVec2(tr);
     this.transform.mapVec2(center);
 
-    var left = 13,
-        right = 74,
+    var rightOffset = 64,
+        scaleWidth = 74,
+        right = rect.width - rightOffset,
+        left = rect.width - (scaleWidth + rightOffset),
         top = rect.height - 17,
-	thickness = 6,
+        thickness = 6,
         bottom = top + thickness,
-	length = right - left,
-	hw = ((length - 1) / 2) + left,
+        length = right - left,
+        hw = ((length - 1) / 2) + left,
         leftVec = this.map.getCoordinateFromPixel([left, top]),
         rightVec = this.map.getCoordinateFromPixel([right, top]),
         dist = turf.distance(turf.point(leftVec), turf.point(rightVec), 'kilometers') * 100000; // centimeters
 
     var formatNumber = function (n) {
-        if (Math.floor(n) === n) {
-            return n;
-        }
-        return n.toFixed(2);
+        return Math.ceil(n);
+        // if (Math.floor(n) === n) {
+        //     return n;
+        // }
+        // return n.toFixed(2);
     };
 
     var labelRight, labelCenter;
@@ -404,6 +396,10 @@ Navigator.prototype.drawScale = function () {
         labelRight = formatNumber(dist / 100000) + ' km';
         labelCenter = formatNumber((dist/2) / 100000) + ' km';
     }
+
+    // adjust scale size to fit dispayed size
+    var distDiff = Math.ceil(dist) / dist;
+    left = rect.width - ((scaleWidth * distDiff) + rightOffset);
 
     ctx.save();
     ctx.fillStyle = 'black';
@@ -478,7 +474,7 @@ Navigator.prototype.dispatcher = function (event) {
     var type = event.type,
         mode = this.getMode();
 
-    if (type in mode) {
+    if (mode && (type in mode)) {
         mode[type](event);
     }
 };
@@ -543,163 +539,4 @@ Navigator.prototype.centerOn = function (pix) {
 };
 
 
-
-function showGroupLegend(node, group) {
-    var wrapper = document.createElement('div'),
-        titleWrapper = document.createElement('div'),
-        titleLabel = document.createElement('span'),
-        title = document.createElement('span'),
-        descLabel = document.createElement('span'),
-        desc = document.createElement('span');
-
-    wrapper.setAttribute('class', 'view-group-wrapper');
-    titleWrapper.setAttribute('class', 'view-group-title-wrapper');
-    titleLabel.setAttribute('class', 'view-group-label');
-    title.setAttribute('class', 'view-group-title');
-    descLabel.setAttribute('class', 'view-group-label');
-    desc.setAttribute('class', 'view-group-description');
-
-    titleLabel.innerHTML = "name ";
-    title.innerHTML = group.get('name', 'Title');
-    descLabel.innerHTML = "description — ";
-    desc.innerHTML = group.get('description', 'Description');
-
-
-    titleWrapper.appendChild(titleLabel);
-    titleWrapper.appendChild(title);
-    wrapper.appendChild(descLabel);
-    wrapper.appendChild(desc);
-    wrapper.appendChild(titleWrapper);
-    node.appendChild(wrapper);
-}
-
-
-function lookupResults(container) {
-    var callback = function (data) {
-        while (container.firstChild) {
-            container.removeChild(container.firstChild);
-        }
-        if('results' in data) {
-            for (var i = 0; i < data.results.length; i++) {
-                var elem = document.createElement('div'),
-                    anchor = document.createElement('a'),
-                    result = data.results[i],
-                    props = result.properties,
-                    name = props.name || result.id,
-                    ctxPath = '/' + result.user_id + '/' + result.id;
-
-                elem.setAttribute('class', 'view-lookup-result');
-                anchor.setAttribute('href', '/map' + ctxPath + '?c=view');
-                anchor.innerHTML = name;
-                elem.appendChild(anchor);
-                container.appendChild(elem);
-            }
-        }
-    };
-    return callback;
-}
-
-function lookupTerm (term, callback) {
-    var transport = new Transport();
-    transport
-        .get(API_URL + '/group/' + term)
-        .then(callback)
-        .catch(function(err){
-            console.error('lookupTerm', err);
-        });
-}
-
-function showLookup (node) {
-    var wrapper = document.createElement('div'),
-        wrapperInput = document.createElement('div'),
-        input = document.createElement('input'),
-        inputBottomLine = document.createElement('div'),
-        button = document.createElement('button'),
-        results = document.createElement('div');
-
-    wrapper.setAttribute('class', 'view-lookup-wrapper');
-    wrapperInput.setAttribute('class', 'input-wrapper');
-    input.setAttribute('class', 'view-lookup-input');
-    input.setAttribute('type', 'text');
-    input.setAttribute('placeholder', 'search');
-    inputBottomLine.setAttribute('class', 'input-bottomLine');
-    button.setAttribute('class', 'view-lookup-search icon-lookup');
-    results.setAttribute('class', 'view-lookup-results');
-
-    button.innerHTML = "lookup";
-
-    wrapperInput.appendChild(input);
-    wrapperInput.appendChild(inputBottomLine);
-
-    wrapper.appendChild(wrapperInput);
-    wrapper.appendChild(button);
-    wrapper.appendChild(results);
-    node.appendChild(wrapper);
-
-    var lookup = function () {
-        var term = input.value.trim();
-        input.value = '';
-        lookupTerm(term, lookupResults(results));
-    };
-    button.addEventListener('click', lookup, false);
-}
-
-
-function waendCredit (node) {
-var waendCredit = document.createElement('div');
-    waendCredit.setAttribute('class', 'credit-waend');
-    waendCreditLink = document.createElement('a');
-    waendCreditLink.setAttribute('href', 'http://waend.com');
-    waendCreditLink.setAttribute('target', 'blank');
-    waendCreditLink.innerHTML = 'wænd';
-
-    waendCredit.appendChild(waendCreditLink);
-    node.appendChild(waendCredit);
-}
-
-
-
-function view () {
-    var self = this,
-        shell = self.shell,
-        stdout = shell.stdout,
-        terminal = shell.terminal,
-        binder = self.binder,
-        map = shell.env.map,
-        display = terminal.display(),
-        userId = self.getUser(),
-        groupId = self.getGroup();
-
-    var options = {
-        'container': display.node,
-        'map': map
-    };
-
-    var nav = new Navigator(options);
-
-    var resolver = function (resolve, reject) {
-
-        var ender = function (extent) {
-            display.end();
-            resolve(extent);
-        };
-
-        nav.start(ender);
-
-        showLookup(display.node);
-        binder.getGroup(userId, groupId)
-            .then(function(group){
-                showGroupLegend(display.node, group);
-            });
-        waendCredit(display.node);
-    };
-
-    return (new Promise(resolver));
-}
-
-
-
-module.exports = exports = {
-    name: 'view',
-    command: view
-};
+module.exports = exports = Navigator;

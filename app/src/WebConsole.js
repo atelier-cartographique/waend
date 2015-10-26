@@ -17,7 +17,8 @@ var _ = require('underscore'),
     Mutex = require('../lib/Mutex'),
     helpers = require('../lib/helpers'),
     buttons = require('./Buttons'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    Geometry = require('../lib/Geometry');
 
 var document = window.document;
 var addClass = helpers.addClass,
@@ -25,7 +26,8 @@ var addClass = helpers.addClass,
     emptyElement = helpers.emptyElement,
     hasClass = helpers.hasClass,
     toggleClass = helpers.toggleClass,
-    px = helpers.px;
+    px = helpers.px,
+    eventPreventer = helpers.eventPreventer;
 
 var titleTypes = ['shell', 'user', 'group', 'layer', 'feature'];
 
@@ -315,7 +317,40 @@ var WebConsole = Terminal.extend({
         this.commandMutex = new Mutex();
     },
 
+    /*
+    At the moment, the console is on top of everything
+    except when asked for a fullscreen display. It means
+    that the map is not receiving mouse events. We'll
+    try to work this around by forwarding such events.
+    It's not beautiful, well, near ugliness, but as long
+    as it works, I'm OK.
+    */
+    forwardMouseEvents: function () {
+        var root = this.root,
+            map = this.shell.env.map,
+            view = map.getView(),
+            navigator = view.navigator,
+            node = navigator.getNode(),
+            events = navigator.events;
+        var forward = function (event) {
+            var extent = new Geometry.Extent(node.getBoundingClientRect());
+            if (extent.intersects([event.clientX, event.clientY])) {
+                navigator.dispatcher(event);
+            }
+        };
+
+        _.each(events, function(e){
+            root.addEventListener(e, forward, false);
+        });
+    },
+
     insertInput: function (listener, events) {
+        var map = this.shell.env.map,
+            view = map.getView(),
+            navigator = view.navigator,
+            node = navigator.getNode(),
+            eventsToFilter = _.without(navigator.events, 'keyup');
+
         listener = listener || this.handleInput.bind(this);
         var oldInput = this._inputField;
         if (oldInput) {
@@ -325,6 +360,8 @@ var WebConsole = Terminal.extend({
         this._inputField.setAttribute('id', 'command-line');
         this._inputField.setAttribute('class', 'wc-input');
         this._inputField.setAttribute('type', 'text');
+
+        eventPreventer(this._inputField, eventsToFilter);
 
             inputPrompt = document.createElement('div');
             inputPrompt.setAttribute('class', 'wc-input-prompt');
@@ -361,9 +398,16 @@ var WebConsole = Terminal.extend({
     },
 
     setButtons: function () {
-        var self = this;
+        var self = this,
+            map = this.shell.env.map,
+            view = map.getView(),
+            navigator = view.navigator,
+            node = navigator.getNode(),
+            eventsToFilter = _.without(navigator.events, 'click');
+
         var cmdHandler = function (cmds) {
-            return (function () {
+            return (function (ev) {
+                ev.stopPropagation();
                 for (var i = 0; i < cmds.length; i++) {
                     self.runCommand(cmds[i]);
                 }
@@ -386,7 +430,8 @@ var WebConsole = Terminal.extend({
                 }
                 closePager(ev);
             };
-            return (function () {
+            return (function (ev) {
+                ev.stopPropagation();
                 emptyElement(pager);
                 removeClass(pager, 'wc-inactive');
                 addClass(pager, 'wc-active');
@@ -464,6 +509,7 @@ var WebConsole = Terminal.extend({
                     spec = buttons[gn][bn],
                     buttonElement = document.createElement('div');
                 addClass(buttonElement, 'wc-button');
+                eventPreventer(buttonElement, eventsToFilter);
 
                 if ('function' === spec.type) {
                     spec.command(self, buttonElement);
@@ -552,10 +598,20 @@ var WebConsole = Terminal.extend({
     },
 
     start: function () {
+        var map = this.shell.env.map,
+            view = map.getView(),
+            navigator = view.navigator,
+            node = navigator.getNode(),
+            eventsToFilter = _.without(navigator.events, 'click');
+
         this.container = document.createElement('div');
         this.pages = document.createElement('div');
         this.pagesTitle = document.createElement('div');
         this.dockContainer = document.createElement('div');
+
+        eventPreventer(this.container, eventsToFilter);
+        eventPreventer(this.dockContainer, eventsToFilter);
+        eventPreventer(this.pages, eventsToFilter);
 
         addClass(this.container, 'wc-container wc-element');
         addClass(this.pages, 'wc-pages wc-element');
@@ -574,7 +630,7 @@ var WebConsole = Terminal.extend({
 
         this.insertInput();
         this.setButtons();
-        this.setMapBlock();
+        // this.setMapBlock();
         this.history = new InputHistory();
         var self = this;
 
@@ -586,43 +642,45 @@ var WebConsole = Terminal.extend({
             semaphore.signal('map:resize');
         }, false);
 
+        this.forwardMouseEvents();
+
         semaphore.on('please:terminal:run', this.runCommand, this);
         semaphore.on('start:loader', this.startLoader, this);
         semaphore.on('stop:loader', this.stopLoader, this);
     },
 
-    setMapBlock: function () {
-        var self = this,
-            mapBlock = document.createElement('div'),
-            nav = document.createElement('div'),
-            select = document.createElement('div');
-            drawZoom = document.createElement('div');
-
-        nav.innerHTML = 'navigate';
-        select.innerHTML = 'select';
-        drawZoom.innerHTML = 'draw zoom';
-
-        addClass(mapBlock, 'wc-mapblock wc-element');
-        addClass(nav, 'wc-nav');
-        addClass(select, 'wc-select');
-        addClass(drawZoom, 'wc-draw-zoom');
-
-        nav.addEventListener('click', function(){
-            self.runCommand('navigate');
-        }, false);
-        select.addEventListener('click', function(){
-            self.runCommand('select');
-        }, false);
-        drawZoom.addEventListener('click', function(){
-            self.runCommand('draw | region set');
-        }, false);
-
-        mapBlock.appendChild(drawZoom);
-        mapBlock.appendChild(nav);
-        mapBlock.appendChild(select);
-        self.root.appendChild(mapBlock);
-        this.mapBlock = mapBlock;
-    },
+    // setMapBlock: function () {
+    //     var self = this,
+    //         mapBlock = document.createElement('div'),
+    //         nav = document.createElement('div'),
+    //         select = document.createElement('div');
+    //         drawZoom = document.createElement('div');
+    //
+    //     nav.innerHTML = 'navigate';
+    //     select.innerHTML = 'select';
+    //     drawZoom.innerHTML = 'draw zoom';
+    //
+    //     addClass(mapBlock, 'wc-mapblock wc-element');
+    //     addClass(nav, 'wc-nav');
+    //     addClass(select, 'wc-select');
+    //     addClass(drawZoom, 'wc-draw-zoom');
+    //
+    //     nav.addEventListener('click', function(){
+    //         self.runCommand('navigate');
+    //     }, false);
+    //     select.addEventListener('click', function(){
+    //         self.runCommand('select');
+    //     }, false);
+    //     drawZoom.addEventListener('click', function(){
+    //         self.runCommand('draw | region set');
+    //     }, false);
+    //
+    //     mapBlock.appendChild(drawZoom);
+    //     mapBlock.appendChild(nav);
+    //     mapBlock.appendChild(select);
+    //     self.root.appendChild(mapBlock);
+    //     this.mapBlock = mapBlock;
+    // },
 
     internalCommand: function (str) {
         if (':' !== str[0]) {
@@ -807,7 +865,7 @@ var WebConsole = Terminal.extend({
         addClass(this.container, 'wc-hide');
         addClass(this.pages, 'wc-hide');
         addClass(this.buttonsContainer, 'wc-hide');
-        addClass(this.mapBlock, 'wc-hide');
+        // addClass(this.mapBlock, 'wc-hide');
         addClass(this.dockContainer, 'wc-hide');
     },
 
@@ -815,7 +873,7 @@ var WebConsole = Terminal.extend({
         removeClass(this.container, 'wc-hide');
         removeClass(this.pages, 'wc-hide');
         removeClass(this.buttonsContainer, 'wc-hide');
-        removeClass(this.mapBlock, 'wc-hide');
+        // removeClass(this.mapBlock, 'wc-hide');
         removeClass(this.dockContainer, 'wc-hide');
     },
 

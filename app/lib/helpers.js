@@ -8,7 +8,8 @@
  *
  */
 
-var _ = require('underscore');
+var _ = require('underscore'),
+    Projection = require('proj4');
 
 module.exports.getModelName = function (model) {
     if (model.get('name')) {
@@ -48,7 +49,7 @@ module.exports.toggleClass = function (elem, c) {
 module.exports.hasClass = function (elem, c) {
     var ecStr = elem.getAttribute('class');
     var ec = ecStr ? ecStr.split(' ') : [];
-    return !(_.indexOf(ec, c) < 0) 
+    return !(_.indexOf(ec, c) < 0)
 }
 
 module.exports.removeClass = function (elem, c) {
@@ -89,6 +90,14 @@ module.exports.makeButton = function (label, attrs, callback, ctx) {
     return button;
 };
 
+module.exports.eventPreventer = function (elem, events) {
+    _.each(events, function (eventName) {
+        elem.addEventListener(eventName, function(e){
+            // e.preventDefault();
+            e.stopPropagation();
+        }, false);
+    });
+};
 
 // GEOM
 
@@ -108,4 +117,30 @@ module.exports.vecAdd = function (v1, v2, a) {
 module.exports.vecEquals = function (v1, v2, eps) {
     eps = eps || 0.00000001;
     return (exports.vecDist(v1, v2) < eps);
+};
+
+module.exports.transformExtent = function (extent, T) {
+    var min = extent.slice(0,2),
+        max = extent.slice(2);
+    T.mapVec2(min);
+    T.mapVec2(max);
+    return min.concat(max);
+};
+
+// GEO
+
+var Proj3857 = Projection('EPSG:3857');
+
+module.exports.projectExtent = function (extent, proj) {
+    proj = proj || Proj3857;
+    var min = proj.forward(extent.slice(0,2)),
+        max = proj.forward(extent.slice(2));
+    return min.concat(max);
+};
+
+module.exports.unprojectExtent = function (extent, proj) {
+    proj = proj || Proj3857;
+    var min = proj.inverse(extent.slice(0,2)),
+        max = proj.inverse(extent.slice(2));
+    return min.concat(max);
 };
