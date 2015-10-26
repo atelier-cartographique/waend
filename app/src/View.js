@@ -15,12 +15,14 @@ var _ = require('underscore'),
     semaphore = require('../lib/Semaphore'),
     Geometry = require('../lib/Geometry'),
     Transform = require('../lib/Transform'),
-    region = require('../lib/Region');
+    region = require('../lib/Region'),
+    Navigator = require('./Navigator');
 
 var document = window.document;
 
 function View (options) {
     this.root = options.root;
+    this.map = options.map;
     this.extent = options.extent;
     this.transform = new Transform();
     this.layers = [];
@@ -28,8 +30,15 @@ function View (options) {
     this.contexts = [];
     this.resize();
 
+    this.navigator = new Navigator({
+        'container': this.root,
+        'map': this.map,
+        'view': this
+    });
+
     window.addEventListener('resize', _.bind(this.resize, this));
     semaphore.on('map:resize', this.resize, this);
+
 }
 
 
@@ -41,6 +50,9 @@ View.prototype.resize = function () {
         var canvas = this.canvas[cidx];
         canvas.width = rect.width;
         canvas.height = rect.height;
+    }
+    if (this.navigator) {
+        this.navigator.resize();
     }
     semaphore.signal('please:map:render');
 };
@@ -174,7 +186,7 @@ View.prototype.createCanvas = function (layerId) {
     canvas.style.left = '0';
     canvas.zIndex = this.canvas.length;
     this.canvas.push(canvas);
-    this.root.appendChild(canvas);
+    this.root.insertBefore(canvas, this.navigator.getNode());
     return canvas;
 };
 
@@ -188,6 +200,9 @@ View.prototype.createContext = function (layerId, canvas) {
 };
 
 View.prototype.addLayer = function (layer) {
+    if (!this.navigator.isStarted) {
+        this.navigator.start();
+    }
     if(!!(this.getLayer(layer.id))){
         return;
     }

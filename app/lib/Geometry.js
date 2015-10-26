@@ -99,6 +99,17 @@ function Extent ( extent ) { // whether from an [minx, miny, maxx, maxy] extent 
     else if (extent instanceof Geometry) {
         this.extent = extent.getExtent().getArray();
     }
+    else if (('top' in extent)
+             && ('left' in extent)
+             && ('right' in extent)
+             && ('bottom' in extent)) {
+        this.extent = [
+            extent.left,
+            extent.top,
+            extent.right,
+            extent.bottom
+        ];
+    }
     else {
         this.extent = copy(extent);
     }
@@ -133,6 +144,22 @@ Extent.prototype.normalize = function () {
         this.extent[3] = tmp;
     }
     return this;
+};
+
+Extent.prototype.intersects = function(v) {
+    var r = v,
+        e = this.extent;
+    // if it's a point, make it a rect
+    if (2 === v.length) {
+        r.push(v[0]);
+        r.push(v[1]);
+    }
+    return (
+        e[0] <= r[2]
+        && r[0] <= e[2]
+        && e[1] <= r[3]
+        && r[1] <= e[3]
+    );
 };
 
 Extent.prototype.bound = function (optExtent) {

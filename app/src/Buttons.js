@@ -94,6 +94,10 @@ function loginButton(console, button) {
      'Set map extent': {
          type: 'shell',
          command: ['region get | set extent']
+     },
+     'Select Features': {
+         type: 'display',
+         command: ['select']
      }
  };
 

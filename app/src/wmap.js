@@ -26,8 +26,8 @@ function init () {
         source = new SourceProvider(),
         wmap = new WMap({'root': elementMap});
 
-    wc.start();
     wc.shell.env.map = wmap; // there might be a better way, but we want this result.
+    wc.start();
 
     if (window.waendUser) {
         Bind.get()

@@ -26,10 +26,12 @@ function Map (options) {
     this.projection = proj4(options.projection || 'EPSG:3857');
     this.renderers = {};
 
-    var viewOptions = _.pick(options, 'root');
-    viewOptions.extent = this.projectedExtent(options.extent || region.get());
-    this.view = new View(viewOptions);
+    var viewOptions = _.extend({
+        'map': this,
+        'extent': this.projectedExtent(options.extent || region.get())
+    },_.pick(options, 'root'));
 
+    this.view = new View(viewOptions);
     this.listenToWaend();
 }
 
