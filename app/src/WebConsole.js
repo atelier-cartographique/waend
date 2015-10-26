@@ -45,7 +45,7 @@ WebCommand.prototype.toString = function () {
 
 WebCommand.prototype.onClick = function () {
     var term = this.term,
-        args = this.args;
+        args = this.args || [];
     var cb = function(event){
         event.preventDefault();
         Promise.reduce(args, function(t,i, index){

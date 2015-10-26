@@ -9,7 +9,12 @@
  */
 
 
-var Promise = require("bluebird");
+var Promise = require("bluebird"),
+    helpers = require('../../helpers');
+
+var getModelName = helpers.getModelName,
+    addClass = helpers.addClass,
+    emptyElement = helpers.emptyElement;
 
 function listGroups () {
     var self = this,
@@ -19,24 +24,43 @@ function listGroups () {
         binder = self.binder,
         terminal = self.shell.terminal;
 
+    var makeOutput = function (group) {
+        var element = document.createElement('div');
+
+        addClass(element, 'group-name');
+
+        element.appendChild(
+            document.createTextNode(getModelName(group))
+        );
+
+        var updater = function(changedKey, newValue) {
+            if (element && ('name' === changedKey)) {
+                emptyElement(element);
+                element.appendChild(
+                    document.createTextNode(getModelName(group))
+                )
+            }
+        };
+
+        group.on('set', updater);
+
+        return terminal.makeCommand({
+            fragment: element,
+            text: getModelName(group),
+            args: [
+                'cc /' + userId + '/' + group.id,
+                'get'
+            ]
+        });
+    };
+
     var res = function(resolve, reject){
         binder.getGroups(userId)
             .then(function(groups){
                 for(var i = 0; i < groups.length; i++){
-                    var group = groups[i];
-                    var gidL = group.id.length; 
-                    var gIdtrim = '•'+group.id.substr(0, 2)+'\u2026'+group.id.substr(gidL - 2, gidL);                    var gName = group.get('name');
-                        if (gName === '' || gName == null) { 
-                            gName = gIdtrim;
-                        };
-                    var cmd = terminal.makeCommand({
-                        'args': [
-                            'cc /'+userId+'/'+group.id,
-                            'get'
-                            ],
-                        'text': gName
-                    });
-                    stdout.write(cmd || '');
+                    stdout.write(
+                        makeOutput(groups[i])
+                    );
                 }
                 resolve();
             })

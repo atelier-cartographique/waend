@@ -278,19 +278,32 @@ var Bind = O.extend({
         return this.transport.get(url, {parse: pr});
     },
 
+    _groupCache: {},
     getGroups: function (userId) {
         var db = this.db,
             binder = this,
-            path = '/user/'+userId+'/group/';
+            path = '/user/'+userId+'/group/',
+            gc = this._groupCache;
 
         var pr = function (response) {
             var data = objectifyResponse(response);
+
             var ret = [];
             for(var i = 0; i < data.results.length; i++){
-                var g = new Group(binder, data.results[i]);
-                // we do not record here, it would prevent deep loading a group
-                // db.record(path+g.id, g);
-                ret.push(g);
+                var groupData = data.results[i];
+                if(db.has(groupData.id)){
+                    ret.push(db.get(groupData.id));
+                }
+                else if (groupData.id in gc) {
+                    ret.push(gc[groupData.id])
+                }
+                else {
+                    var g = new Group(binder, groupData);
+                    // we do not record here, it would prevent deep loading a group
+                    // db.record(path+g.id, g);
+                    gc[groupData.id] = g;
+                    ret.push(g);
+                }
             }
             return ret;
         };

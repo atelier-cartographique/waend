@@ -10,7 +10,12 @@
 
 'use strict';
 
-var _ = require('underscore');
+var _ = require('underscore'),
+    helpers = require('../helpers');
+
+var addClass = helpers.addClass,
+    emptyElement = helpers.emptyElement;
+
 
 function getAttr () {
     var self = this,
@@ -21,27 +26,51 @@ function getAttr () {
         key = args.shift(),
         sys = self.sys,
         result;
+
+    var makeOutput = function (k, v) {
+        var wrapper = document.createElement('div'),
+            key = document.createElement('div'),
+            value = document.createElement('div');
+
+        addClass(key, 'key-value');
+        addClass(value, 'value');
+
+        key.appendChild(
+            document.createTextNode(k.toString())
+        );
+        value.appendChild(
+            document.createTextNode(JSON.stringify(v))
+        );
+
+        wrapper.appendChild(key);
+        wrapper.appendChild(value);
+
+        self.data.on('set', function(changedKey, newValue) {
+            if (value) {
+                emptyElement(value);
+                value.appendChild(
+                    document.createTextNode(JSON.stringify(newValue))
+                )
+            }
+        });
+
+        return terminal.makeCommand({
+            fragment: wrapper,
+            text: k.toString()
+        });
+    }
+
     if(key){
         result = self.data.get(key);
-        // sys.stdout.write('"'+ key +'" : '+ JSON.stringify(self.data.get(key)));
-        sys.stdout.write('<span class="key-value key-'+ key + '">' + '<span class="key">' + key + ' :' + '</span>' + '<span class="value">' + JSON.stringify(result) + '</span>' + '</span>');
-
+        stdout.write(makeOutput(key, result));
     }
     else{
         var data = self.data.getData();
         result = data;
 
         for(var k in data){
-            sys.stdout.write('<span class="key-value key-'+ k + '">' + '<span class="key">' + k + ' :' + '</span>' + '<span class="value">' + JSON.stringify(data[k]) + '</span>' + '</span>');
-            // stdout.write(terminal.makeCommand({
-            //     'args': [
-            //         'get '+ key +' | edit | set ' + key
-            //     ],
-            //     'text': 'edit'
-            // }));
+            stdout.write(makeOutput(k, data[k]));
         }
-
-        stdout.write('<span class="hint">Help : <a href="http://alpha.waend.com/documentation/help.html#set" target="_blank">Set Attributes</a></span>');
     }
 
 

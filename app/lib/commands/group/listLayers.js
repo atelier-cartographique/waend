@@ -10,7 +10,13 @@
 
 
 var _ = require('underscore'),
-    Promise = require("bluebird");
+    Promise = require("bluebird"),
+    helpers = require('../../helpers');
+
+var getModelName = helpers.getModelName,
+    addClass = helpers.addClass,
+    emptyElement = helpers.emptyElement;
+
 
 function listLayers () {
     var self = this,
@@ -22,23 +28,44 @@ function listLayers () {
         binder = self.binder,
         terminal = shell.terminal;
 
+    var makeOutput = function (layer) {
+        var element = document.createElement('div');
+
+        addClass(element, 'layer-name');
+
+        element.appendChild(
+            document.createTextNode(getModelName(layer))
+        );
+
+        var updater = function(changedKey, newValue) {
+            if (element && ('name' === changedKey)) {
+                emptyElement(element);
+                element.appendChild(
+                    document.createTextNode(getModelName(layer))
+                )
+            }
+        };
+
+        layer.on('set', updater);
+
+        return terminal.makeCommand({
+            fragment: element,
+            text: getModelName(layer),
+            args: [
+                'cc /' + userId + '/' + groupId + '/' + layer.id,
+                'get'
+            ]
+        });
+    };
+
+
     var res = function(resolve, reject){
         binder.getLayers(userId, groupId)
             .then(function(layers){
                 for(var i = 0; i < layers.length; i++){
-                    var layer = layers[i];
-                    var lidL = layer.id.length; 
-                    var lIdtrim = '•'+layer.id.substr(0, 2)+'\u2026'+layer.id.substr(lidL - 2, lidL);                    var lName = layer.get('name');
-                        if (lName === '' || lName == null) { 
-                            lName = lIdtrim;
-                        };
-                    var cmd = terminal.makeCommand({
-                        'args': [
-                            'cc /'+userId+'/'+groupId+'/'+layer.id,
-                            'get'],
-                        'text': lName
-                    });
-                    stdout.write(cmd || '');
+                    stdout.write(
+                        makeOutput(layers[i])
+                    );
                 }
                 resolve(_.map(layers, function(l){return l.id;}));
             })
