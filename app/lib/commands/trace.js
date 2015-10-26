@@ -14,7 +14,8 @@ var _ = require('underscore'),
     util = require('util'),
     rbush = require('rbush'),
     Projection = require('proj4'),
-    Geometry = require('../Geometry');
+    Geometry = require('../Geometry'),
+    semaphore = require('../Semaphore');
 
 var Proj3857 = Projection('EPSG:3857');
 
@@ -125,14 +126,23 @@ TracerMode.prototype.keyup = function (event) {
 function TracerModeNewPoint () {
     TracerMode.apply(this, arguments);
     this.modeName = 'NewPoint';
-    this.inverse = this.tracer.transform.inverse();
+    Object.defineProperty(this, 'inverse', {
+        get:  function () {
+            return this.tracer.transform.inverse();
+        }
+    });
+    // this.inverse = this.tracer.transform.inverse();
 }
 util.inherits(TracerModeNewPoint, TracerMode);
 
 function TracerModeEditPoint () {
     TracerMode.apply(this, arguments);
     this.modeName = 'EditPoint';
-    this.inverse = this.tracer.transform.inverse();
+    Object.defineProperty(this, 'inverse', {
+        get: function () {
+            return this.tracer.transform.inverse();
+        }
+    });
 }
 util.inherits(TracerModeEditPoint, TracerMode);
 
@@ -234,6 +244,15 @@ function Tracer (options) {
     this.setupModes();
     this.setupCanvas();
     this.setupButtons();
+
+    semaphore.on('view:resize', function (view) {
+        this.transform = view.transform.clone();
+        if (this.canvas) {
+            var rect = view.getRect();
+            this.canvas.width = rect.width;
+            this.canvas.height = rect.height;
+        }
+    }, this);
 }
 
 

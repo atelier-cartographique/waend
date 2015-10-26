@@ -55,6 +55,7 @@ View.prototype.resize = function () {
         this.navigator.resize();
     }
     semaphore.signal('please:map:render');
+    semaphore.signal('view:resize', this);
 };
 
 View.prototype.getRect = function () {

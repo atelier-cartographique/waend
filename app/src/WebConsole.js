@@ -331,11 +331,14 @@ var WebConsole = Terminal.extend({
             view = map.getView(),
             navigator = view.navigator,
             node = navigator.getNode(),
-            events = navigator.events;
+            events = navigator.events,
+            self = this;
         var forward = function (event) {
-            var extent = new Geometry.Extent(node.getBoundingClientRect());
-            if (extent.intersects([event.clientX, event.clientY])) {
-                navigator.dispatcher(event);
+            if (!self.isFullscreen) {
+                var extent = new Geometry.Extent(node.getBoundingClientRect());
+                if (extent.intersects([event.clientX, event.clientY])) {
+                    navigator.dispatcher(event);
+                }
             }
         };
 
@@ -713,16 +716,17 @@ var WebConsole = Terminal.extend({
                     throw err;
                 }
 
-                self.shell.exec(val)
-                    .then(function(){
+                var shellExeced = self.shell.exec(val);
+                var shellThened = shellExeced.then(function(){
                         self.history.push(val);
                         self.insertInput().focus();
-                    })
-                    .catch(function(err){
+                        unlock();
+                    });
+                var shellCaught = shellThened.catch(function(err){
                         self.writeError(err);
                         self.insertInput().focus();
-                    })
-                    .finally(unlock);
+                        unlock();
+                    });
             })
             .catch(function(err){
                 console.error('get mutex', err);
@@ -849,10 +853,12 @@ var WebConsole = Terminal.extend({
         var display = new Display(this.root),
             mc = this.mapContainer;
         this.hide();
+        this.isFullscreen = true;
         addClass(mc, 'wc-fullscreen');
         display.setFinalizer(function () {
             removeClass(mc, 'wc-fullscreen');
             this.show();
+            this.isFullscreen = false;
             // semaphore.signal('map:resize');
         }, this);
         // _.defer(function(){
