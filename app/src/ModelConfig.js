@@ -50,7 +50,12 @@ function getDomFragmentFactory (type) {
             }
         };
 
-        self.on('set', updater);
+        var listenerId = self.on('set', updater);
+
+        element.addEventListener('remove', function() {
+            self.offById(listenerId);
+        }, false);
+
         return element;
     }
 

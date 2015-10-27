@@ -24,6 +24,7 @@ var document = window.document;
 var addClass = helpers.addClass,
     removeClass = helpers.removeClass,
     emptyElement = helpers.emptyElement,
+    removeElement = helpers.removeElement,
     hasClass = helpers.hasClass,
     toggleClass = helpers.toggleClass,
     px = helpers.px,
@@ -106,7 +107,7 @@ Display.prototype.end = function () {
 
     var container = this._root,
         el = this.node;
-    container.removeChild(el);
+    removeElement(el);
     this._ended = true;
     if (this.finalizer) {
         this.finalizer.callback.call(this.finalizer.context);
@@ -119,7 +120,7 @@ function Dock (options) {
 }
 
 Dock.prototype.detachPage = function (pageWrapper) {
-    this.container.removeChild(pageWrapper);
+    removeElement(pageWrapper);
 };
 
 Dock.prototype.addPage = function (page) {
@@ -357,7 +358,7 @@ var WebConsole = Terminal.extend({
         listener = listener || this.handleInput.bind(this);
         var oldInput = this._inputField;
         if (oldInput) {
-            this.container.removeChild(oldInput);
+            removeElement(oldInput);
         }
         this._inputField = document.createElement('input');
         this._inputField.setAttribute('id', 'command-line');
@@ -754,7 +755,7 @@ var WebConsole = Terminal.extend({
         else {
             var self = this,
                 pager = this.pages,
-                pagesTitle = pager.removeChild(this.pagesTitle),
+                pagesTitle = removeElement(this.pagesTitle),
                 title = document.createElement('div'),
                 docker = document.createElement('span');
 
@@ -763,7 +764,7 @@ var WebConsole = Terminal.extend({
             docker.innerHTML = 'dock it';
             addClass(docker, 'wc-page-docker icon-docker');
             docker.addEventListener('click', function(ev){
-                self.pagesTitle.removeChild(title);
+                removeElement(title);
                 self.dock.addPage(page);
                 self.currentPage = null;
             }, false);
@@ -900,7 +901,7 @@ var WebConsole = Terminal.extend({
     stopLoader: function (text) {
         if (this.loader) {
             this.loader.stop();
-            this.root.removeChild(this.loader.element);
+            removeElement(this.loader.element);
             this.loader = null;
         }
     },

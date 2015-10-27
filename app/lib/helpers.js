@@ -9,7 +9,8 @@
  */
 
 var _ = require('underscore'),
-    Projection = require('proj4');
+    Projection = require('proj4'),
+    semaphore = require('./Semaphore');
 
 module.exports.getModelName = function (model) {
     if (model.get('name')) {
@@ -60,8 +61,20 @@ module.exports.removeClass = function (elem, c) {
 
 module.exports.emptyElement = function (elem) {
     while (elem.firstChild) {
-        elem.removeChild(elem.firstChild);
+        exports.removeElement(elem.firstChild);
     }
+    return elem;
+};
+
+module.exports.removeElement = function (elem, keepChildren) {
+    if (!keepChildren) {
+        exports.emptyElement(elem);
+    }
+    var parent = elem.parentNode,
+        evt = document.createEvent('CustomEvent');
+    parent.removeChild(elem);
+    evt.initCustomEvent('remove', false, false, null);
+    elem.dispatchEvent(evt);
     return elem;
 };
 
