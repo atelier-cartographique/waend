@@ -572,9 +572,14 @@ var WebConsole = Terminal.extend({
                         var model = Bind.get().db.get(id);
                         name = helpers.getModelName(model);
                     }
+                    var ccCmd = 'cc /' + ctxPath.slice(0, pidx + 1).join('/');
                     return self.makeCommand({
-                        'args': ['cc /' + ctxPath.slice(0, pidx + 1).join('/'), 'get'],
-                        'text': name
+                        'args': [ccCmd, 'get'],
+                        'text': name,
+                        fragment: model.getDomFragment('name', 'a', {
+                            'href': '#',
+                            'title': ccCmd
+                        })
                     });
             };
 
