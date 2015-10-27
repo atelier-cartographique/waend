@@ -14,8 +14,10 @@ var _ = require('underscore'),
     Promise = require('bluebird'),
     Geometry = require('../Geometry'),
     Transform = require('../Transform'),
-    region = require('../Region');
+    region = require('../Region'),
+    helpers = require('../helpers');
 
+var getModelName = helpers.getModelName;
 
 function transformRegion (T, opt_extent) {
     var extent = opt_extent.extent;
@@ -33,6 +35,18 @@ function select () {
         map = shell.env.map,
         display = terminal.display();
 
+    var makeOutput = function (feature) {
+        return terminal.makeCommand({
+            fragment: feature.getDomFragment('name'),
+            text: getModelName(feature),
+            args: [
+                'cc /' + feature.getPath().join('/'),
+                'gg | region set'
+            ]
+        });
+    };
+
+
     var resolver = function (resolve, reject) {
         var innerSelect = function (event) {
             var clientPosMin = [event.clientX - 1, event.clientY - 1],
@@ -46,23 +60,7 @@ function select () {
                 for (var i = 0 ; i < features.length; i++) {
                     var f = features[i];
                     if (f) {
-                        var id = f.id,
-                            fidL = f.id.length, 
-                            fidTrim = '•'+f.id.substr(0, 2)+'\u2026'+f.id.substr(fidL - 2, fidL);
-
-                            name = f.has('name') ? f.get('name') : '',
-                            p = '/' + f.getPath().join('/');
-
-                            if (name ==='' || name == null) {
-                                name = fidTrim;
-                            };
-                        stdout.write(terminal.makeCommand({
-                            'args': [
-                                'cc ' + p,
-                                'gg | region set | get'
-                            ],
-                            'text': (name)
-                        }));
+                        stdout.write(makeOutput(f));
                     }
                 }
                 resolve(features);
