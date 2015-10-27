@@ -1262,6 +1262,7 @@ body {
   text-align: center;
   line-height: 80%;
   margin-right: 10px;
+  content: "-";
 }
 .icon-help:before {
   content: "\e83f";
