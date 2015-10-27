@@ -81,7 +81,7 @@ function loginButton(console, button) {
      },
      'Add layer': {
          type: 'display',
-         commmand: ['mklayer']
+         command: ['mklayer']
      },
      'Show - Hide layers': {
          type: 'display',

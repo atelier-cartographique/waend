@@ -1,5 +1,5 @@
 /*
- * app/lib/commands/createGroup.js
+ * app/lib/commands/group/createLayer.js
  *
  *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
@@ -11,9 +11,9 @@
 
 var _ = require('underscore'),
     Promise = require('bluebird'),
-    semaphore = require('../Semaphore'),
-    region = require('../Region'),
-    helpers = require('../helpers');
+    semaphore = require('../../Semaphore'),
+    region = require('../../Region'),
+    helpers = require('../../helpers');
 
 
 var addClass = helpers.addClass,
@@ -72,14 +72,28 @@ function makeForm(node, label) {
 }
 
 
+function ensureVisibility (binder, userId, groupId, layerId) {
+    binder.getGroup(userId, groupId)
+          .then(function(group){
+              if (group.has('visible')) {
+                  var v = group.get('visible');
+                  v.push(layerId);
+                  group.set('visible', v);
+              }
+          })
+          .catch(function(err) {
+              console.error('failed to make this layer visible', layerId);
+          });
+}
 
-function createGroup (ctx, user, resolve, reject) {
+
+function createLayer (ctx, user, groupId, resolve, reject) {
     var binder = ctx.binder,
         shell = ctx.shell,
         terminal = shell.terminal,
         display = terminal.display();
 
-    var form = makeForm(display.node, 'Add a new map');
+    var form = makeForm(display.node, 'Add a new layer');
 
     var createOK = function () {
         var title = form.title.value,
@@ -87,16 +101,16 @@ function createGroup (ctx, user, resolve, reject) {
         if((title.length > 0) && (desc.length > 0)) {
             var data = {
                 user_id: user.id,
-                status_flag: 0,
                 properties: {
                     'name': title,
                     'description': desc}
             };
 
-            ctx.binder.setGroup(user.id, data)
+            ctx.binder.setLayer(user.id, groupId, data)
                 .then(function(model){
+                    shell.exec('cc /' + user.id + '/' + groupId + '/' + model.id);
+                    ensureVisibility(binder, user.id, groupId, model.id);
                     resolve(model);
-                    shell.exec('cc /' + user.id + '/' + model.id);
                 })
                 .catch(reject)
                 .finally(function(){
@@ -119,19 +133,20 @@ function iCreate (groupName, groupDescription) {
         terminal = self.shell.terminal,
         stdout = self.sys.stdout,
         stdin = self.sys.stdin,
-        user = self.shell.getUser();
+        user = self.shell.getUser(),
+        groupId = self.getGroup();
 
     if (!user) {
         return (Promise.reject('You\'re not logged in.'));
     }
 
-    var creator = _.partial(createGroup, self, user);
+    var creator = _.partial(createLayer, self, user, groupId);
 
     return (new Promise(creator));
 }
 
 
 module.exports = exports = {
-    name: 'mkgroup',
+    name: 'mklayer',
     command: iCreate
 };

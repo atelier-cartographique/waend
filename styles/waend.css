@@ -457,8 +457,7 @@ input[type="submit"] {
   margin-top: 61px;
   border: 24px solid #f8f8f8;
 }
-.grp-form:before {
-  content: "Add a new map";
+.grp-form .form-label {
   text-align: center;
   width: 300px;
   display: block;
@@ -466,6 +465,9 @@ input[type="submit"] {
 }
 .grp-form .grp-input-title {
   margin-bottom: 12px;
+}
+.grp-form .grp-input-description {
+  width: 98%;
 }
 .grp-button-wrapper {
   width: 324px;

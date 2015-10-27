@@ -13,6 +13,7 @@
 var Context = require('./Context'),
     Bind = require('./Bind'),
     listLayers = require('./commands/group/listLayers'),
+    createLayer = require('./commands/group/createLayer'),
     visible = require('./commands/group/visible');
 
 
@@ -21,7 +22,8 @@ var Group = Context.extend({
     name: 'group',
     commands:{
         'll': listLayers.command,
-        'visible': visible.command
+        'visible': visible.command,
+        'mklayer': createLayer.command
     }
 });
 
