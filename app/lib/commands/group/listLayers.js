@@ -13,9 +13,7 @@ var _ = require('underscore'),
     Promise = require("bluebird"),
     helpers = require('../../helpers');
 
-var getModelName = helpers.getModelName,
-    addClass = helpers.addClass,
-    emptyElement = helpers.emptyElement;
+var getModelName = helpers.getModelName;
 
 
 function listLayers () {
@@ -29,27 +27,8 @@ function listLayers () {
         terminal = shell.terminal;
 
     var makeOutput = function (layer) {
-        var element = document.createElement('div');
-
-        addClass(element, 'layer-name');
-
-        element.appendChild(
-            document.createTextNode(getModelName(layer))
-        );
-
-        var updater = function(changedKey, newValue) {
-            if (element && ('name' === changedKey)) {
-                emptyElement(element);
-                element.appendChild(
-                    document.createTextNode(getModelName(layer))
-                )
-            }
-        };
-
-        layer.on('set', updater);
-
         return terminal.makeCommand({
-            fragment: element,
+            fragment: layer.getDomFragment('name'),
             text: getModelName(layer),
             args: [
                 'cc /' + userId + '/' + groupId + '/' + layer.id,

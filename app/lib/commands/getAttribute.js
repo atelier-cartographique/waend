@@ -27,32 +27,20 @@ function getAttr () {
         sys = self.sys,
         result;
 
-    var makeOutput = function (k, v) {
+    var makeOutput = function (k, model) {
         var wrapper = document.createElement('div'),
             key = document.createElement('div'),
-            value = document.createElement('div');
+            value = model.getDomFragment(k);
 
         addClass(key, 'key-value');
-        addClass(value, 'value');
 
         key.appendChild(
             document.createTextNode(k.toString())
-        );
-        value.appendChild(
-            document.createTextNode(JSON.stringify(v))
         );
 
         wrapper.appendChild(key);
         wrapper.appendChild(value);
 
-        self.data.on('set', function(changedKey, newValue) {
-            if (value) {
-                emptyElement(value);
-                value.appendChild(
-                    document.createTextNode(JSON.stringify(newValue))
-                )
-            }
-        });
 
         return terminal.makeCommand({
             fragment: wrapper,
@@ -60,22 +48,14 @@ function getAttr () {
         });
     }
 
-    if(key){
-        result = self.data.get(key);
-        stdout.write(makeOutput(key, result));
-    }
-    else{
-        var data = self.data.getData();
-        result = data;
+    var result = key ? self.data.get(key) : self.data.getData(),
+        keys = key ? [key] : _.keys(self.data.getData());
 
-        for(var k in data){
-            stdout.write(makeOutput(k, data[k]));
-        }
-    }
-
+    _.each(keys, function(key){
+        stdout.write(makeOutput(key, self.data));
+    });
 
     return self.end(result);
-
 }
 
 

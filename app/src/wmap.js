@@ -15,7 +15,10 @@ var Bind = require('../lib/Bind'),
     WebConsole = require('./WebConsole'),
     LayerProvider = require('./LayerProvider'),
     SourceProvider = require('./SourceProvider'),
-    WMap = require('./WaendMap');
+    WMap = require('./WaendMap'),
+    ModelConfig = require('./ModelConfig');
+
+Bind.configureModels(ModelConfig.configurator);
 
 
 function init () {

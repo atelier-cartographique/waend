@@ -486,3 +486,11 @@ module.exports.get = function () {
     }
     return bindInstance;
 };
+
+
+module.exports.configureModels = function (configurator) {
+    User = configurator(User);
+    Group = configurator(Group);
+    Layer = configurator(Layer);
+    Feature = configurator(Feature);
+};

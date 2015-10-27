@@ -9,7 +9,10 @@
  */
 
 
-var Promise = require("bluebird");
+var Promise = require("bluebird"),
+helpers = require('../../helpers');
+
+var getModelName = helpers.getModelName;
 
 function listFeatures () {
     var self = this,
@@ -22,26 +25,26 @@ function listFeatures () {
         binder = self.binder,
         terminal = shell.terminal;
 
+    var makeOutput = function (feature) {
+        return terminal.makeCommand({
+            fragment: feature.getDomFragment('name'),
+            text: getModelName(feature),
+            args: [
+                'cc /' + userId + '/' + groupId + '/' + layerId + '/' +feature.id,
+                'gg | region set',
+                'get'
+            ]
+        });
+    };
+
+
     var res = function(resolve, reject){
         binder.getFeatures(userId, groupId, layerId)
             .then(function(features){
                 for(var i = 0; i < features.length; i++){
-                    var feature = features[i];
-                    var fidL = feature.id.length; 
-                    var fIdtrim = '•'+feature.id.substr(0, 2)+'\u2026'+feature.id.substr(fidL - 2, fidL);
-                    var fName = feature.get('name');
-                        if (fName === '' || fName == null) { 
-                            fName = fIdtrim;
-                        };
-                    var cmd = terminal.makeCommand({
-                        'args': [
-                            'cc /'+userId+'/'+groupId+'/'+layerId+'/'+feature.id,
-                            'gg | region set',
-                            'get'
-                            ],
-                        'text': fName
-                    });
-                    stdout.write(cmd || '');
+                    stdout.write(
+                        makeOutput(features[i])
+                    );
                 }
                 resolve();
             })

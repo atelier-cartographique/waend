@@ -251,6 +251,7 @@ function Tracer (options) {
             var rect = view.getRect();
             this.canvas.width = rect.width;
             this.canvas.height = rect.height;
+            this.draw();
         }
     }, this);
 }

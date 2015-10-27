@@ -25,27 +25,8 @@ function listGroups () {
         terminal = self.shell.terminal;
 
     var makeOutput = function (group) {
-        var element = document.createElement('div');
-
-        addClass(element, 'group-name');
-
-        element.appendChild(
-            document.createTextNode(getModelName(group))
-        );
-
-        var updater = function(changedKey, newValue) {
-            if (element && ('name' === changedKey)) {
-                emptyElement(element);
-                element.appendChild(
-                    document.createTextNode(getModelName(group))
-                )
-            }
-        };
-
-        group.on('set', updater);
-
         return terminal.makeCommand({
-            fragment: element,
+            fragment: group.getDomFragment('name'),
             text: getModelName(group),
             args: [
                 'cc /' + userId + '/' + group.id,
