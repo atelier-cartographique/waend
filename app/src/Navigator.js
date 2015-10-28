@@ -142,43 +142,72 @@ NavigatorModeBase.prototype.mousedown = function (event) {
     event.stopPropagation();
     this.startPoint = this.getMouseEventPos(event);
     this.isStarted = true;
+    this.isPanning = !event.shiftKey;
 };
 
 
+NavigatorModeBase.prototype.drawPanControl = function (hp) {
+    var sp = this.startPoint,
+        extent = new Geometry.Extent(sp.concat(hp)),
+        ctx = this.navigator.context;
+    extent.normalize();
+    var tl = extent.getBottomLeft().getCoordinates();
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
+    ctx.strokeStyle = '#0092FF';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(sp[0], sp[1]);
+    ctx.lineTo(hp[0], hp[1]);
+
+    var tr0 = new Transform(),
+        tr1 = new Transform(),
+        mpX = sp[0] + ((hp[0] - sp[0]) * 0.9),
+        mpY = sp[1] + ((hp[1] - sp[1]) * 0.9),
+        mp0 = [mpX, mpY],
+        mp1 = [mpX, mpY];
+
+    tr0.rotate(60, hp);
+    tr1.rotate(-60, hp);
+    tr0.mapVec2(mp0);
+    tr1.mapVec2(mp1);
+
+    ctx.lineTo(mp0[0], mp0[1]);
+    ctx.lineTo(mp1[0], mp1[1]);
+    ctx.lineTo(hp[0], hp[1]);
+
+    ctx.stroke();
+    ctx.restore();
+};
+
+NavigatorModeBase.prototype.drawZoomControl = function (hp) {
+    var sp = this.startPoint,
+        extent = new Geometry.Extent(sp.concat(hp)),
+        ctx = this.navigator.context;
+    extent.normalize();
+    var tl = extent.getBottomLeft().getCoordinates();
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
+    ctx.strokeStyle = '#0092FF';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(sp[0], sp[1]);
+    ctx.lineTo(hp[0], sp[1]);
+    ctx.lineTo(hp[0], hp[1]);
+    ctx.lineTo(sp[0], hp[1]);
+    ctx.lineTo(sp[0], sp[1]);
+    ctx.stroke();
+    ctx.restore();
+};
+
 NavigatorModeBase.prototype.mousemove = function (event) {
     if (this.isStarted) {
-        var sp = this.startPoint,
-            hp = this.getMouseEventPos(event),
-            extent = new Geometry.Extent(sp.concat(hp)),
-            ctx = this.navigator.context;
-        extent.normalize();
-        var tl = extent.getBottomLeft().getCoordinates();
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.save();
-        ctx.strokeStyle = '#0092FF';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(sp[0], sp[1]);
-        ctx.lineTo(hp[0], hp[1]);
-
-        var tr0 = new Transform(),
-            tr1 = new Transform(),
-            mpX = sp[0] + ((hp[0] - sp[0]) * 0.9),
-            mpY = sp[1] + ((hp[1] - sp[1]) * 0.9),
-            mp0 = [mpX, mpY],
-            mp1 = [mpX, mpY];
-
-        tr0.rotate(60, hp);
-        tr1.rotate(-60, hp);
-        tr0.mapVec2(mp0);
-        tr1.mapVec2(mp1);
-
-        ctx.lineTo(mp0[0], mp0[1]);
-        ctx.lineTo(mp1[0], mp1[1]);
-        ctx.lineTo(hp[0], hp[1]);
-
-        ctx.stroke();
-        ctx.restore();
+        if (this.isPanning) {
+            this.drawPanControl(this.getMouseEventPos(event));
+        }
+        else {
+            this.drawZoomControl(this.getMouseEventPos(event));
+        }
         if (!this.isMoving) {
             this.isMoving = true;
         }
@@ -192,27 +221,32 @@ NavigatorModeBase.prototype.mouseup = function (event) {
             startPoint = this.startPoint,
             dist = vecDist(startPoint, endPoint),
             map = this.navigator.map,
-            extent = new Geometry.Extent(startPoint.concat(endPoint)),
             ctx = this.navigator.context;
-        extent.normalize();
-        var tl = extent.getBottomLeft().getCoordinates();
 
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         if (dist > 4) {
             var startCoordinates = map.getCoordinateFromPixel(startPoint),
                 endCoordinates = map.getCoordinateFromPixel(endPoint);
-            var T = new Transform(),
-                extent = region.get();
-
-            T.translate(startCoordinates[0] - endCoordinates[0],
-                        startCoordinates[1] - endCoordinates[1]);
-            transformRegion(T, extent);
+            if (this.isPanning) {
+                var T = new Transform(),
+                    extent = region.get();
+                T.translate(startCoordinates[0] - endCoordinates[0],
+                            startCoordinates[1] - endCoordinates[1]);
+                transformRegion(T, extent);
+            }
+            else {
+                var extent = new Geometry.Extent(
+                        startCoordinates.concat(endCoordinates)
+                    );
+                region.push(extent);
+            }
         }
         else {
             this.navigator.centerOn(startPoint);
         }
         this.isStarted = false;
+        this.isZooming = false;
         this.isMoving = false;
         this.navigator.draw();
     }

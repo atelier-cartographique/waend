@@ -41,6 +41,7 @@ var commandModules = [
     require('./attach'),
     require('./detach'),
     require('./styleWidget'),
+    require('./widget'),
     ];
 
 
