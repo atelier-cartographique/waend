@@ -17,7 +17,8 @@ var widgets = {
 
 
 function displayWidget () {
-    var args = _.toArray(arguments),
+    var self = this,
+        args = _.toArray(arguments),
         name = args.shift(),
         shell = this.shell,
         terminal = shell.terminal,
@@ -25,23 +26,28 @@ function displayWidget () {
         config = {},
         Widget;
 
-    try{
-        Widget = widgets[name];
-        for (var i = 0; i < args.length; i += 2) {
-            var k = args[i],
-                v = JSON.parse(args[i + 1]);
-            config[k] = v;
+    var resolver = function (resolve, reject) {
+        try{
+            Widget = widgets[name];
+            for (var i = 0; i < args.length; i += 2) {
+                var k = args[i],
+                    v = JSON.parse(args[i + 1]);
+                config[k] = v;
+            }
+            config.container = display.node;
+            var wdgt = new Widget(config);
+            wdgt.build(function(value){
+                display.end();
+                resolve(value);
+            });
         }
-        config.container = display.node;
-        var wdgt = new Widget(config);
-        wdgt.build();
-    }
-    catch (err) {
-        display.end();
-        return (new Promise.reject(err));
-    }
+        catch (err) {
+            display.end();
+            reject(err);
+        }
+    };
 
-
+    return (new Promise(resolver));
 }
 
 
