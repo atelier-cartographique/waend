@@ -437,6 +437,17 @@ var ValueSelect = O.extend({
         callback.call(control, pos, this);
     },
 
+    moveHandler: function (event) {
+        var pos = [event.clientX, event.clientY],
+            controls = this.getControls(pos);
+        if (0 === controls.length) {
+            event.target.style.cursor = 'default';
+        }
+        else {
+            event.target.style.cursor = 'pointer';
+        }
+    },
+
     build: function (ender) {
         var container = this.config.container,
             width = this.config.width,
@@ -455,6 +466,8 @@ var ValueSelect = O.extend({
         container.appendChild(canvas);
         canvas.addEventListener('click',
                 _.bind(this.clickHandler, this), false);
+        canvas.addEventListener('mousemove',
+                _.bind(this.moveHandler, this), false);
 
         this.on('value', function(v){
             ender(v);
