@@ -11,8 +11,10 @@
 
 var _ = require('underscore'),
     rbush = require('rbush'),
-    O = require('../../../../lib/object').Object;
+    O = require('../../../../lib/object').Object,
+    helpers = require('../../helpers');
 
+var copy = helpers.copy;
 
 function Value (val, size, align) {
     this.value = val;
@@ -105,6 +107,16 @@ function Range (min, max) {
     this.valueMiddle = new Value(this.value, this.thickness);
 }
 
+
+Range.prototype.setRange = function (min, max) {
+    this.min = min;
+    this.max = max;
+    this.value = min + Math.floor((max - min) / 2);
+    this.valueMin.setValue(this.min);
+    this.valueMax.setValue(this.max);
+    this.valueMiddle.setValue(this.value);
+};
+
 Range.prototype.getControl = function () {
     var extent = this.extent ? _.clone(this.extent) : [0,0,0,0];
     extent.push(this);
@@ -116,7 +128,7 @@ Range.prototype.getControls = function () {
         cmin = this.valueMin.getControl(),
         cmid = this.valueMiddle.getControl(),
         cmax = this.valueMax.getControl();
-    return [c, cmin, cmid, cmax];
+    return [c, cmin, cmid, cmax, this.movers[0], this.movers[1]];
 };
 
 Range.prototype.draw = function (context, startPos, endPos) {
@@ -145,6 +157,8 @@ Range.prototype.draw = function (context, startPos, endPos) {
     this.extent = [sp[0], sp[1] - thickness, ep[0], ep[1]];
     this.context = context;
 
+    this.drawMovers(context, startPos, endPos);
+
     sp[1] = sp[1] - (thickness * 1.3);
     ep[1] = ep[1] - (thickness * 1.3);
     mp[1] = mp[1] - (thickness * 1.3);
@@ -152,6 +166,69 @@ Range.prototype.draw = function (context, startPos, endPos) {
     this.valueMin.draw(context, sp);
     this.valueMiddle.draw(context, mp);
     this.valueMax.draw(context, ep);
+
+};
+
+Range.prototype.drawMovers = function (context, startPoint, endPoint) {
+    var margin = 8,
+        sz = this.thickness * 0.8,
+        h = this.thickness,
+        hh = h / 2,
+        leftExtent, rightExtent;
+
+    if (!this.movers) {
+        var sp = copy(startPoint),
+            ep = copy(endPoint);
+
+        leftExtent = [
+            sp[0] - (margin + sz), sp[1] - sz,
+            sp[0] - margin, sp[1]
+        ];
+        rightExtent = [
+            ep[0] + margin, ep[1] - sz,
+            ep[0] + margin + sz, ep[1]
+        ];
+
+        var moverCb = function (isLeft) {
+            return function () {
+                var r = this.r,
+                    itv = r.max - r.min;
+                if (isLeft) {
+                    r.setRange(r.min - itv, r.max - itv);
+                }
+                else {
+                    r.setRange(r.min + itv, r.max + itv);
+                }
+                r.draw(context, copy(sp), copy(ep));
+            };
+        };
+
+        var leftMover = {
+            r: this,
+            callback: moverCb(true)
+        };
+        var rightMover = {
+            r: this,
+            callback: moverCb(false)
+        };
+        leftExtent.push(leftMover);
+        rightExtent.push(rightMover);
+        this.movers = [leftExtent, rightExtent];
+
+        context.beginPath();
+        context.moveTo(sp[0] - margin, sp[1]);
+        context.lineTo(sp[0] - (margin + sz), sp[1] - hh);
+        context.lineTo(sp[0] - margin, sp[1] - h);
+        context.closePath();
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(ep[0] + margin, ep[1]);
+        context.lineTo(ep[0] + (margin + sz), ep[1] - hh);
+        context.lineTo(ep[0] + margin, ep[1] - h);
+        context.closePath();
+        context.stroke();
+    }
 };
 
 
@@ -283,11 +360,46 @@ Range.prototype.valueAt = function (pos) {
 };
 
 Range.prototype.callback = function (pos, widget) {
-    // widget.addRange(this.makeRange(this.valueAt(pos)));
-    this.transition(pos);
+    var val = this.valueAt(pos),
+        range = this.makeRange(val),
+        itv = range[1] - range[0];
+    if (itv > 6) {
+        this.transition(pos);
+    }
+    else {
+        widget.switchToSet(range);
+    }
 };
 
 
+function Set (values) {
+    this.values = values;
+}
+
+Set.prototype.getControls = function () {
+    var ret = [];
+    for(var i = 0; i < this.vw.length; i++) {
+        ret.push(this.vw[i].getControl());
+    }
+    return ret;
+};
+
+Set.prototype.draw = function (context, startPos) {
+    var values = this.values,
+        valueWidgets = [],
+        offset = 0,
+        margin = 12,
+        control;
+
+    for (var i = 0; i < values.length; i++) {
+        var w = new Value(values[i], 24, 'left');
+        w.draw(context, [startPos[0] + offset, startPos[1]]);
+        control = w.getControl();
+        offset += (control[2] - control[0]) + margin;
+        valueWidgets.push(w);
+    }
+    this.vw = valueWidgets;
+};
 
 var ValueSelect = O.extend({
 
@@ -424,6 +536,25 @@ var ValueSelect = O.extend({
             }, this);
             this.existingRanges.push(rv);
         }
+    },
+
+    switchToSet: function (range) {
+        var context = this.context,
+            canvas = context.canvas,
+            ranges = this.ranges,
+            width = this.config.width,
+            height = this.config.height,
+            startX = width * 0.2,
+            endX = width * 0.8,
+            yStep = height / (ranges.length + 1),
+            values = _.range(range[0], range[1] + 1);
+
+        context.clearRect(0, 0, width, height);
+        this.controls.clear();
+
+        var s = new Set(values);
+        s.draw(context, [startX, height / 2]);
+        this.controls.load(s.getControls());
     }
 
 });

@@ -20,6 +20,11 @@ module.exports.getModelName = function (model) {
     return '•' + id.substr(0, 6);
 };
 
+module.exports.copy = function (data) {
+    return JSON.parse(JSON.stringify(data));
+};
+
+
 // DOM
 
 module.exports.setAttributes = function (elem, attrs) {
