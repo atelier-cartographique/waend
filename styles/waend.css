@@ -193,11 +193,9 @@ table {
 }
 .word-wrap {
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -342,18 +340,18 @@ input[type="submit"] {
 }
 .fade-in {
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
 }
 @keyframes fadein {
   from {
@@ -399,18 +397,18 @@ input[type="submit"] {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
 }
 @keyframes fadein {
   from {
@@ -698,11 +696,9 @@ body {
   color: #993358;
   display: block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -714,11 +710,9 @@ body {
   display: block;
   margin-bottom: 6px;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -818,11 +812,9 @@ body {
   color: #993358;
   display: block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -834,11 +826,9 @@ body {
   display: block;
   margin-bottom: 6px;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -920,7 +910,6 @@ body {
 .wc-element.wc-container .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
-
 }
 .wc-element.wc-container .wc-pending {
   color: #2B71FF;
@@ -1430,18 +1419,18 @@ body {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   position: absolute;
   display: block;
   overflow: hidden;
@@ -1547,18 +1536,18 @@ body {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   position: absolute;
   margin: 0px auto 0px auto;
   width: 100%;
@@ -1650,19 +1639,27 @@ canvas.tool-draw,
 canvas.tool-trace {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
+  /* Safari, Chrome and Opera > 12.1 */
+  /* Firefox < 16 */
+  /* Internet Explorer */
+  /* Opera < 12.1 */
+  /* Firefox < 16 */
+  /* Safari, Chrome and Opera > 12.1 */
+  /* Internet Explorer */
+  /* Opera < 12.1 */
   -webkit-animation: fadein 0.5s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
+  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
+  /* Internet Explorer */
   -o-animation: fadein 0.5s;
+  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   cursor: crosshair;
 }
 @keyframes fadein {
@@ -1791,4 +1788,18 @@ canvas.tool-trace {
   width: 324px;
   background-color: #f8f8f8;
   padding: 12px;
+}
+.widget-form {
+  position: absolute;
+  top: 10%;
+  left: 20%;
+  right: 20%;
+  bottom: 10%;
+}
+.widget-form .widget-wrapper {
+  margin: auto;
+  border: 1px solid grey;
+}
+.widget-form .widget-buttons {
+  margin: auto;
 }

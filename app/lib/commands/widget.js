@@ -34,12 +34,8 @@ function displayWidget () {
                     v = JSON.parse(args[i + 1]);
                 config[k] = v;
             }
-            config.container = display.node;
             var wdgt = new Widget(config);
-            wdgt.build(function(value){
-                display.end();
-                resolve(value);
-            });
+            display.node.appendChild(wdgt.getNode());
         }
         catch (err) {
             display.end();

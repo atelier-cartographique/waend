@@ -232,7 +232,7 @@ Range.prototype.drawMovers = function (context, startPoint, endPoint) {
 };
 
 
-Range.prototype.transition = function (pos) {
+Range.prototype.transition = function (pos, transitionEnd) {
     var x = pos[0],
         val = this.valueAt(pos),
         range = this.makeRange(val),
@@ -284,6 +284,9 @@ Range.prototype.transition = function (pos) {
             valMax.setValue(self.max);
             valCen.setValue(self.value);
             self.draw(context, [extent[0], baseY], [extent[2], baseY]);
+            if (_.isFunction(transitionEnd)) {
+                transitionEnd();
+            }
             return;
         }
         var s = elapsed / duration,
@@ -364,7 +367,9 @@ Range.prototype.callback = function (pos, widget) {
         range = this.makeRange(val),
         itv = range[1] - range[0];
     if (itv > 6) {
-        this.transition(pos);
+        this.transition(pos, function(){
+            widget.emit('value', val);
+        });
     }
     else {
         widget.switchToSet(range);
@@ -427,7 +432,7 @@ var ValueSelect = O.extend({
     },
 
     clickHandler: function (event) {
-        var pos = [event.clientX, event.clientY],
+        var pos = [event.offsetX, event.offsetY],
             controls = this.getControls(pos);
         if (0 === controls.length) {
             return;
@@ -438,7 +443,7 @@ var ValueSelect = O.extend({
     },
 
     moveHandler: function (event) {
-        var pos = [event.clientX, event.clientY],
+        var pos = [event.offsetX, event.offsetY],
             controls = this.getControls(pos);
         if (0 === controls.length) {
             event.target.style.cursor = 'default';
@@ -448,9 +453,15 @@ var ValueSelect = O.extend({
         }
     },
 
-    build: function (ender) {
-        var container = this.config.container,
-            width = this.config.width,
+    getNode: function () {
+        if (!this.canvas) {
+            this.build();
+        }
+        return this.canvas;
+    },
+
+    build: function () {
+        var width = this.config.width,
             height = this.config.height,
             min = this.config.min,
             max = this.config.max;
@@ -463,15 +474,10 @@ var ValueSelect = O.extend({
         this.canvas = canvas;
         this.addRange(min, max);
 
-        container.appendChild(canvas);
         canvas.addEventListener('click',
                 _.bind(this.clickHandler, this), false);
         canvas.addEventListener('mousemove',
                 _.bind(this.moveHandler, this), false);
-
-        this.on('value', function(v){
-            ender(v);
-        }, this);
     },
 
     addRange: function (min, max) {
