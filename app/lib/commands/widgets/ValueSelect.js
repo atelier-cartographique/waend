@@ -12,9 +12,12 @@
 var _ = require('underscore'),
     rbush = require('rbush'),
     O = require('../../../../lib/object').Object,
-    helpers = require('../../helpers');
+    helpers = require('../../helpers'),
+    Text = require('../../../src/Text'),
+    Font = require('../../../src/Font');
 
-var copy = helpers.copy;
+var copy = helpers.copy,
+    font;
 
 function Value (val, size, align) {
     this.value = val;
@@ -47,42 +50,42 @@ Value.prototype.draw = function (context, pos) {
     var str = ' ' + this.value.toString() + ' ',
         x = pos[0],
         y = pos[1],
-        align = this.align;
+        align = this.align,
+        text = new Text(str, font),
+        baseRect = text.getRect(pos, this.size);
 
+
+    if ('left' !== align) {
+        var width = baseRect[2] - baseRect[0];
+        if ('center' === align) {
+            baseRect[0] = baseRect[0] - (width / 2);
+            baseRect[2] = baseRect[2] - (width / 2);
+        }
+        else if ('right' === align) {
+            baseRect[0] = baseRect[0] - width;
+            baseRect[2] = baseRect[2] - width;
+        }
+    }
     context.save();
     context.fillStyle = '#0092FF';
-    context.font = this.size +'px dauphine_regular';
-    context.textAlign = align;
-    context.fillText(str, x, y);
-
-    // store text bounding box
-    var metrics = context.measureText(str),
-        minY = y - metrics.fontBoundingBoxAscent,
-        maxY = y + metrics.fontBoundingBoxDescent;
-
-    if ('center' === align) {
-        var hw = metrics.width / 2;
-        extent = [ x - hw, minY, x + hw, maxY ];
-    }
-    else if ('right' === align) {
-        extent = [ x - metrics.width, minY, x , maxY ];
-    }
-    else { // left
-        extent = [ x, minY, x + metrics.width, maxY ];
-    }
+    // context.font = this.size +'px dauphine_regular';
+    // context.textAlign = align;
+    // context.fillText(str, x, y);
+    text.drawOnCanvas(context, [baseRect[0], pos[1]], this.size);
+    extent = baseRect;
+    context.restore();
 
     this.visualState = {
         extent: extent,
         context: context,
         pos: pos
     };
-    //
+
     // context.strokeRect(
     //     extent[0], extent[1],
     //     extent[2] - extent[0], extent[3] - extent[1]
     // );
 
-    context.restore();
 };
 
 Value.prototype.getControl = function () {
@@ -414,6 +417,12 @@ var ValueSelect = O.extend({
 
         this.ranges = [];
         this.controls = rbush();
+        this.isReady = false;
+        Font.select('default', function (f) {
+            font = f;
+            this.isReady = true;
+            this.emit('ready');
+        }, this);
     },
 
     getControls: function (pos) {
@@ -472,12 +481,20 @@ var ValueSelect = O.extend({
 
         this.context = canvas.getContext('2d');
         this.canvas = canvas;
-        this.addRange(min, max);
 
         canvas.addEventListener('click',
                 _.bind(this.clickHandler, this), false);
         canvas.addEventListener('mousemove',
                 _.bind(this.moveHandler, this), false);
+
+        if (this.isReady) {
+            this.addRange(min, max);
+        }
+        else {
+            this.once('ready', function () {
+                this.addRange(min, max);
+            }, this);
+        }
     },
 
     addRange: function (min, max) {

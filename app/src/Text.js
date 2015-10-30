@@ -8,7 +8,8 @@
  *
  */
 
-var Hyph = require('hypher'),
+var _ = require('underscore'),
+    Hyph = require('hypher'),
     en = require('hyphenation.en-us'),
     hyph = new Hyph(en),
     Font = require('./Font');
@@ -27,18 +28,23 @@ function Text (str, fontName) {
         }
     }
     this._pendings = [];
-    fontName = fontName || 'default';
-    Font.select(fontName, function (f) {
-        this.font = f;
-        this.ready = true;
-        for (var i = 0; i < this._pendings.length; i++) {
-            var pending = this._pendings[i],
-                fn = pending[0],
-                ctx = pending[1];
-            fn.call(ctx, this);
-        }
-        this._pendings = [];
-    }, this);
+    if (!fontName || _.isString(fontName)) {
+        fontName = fontName || 'default';
+        Font.select(fontName, function (f) {
+            this.font = f;
+            this.ready = true;
+            for (var i = 0; i < this._pendings.length; i++) {
+                var pending = this._pendings[i],
+                    fn = pending[0],
+                    ctx = pending[1];
+                fn.call(ctx, this);
+            }
+            this._pendings = [];
+        }, this);
+    }
+    else {
+        this.font = fontName;
+    }
 }
 
 Text.prototype.whenReady = function (fn, ctx) {
@@ -48,6 +54,10 @@ Text.prototype.whenReady = function (fn, ctx) {
     else {
         fn.call(ctx, this);
     }
+};
+
+Text.prototype.getFont = function () {
+    return this.font;
 };
 
 /*
@@ -165,5 +175,87 @@ Text.prototype.draw = function (fontsz, segments, offset, mergeSegments) {
     return [null, paths];
 };
 
+Text.prototype.drawOnCanvas = function (ctx, startPos, sz) {
+    // this.font.draw(ctx, this._string, startPos[0], startPos[1], sz);
+    var fullPath = new Font.Path();
+    this.font.forEachGlyph(
+        this._string, startPos[0], startPos[1], sz, {},
+        function(glyph, gX, gY, gFontSize) {
+        var glyphPath = glyph.getPath(gX, gY, gFontSize);
+        fullPath.extend(glyphPath);
+    });
+    fullPath.fill = ctx.fillStyle;
+    fullPath.stroke = undefined;
+    fullPath.draw(ctx);
+};
+
+Text.prototype.getRect = function (startPos, sz) {
+    var xMin = Infinity,
+        xMax = - Infinity,
+        yMin = Infinity,
+        yMax = - Infinity;
+
+    var uem = this.font.unitsPerEm;
+    var viz = function (glyph, gX, gY, gFontSize) {
+        var scale = 1 / uem * gFontSize,
+            ms = glyph.getMetrics();
+
+        xMin = Math.min(xMin, gX + (ms.xMin * scale));
+        xMax = Math.max(xMax, gX + (ms.xMax * scale));
+        yMin = Math.min(yMin, gY - (ms.yMax * scale));
+        yMax = Math.max(yMax, gY + (ms.yMin * scale));
+    };
+
+    this.font.forEachGlyph(
+        this._string, startPos[0], startPos[1], sz, {}, viz
+    );
+
+    return [xMin, yMin, xMax, yMax];
+};
+
+/*
+
+Font.prototype.drawMetrics = function(ctx, text, x, y, fontSize, options) {
+    this.forEachGlyph(text, x, y, fontSize, options, function(glyph, gX, gY, gFontSize) {
+        glyph.drawMetrics(ctx, gX, gY, gFontSize);
+    });
+};
+
+Glyph.prototype.drawMetrics = function(ctx, x, y, fontSize) {
+    var scale;
+    x = x !== undefined ? x : 0;
+    y = y !== undefined ? y : 0;
+    fontSize = fontSize !== undefined ? fontSize : 24;
+    scale = 1 / this.path.unitsPerEm * fontSize;
+    ctx.lineWidth = 1;
+
+    // Draw the origin
+    ctx.strokeStyle = 'black';
+    draw.line(ctx, x, -10000, x, 10000);
+    draw.line(ctx, -10000, y, 10000, y);
+
+    // This code is here due to memory optimization: by not using
+    // defaults in the constructor, we save a notable amount of memory.
+    var xMin = this.xMin || 0;
+    var yMin = this.yMin || 0;
+    var xMax = this.xMax || 0;
+    var yMax = this.yMax || 0;
+    var advanceWidth = this.advanceWidth || 0;
+
+    // Draw the glyph box
+    ctx.strokeStyle = 'blue';
+    draw.line(ctx, x + (xMin * scale), -10000, x + (xMin * scale), 10000);
+    draw.line(ctx, x + (xMax * scale), -10000, x + (xMax * scale), 10000);
+    draw.line(ctx, -10000, y + (-yMin * scale), 10000, y + (-yMin * scale));
+    draw.line(ctx, -10000, y + (-yMax * scale), 10000, y + (-yMax * scale));
+
+    // Draw the advance width
+    ctx.strokeStyle = 'green';
+    draw.line(ctx, x + (advanceWidth * scale), -10000, x + (advanceWidth * scale), 10000);
+};
+
+
+
+*/
 
 module.exports = exports = Text;
