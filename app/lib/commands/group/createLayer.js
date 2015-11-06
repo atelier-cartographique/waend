@@ -45,14 +45,14 @@ function makeForm(node, label) {
     setAttributes(title, {
         'type': 'text',
         'class': 'grp-input-title',
-        'placeholder': 'map name'
+        'placeholder': 'layer name'
     });
 
     setAttributes(desc, {
         'class': 'grp-input-description',
         'rows': '7',
         'cols': '50',
-        'placeholder': 'map description'
+        'placeholder': 'layer description'
     });
 
     addClass(form, 'grp-form');

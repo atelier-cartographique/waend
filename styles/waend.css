@@ -193,9 +193,11 @@ table {
 }
 .word-wrap {
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -340,18 +342,18 @@ input[type="submit"] {
 }
 .fade-in {
   -webkit-animation: fadein 0.5s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
-  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
-  /* Internet Explorer */
   -o-animation: fadein 0.5s;
-  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
 }
 @keyframes fadein {
   from {
@@ -397,18 +399,18 @@ input[type="submit"] {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
-  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
-  /* Internet Explorer */
   -o-animation: fadein 0.5s;
-  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
 }
 @keyframes fadein {
   from {
@@ -528,6 +530,87 @@ body {
 }
 .wc-context-shell {
   color: #993358 !important;
+}
+.view-group-wrapper {
+  position: absolute;
+  left: 15px;
+  bottom: 33px;
+  width: 300px;
+  font-size: 12pt;
+}
+.view-group-wrapper .view-group-label {
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.5pt;
+}
+.view-lookup-wrapper {
+  position: absolute;
+  top: 2px;
+  right: 5px;
+}
+.view-lookup-wrapper .input-wrapper {
+  float: left;
+  margin: 0px;
+  margin-right: 6px;
+}
+.view-lookup-wrapper .input-wrapper input {
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  margin-bottom: -5px;
+  font-size: 12pt;
+}
+.view-lookup-wrapper .view-lookup-search {
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.5pt;
+  border: 0px;
+  background: transparent;
+  padding-top: 11px;
+  font-family: "dauphine_regular";
+}
+.view-lookup-wrapper .view-lookup-search:hover {
+  cursor: pointer;
+}
+.view-lookup-wrapper .view-lookup-search:focus {
+  outline: none;
+}
+.view-lookup-wrapper .view-lookup-results {
+  padding: 23px;
+  padding-top: 0;
+  text-align: center;
+  font-size: 12pt;
+}
+.view-lookup-wrapper .view-lookup-results .view-lookup-result {
+  padding-bottom: 4px;
+}
+.view-lookup-wrapper .view-lookup-results .view-lookup-result a {
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
+  font-family: "dauphine_regular";
+  color: #000;
+  padding: 2px 0px;
+}
+.view-lookup-wrapper .view-lookup-results .view-lookup-result a:hover {
+  border-bottom: 1px solid #282f35;
+  cursor: pointer;
+}
+.credit-waend {
+  font-size: 9pt;
+  text-transform: lowercase;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  text-align: right;
+}
+.credit-waend a {
+  text-decoration: none;
+  color: #000;
+}
+.credit-waend a:hover {
+  cursor: pointer;
+}
+.credit-waend a:focus {
+  outline: none;
 }
 #register {
   position: absolute;
@@ -696,9 +779,11 @@ body {
   color: #993358;
   display: block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -710,9 +795,11 @@ body {
   display: block;
   margin-bottom: 6px;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -758,7 +845,7 @@ body {
   padding-bottom: 2px;
 }
 .wc-element.wc-dock.wc-hide {
-  right: -200px;
+  right: -400px;
   transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-dock .wc-dock-page {
@@ -812,9 +899,11 @@ body {
   color: #993358;
   display: block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -826,9 +915,11 @@ body {
   display: block;
   margin-bottom: 6px;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -910,6 +1001,7 @@ body {
 .wc-element.wc-container .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
+
 }
 .wc-element.wc-container .wc-pending {
   color: #2B71FF;
@@ -1113,26 +1205,6 @@ body {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
-.credit-waend {
-  font-size: 9pt;
-  text-transform: uppercase;
-  letter-spacing: 0.5pt;
-  width: 40px;
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  text-align: right;
-}
-.credit-waend a {
-  text-decoration: none;
-  color: #000;
-}
-.credit-waend a:hover {
-  cursor: pointer;
-}
-.credit-waend a:focus {
-  outline: none;
-}
 .wc-element.wc-buttons {
   position: absolute;
   top: 0px;
@@ -1148,7 +1220,7 @@ body {
   transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-buttons.wc-hide {
-  left: -187px;
+  left: -354px;
   transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-buttons .wc-buttons-group-title-wrapper .wc-buttons-group-title-label {
@@ -1420,18 +1492,18 @@ body {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
-  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
-  /* Internet Explorer */
   -o-animation: fadein 0.5s;
-  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   position: absolute;
   display: block;
   overflow: hidden;
@@ -1537,18 +1609,18 @@ body {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 0.5s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
-  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
-  /* Internet Explorer */
   -o-animation: fadein 0.5s;
-  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   position: absolute;
   margin: 0px auto 0px auto;
   width: 100%;
@@ -1640,27 +1712,19 @@ canvas.tool-draw,
 canvas.tool-trace {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
-  /* Safari, Chrome and Opera > 12.1 */
-  /* Firefox < 16 */
-  /* Internet Explorer */
-  /* Opera < 12.1 */
-  /* Firefox < 16 */
-  /* Safari, Chrome and Opera > 12.1 */
-  /* Internet Explorer */
-  /* Opera < 12.1 */
   -webkit-animation: fadein 0.5s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s;
-  /* Firefox < 16 */
   -ms-animation: fadein 0.5s;
-  /* Internet Explorer */
   -o-animation: fadein 0.5s;
-  /* Opera < 12.1 */
   animation: fadein 0.5s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   cursor: crosshair;
 }
 @keyframes fadein {

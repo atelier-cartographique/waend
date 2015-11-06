@@ -648,12 +648,25 @@ function showLookup (node) {
 function waendCredit (node) {
 var waendCredit = document.createElement('div');
     waendCredit.setAttribute('class', 'credit-waend');
+
     waendCreditLink = document.createElement('a');
     waendCreditLink.setAttribute('href', 'http://waend.com');
     waendCreditLink.setAttribute('target', 'blank');
-    waendCreditLink.innerHTML = 'wænd';
+    waendCreditLink.innerHTML = 'wænd.com';
+
+    waendCreditLinkToLogin = document.createElement('a');
+    waendCreditLinkToLogin.setAttribute('href', 'http://alpha.waend.com');
+    waendCreditLinkToLogin.setAttribute('target', 'blank');
+    waendCreditLinkToLogin.innerHTML = ' • login • ';
+
+    waendCreditLinkToRegister = document.createElement('a');
+    waendCreditLinkToRegister.setAttribute('href', 'http://alpha.waend.com/register');
+    waendCreditLinkToRegister.setAttribute('target', 'blank');
+    waendCreditLinkToRegister.innerHTML = 'register';
 
     waendCredit.appendChild(waendCreditLink);
+    waendCredit.appendChild(waendCreditLinkToLogin);
+    waendCredit.appendChild(waendCreditLinkToRegister);
     node.appendChild(waendCredit);
 }
 
