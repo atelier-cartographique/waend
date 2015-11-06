@@ -712,7 +712,7 @@ body {
   position: absolute;
   left: 195px;
   bottom: 34px;
-  width: 600px;
+  max-width: 600px;
   max-height: 80%;
   display: block;
   overflow-y: auto;
@@ -764,6 +764,9 @@ body {
 }
 .wc-element.wc-pages .wc-line {
   font-size: 10pt;
+}
+.wc-element.wc-pages .wc-line:hover {
+  cursor: pointer;
 }
 .wc-element.wc-pages .wc-line a {
   text-decoration: none !important;
@@ -845,7 +848,7 @@ body {
   padding-bottom: 2px;
 }
 .wc-element.wc-dock.wc-hide {
-  right: -400px;
+  right: -200px;
   transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-dock .wc-dock-page {

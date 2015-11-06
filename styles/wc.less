@@ -55,7 +55,7 @@
         position: absolute;
         left: @widthMenuLeft + 40px;
         bottom: 34px;
-        width: 600px;
+        max-width: 600px;
         max-height: 80%;
         display: block;
         overflow-y: auto;
@@ -115,6 +115,9 @@
 
         .wc-line {
             font-size: 10pt;
+            &:hover {
+                cursor: pointer;
+            }
             a{
                 .linkwaend;
                 color: #000;
@@ -178,7 +181,7 @@
         }
 
         &.wc-hide {
-            right: -400px;
+            right: -200px;
             transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
         }
 
