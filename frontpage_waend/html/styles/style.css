@@ -69,6 +69,8 @@ a:hover {
 
 }
 
+img {border: 1px solid #eee;}
+
 .header,
 .footer{
     min-width: 400px;
