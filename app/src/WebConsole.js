@@ -769,7 +769,7 @@ var WebConsole = Terminal.extend({
                 self.dock.addPage(page);
                 self.currentPage = null;
             }, false);
-            closer.innerHTML = 'close it';
+            closer.innerHTML = 'close';
             addClass(closer, 'wc-page-closer icon-close');
             closer.addEventListener('click', function(ev){
                 removeElement(title);

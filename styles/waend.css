@@ -742,8 +742,14 @@ body {
 .wc-element.wc-pages .wc-title .wc-page-title {
   text-shadow: none;
   margin-bottom: 6px;
-  font-size: 13pt;
+  font-size: 10pt;
   padding: 6px 12px;
+  font-family: monospace;
+  max-width: 440px;
+}
+.wc-element.wc-pages .wc-title .wc-page-title:before {
+  content: "> ";
+  font-size: 8pt;
 }
 .wc-element.wc-pages .wc-title .wc-page-docker,
 .wc-element.wc-pages .wc-title .wc-page-closer {
@@ -753,6 +759,15 @@ body {
   text-transform: uppercase;
   color: black;
   margin: 0px 10px;
+  position: absolute;
+}
+.wc-element.wc-pages .wc-title .wc-page-closer {
+  top: 6px;
+  right: 0px;
+}
+.wc-element.wc-pages .wc-title .wc-page-docker {
+  top: 6px;
+  right: 70px;
 }
 .wc-element.wc-pages .wc-page {
   display: block;
@@ -788,57 +803,8 @@ body {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
-.wc-element.wc-pages .wc-line .key-value .key {
-  padding-right: 6px;
-  color: #993358;
-  display: block;
-  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
-  -ms-word-break: break-all;
-  word-break: break-all;
-  /* Non standard for webkit */
-
-  word-break: break-word;
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  -ms-hyphens: auto;
-  hyphens: auto;
-}
-.wc-element.wc-pages .wc-line .key-value .value {
-  letter-spacing: 0.5px;
-  display: block;
-  margin-bottom: 6px;
-  /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
-  -ms-word-break: break-all;
-  word-break: break-all;
-  /* Non standard for webkit */
-
-  word-break: break-word;
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  -ms-hyphens: auto;
-  hyphens: auto;
-}
-.wc-element.wc-pages .wc-line .hint {
-  font-family: "dauphine_regular";
-  text-shadow: none;
-  display: inline-block;
-  color: #91b391;
-}
-.wc-element.wc-pages .wc-line .hint a {
-  color: #91b391;
-  text-decoration: none !important;
-  display: inline-block;
-  border-bottom: 1px solid transparent;
-  margin-bottom: 6px;
-}
-.wc-element.wc-pages .wc-line .hint a:link {
-  font-family: "dauphine_italic";
-}
-.wc-element.wc-pages .wc-line .hint a:hover {
-  border-bottom: 1px solid #282f35;
-  cursor: pointer;
+.wc-element.wc-pages .wc-line [class^="group-"] {
+  padding-bottom: 6px;
 }
 .wc-element.wc-dock {
   position: absolute;
@@ -1356,16 +1322,19 @@ body {
   border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
+[class^="icon-"],
+[class*=" icon-"] {
+  font-family: "dauphine_regular" !important;
+  font-style: normal;
+  font-weight: normal;
+}
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
-  font-family: "dauphine_regular";
-  font-style: normal;
+  font-size: 13pt;
   speak: none;
-  font-weight: normal;
   -webkit-font-smoothing: antialiased;
   font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-size: 13pt;
   width: 20px;
   display: inline-block;
   text-align: center;

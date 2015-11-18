@@ -80,8 +80,16 @@
             .wc-page-title {
                 text-shadow: none;
                 margin-bottom: 6px;
-                font-size: 13pt;
+                font-size: 10pt;
                 padding: 6px 12px;
+                font-family: monospace;
+                max-width: 440px;
+
+
+                &:before {
+                    content: "> ";
+                    font-size: 8pt;
+                }
             }
             .wc-page-docker,
             .wc-page-closer {
@@ -91,6 +99,16 @@
                 text-transform: uppercase;
                 color: black;
                 margin: 0px 10px;
+                position: absolute;
+            }
+            .wc-page-closer {
+                top: 6px;
+                right: 0px;
+            }
+
+            .wc-page-docker {
+                top: 6px;
+                right: 70px;
             }
         }
         .wc-page {
@@ -129,40 +147,29 @@
                 color: #000;
             }
 
-            .key-value {
-                .key {
-                  padding-right: 6px;
-                  color: @red;
-                  display: block;
-                  .word-wrap;
-                }
-
-                .value {
-                    letter-spacing: 0.5px;
-                    display: block;
-                    margin-bottom: 6px;
-                    .word-wrap;
-                }
+            
+             [class^="group-"] {
+                padding-bottom: 6px;
             }
 
-            .hint {
-                font-family: "dauphine_regular";
-                text-shadow: none;
-                display: inline-block;
-                color: @colorHelp;
+            // .hint {
+            //     font-family: "dauphine_regular";
+            //     text-shadow: none;
+            //     display: inline-block;
+            //     color: @colorHelp;
 
-                a{
-                  color: @colorHelp;
-                  text-decoration: none !important;
-                  display: inline-block;
-                  border-bottom: 1px solid transparent;
-                  margin-bottom: 6px;
-                }
+            //     a{
+            //       color: @colorHelp;
+            //       text-decoration: none !important;
+            //       display: inline-block;
+            //       border-bottom: 1px solid transparent;
+            //       margin-bottom: 6px;
+            //     }
 
-                a:link{font-family: "dauphine_italic";}
+            //     a:link{font-family: "dauphine_italic";}
 
-                a:hover{.link-hover}
-            }
+            //     a:hover{.link-hover}
+            // }
         }
 
     }
