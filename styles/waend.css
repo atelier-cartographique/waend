@@ -715,10 +715,11 @@ body {
   cursor: pointer;
 }
 .wc-element.wc-pages {
+  background: #fff;
   position: absolute;
-  left: 195px;
-  bottom: 34px;
-  max-width: 600px;
+  left: 193px;
+  bottom: 36px;
+  width: 635px;
   max-height: 80%;
   display: block;
   overflow-y: auto;
@@ -735,19 +736,23 @@ body {
   color: #8A8A8A;
   text-align: left;
 }
+.wc-element.wc-pages .wc-title:empty {
+  display: none;
+}
 .wc-element.wc-pages .wc-title .wc-page-title {
   text-shadow: none;
   margin-bottom: 6px;
   font-size: 13pt;
+  padding: 6px 12px;
 }
-.wc-element.wc-pages .wc-title .wc-page-docker {
+.wc-element.wc-pages .wc-title .wc-page-docker,
+.wc-element.wc-pages .wc-title .wc-page-closer {
   text-align: right;
   cursor: pointer;
-  font-size: 11pt;
-  padding-left: 1em;
-}
-.wc-element.wc-pages .wc-title .wc-page-docker:hover {
+  font-size: 9pt;
+  text-transform: uppercase;
   color: black;
+  margin: 0px 10px;
 }
 .wc-element.wc-pages .wc-page {
   display: block;

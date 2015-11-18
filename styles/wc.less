@@ -10,7 +10,6 @@
     bottom: 0;
     width:100%;
     height:100%;
-    // font-family: "sansguiltmb";
     background-color: transparent;
 }
 
@@ -55,10 +54,11 @@
     }
 
     &.wc-pages {
+        background: #fff;
         position: absolute;
-        left: @widthMenuLeft + 40px;
-        bottom: 34px;
-        max-width: 600px;
+        left: @widthMenuLeft + 38px;
+        bottom: 36px;
+        width: 635px;
         max-height: 80%;
         display: block;
         overflow-y: auto;
@@ -75,19 +75,22 @@
             color: #8A8A8A;
             text-align: left;
 
+            &:empty {display: none;}
+
             .wc-page-title {
                 text-shadow: none;
                 margin-bottom: 6px;
                 font-size: 13pt;
+                padding: 6px 12px;
             }
-            .wc-page-docker {
+            .wc-page-docker,
+            .wc-page-closer {
                 text-align: right;
                 cursor: pointer;
-                font-size: 11pt;
-                padding-left: 1em;
-                &:hover {
-                    color: black;
-                }
+                font-size: 9pt;
+                text-transform: uppercase;
+                color: black;
+                margin: 0px 10px;
             }
         }
         .wc-page {
