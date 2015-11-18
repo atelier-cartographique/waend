@@ -1,6 +1,7 @@
 
 
 .wc-display {
+    cursor: default;
     position:absolute;
     z-index: 1000;
     top:0;
@@ -23,6 +24,8 @@
 
 
 .wc-element {
+    cursor: default;
+
     &.wc-mapblock {
         position: absolute;
         left: 36%;
@@ -116,7 +119,7 @@
         .wc-line {
             font-size: 10pt;
             &:hover {
-                cursor: pointer;
+                cursor: default;
             }
             a{
                 .linkwaend;
@@ -167,17 +170,17 @@
         top: 0;
         width: 200px;
         max-height: 100%;
-        padding: 12px 0;
         overflow-y: auto;
         overflow-x: hidden;
 
         &:before {
             content: "DOCK";
             font-size: 8pt;
-            text-align: center;
+            text-align: right;
             display: block;
-            margin-top: -8px;
-            padding-bottom: 2px;
+            margin-top: 6px;
+            margin-right: 6px;
+            height: 10px;
         }
 
         &.wc-hide {
@@ -186,11 +189,12 @@
         }
 
         .wc-dock-page {
-            margin-bottom: 12px;
+            margin-top: 12px;
             padding: 6px;
             background: #fff;
             margin-right: 6px;
             border: 1px solid #000;
+
 
             .wc-dock-buttons {
                 font-size: 9pt;
@@ -233,6 +237,18 @@
                 a {
                     color: #000;
                     .linkwaend;
+                }
+
+                .wc-line {
+                    cursor: pointer;
+                    border-bottom: 1px solid transparent;
+                    display: table;
+                    margin-bottom: 1px;
+
+                    &:hover {
+                        cursor: pointer;
+                        border-bottom: 1px solid #000;
+                    }
                 }
 
                 .key-value {

@@ -81,7 +81,7 @@ function listMedia () {
                         'width:200px;',
                         'height:200px;',
                         'background-position: center center;',
-                        'background-size: cover;',
+                        'background-size: contain;',
                         'background-repeat: no-repeat;',
                         'background-image:url("'+imageUrl+'")'
                     ];
