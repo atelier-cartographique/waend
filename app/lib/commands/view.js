@@ -270,29 +270,29 @@ Navigator.prototype.setupButtons = function () {
 
     buttonBlock.setAttribute('class', 'navigate-buttons');
 
-    var zoomIn = makeButton('+', {
+    var zoomIn = makeButton('', {
         'class': 'navigate-button navigate-zoom-in',
         'title': '[i]'
         }, this.zoomIn, this);
 
-    var zoomOut = makeButton('-', {
+    var zoomOut = makeButton('', {
         'class': 'navigate-button navigate-zoom-out',
         'title': '[o]'
     }, this.zoomOut, this);
 
-    var west = makeButton('↦', {
+    var west = makeButton('', {
         'class': 'navigate-button navigate-west'
     }, this.west, this);
 
-    var east = makeButton('↤', {
+    var east = makeButton('', {
         'class': 'navigate-button navigate-east'
     }, this.east, this);
 
-    var north = makeButton('↧', {
+    var north = makeButton('', {
         'class': 'navigate-button navigate-north'
     }, this.north, this);
 
-    var south = makeButton('↥', {
+    var south = makeButton('', {
         'class': 'navigate-button navigate-south'
     }, this.south, this);
 

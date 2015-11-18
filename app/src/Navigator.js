@@ -295,20 +295,20 @@ Navigator.prototype.setupButtons = function () {
         'title': '[o]'
     }, this.zoomOut, this);
 
-    var west = makeButton('↦', {
-        'class': 'navigate-button navigate-west'
+    var west = makeButton('', {
+        'class': 'navigate-button navigate-west icon-pan-west'
     }, this.west, this);
 
-    var east = makeButton('↤', {
-        'class': 'navigate-button navigate-east'
+    var east = makeButton('', {
+        'class': 'navigate-button navigate-east icon-pan-east'
     }, this.east, this);
 
-    var north = makeButton('↧', {
-        'class': 'navigate-button navigate-north'
+    var north = makeButton('', {
+        'class': 'navigate-button navigate-north icon-pan-north'
     }, this.north, this);
 
-    var south = makeButton('↥', {
-        'class': 'navigate-button navigate-south'
+    var south = makeButton('', {
+        'class': 'navigate-button navigate-south icon-pan-south'
     }, this.south, this);
 
 
