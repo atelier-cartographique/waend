@@ -758,6 +758,7 @@ var WebConsole = Terminal.extend({
                 pagesTitle = removeElement(this.pagesTitle),
                 title = document.createElement('div'),
                 docker = document.createElement('span');
+                closer = document.createElement('span');
 
             emptyElement(pager);
             emptyElement(this.pagesTitle);
@@ -768,9 +769,16 @@ var WebConsole = Terminal.extend({
                 self.dock.addPage(page);
                 self.currentPage = null;
             }, false);
+            closer.innerHTML = 'close it';
+            addClass(closer, 'wc-page-closer icon-close');
+            closer.addEventListener('click', function(ev){
+                removeElement(title);
+                removeElement(page);
+            }, false);
             addClass(title, 'wc-page-title');
             title.appendChild(document.createTextNode(cmd));
             title.appendChild(docker);
+            title.appendChild(closer);
 
             pagesTitle.appendChild(title);
             pager.appendChild(pagesTitle);
