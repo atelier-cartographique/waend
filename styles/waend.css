@@ -715,15 +715,16 @@ body {
   cursor: pointer;
 }
 .wc-element.wc-pages {
-  background: #fff;
+  background: #f8f8f8;
   position: absolute;
   left: 193px;
-  bottom: 36px;
+  bottom: 30px;
   width: 635px;
   max-height: 80%;
   display: block;
   overflow-y: auto;
   overflow-x: hidden;
+  text-shadow: none;
 }
 .wc-element.wc-pages.wc-hide {
   left: -700px;
