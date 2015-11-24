@@ -1286,7 +1286,7 @@ body {
   text-transform: uppercase;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .pager-actions span.pager-action-close {
-  margin-right: 24px;
+  margin-left: 20px;
   cursor: pointer;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .pager-actions span.pager-action-dock {
