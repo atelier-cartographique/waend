@@ -443,14 +443,14 @@ var WebConsole = Terminal.extend({
                     closeBtn = document.createElement('span'),
                     dockBtn = document.createElement('span');
                 pagerBtns.className = 'pager-actions';
-                closeBtn.className = 'pager-action-close icon-close';
-                closeBtn.innerHTML = 'close';
                 dockBtn.className = 'pager-action-dock icon-docker';
                 dockBtn.innerHTML = 'dock it';
-                closeBtn.addEventListener('click', closePager, false);
+                closeBtn.className = 'pager-action-close icon-close';
+                closeBtn.innerHTML = 'close';
                 dockBtn.addEventListener('click', dockPage, false);
-                pagerBtns.appendChild(closeBtn);
+                closeBtn.addEventListener('click', closePager, false);
                 pagerBtns.appendChild(dockBtn);
+                pagerBtns.appendChild(closeBtn);
                 pager.appendChild(pagerBtns);
 
                 var rect = button.getBoundingClientRect();

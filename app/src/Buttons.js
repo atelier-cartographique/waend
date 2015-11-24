@@ -103,6 +103,10 @@ function loginButton(console, button) {
 
 
  var layerButtons = {
+    'List features': {
+        type: 'embed',
+        command: ['lf']
+    },
      'Trace': {
          type: 'display',
          command: ['trace | create']
@@ -118,10 +122,6 @@ function loginButton(console, button) {
      'Import geo-datas': {
          type: 'display',
          command: ['import','lf']
-     },
-     'List features': {
-         type: 'embed',
-         command: ['lf']
      }
  };
 
