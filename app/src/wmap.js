@@ -10,7 +10,9 @@
 
 
 
-var Bind = require('../lib/Bind'),
+var config = require('../../config'),
+    Bind = require('../lib/Bind'),
+    Sync = require('../lib/Sync'),
     semaphore = require('../lib/Semaphore'),
     WebConsole = require('./WebConsole'),
     LayerProvider = require('./LayerProvider'),
@@ -42,6 +44,8 @@ function init () {
     else {
         semaphore.signal('shell:change:context', 0, []);
     }
+
+    Sync.configure(config.notify);
 }
 
 document.onreadystatechange = function () {

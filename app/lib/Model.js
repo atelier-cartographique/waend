@@ -97,10 +97,36 @@ var Model = O.extend({
     },
 
     _updateData: function (data, silent) {
-        var changed = _.isEqual(data, this.data);
+        var props = this.data.properties,
+            newProps = data.properties,
+            changedProps = [],
+            changedAttrs = [],
+            changedKeys = _.difference(_.keys(props), _.keys(newProps));
+
+        _.each(props, function(v, k) {
+            if (!_.isEqual(v, newProps[k])) {
+                changedProps.push(k);
+            }
+        });
+
+        _.each(this.data, function(v, k) {
+            if ('properties' !== k) {
+                if (!_.isEqual(v, data[k])) {
+                    changedAttrs.push(k);
+                }
+            }
+        });
+
+
         this.data = data;
-        if (!silent && changed) {
-            this.emit('change', data);
+        if (!silent
+            && ((changedAttrs.length > 0)
+                || (changedProps.length > 0)
+                || (changedKeys.length > 0)) ) {
+            this.emit('set:data', data);
+            _.each(changedProps, function(k) {
+                this.emit('set', k, data.properties[k]);
+            }, this);
         }
     }
 

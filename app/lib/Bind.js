@@ -35,6 +35,7 @@ var _ = require('underscore'),
     config = require('../../config'),
     region = require('./Region'),
     Geometry = require('./Geometry'),
+    Sync = require('./Sync'),
     semaphore = require('./Semaphore'),
     Promise = require("bluebird");
 
@@ -194,6 +195,15 @@ var Bind = O.extend({
         this.transport = new Transport();
         this.db = new DB(this.transport);
         this.featurePages = {};
+
+        semaphore.on('sync', function(cmd, data){
+            if ('update' === cmd) {
+                if (this.db.has(data.id)) {
+                    var model = this.db.get(data.id);
+                    model._updateData(data);
+                }
+            }
+        }, this);
     },
 
     update: function (model) {
@@ -271,6 +281,7 @@ var Bind = O.extend({
                 }
             }
             semaphore.signal('stop:loader');
+            Sync.send('sub', 'group', groupId);
             return g;
         };
         var url = API_URL+path;
