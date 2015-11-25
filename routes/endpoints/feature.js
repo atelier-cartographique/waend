@@ -11,7 +11,8 @@
 
 var _ = require('underscore'),
     base = require('./base'),
-    cache = require('../../lib/cache');
+    cache = require('../../lib/cache'),
+    notifier = require('../../lib/notifier');
 
 
 module.exports = exports = base.RequestHandler.extend({
@@ -52,13 +53,13 @@ module.exports = exports = base.RequestHandler.extend({
                 handler: 'del',
                 url: 'user/:user_id/group/:group_id/layer/:layer_id/feature/:feature_id',
                 permissions: ['isAuthenticated', 'isLayerOwner']
-            },
+            }
         },
 
 
         list: function (request, response) {
             var self = this,
-                bounds = _.mapObject(_.pick(request.query, 'n', 'e', 's', 'w'), function(v){return parseFloat(v);});
+                bounds = _.mapObject(_.pick(request.query, 'n', 'e', 's', 'w'), function(v){ return parseFloat(v); });
             cache.client()
                 .getFeatures(request.params.layer_id, bounds)
                 .then(function(results){
@@ -99,7 +100,8 @@ module.exports = exports = base.RequestHandler.extend({
 
 
         put: function (request, response) {
-            var body = _.extend(request.body, {
+            var groupId = request.params.group_id,
+                body = _.extend(request.body, {
                 'user_id': request.user.id,
                 'layer_id': request.params.layer_id,
                 'id': request.params.feature_id
@@ -108,6 +110,7 @@ module.exports = exports = base.RequestHandler.extend({
                 .setFeature(body)
                 .then(function(data){
                     response.send(data);
+                    notifier.update('feature', groupId, data);
                 })
                 .catch(function(err){
                     response.status(500).send(err);
@@ -119,7 +122,7 @@ module.exports = exports = base.RequestHandler.extend({
                 fid = request.params.feature_id;
             cache.client()
                 .delFeature(lid, fid)
-                .then(function(n){
+                .then(function(){
                     response.status(204).end();
                 })
                 .catch(function(err){

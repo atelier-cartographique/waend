@@ -17,7 +17,7 @@ module.exports = exports = function(app){
 
     var router = express.Router();
     _.each(routes, function(route){
-        require('./'+route)(router, app);
+        require('./' + route)(router, app);
     });
 
     /* GET home page. */
@@ -30,7 +30,6 @@ module.exports = exports = function(app){
     });
     router.get('/map*', function(request, response){
         if (request.isAuthenticated()) {
-            console.log('map', request.user);
             response.render('map', {
                 'user': request.user
             });

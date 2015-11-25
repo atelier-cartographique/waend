@@ -1,9 +1,9 @@
 /*
  * routes/endpoints/base.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2014  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
@@ -73,17 +73,16 @@ module.exports.RequestHandler = object.Object.extend({
     ownsGroupOrPublic: function (request, response, next) {
         var groupId = request.params.group_id,
             requestUserId = (request.user) ? request.user.id : 'x';
-        console.log('base.ownsGroupOrPublic', groupId);
         cache.client().get('group', groupId)
             .then(function(group){
-                console.log('base.ownsGroupOrPublic group', group);
-                if((0 === group.status_flag) 
+                if((0 === group.status_flag)
                     || (requestUserId === group.user_id)){
                     return next();
                 }
                 response.status(403).send('NOT THE GROUP OWNER NOR A PUBLIC GROUP');
             })
             .catch(function(err){
+                console.error('base.ownsGroupOrPublic err', err);
                 response.status(404).send(err.toString());
             });
     },
@@ -92,7 +91,7 @@ module.exports.RequestHandler = object.Object.extend({
 
     paginate: function (result, request, response) {
         var page = parseInt(request.query.page) || DEFAULT_PAGE,
-            pageSize = parseInt(request.query.page_size) || PAGE_SIZE
+            pageSize = parseInt(request.query.page_size) || PAGE_SIZE,
             offset = pageSize * page,
             len = result.length,
             pResult = result.slice(offset, offset + pageSize);
@@ -115,5 +114,3 @@ module.exports.RequestHandler = object.Object.extend({
     }
 
 });
-
-

@@ -12,7 +12,8 @@
 
 var _ = require('underscore'),
     base = require('./base'),
-    cache = require('../../lib/cache');
+    cache = require('../../lib/cache'),
+    notifier = require('../../lib/notifier');
 
 module.exports = exports = base.RequestHandler.extend({
 
@@ -82,12 +83,12 @@ module.exports = exports = base.RequestHandler.extend({
 
         get: function(request, response) {
             cache.client()
-                // .get('group', request.params.group_id)
                 .getGroup(request.params.group_id)
                 .then(function(data){
                     response.send(data);
                 })
                 .catch(function(err){
+                    console.error('group.get', err);
                     response.status(404).send(err);
                 });
         },
@@ -100,9 +101,9 @@ module.exports = exports = base.RequestHandler.extend({
                 listPrivate = true;
             }
             cache.client()
-                .getMaps(request.params.user_id)
+                .query('groupListForUser', 'group', [request.params.user_id])
                 .then(function(results){
-                    // console.log('groups.list results', results);
+                    console.log('groups.list results', results);
                     if(!!listPrivate){
                         self.paginate(results, request, response);
                     }
@@ -142,6 +143,7 @@ module.exports = exports = base.RequestHandler.extend({
                 .set('group', body)
                 .then(function(data){
                     response.send(data);
+                    notifier.update('group', data.id, data);
                 })
                 .catch(function(err){
                     response.status(500).send(err);

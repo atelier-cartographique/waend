@@ -16,6 +16,7 @@
     "ejs": "^1.0.0",
     "express": ">=4.8.0",
     "express-session": "~1.7.2",
+    "fast-json-patch": "^0.5.4",
     "hyphenation.en-us": "*",
     "hypher": "*",
     "imagemagick-native": "*",
