@@ -228,6 +228,17 @@ var Bind = O.extend({
                     }
                 }
             }
+            else if ('delete' === cmd) {
+                var ctx = chan.type;
+                if ('layer' === ctx) {
+                    var fid = data;
+                    if (this.db.has(fid)) {
+                        var layerId = chan.id;
+                        this.db.del(fid);
+                        this.changeParent(layerId);
+                    }
+                }
+            }
         }, this);
     },
 
@@ -388,10 +399,12 @@ var Bind = O.extend({
     },
 
     delFeature: function (userId, groupId, layerId, featureId) {
-        var path = '/user/' + userId +
+        var feature = this.db.get(featureId),
+            geom = feature.getGeometry(),
+            path = '/user/' + userId +
                    '/group/' + groupId +
                    '/layer/' + layerId +
-                   '/feature/' + featureId,
+                   '/feature.'+ geom.getType() +'/' + featureId,
             url = API_URL + path,
             db = this.db,
             self = this;

@@ -51,7 +51,7 @@ module.exports = exports = base.RequestHandler.extend({
             del: {
                 verb: 'delete',
                 handler: 'del',
-                url: 'user/:user_id/group/:group_id/layer/:layer_id/feature/:feature_id',
+                url: 'user/:user_id/group/:group_id/layer/:layer_id/feature.:geom_type/:feature_id',
                 permissions: ['isAuthenticated', 'isLayerOwner']
             }
         },
@@ -120,11 +120,14 @@ module.exports = exports = base.RequestHandler.extend({
 
         del: function (request, response) {
             var lid = request.params.layer_id,
-                fid = request.params.feature_id;
+                fid = request.params.feature_id,
+                geomType = request.params.geom_type.toLowerCase();
+
             cache.client()
-                .delFeature(lid, fid)
+                .delFeature(lid, fid, geomType)
                 .then(function(){
                     response.status(204).end();
+                    notifier.delete('layer', lid, fid);
                 })
                 .catch(function(err){
                     response.status(500).send(err);
