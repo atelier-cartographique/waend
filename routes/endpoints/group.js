@@ -71,6 +71,7 @@ module.exports = exports = base.RequestHandler.extend({
             cache.client()
                 .lookupGroups(request.params.term)
                 .then(function(results){
+                    console.log('searchGroups', results);
                     var data = _.filter(results, function (g) {
                         return (0 === g.status_flag);
                     });

@@ -75,7 +75,7 @@ function listMedia () {
             if('medias' in data) {
                 for (var i = 0; i < data.medias.length; i++) {
                     var m = data.medias[i];
-                    var imageUrl = MEDIA_URL + '/' + user.id+'/'+m + '/256';
+                    var imageUrl = MEDIA_URL + '/' + user.id+'/'+ m + '/256';
                     var wrapper = document.createElement('div');
                     var style = [
                         'width:200px;',
