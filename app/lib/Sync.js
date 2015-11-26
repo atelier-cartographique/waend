@@ -52,6 +52,12 @@ module.exports.configure = function (config) {
     sock.onmessage = sockMessage;
 };
 
+
+/**
+ * send raw data to the nofify end point
+ * @method send
+ * @return {bool} true if data has been sent, false if delayed or failed
+ */
 module.exports.send = function () {
     var args = _.toArray(arguments);
     if (!sock || (sock.readyState !== Sockjs.OPEN)) {
@@ -68,3 +74,14 @@ module.exports.send = function () {
     }
     return false;
 };
+
+
+/**
+ * subscribe to a channel
+ * @method subscribe
+ * @param  {string}  type A channel name, which is usually a context name
+ * @param  {string}  id   context id
+ */
+module.exports.subscribe = function (type, id) {
+    exports.send('sub', type, id);
+}

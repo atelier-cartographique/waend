@@ -83,7 +83,7 @@ module.exports = exports = base.RequestHandler.extend({
 
 
         post: function (request, response) {
-            var groupId = request.params.group_id,
+            var layerId = request.params.layer_id,
                 body = _.extend(request.body, {
                     'user_id': request.user.id
                 });
@@ -92,6 +92,7 @@ module.exports = exports = base.RequestHandler.extend({
                 .setFeature(body)
                 .then(function(feature){
                     response.status(201).send(feature);
+                    notifier.create('layer', layerId, feature);
                 })
                 .catch(function(err){
                     response.status(500).send(err);
@@ -100,17 +101,17 @@ module.exports = exports = base.RequestHandler.extend({
 
 
         put: function (request, response) {
-            var groupId = request.params.group_id,
+            var layerId = request.params.layer_id,
                 body = _.extend(request.body, {
                 'user_id': request.user.id,
-                'layer_id': request.params.layer_id,
+                'layer_id': layerId,
                 'id': request.params.feature_id
             });
             cache.client()
                 .setFeature(body)
                 .then(function(data){
                     response.send(data);
-                    notifier.update('feature', groupId, data);
+                    notifier.update('layer', layerId, data);
                 })
                 .catch(function(err){
                     response.status(500).send(err);

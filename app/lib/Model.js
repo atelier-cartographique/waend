@@ -101,7 +101,7 @@ var Model = O.extend({
             newProps = data.properties,
             changedProps = [],
             changedAttrs = [],
-            changedKeys = _.difference(_.keys(props), _.keys(newProps));
+            changedKeys = _.difference(_.keys(props), _.keys(newProps)).concat(_.difference(_.keys(newProps), _.keys(props)));
 
         _.each(props, function(v, k) {
             if (!_.isEqual(v, newProps[k])) {

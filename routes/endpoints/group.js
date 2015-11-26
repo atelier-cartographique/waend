@@ -104,11 +104,11 @@ module.exports = exports = base.RequestHandler.extend({
                 .query('groupListForUser', 'group', [request.params.user_id])
                 .then(function(results){
                     console.log('groups.list results', results);
-                    if(!!listPrivate){
+                    if(listPrivate){
                         self.paginate(results, request, response);
                     }
                     else{
-                        var data = _.filter(results, function(g){ return (0 === g.status_flag);});
+                        var data = _.filter(results, function(g){ return (0 === g.status_flag); });
                         // console.log('groups.list public', data);
                         self.paginate(data, request, response);
                     }

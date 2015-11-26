@@ -196,11 +196,22 @@ var Bind = O.extend({
         this.db = new DB(this.transport);
         this.featurePages = {};
 
-        semaphore.on('sync', function(cmd, data){
+        semaphore.on('sync', function(chan, cmd, data){
             if ('update' === cmd) {
                 if (this.db.has(data.id)) {
                     var model = this.db.get(data.id);
                     model._updateData(data);
+                }
+            }
+            else if ('create' === cmd) {
+                var ctx = chan.type;
+                if ('layer' === ctx) {
+                    var layerId = chan.id,
+                        feature = new Feature(this, data),
+                        comps = this.db.getComps(layerId);
+                    comps.push(feature.id);
+                    this.db.record(comps, feature);
+                    this.changeParent(layerId);
                 }
             }
         }, this);
@@ -279,9 +290,10 @@ var Bind = O.extend({
 
                     db.record([userId, groupId, layer.id, feature.id], f);
                 }
+                Sync.subscribe('layer', layer.id);
             }
             semaphore.signal('stop:loader');
-            Sync.send('sub', 'group', groupId);
+            Sync.subscribe('group', groupId);
             return g;
         };
         var url = API_URL+path;
