@@ -143,8 +143,7 @@ var DB = O.extend({
             self.transport
                 .put(API_URL + path, {'body': model })
                     .then(function(){
-                        record.model = model;
-                        db[model.id] = record;
+                        db[model.id] = new Record(model, record.comps, record.parent);
                         resolve(model);
                     })
                     .catch(reject);
@@ -355,7 +354,7 @@ var Bind = O.extend({
             }
             return ret;
         };
-        var url = API_URL+path;
+        var url = API_URL + path;
         return this.transport.get(url, {parse: pr});
     },
 
@@ -371,7 +370,7 @@ var Bind = O.extend({
             db.record([userId, groupId, layerId], l);
             return l;
         };
-        var url = API_URL+path;
+        var url = API_URL + path;
         return this.transport.get(url, {parse: pr});
     },
 
@@ -394,7 +393,7 @@ var Bind = O.extend({
             db.record([userId, groupId, layerId, featureId], f);
             return f;
         };
-        var url = API_URL+path;
+        var url = API_URL + path;
         return this.transport.get(url, {parse: pr});
     },
 

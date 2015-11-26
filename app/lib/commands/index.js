@@ -42,7 +42,8 @@ var commandModules = [
     require('./detach'),
     require('./styleWidget'),
     require('./widget'),
-    require('./wSet')
+    require('./wSet'),
+    require('./notify')
     ];
 
 
