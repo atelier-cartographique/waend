@@ -136,11 +136,11 @@ function loginButton(console, button) {
      },
      'Set color': {
          type: 'display',
-         command: ['get color | edit | set style.strokeStyle']
+         command: ['get style.strokeStyle | edit | set style.strokeStyle']
      },
      'Set text': {
          type: 'display',
-         command: ['get text | edit | set params.text']
+         command: ['get params.text | edit | set params.text']
      },
      'Edit geometry' : {
          type: 'display',

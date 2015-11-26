@@ -204,9 +204,15 @@ table {
   -ms-hyphens: auto;
   hyphens: auto;
 }
+.button {
+  font-family: "dauphine_regular";
+  font-size: 9pt;
+  text-transform: uppercase;
+}
 .push-buttons {
   font-family: "dauphine_regular";
-  font-size: 12pt;
+  font-size: 9pt;
+  text-transform: uppercase;
   text-shadow: none;
   text-align: center;
   padding: 4px 10px 3px 10px;
@@ -223,7 +229,8 @@ table {
 }
 .push-validate {
   font-family: "dauphine_regular";
-  font-size: 12pt;
+  font-size: 9pt;
+  text-transform: uppercase;
   text-shadow: none;
   text-align: center;
   padding: 4px 10px 3px 10px;
@@ -241,7 +248,8 @@ table {
 }
 .push-cancel {
   font-family: "dauphine_regular";
-  font-size: 12pt;
+  font-size: 9pt;
+  text-transform: uppercase;
   text-shadow: none;
   text-align: center;
   padding: 4px 10px 3px 10px;
@@ -259,7 +267,8 @@ table {
 }
 .push-edit {
   font-family: "dauphine_regular";
-  font-size: 12pt;
+  font-size: 9pt;
+  text-transform: uppercase;
   text-shadow: none;
   text-align: center;
   padding: 4px 10px 3px 10px;
@@ -277,7 +286,8 @@ table {
 }
 .push-add {
   font-family: "dauphine_regular";
-  font-size: 12pt;
+  font-size: 9pt;
+  text-transform: uppercase;
   text-shadow: none;
   text-align: center;
   padding: 4px 10px 3px 10px;
@@ -340,12 +350,15 @@ input[type="submit"] {
   color: #f8f8f8;
   margin-top: 18px;
 }
+.transition-move {
+  transition: all 0.5s cubic-bezier(0.2, 0.81, 0.91, 0.96);
+}
 .fade-in {
-  -webkit-animation: fadein 0.5s;
-  -moz-animation: fadein 0.5s;
-  -ms-animation: fadein 0.5s;
-  -o-animation: fadein 0.5s;
-  animation: fadein 0.5s;
+  -webkit-animation: fadein 01s;
+  -moz-animation: fadein 01s;
+  -ms-animation: fadein 01s;
+  -o-animation: fadein 01s;
+  animation: fadein 01s;
   /* Firefox < 16 */
 
   /* Safari, Chrome and Opera > 12.1 */
@@ -356,53 +369,148 @@ input[type="submit"] {
 
 }
 @keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-moz-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-webkit-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-ms-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-o-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.widget-block-left {
+  -webkit-animation: fadein 01s;
+  -moz-animation: fadein 01s;
+  -ms-animation: fadein 01s;
+  -o-animation: fadein 01s;
+  animation: fadein 01s;
+  /* Firefox < 16 */
+
+  /* Safari, Chrome and Opera > 12.1 */
+
+  /* Internet Explorer */
+
+  /* Opera < 12.1 */
+
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 155px;
+  padding: 12px;
+  height: 100%;
+  overflow-y: auto;
+  background: #f8f8f8;
+  font-size: 10pt;
+  border-right: 1px solid #000;
+}
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-ms-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 .graticule {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
-  -webkit-animation: fadein 0.5s;
-  -moz-animation: fadein 0.5s;
-  -ms-animation: fadein 0.5s;
-  -o-animation: fadein 0.5s;
-  animation: fadein 0.5s;
+  -webkit-animation: fadein 01s;
+  -moz-animation: fadein 01s;
+  -ms-animation: fadein 01s;
+  -o-animation: fadein 01s;
+  animation: fadein 01s;
   /* Firefox < 16 */
 
   /* Safari, Chrome and Opera > 12.1 */
@@ -413,42 +521,57 @@ input[type="submit"] {
 
 }
 @keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-moz-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-webkit-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-ms-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-o-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
@@ -482,7 +605,7 @@ input[type="submit"] {
   display: inline-block;
 }
 body {
-  background-color: #E5E5E5;
+  background-color: #f8f8f8;
   text-shadow: 0 0 6px black;
   letter-spacing: 1px;
   font-size: 14pt;
@@ -499,14 +622,6 @@ body {
   right: 0;
   bottom: 0;
   background-color: white;
-  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
-}
-#map.wc-fullscreen {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 #wc {
   position: absolute;
@@ -697,7 +812,6 @@ body {
 }
 .wc-element.wc-mapblock.wc-hide {
   top: -64px;
-  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-mapblock .wc-nav,
 .wc-element.wc-mapblock .wc-select,
@@ -719,7 +833,7 @@ body {
   position: absolute;
   left: 193px;
   bottom: 30px;
-  width: 635px;
+  width: 636px;
   max-height: 80%;
   display: block;
   overflow-y: auto;
@@ -727,8 +841,7 @@ body {
   text-shadow: none;
 }
 .wc-element.wc-pages.wc-hide {
-  left: -700px;
-  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+  bottom: -80%;
 }
 .wc-element.wc-pages .wc-title {
   width: 100%;
@@ -827,7 +940,6 @@ body {
 }
 .wc-element.wc-dock.wc-hide {
   right: -200px;
-  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-dock .wc-dock-page {
   margin-top: 12px;
@@ -860,11 +972,9 @@ body {
   overflow: hidden;
   border-left: 1px dashed #000;
   padding-left: 6px;
-  transition: max-height 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-dock .wc-dock-page .wc-page.wc-collapsed {
   max-height: 0px;
-  transition: max-height 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
 }
 .wc-element.wc-dock .wc-dock-page .wc-page a {
   color: #000;
@@ -939,13 +1049,13 @@ body {
 }
 .wc-element.wc-container {
   position: absolute;
+  height: 30px;
   bottom: 0;
   left: 185px;
   width: 632px;
 }
 .wc-element.wc-container.wc-hide {
-  left: -700px;
-  transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+  bottom: -700px;
 }
 .wc-element.wc-container .wc-input-prompt {
   font-family: "dauphine_regular";
@@ -1217,11 +1327,11 @@ body {
   height: 100vh;
   text-shadow: none;
   border-right: solid 1px #000;
-  transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+  transition: all 0.5s cubic-bezier(0.2, 0.81, 0.91, 0.96);
 }
 .wc-element.wc-buttons.wc-hide {
   left: -354px;
-  transition: left 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+  transition: all 0.5s cubic-bezier(0.2, 0.81, 0.91, 0.96);
 }
 .wc-element.wc-buttons .wc-buttons-group-title-wrapper .wc-buttons-group-title-label {
   font-size: 9pt;
@@ -1475,7 +1585,8 @@ body {
 }
 .media-wrapper .media-close {
   font-family: "dauphine_regular";
-  font-size: 12pt;
+  font-size: 9pt;
+  text-transform: uppercase;
   text-shadow: none;
   padding: 4px 10px 3px 10px;
   display: block;
@@ -1507,66 +1618,12 @@ body {
   border: 1px solid grey;
 }
 .CodeMirror {
-  background: url(svg/grid.svg);
-  background-position: -50px -50px;
-  -webkit-animation: fadein 0.5s;
-  -moz-animation: fadein 0.5s;
-  -ms-animation: fadein 0.5s;
-  -o-animation: fadein 0.5s;
-  animation: fadein 0.5s;
-  /* Firefox < 16 */
-
-  /* Safari, Chrome and Opera > 12.1 */
-
-  /* Internet Explorer */
-
-  /* Opera < 12.1 */
-
+  background: transparent;
   position: absolute;
   display: block;
   overflow: hidden;
   height: 100%;
   width: 100%;
-}
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-moz-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-webkit-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-ms-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-o-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 .CodeMirror .CodeMirror-scroll {
   width: 50%;
@@ -1624,67 +1681,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url(svg/grid.svg);
-  background-position: -50px -50px;
-  -webkit-animation: fadein 0.5s;
-  -moz-animation: fadein 0.5s;
-  -ms-animation: fadein 0.5s;
-  -o-animation: fadein 0.5s;
-  animation: fadein 0.5s;
-  /* Firefox < 16 */
-
-  /* Safari, Chrome and Opera > 12.1 */
-
-  /* Internet Explorer */
-
-  /* Opera < 12.1 */
-
   position: absolute;
   margin: 0px auto 0px auto;
   width: 100%;
   height: 100%;
   background-color: transparent;
   z-index: -1;
-}
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-moz-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-webkit-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-ms-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@-o-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 .importer-dropzone .importer-dropzone-label {
   font-size: 25pt;
@@ -1721,20 +1723,94 @@ body {
   margin: auto;
 }
 .importer-hints {
+  -webkit-animation: fadein 01s;
+  -moz-animation: fadein 01s;
+  -ms-animation: fadein 01s;
+  -o-animation: fadein 01s;
+  animation: fadein 01s;
+  /* Firefox < 16 */
+
+  /* Safari, Chrome and Opera > 12.1 */
+
+  /* Internet Explorer */
+
+  /* Opera < 12.1 */
+
   position: absolute;
-  width: 50%;
-  bottom: 50px;
-  left: 12px;
+  top: 0px;
+  left: 0px;
+  width: 155px;
+  padding: 12px;
+  height: 100%;
+  overflow-y: auto;
+  background: #f8f8f8;
+  font-size: 10pt;
+  border-right: 1px solid #000;
+}
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-ms-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 canvas.tool-draw,
 canvas.tool-trace {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
-  -webkit-animation: fadein 0.5s;
-  -moz-animation: fadein 0.5s;
-  -ms-animation: fadein 0.5s;
-  -o-animation: fadein 0.5s;
-  animation: fadein 0.5s;
+  -webkit-animation: fadein 01s;
+  -moz-animation: fadein 01s;
+  -ms-animation: fadein 01s;
+  -o-animation: fadein 01s;
+  animation: fadein 01s;
   /* Firefox < 16 */
 
   /* Safari, Chrome and Opera > 12.1 */
@@ -1746,91 +1822,274 @@ canvas.tool-trace {
   cursor: crosshair;
 }
 @keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-moz-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-webkit-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-ms-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-o-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-moz-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-webkit-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-ms-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 @-o-keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.draw-hints {
+  -webkit-animation: fadein 01s;
+  -moz-animation: fadein 01s;
+  -ms-animation: fadein 01s;
+  -o-animation: fadein 01s;
+  animation: fadein 01s;
+  /* Firefox < 16 */
+
+  /* Safari, Chrome and Opera > 12.1 */
+
+  /* Internet Explorer */
+
+  /* Opera < 12.1 */
+
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 155px;
+  padding: 12px;
+  height: 100%;
+  overflow-y: auto;
+  background: #f8f8f8;
+  font-size: 10pt;
+  border-right: 1px solid #000;
+}
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-ms-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
 .trace-buttons {
+  -webkit-animation: fadein 01s;
+  -moz-animation: fadein 01s;
+  -ms-animation: fadein 01s;
+  -o-animation: fadein 01s;
+  animation: fadein 01s;
+  /* Firefox < 16 */
+
+  /* Safari, Chrome and Opera > 12.1 */
+
+  /* Internet Explorer */
+
+  /* Opera < 12.1 */
+
   position: absolute;
-  left: 22px;
-  top: 22px;
-  background-color: grey;
+  top: 0px;
+  left: 0px;
+  width: 155px;
   padding: 12px;
+  height: 100%;
+  overflow-y: auto;
+  background: #f8f8f8;
+  font-size: 10pt;
+  border-right: 1px solid #000;
+}
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-ms-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 .trace-buttons .trace-button.active .trace-button-label {
   color: #337AFF;

@@ -38,7 +38,7 @@
 
         &.wc-hide {
             top: -64px;
-            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+            //.transition-move;
         }
 
         .wc-nav, .wc-select, .wc-draw-zoom {
@@ -58,16 +58,18 @@
         position: absolute;
         left: @widthMenuLeft + 38px;
         bottom: 30px;
-        width: 635px;
+        width: 636px;
         max-height: 80%;
         display: block;
         overflow-y: auto;
         overflow-x: hidden;
         text-shadow: none;
+        //.transition-move;
+
 
         &.wc-hide {
-            left: -700px;
-            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+            bottom: -80%;
+            //.transition-move;
         }
         .wc-title {
             width: 100%;
@@ -196,7 +198,7 @@
 
         &.wc-hide {
             right: -200px;
-            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+            //.transition-move;
         }
 
         .wc-dock-page {
@@ -236,13 +238,13 @@
                 overflow: hidden;
                 border-left: 1px dashed #000;
                 padding-left: 6px;
-                transition: max-height 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+                //.transition-move;
 
 
                 &.wc-collapsed {
                     // height: 0px;
                     max-height: 0px;
-                    transition: max-height 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+                    //.transition-move;
                 }
 
                 a {
@@ -302,13 +304,16 @@
 
     &.wc-container {
         position: absolute;
+        height: 30px;
         bottom: 0;
         left: @widthMenuLeft + 30px;
         width: 632px;
+        ////.transition-move;
+
 
         &.wc-hide {
-            left: -700px;
-            transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+            bottom: -700px;
+            //.transition-move;
         }
 
         .wc-input-prompt {
