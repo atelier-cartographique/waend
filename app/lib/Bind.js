@@ -26,7 +26,7 @@ It listens to model changes and calls back all the views connected to it to re-r
 
  */
 
-
+'use strict';
 
 var _ = require('underscore'),
     O = require('../../lib/object').Object,
@@ -77,6 +77,20 @@ var Feature = Model.extend({
 });
 
 
+function Record (model, comps, parent) {
+    Object.defineProperty(this, 'model', {
+        value: model
+    });
+    Object.defineProperty(this, 'comps', {
+        value: Object.freeze(comps)
+    });
+    Object.defineProperty(this, 'parent', {
+        value: parent
+    });
+
+    Object.freeze(this);
+}
+
 var DB = O.extend({
     _db : {},
 
@@ -106,20 +120,17 @@ var DB = O.extend({
     },
 
     record: function (comps, model) {
+        var rec;
         if (model.id in this._db) {
-            var rec = this._db[model.id];
-            rec.model._updateData(model.data);
-            rec.comps = comps;
-            rec.parent = this.getParent(comps);
+            var oldRec = this._db[model.id];
+            oldRec.model._updateData(model.data);
+            rec = new Record(oldRec.model, oldRec.comps, this.getParent(comps));
         }
         else {
-            this._db[model.id] = {
-                'model': model,
-                'comps': comps,
-                'parent': this.getParent(comps)
-            };
-            // TODO subscribe to notifications about it
+            rec = new Record(model, comps, this.getParent(comps));
         }
+        this._db[model.id] = rec;
+        return rec;
     },
 
     update: function (model) {
@@ -155,7 +166,7 @@ var DB = O.extend({
     },
 
     getComps: function (id) {
-        return this._db[id].comps;
+        return _.clone(this._db[id].comps);
     },
 
     lookupKey: function (prefix) {
@@ -197,7 +208,7 @@ var Bind = O.extend({
         this.featurePages = {};
 
         semaphore.on('sync', function(chan, cmd, data){
-            if ('update' === cmd) {
+            if ('update' === cmd) {4
                 if (this.db.has(data.id)) {
                     var model = this.db.get(data.id);
                     model._updateData(data);
@@ -206,12 +217,15 @@ var Bind = O.extend({
             else if ('create' === cmd) {
                 var ctx = chan.type;
                 if ('layer' === ctx) {
-                    var layerId = chan.id,
-                        feature = new Feature(this, data),
-                        comps = this.db.getComps(layerId);
-                    comps.push(feature.id);
-                    this.db.record(comps, feature);
-                    this.changeParent(layerId);
+                    if (!this.db.has(data.id)) {
+                        var layerId = chan.id,
+                            feature = new Feature(this, data),
+                            comps = this.getComps(layerId);
+                        comps.push(feature.id);
+                        var rec = this.db.record(comps, feature);
+                        console.log('comps', comps, rec);
+                        this.changeParent(layerId);
+                    }
                 }
             }
         }, this);
