@@ -34,6 +34,7 @@ function setupInput (container) {
     inputWrapper.setAttribute('class', 'importer-input-wrapper');
     input.setAttribute('class', 'importer-input');
     input.setAttribute('type', 'file');
+    input.setAttribute('multiple', '1');
     container.appendChild(input);
     return input;
 }
