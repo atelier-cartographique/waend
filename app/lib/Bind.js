@@ -222,7 +222,7 @@ var Bind = O.extend({
                             comps = this.getComps(layerId);
                         comps.push(feature.id);
                         var rec = this.db.record(comps, feature);
-                        console.log('comps', comps, rec);
+                        // console.log('comps', comps, rec);
                         this.changeParent(layerId);
                     }
                 }

@@ -103,7 +103,6 @@ module.exports = exports = base.RequestHandler.extend({
             cache.client()
                 .query('groupListForUser', 'group', [request.params.user_id])
                 .then(function(results){
-                    console.log('groups.list results', results);
                     if(listPrivate){
                         self.paginate(results, request, response);
                     }
