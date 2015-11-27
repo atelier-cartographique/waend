@@ -17,7 +17,7 @@ var _ = require('underscore'),
 db.configure(config.pg);
 indexer.configure(config.solr);
 
-var batchSize = 512;
+var batchSize = 30000;
 
 var client = {
     db: db.client(),
@@ -85,10 +85,13 @@ function processLayers (context, done, results) {
         var ms = [],
             groups = [];
         for (var i = 0; i < results.length; i++) {
-            var f = models.layer.buildFromPersistent(results[i]),
-                lid = f.layer_id,
+            var l = models.layer.buildFromPersistent(results[i]),
+                lid = l.id,
                 gids = context.compositions[lid] || [];
-            ms.push(f);
+            if (0 === gids.length) {
+                console.warn('layer not composed', lid);
+            }
+            ms.push(l);
             groups.push(gids);
         }
 
@@ -113,7 +116,7 @@ function processGroups (context, done, results) {
 
         for (var i = 0; i < results.length; i++) {
             var g = models.group.buildFromPersistent(results[i]),
-                gids = context.compositions[g.id];
+                gids = [g.id];
 
             ms.push(g);
             groups.push(gids);
