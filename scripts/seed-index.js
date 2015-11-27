@@ -8,144 +8,205 @@
 
 
 
-var config = require('../config'),
+var _ = require('underscore'),
+    config = require('../config'),
     db = require('../lib/db'),
     indexer = require('../lib/indexer'),
-    models = require('../lib/models'),
-    Promise = require('bluebird');
+    models = require('../lib/models');
 
 db.configure(config.pg);
 indexer.configure(config.solr);
 
+var batchSize = 512;
 
 var client = {
     db: db.client(),
     indexer: indexer.client()
 };
 
-var compositions = {};
+function log (what) {
+    return function (err) {
+        console.log(what, err);
+    };
+}
 
+function processFeature (type, context, done) {
 
-function processFeature (type) {
     return function (results) {
-        console.log('process' + type, results.length);
-        if (results) {
-            var batchSz = 512,
-                len = results.length + batchSz,
-                indexed = [];
-            for (var i = 0; i < len; i += batchSz) {
-                var stop = i + batchSz,
-                    ms = [],
-                    groups = [];
-                for (var j = i; j < stop; j++) {
-                    if (!results[j]) {
-                        break;
-                    }
-                    var f = models[type].buildFromPersistent(results[j]),
-                        lid = f.layer_id,
-                        gids = compositions[lid] || [];
-                    ms.push(f);
-                    groups.push(gids);
-                }
-                indexed.push(client.indexer.updateBatch('layer', groups, ms));
+        if (results && (results.length > 0)) {
+            console.log('process', type, results.length);
+            var ms = [],
+                groups = [];
+            for (var i = 0; i < results.length; i++) {
+                var f = models[type].buildFromPersistent(results[i]),
+                    lid = f.layer_id,
+                    gids = context.compositions[lid] || [];
+                ms.push(f);
+                groups.push(gids);
             }
-            return Promise.all(indexed).then(function(){
-                console.log('end of process' + type);
-            });
+
+            client.indexer.updateBatch(type, groups, ms)
+                .catch(log('proce feat error'))
+                .finally(function(){
+                    context.taskState.pending = false;
+                });
+        }
+        else {
+            done();
         }
     };
 }
 
 function loadFeature (type) {
-    return function () {
-        console.log('load' + type);
-        return client.db.query(type + 'Load', []);
+    return function (context, done) {
+        var state = context.taskState;
+        if (!state.started) {
+            console.log('START', type);
+            state.started = true;
+            state.pending = true;
+            state.offset = 0;
+            client.db.query(type + 'LoadPart', [state.offset, batchSize])
+                .then(processFeature(type, context, done));
+        }
+        else {
+            if (!state.pending) {
+                state.pending = true;
+                state.offset += batchSize;
+                console.log('CONT', type, state.offset);
+                client.db.query(type + 'LoadPart', [state.offset, batchSize])
+                    .then(processFeature(type, context, done));
+            }
+        }
     };
 }
 
-function processLayers (results) {
-    console.log('processLayers', results.length);
-    var batchSz = 126,
-        len = results.length + batchSz,
-        indexed = [];
-    for (var i = 0; i < len; i += batchSz) {
-        var stop = i + batchSz,
-            ms = [],
+function processLayers (context, done, results) {
+    if (results && (results.length > 0)) {
+        var ms = [],
             groups = [];
-        for (var j = i; j < stop; j++) {
-            if (!results[j]) {
-                break;
-            }
-            var l = models.layer.buildFromPersistent(results[j]),
-                lid = l.id,
-                gids = compositions[lid] || [];
-
-            ms.push(l);
+        for (var i = 0; i < results.length; i++) {
+            var f = models.layer.buildFromPersistent(results[i]),
+                lid = f.layer_id,
+                gids = context.compositions[lid] || [];
+            ms.push(f);
             groups.push(gids);
         }
-        indexed.push(client.indexer.updateBatch('layer', groups, ms));
+
+        client.indexer.updateBatch('layer', groups, ms)
+            .catch(log('proce layer error'))
+            .finally(function(){
+                context.taskState.pending = false;
+            });
     }
-    return Promise.all(indexed).then(function(){
-        console.log('end of processLayers');
-    });
-}
-
-function loadLayers () {
-    console.log('loadLayers');
-    return client.db.query('layerLoad', []);
-}
-
-
-function processGroups (results) {
-    console.log('processGroups');
-    for (var i = 0; i < results.length; i++) {
-        var g = models.group.buildFromPersistent(results[i]);
-
-        client.indexer.update('group', [g.id], g);
+    else {
+        done();
     }
 }
 
 
-function loadGroups () {
-    console.log('loadGroups');
-    return client.db.query('groupLoad', []);
-}
 
+function processGroups (context, done, results) {
+    if (results && (results.length > 0)) {
+        console.log('processGroups', results.length);
+        var ms = [],
+            groups = [];
 
-function processCompositions (results) {
-    console.log('processCompositions');
-    for (var i = 0; i < results.length; i++) {
-        var compo = models.composition.buildFromPersistent(results[i]);
-        if (!(compo.layer_id in compositions)) {
-            compositions[compo.layer_id] = [];
+        for (var i = 0; i < results.length; i++) {
+            var g = models.group.buildFromPersistent(results[i]),
+                gids = context.compositions[g.id];
+
+            ms.push(g);
+            groups.push(gids);
         }
-        compositions[compo.layer_id].push(compo.group_id);
+
+        client.indexer.updateBatch('group', groups, ms)
+            .catch(log('process group error'))
+            .finally(function(){
+                context.taskState.pending = false;
+            });
+    }
+    else {
+        done();
     }
 }
 
-function loadCompositions () {
-    return client.db
-      .query('compositionLoad', [])
-      .then(processCompositions)
-      .then(loadFeature('entity'))
-      .then(processFeature('entity'))
-      .then(loadFeature('path'))
-      .then(processFeature('path'))
-      .then(loadFeature('spread'))
-      .then(processFeature('spread'))
-      .then(loadLayers)
-      .then(processLayers)
-      .then(loadGroups)
-      .then(processGroups);
+function processCompositions (context, done, results) {
+    if (results && (results.length > 0)) {
+        context.compositions = context.compositions || {};
+        console.log('processCompositions', results.length);
+        for (var i = 0; i < results.length; i++) {
+            var compo = models.composition.buildFromPersistent(results[i]);
+            if (!(compo.layer_id in context.compositions)) {
+                context.compositions[compo.layer_id] = [];
+            }
+            context.compositions[compo.layer_id].push(compo.group_id);
+        }
+        context.taskState.pending = false;
+    }
+    else {
+        done();
+    }
 }
 
-var start = Date.now();
-loadCompositions()
-.then(function(){
-    var t = Math.ceil((Date.now() - start) / 1000);
-    console.log('Done in', t, 'seconds');
-});
-// .catch(function(err){
-//     console.error(err);
-//     throw (new Error(err));
-// });
+function loader (qname, processor) {
+    return function (context, done) {
+        var state = context.taskState;
+        var partial = _.partial(processor, context, done);
+        if (!state.started) {
+            state.started = true;
+            state.pending = true;
+            state.offset = 0;
+            client.db.query(qname, [state.offset, batchSize])
+                .then(partial);
+        }
+        else {
+            if (!state.pending) {
+                state.pending = true;
+                state.offset += batchSize;
+                client.db.query(qname, [state.offset, batchSize])
+                    .then(partial);
+            }
+        }
+    };
+}
+
+
+function taskRunner (tasks) {
+    var context = {},
+        itv;
+
+    function resetTaskState () {
+        context.taskState = {
+            started: false,
+            pending: false
+        };
+    }
+
+    function done () {
+        resetTaskState();
+        tasks.shift();
+        if (0 === tasks.length) {
+            clearInterval(itv);
+        }
+    }
+
+    function run () {
+        var task = tasks[0];
+        task(context, done);
+    }
+
+    resetTaskState();
+    itv = setInterval(run, 10);
+}
+
+
+var tasks = [
+    loader('compositionLoadPart', processCompositions),
+    loadFeature('entity'),
+    loadFeature('path'),
+    loadFeature('spread'),
+    loader('layerLoadPart', processLayers),
+    loader('groupLoadPart', processGroups)
+];
+
+taskRunner(tasks);
