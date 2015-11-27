@@ -26,7 +26,7 @@ It listens to model changes and calls back all the views connected to it to re-r
 
  */
 
-
+'use strict';
 
 var _ = require('underscore'),
     O = require('../../lib/object').Object,
@@ -35,6 +35,7 @@ var _ = require('underscore'),
     config = require('../../config'),
     region = require('./Region'),
     Geometry = require('./Geometry'),
+    Sync = require('./Sync'),
     semaphore = require('./Semaphore'),
     Promise = require("bluebird");
 
@@ -76,6 +77,20 @@ var Feature = Model.extend({
 });
 
 
+function Record (model, comps, parent) {
+    Object.defineProperty(this, 'model', {
+        value: model
+    });
+    Object.defineProperty(this, 'comps', {
+        value: Object.freeze(comps)
+    });
+    Object.defineProperty(this, 'parent', {
+        value: parent
+    });
+
+    Object.freeze(this);
+}
+
 var DB = O.extend({
     _db : {},
 
@@ -105,20 +120,17 @@ var DB = O.extend({
     },
 
     record: function (comps, model) {
+        var rec;
         if (model.id in this._db) {
-            var rec = this._db[model.id];
-            rec.model._updateData(model.data);
-            rec.comps = comps;
-            rec.parent = this.getParent(comps);
+            var oldRec = this._db[model.id];
+            oldRec.model._updateData(model.data);
+            rec = new Record(oldRec.model, oldRec.comps, this.getParent(comps));
         }
         else {
-            this._db[model.id] = {
-                'model': model,
-                'comps': comps,
-                'parent': this.getParent(comps)
-            };
-            // TODO subscribe to notifications about it
+            rec = new Record(model, comps, this.getParent(comps));
         }
+        this._db[model.id] = rec;
+        return rec;
     },
 
     update: function (model) {
@@ -131,8 +143,7 @@ var DB = O.extend({
             self.transport
                 .put(API_URL + path, {'body': model })
                     .then(function(){
-                        record.model = model;
-                        db[model.id] = record;
+                        db[model.id] = new Record(model, record.comps, record.parent);
                         resolve(model);
                     })
                     .catch(reject);
@@ -154,7 +165,7 @@ var DB = O.extend({
     },
 
     getComps: function (id) {
-        return this._db[id].comps;
+        return _.clone(this._db[id].comps);
     },
 
     lookupKey: function (prefix) {
@@ -194,6 +205,40 @@ var Bind = O.extend({
         this.transport = new Transport();
         this.db = new DB(this.transport);
         this.featurePages = {};
+
+        semaphore.on('sync', function(chan, cmd, data){
+            if ('update' === cmd) {4
+                if (this.db.has(data.id)) {
+                    var model = this.db.get(data.id);
+                    model._updateData(data);
+                }
+            }
+            else if ('create' === cmd) {
+                var ctx = chan.type;
+                if ('layer' === ctx) {
+                    if (!this.db.has(data.id)) {
+                        var layerId = chan.id,
+                            feature = new Feature(this, data),
+                            comps = this.getComps(layerId);
+                        comps.push(feature.id);
+                        var rec = this.db.record(comps, feature);
+                        // console.log('comps', comps, rec);
+                        this.changeParent(layerId);
+                    }
+                }
+            }
+            else if ('delete' === cmd) {
+                var ctx = chan.type;
+                if ('layer' === ctx) {
+                    var fid = data;
+                    if (this.db.has(fid)) {
+                        var layerId = chan.id;
+                        this.db.del(fid);
+                        this.changeParent(layerId);
+                    }
+                }
+            }
+        }, this);
     },
 
     update: function (model) {
@@ -269,8 +314,10 @@ var Bind = O.extend({
 
                     db.record([userId, groupId, layer.id, feature.id], f);
                 }
+                Sync.subscribe('layer', layer.id);
             }
             semaphore.signal('stop:loader');
+            Sync.subscribe('group', groupId);
             return g;
         };
         var url = API_URL+path;
@@ -307,7 +354,7 @@ var Bind = O.extend({
             }
             return ret;
         };
-        var url = API_URL+path;
+        var url = API_URL + path;
         return this.transport.get(url, {parse: pr});
     },
 
@@ -323,7 +370,7 @@ var Bind = O.extend({
             db.record([userId, groupId, layerId], l);
             return l;
         };
-        var url = API_URL+path;
+        var url = API_URL + path;
         return this.transport.get(url, {parse: pr});
     },
 
@@ -346,15 +393,17 @@ var Bind = O.extend({
             db.record([userId, groupId, layerId, featureId], f);
             return f;
         };
-        var url = API_URL+path;
+        var url = API_URL + path;
         return this.transport.get(url, {parse: pr});
     },
 
     delFeature: function (userId, groupId, layerId, featureId) {
-        var path = '/user/' + userId +
+        var feature = this.db.get(featureId),
+            geom = feature.getGeometry(),
+            path = '/user/' + userId +
                    '/group/' + groupId +
                    '/layer/' + layerId +
-                   '/feature/' + featureId,
+                   '/feature.'+ geom.getType() +'/' + featureId,
             url = API_URL + path,
             db = this.db,
             self = this;

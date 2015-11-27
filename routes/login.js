@@ -14,13 +14,13 @@ var _ = require('underscore'),
     Token = require('../lib/token');
 
 var authOptions = {
-    failureRedirect: '/login?failed=1',
+    failureRedirect: '/login?failed=1'
 };
 var authenticate = passport.authenticate('local', authOptions);
 
 function getToken(req, res){
-    var t = Token.PUT(req.user);
-    res.json(t);
+    var t = Token.put(req.user);
+    res.json(t.toJSON());
 }
 
 function postLogin(req, res){

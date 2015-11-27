@@ -1,16 +1,17 @@
 /*
  * routes/endpoints/layer.js
- *     
- * 
+ *
+ *
  * Copyright (C) 2014  Pierre Marchand <pierremarc07@gmail.com>
- * 
+ *
  * License in LICENSE file at the root of the repository.
  *
  */
 
 var _ = require('underscore'),
     base = require('./base'),
-    cache = require('../../lib/cache');
+    cache = require('../../lib/cache'),
+    notifier = require('../../lib/notifier');
 
 
 module.exports = exports = base.RequestHandler.extend({
@@ -44,7 +45,7 @@ module.exports = exports = base.RequestHandler.extend({
                 handler: 'put',
                 url: 'user/:user_id/group/:group_id/layer/:layer_id',
                 permissions: ['isAuthenticated', 'isUser', 'isGroupOwner']
-            },
+            }
         },
 
 
@@ -87,7 +88,7 @@ module.exports = exports = base.RequestHandler.extend({
                     };
                     cache.client()
                         .set('composition', compositionData)
-                        .then(function(composition){
+                        .then(function(/* composition */){
                             response.status(201).send(layer);
                         });
                 })
@@ -98,14 +99,16 @@ module.exports = exports = base.RequestHandler.extend({
 
 
         put: function (request, response) {
-            var body = _.extend(request.body, {
+            var layerId = request.params.layer_id,
+                body = _.extend(request.body, {
                 'user_id': request.user.id,
-                'id': request.params.layer_id
+                'id': layerId
             });
             cache.client()
                 .set('layer', body)
                 .then(function(data){
                     response.send(data);
+                    notifier.update('layer', layerId, data);
                 })
                 .catch(function(err){
                     response.status(500).send(err);

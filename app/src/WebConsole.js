@@ -46,7 +46,7 @@ WebCommand.prototype.toString = function () {
 
 WebCommand.prototype.onClick = function () {
     var term = this.term,
-        args = this.args || [];
+        args = this.args;
     var cb = function(event){
         event.preventDefault();
         Promise.reduce(args, function(t,i, index){
@@ -62,12 +62,13 @@ WebCommand.prototype.onClick = function () {
 
 WebCommand.prototype.toDomFragment = function () {
     if (this.fragment) {
-        this.fragment.addEventListener('click', this.onClick(), false);
+        if (this.args) {
+            this.fragment.addEventListener('click', this.onClick(), false);
+        }
         return this.fragment;
     }
     var element = document.createElement('a'),
         textElement = document.createTextNode(this.text.toString());
-    element.setAttribute('href', '#');
     if (!!this.attributes) {
         for (var k in this.attributes) {
             element.setAttribute(k, this.attributes[k]);
@@ -78,7 +79,10 @@ WebCommand.prototype.toDomFragment = function () {
         element.setAttribute('title', this.args.join(' '));
     }
     element.appendChild(textElement);
-    element.addEventListener('click', this.onClick(), false);
+    if (this.args) {
+        element.setAttribute('href', '#');
+        element.addEventListener('click', this.onClick(), false);
+    }
     return element;
 };
 

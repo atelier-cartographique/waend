@@ -11,7 +11,8 @@
 
 var _ = require('underscore'),
     base = require('./base'),
-    cache = require('../../lib/cache');
+    cache = require('../../lib/cache'),
+    notifier = require('../../lib/notifier');
 
 
 module.exports = exports = base.RequestHandler.extend({
@@ -50,15 +51,15 @@ module.exports = exports = base.RequestHandler.extend({
             del: {
                 verb: 'delete',
                 handler: 'del',
-                url: 'user/:user_id/group/:group_id/layer/:layer_id/feature/:feature_id',
+                url: 'user/:user_id/group/:group_id/layer/:layer_id/feature.:geom_type/:feature_id',
                 permissions: ['isAuthenticated', 'isLayerOwner']
-            },
+            }
         },
 
 
         list: function (request, response) {
             var self = this,
-                bounds = _.mapObject(_.pick(request.query, 'n', 'e', 's', 'w'), function(v){return parseFloat(v);});
+                bounds = _.mapObject(_.pick(request.query, 'n', 'e', 's', 'w'), function(v){ return parseFloat(v); });
             cache.client()
                 .getFeatures(request.params.layer_id, bounds)
                 .then(function(results){
@@ -82,7 +83,7 @@ module.exports = exports = base.RequestHandler.extend({
 
 
         post: function (request, response) {
-            var groupId = request.params.group_id,
+            var layerId = request.params.layer_id,
                 body = _.extend(request.body, {
                     'user_id': request.user.id
                 });
@@ -91,6 +92,7 @@ module.exports = exports = base.RequestHandler.extend({
                 .setFeature(body)
                 .then(function(feature){
                     response.status(201).send(feature);
+                    notifier.create('layer', layerId, feature);
                 })
                 .catch(function(err){
                     response.status(500).send(err);
@@ -99,15 +101,17 @@ module.exports = exports = base.RequestHandler.extend({
 
 
         put: function (request, response) {
-            var body = _.extend(request.body, {
+            var layerId = request.params.layer_id,
+                body = _.extend(request.body, {
                 'user_id': request.user.id,
-                'layer_id': request.params.layer_id,
+                'layer_id': layerId,
                 'id': request.params.feature_id
             });
             cache.client()
                 .setFeature(body)
                 .then(function(data){
                     response.send(data);
+                    notifier.update('layer', layerId, data);
                 })
                 .catch(function(err){
                     response.status(500).send(err);
@@ -116,11 +120,14 @@ module.exports = exports = base.RequestHandler.extend({
 
         del: function (request, response) {
             var lid = request.params.layer_id,
-                fid = request.params.feature_id;
+                fid = request.params.feature_id,
+                geomType = request.params.geom_type.toLowerCase();
+
             cache.client()
-                .delFeature(lid, fid)
-                .then(function(n){
+                .delFeature(lid, fid, geomType)
+                .then(function(){
                     response.status(204).end();
+                    notifier.delete('layer', lid, fid);
                 })
                 .catch(function(err){
                     response.status(500).send(err);
