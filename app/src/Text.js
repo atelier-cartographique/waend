@@ -15,8 +15,8 @@ var _ = require('underscore'),
     Font = require('./Font');
 
 function Text (str, fontName) {
-    this._string = str;
-    var strs = str.split(' ');
+    this._string = str.toString();
+    var strs = this._string.split(' ');
     this.clusters = [];
     for (var i = 0; i < strs.length; i++) {
         if(i > 0) {

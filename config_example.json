@@ -12,6 +12,14 @@
             "port": 6379
         }
     },
+    "notify": {
+        "url": "http://waend.local/notify"
+    },
+    "solr": {
+        "host": "localhost",
+        "port": 8983,
+        "collection": "waend"
+    },
     "server":{
         "port": 8000,
         "viewEngine" : "ejs",
