@@ -11,7 +11,8 @@
 var config = require('../config'),
     db = require('../lib/db'),
     indexer = require('../lib/indexer'),
-    models = require('../lib/models');
+    models = require('../lib/models'),
+    Promise = require('bluebird');
 
 db.configure(config.pg);
 indexer.configure(config.solr);
@@ -30,7 +31,8 @@ function processFeature (type) {
         console.log('process' + type, results.length);
         if (results) {
             var batchSz = 512,
-                len = results.length + batchSz;
+                len = results.length + batchSz,
+                indexed = [];
             for (var i = 0; i < len; i += batchSz) {
                 var stop = i + batchSz,
                     ms = [],
@@ -45,8 +47,11 @@ function processFeature (type) {
                     ms.push(f);
                     groups.push(gids);
                 }
-                client.indexer.updateBatch('layer', groups, ms);
+                indexed.push(client.indexer.updateBatch('layer', groups, ms));
             }
+            return Promise.all(indexed).then(function(){
+                console.log('end of process' + type);
+            });
         }
     };
 }
@@ -61,7 +66,8 @@ function loadFeature (type) {
 function processLayers (results) {
     console.log('processLayers', results.length);
     var batchSz = 126,
-        len = results.length + batchSz;
+        len = results.length + batchSz,
+        indexed = [];
     for (var i = 0; i < len; i += batchSz) {
         var stop = i + batchSz,
             ms = [],
@@ -77,8 +83,11 @@ function processLayers (results) {
             ms.push(l);
             groups.push(gids);
         }
-        client.indexer.updateBatch('layer', groups, ms);
+        indexed.push(client.indexer.updateBatch('layer', groups, ms));
     }
+    return Promise.all(indexed).then(function(){
+        console.log('end of processLayers');
+    });
 }
 
 function loadLayers () {
