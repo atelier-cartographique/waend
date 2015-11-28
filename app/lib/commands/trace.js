@@ -122,6 +122,21 @@ TracerMode.prototype.keyup = function (event) {
     }
 };
 
+TracerMode.prototype.getMouseEventPos = function (ev) {
+    if (ev instanceof MouseEvent) {
+        var target = ev.target,
+            trect = target.getBoundingClientRect();
+            // node = this.tracer.getNode(),
+            // nrect = node.getBoundingClientRect();
+
+            return [
+                ev.clientX - trect.left,
+                ev.clientY - trect.top
+            ];
+    }
+    return [0, 0];
+}
+
 
 function TracerModeNewPoint () {
     TracerMode.apply(this, arguments);
@@ -148,7 +163,7 @@ util.inherits(TracerModeEditPoint, TracerMode);
 
 
 TracerModeNewPoint.prototype.click = function (event) {
-    var pos = this.inverse.mapVec2([event.clientX, event.clientY]),
+    var pos = this.inverse.mapVec2(this.getMouseEventPos(event)),
         selected = this.tracer.getControls(pos);
     if (('LineString' === this.tracer.geometryType)
         && (selected.length > 0)
@@ -157,16 +172,14 @@ TracerModeNewPoint.prototype.click = function (event) {
         this.tracer.setMode('EditPoint');
     }
     else {
-        var vec = [event.clientX, event.clientY];
-        this.inverse.mapVec2(vec);
-        this.tracer.addSegment(vec);
+        this.tracer.addSegment(pos);
     }
 };
 
 
 TracerModeNewPoint.prototype.mousemove = function (event) {
     if ('LineString' === this.tracer.geometryType) {
-        var pos = this.inverse.mapVec2([event.clientX, event.clientY]),
+        var pos = this.inverse.mapVec2(this.getMouseEventPos(event)),
             selected = this.tracer.getControls(pos);
         if ((selected.length > 0) && (_.indexOf(selected, 0) >= 0)) {
             this.highlighted = true;
@@ -181,7 +194,7 @@ TracerModeNewPoint.prototype.mousemove = function (event) {
 
 TracerModeEditPoint.prototype.mousedown = function (event) {
     var controls = this.tracer.controls,
-        pos = this.inverse.mapVec2([event.clientX, event.clientY]),
+        pos = this.inverse.mapVec2(this.getMouseEventPos(event)),
         selected = this.tracer.getControls(pos);
 
     this.currentSelection = selected;
@@ -194,7 +207,7 @@ TracerModeEditPoint.prototype.mousemove = function (event) {
     if (this.currentSelection) {
         event.preventDefault();
         event.stopPropagation();
-        var pos = this.inverse.mapVec2([event.clientX, event.clientY]);
+        var pos = this.inverse.mapVec2(this.getMouseEventPos(event));
         for (var i = 0; i < this.currentSelection.length; i++) {
             var index = this.currentSelection[i];
             this.tracer.segments[index] = pos;
@@ -238,7 +251,8 @@ function makeButton (label, classSuffix, callback, ctx) {
 
 function Tracer (options) {
     this.options = options;
-    this.transform = options.transform;
+    this.view = options.view;
+    this.transform = this.view.transform.clone();
     this.controls = rbush();
     this.segments = [];
     this.setupModes();
@@ -251,6 +265,8 @@ function Tracer (options) {
             var rect = view.getRect();
             this.canvas.width = rect.width;
             this.canvas.height = rect.height;
+            this.canvas.style.top = rect.top + 'px';
+            this.canvas.style.left = rect.left + 'px';
             this.draw();
         }
     }, this);
@@ -287,8 +303,9 @@ Tracer.prototype.setupButtons = function () {
 };
 
 Tracer.prototype.setupCanvas = function () {
-    var container = this.options.container;
-        rect = container.getBoundingClientRect();
+    var container = this.options.container,
+        view = this.view,
+        rect = view.getRect();
 
     this.canvas = document.createElement('canvas');
     this.canvas.setAttribute('class', 'tool-trace');
@@ -296,8 +313,8 @@ Tracer.prototype.setupCanvas = function () {
     this.canvas.height = rect.height;
     this.canvas.backgroundColor = 'rgba(256,256,256,0.5)';
     this.canvas.style.position = 'absolute';
-    this.canvas.style.top = '0';
-    this.canvas.style.left = '0';
+    this.canvas.style.top = rect.top + 'px';
+    this.canvas.style.left = rect.left + 'px';
 
     container.appendChild(this.canvas);
     this.canvas.setAttribute('tabindex', -1);
@@ -313,6 +330,10 @@ Tracer.prototype.setupCanvas = function () {
     for (var i = 0; i < events.length; i++) {
         this.canvas.addEventListener(events[i], dispatcher, false);
     }
+};
+
+Tracer.prototype.getNode = function () {
+    return this.canvas;
 };
 
 Tracer.prototype.setupModes = function () {
@@ -558,7 +579,7 @@ function trace () {
 
     var tracerOptions = {
         'container': display.node,
-        'transform': view.transform.clone(),
+        'view': view,
     };
 
     var tracer = new Tracer(tracerOptions);
