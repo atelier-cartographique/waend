@@ -27,6 +27,20 @@ function transformRegion (T, opt_extent) {
     region.push(newExtent);
 }
 
+
+function getMouseEventPos (ev, view) {
+    if (ev instanceof MouseEvent) {
+        var target = ev.target,
+            vrect = view.getRect();
+            return [
+                ev.clientX - vrect.left,
+                ev.clientY - vrect.top
+            ];
+    }
+    return [0, 0];
+}
+
+
 function select () {
     var self = this,
         stdout = self.sys.stdout,
@@ -49,8 +63,9 @@ function select () {
 
     var resolver = function (resolve, reject) {
         var innerSelect = function (event) {
-            var clientPosMin = [event.clientX - 1, event.clientY - 1],
-                clientPosMax = [event.clientX + 1, event.clientY + 1],
+            var pos = getMouseEventPos(event, map.getView()),
+                clientPosMin = [pos[0] -1, pos[1] - 1],
+                clientPosMax = [pos[0] + 1, pos[1] + 1],
                 mapPosMin = map.getCoordinateFromPixel(clientPosMin),
                 mapPosMax = map.getCoordinateFromPixel(clientPosMax),
                 features = map.getFeatures(mapPosMin.concat(mapPosMax));

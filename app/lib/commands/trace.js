@@ -126,9 +126,6 @@ TracerMode.prototype.getMouseEventPos = function (ev) {
     if (ev instanceof MouseEvent) {
         var target = ev.target,
             trect = target.getBoundingClientRect();
-            // node = this.tracer.getNode(),
-            // nrect = node.getBoundingClientRect();
-
             return [
                 ev.clientX - trect.left,
                 ev.clientY - trect.top
