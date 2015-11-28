@@ -13,15 +13,19 @@
 var _ = require('underscore'),
     Promise = require('bluebird'),
     Geometry = require('../Geometry'),
+    semaphore = require('../Semaphore'),
     paper = require('../../vendors/paper');
 
 
-function setupCanvas (container) {
-    console.log('drawLine.setupCanvas', container.getAttribute('id'));
-    var canvas = document.createElement('canvas');
+function setupCanvas (container, view) {
+    var canvas = document.createElement('canvas'),
+        rect = view.getRect();
     canvas.setAttribute('class', 'tool-draw');
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
+    canvas.style.position = 'absolute';
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    canvas.style.top = rect.top + 'px';
+    canvas.style.left = rect.left + 'px';
     canvas.backgroundColor = 'transparent';
     var hints = document.createElement('div');
     hints.setAttribute('class', 'draw-hints');
@@ -30,6 +34,13 @@ function setupCanvas (container) {
     container.appendChild(canvas);
     paper.setup(canvas);
     paper.view.draw();
+    semaphore.on('view:resize', function () {
+        var vrect = view.getRect();
+        canvas.width = vrect.width;
+        canvas.height = vrect.height;
+        canvas.style.top = vrect.top + 'px';
+        canvas.style.left = vrect.left + 'px';
+    }, this);
 }
 
 function drawLine () {
@@ -40,7 +51,7 @@ function drawLine () {
         map = shell.env.map,
         display = terminal.display();
 
-    setupCanvas(display.node);
+    setupCanvas(display.node, map.getView());
 
     var resolver = function (resolve, reject) {
 
