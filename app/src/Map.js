@@ -55,8 +55,8 @@ function Map (options) {
                 f = fs[0],
                 path = '/' + f.get('path').join('/'),
                 cl = 'cc ' + path ;
-            semaphore.signal('please:terminal:run', cl);
-            semaphore.signal('please:terminal:run', 'get');
+            semaphore.signal('terminal:run', cl);
+            semaphore.signal('terminal:run', 'get');
         }
     });
 }

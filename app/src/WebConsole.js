@@ -651,13 +651,13 @@ var WebConsole = Terminal.extend({
         self.shell.stderr.on('data', self.writeError, self);
 
 
-        this.mapContainer.addEventListener('transitionend', function(){
-            semaphore.signal('map:resize');
-        }, false);
+        // this.mapContainer.addEventListener('transitionend', function(){
+        //     semaphore.signal('map:resize');
+        // }, false);
 
         this.forwardMouseEvents();
 
-        semaphore.on('please:terminal:run', this.runCommand, this);
+        semaphore.on('terminal:run', this.runCommand, this);
         semaphore.on('start:loader', this.startLoader, this);
         semaphore.on('stop:loader', this.stopLoader, this);
     },
@@ -867,21 +867,25 @@ var WebConsole = Terminal.extend({
         return (new WebCommand(this, options));
     },
 
-    display: function () {
+    display: function (options) {
+        options = options || {};
         var display = new Display(this.root),
-            mc = this.mapContainer;
+            mc = this.mapContainer,
+            fullscreen = options.fullscreen;
         this.hide();
-        this.isFullscreen = true;
-        addClass(mc, 'wc-fullscreen');
+        if(fullscreen) {
+            this.isFullscreen = true;
+            addClass(mc, 'wc-fullscreen');
+        }
         display.setFinalizer(function () {
             removeClass(mc, 'wc-fullscreen');
             this.show();
             this.isFullscreen = false;
-            // semaphore.signal('map:resize');
+            semaphore.signal('map:resize');
         }, this);
-        // _.defer(function(){
-        //     semaphore.signal('map:resize');
-        // });
+        _.defer(function(){
+            semaphore.signal('map:resize');
+        });
         return display;
     },
 

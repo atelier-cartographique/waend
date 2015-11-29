@@ -430,7 +430,7 @@ Navigator.prototype.drawScale = function () {
 
 Navigator.prototype.draw = function (selected) {
     this.clear();
-    this.drawScale();
+    // this.drawScale();
     return this;
 };
 
@@ -679,7 +679,7 @@ function view () {
         terminal = shell.terminal,
         binder = self.binder,
         map = shell.env.map,
-        display = terminal.display(),
+        display = terminal.display({fullscreen: true}),
         userId = self.getUser(),
         groupId = self.getGroup();
 

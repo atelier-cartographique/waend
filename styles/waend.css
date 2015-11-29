@@ -1,8 +1,8 @@
-@import "codemirror.css";
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
+@import "codemirror.css";
 html,
 body,
 div,
@@ -166,7 +166,7 @@ table {
 }
 /**** VARIABLES ****/
 .link-hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 .linkwaend {
@@ -174,7 +174,7 @@ table {
   font-family: "dauphine_italic";
 }
 .linkwaend:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 .label {
@@ -183,21 +183,19 @@ table {
   letter-spacing: 0.5pt;
 }
 .white-text-shadow {
-  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
 }
 .yellow-text-shadow {
-  text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
+  text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #fff, -1px -1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff;
 }
 .dark-text-shadow {
   text-shadow: 0 0 6px #555555, 0 0 6px #555555, 1px 1px 0px #555555, -1px -1px 0px #555555, -1px 1px 0px #555555, 1px -1px 0px #555555;
 }
 .word-wrap {
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -240,7 +238,7 @@ table {
   border: 1px solid #000;
   background-color: #fff;
   margin: 6px;
-  color: #3f5f58;
+  color: #3F5F58;
 }
 .push-validate:hover {
   cursor: pointer;
@@ -278,7 +276,7 @@ table {
   border: 1px solid #000;
   background-color: #fff;
   margin: 6px;
-  color: #39598c;
+  color: #39598C;
 }
 .push-edit:hover {
   cursor: pointer;
@@ -297,7 +295,7 @@ table {
   border: 1px solid #000;
   background-color: #fff;
   margin: 6px;
-  color: #ff974c;
+  color: #FF974C;
 }
 .push-add:hover {
   cursor: pointer;
@@ -345,9 +343,9 @@ input {
   border: 0px;
 }
 input[type="submit"] {
-  background-color: #3f5f58;
+  background-color: #3F5F58;
   cursor: pointer;
-  color: #f8f8f8;
+  color: #F8F8F8;
   margin-top: 18px;
 }
 .transition-move {
@@ -355,18 +353,18 @@ input[type="submit"] {
 }
 .fade-in {
   -webkit-animation: fadein 01s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
+  /* Firefox < 16 */
   -ms-animation: fadein 01s;
+  /* Internet Explorer */
   -o-animation: fadein 01s;
+  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
 }
 @keyframes fadein {
   0% {
@@ -425,18 +423,18 @@ input[type="submit"] {
 }
 .widget-block-left {
   -webkit-animation: fadein 01s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
+  /* Firefox < 16 */
   -ms-animation: fadein 01s;
+  /* Internet Explorer */
   -o-animation: fadein 01s;
+  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   position: absolute;
   top: 0px;
   left: 0px;
@@ -507,18 +505,18 @@ input[type="submit"] {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 01s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
+  /* Firefox < 16 */
   -ms-animation: fadein 01s;
+  /* Internet Explorer */
   -o-animation: fadein 01s;
+  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
 }
 @keyframes fadein {
   0% {
@@ -577,10 +575,10 @@ input[type="submit"] {
 }
 .grp-form {
   width: 324px;
-  background: #f8f8f8;
+  background: #F8F8F8;
   margin: auto;
   margin-top: 61px;
-  border: 24px solid #f8f8f8;
+  border: 24px solid #F8F8F8;
 }
 .grp-form .form-label {
   text-align: center;
@@ -597,8 +595,8 @@ input[type="submit"] {
 .grp-button-wrapper {
   width: 324px;
   margin: auto;
-  background: #f8f8f8;
-  border: 24px solid #f8f8f8;
+  background: #F8F8F8;
+  border: 24px solid #F8F8F8;
 }
 .grp-button-wrapper .button {
   width: 128px;
@@ -610,7 +608,7 @@ body {
   letter-spacing: 1px;
   font-size: 14pt;
   font-family: "dauphine_regular";
-  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
 }
 #page-title {
   display: none;
@@ -623,6 +621,12 @@ body {
   bottom: 0;
   background-color: white;
 }
+#map.wc-fullscreen {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
 #wc {
   position: absolute;
   top: 0;
@@ -633,16 +637,16 @@ body {
   cursor: move;
 }
 .wc-context-feature {
-  color: #282f35 !important;
+  color: #282F35 !important;
 }
 .wc-context-layer {
-  color: #39598c !important;
+  color: #39598C !important;
 }
 .wc-context-group {
-  color: #3f5f58 !important;
+  color: #3F5F58 !important;
 }
 .wc-context-user {
-  color: #cfb84c !important;
+  color: #CFB84C !important;
 }
 .wc-context-shell {
   color: #993358 !important;
@@ -671,12 +675,12 @@ body {
   margin-right: 6px;
 }
 .view-lookup-wrapper .input-wrapper input {
-  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
   margin-bottom: -5px;
   font-size: 12pt;
 }
 .view-lookup-wrapper .view-lookup-search {
-  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
   font-size: 9pt;
   text-transform: uppercase;
   letter-spacing: 0.5pt;
@@ -708,7 +712,7 @@ body {
   padding: 2px 0px;
 }
 .view-lookup-wrapper .view-lookup-results .view-lookup-result a:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 .credit-waend {
@@ -731,7 +735,7 @@ body {
 }
 #register {
   position: absolute;
-  background-color: #f8f8f8;
+  background-color: #F8F8F8;
   text-shadow: none;
   width: 100%;
   height: 100%;
@@ -773,7 +777,7 @@ body {
   font-family: "dauphine_italic";
 }
 #register .footer:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 #register .footer a:link {
@@ -808,7 +812,7 @@ body {
   font-weight: normal;
   letter-spacing: 2px;
   text-align: right;
-  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
 }
 .wc-element.wc-mapblock.wc-hide {
   top: -64px;
@@ -825,11 +829,11 @@ body {
 .wc-element.wc-mapblock .wc-nav:hover,
 .wc-element.wc-mapblock .wc-select:hover,
 .wc-element.wc-mapblock .wc-draw-zoom:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 .wc-element.wc-pages {
-  background: #f8f8f8;
+  background: #F8F8F8;
   position: absolute;
   left: 193px;
   bottom: 30px;
@@ -914,7 +918,7 @@ body {
   color: #000;
 }
 .wc-element.wc-pages .wc-line a:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 .wc-element.wc-pages .wc-line [class^="group-"] {
@@ -982,7 +986,7 @@ body {
   font-family: "dauphine_italic";
 }
 .wc-element.wc-dock .wc-dock-page .wc-page a:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 .wc-element.wc-dock .wc-dock-page .wc-page .wc-line {
@@ -1000,11 +1004,9 @@ body {
   color: #993358;
   display: block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -1016,11 +1018,9 @@ body {
   display: block;
   margin-bottom: 6px;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
-
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
-
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -1031,10 +1031,10 @@ body {
   font-family: "dauphine_regular";
   text-shadow: none;
   display: inline-block;
-  color: #91b391;
+  color: #91B391;
 }
 .wc-element.wc-dock .wc-dock-page .wc-page .hint a {
-  color: #91b391;
+  color: #91B391;
   text-decoration: none !important;
   display: inline-block;
   border-bottom: 1px solid transparent;
@@ -1044,7 +1044,7 @@ body {
   font-family: "dauphine_italic";
 }
 .wc-element.wc-dock .wc-dock-page .wc-page .hint a:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 .wc-element.wc-container {
@@ -1102,7 +1102,6 @@ body {
 .wc-element.wc-container .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
-
 }
 .wc-element.wc-container .wc-pending {
   color: #2B71FF;
@@ -1275,12 +1274,12 @@ body {
   margin-right: 6px;
 }
 .view-lookup-wrapper .input-wrapper input {
-  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
   margin-bottom: -5px;
   font-size: 12pt;
 }
 .view-lookup-wrapper .view-lookup-search {
-  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
   font-size: 9pt;
   text-transform: uppercase;
   letter-spacing: 0.5pt;
@@ -1312,7 +1311,7 @@ body {
   padding: 2px 0px;
 }
 .view-lookup-wrapper .view-lookup-results .view-lookup-result a:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 .wc-element.wc-buttons {
@@ -1388,7 +1387,7 @@ body {
   border-left: 1px solid #fff;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .pager-actions span {
-  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
   display: inline-block;
   margin-right: 5px;
   margin-bottom: 12px;
@@ -1409,11 +1408,11 @@ body {
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page a {
   text-decoration: none !important;
   font-family: "dauphine_italic";
-  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
   color: #000;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page a:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page .wc-line {
@@ -1430,7 +1429,7 @@ body {
   display: none;
 }
 .wc-element.wc-buttons .wc-button:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 [class^="icon-"],
@@ -1568,7 +1567,7 @@ body {
   padding: 72px 12px;
   width: 100%;
   height: 100%;
-  background-color: #f8f8f8;
+  background-color: #F8F8F8;
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -1576,7 +1575,7 @@ body {
 }
 .media-wrapper .picker-title {
   font-size: 20pt;
-  color: #39598c;
+  color: #39598C;
   position: absolute;
   top: 12px;
   left: 12px;
@@ -1608,7 +1607,7 @@ body {
   background-color: #dfdfdf;
 }
 .media-wrapper .media-close:hover {
-  border-bottom: 1px solid #282f35;
+  border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
 .media-wrapper .media-item {
@@ -1629,11 +1628,11 @@ body {
   width: 50%;
   min-width: 500px;
   max-width: 800px;
-  background: #f8f8f8;
+  background: #F8F8F8;
   height: calc(100vh - 160px);
   margin: auto;
   margin-top: 61px;
-  border: 24px solid #f8f8f8;
+  border: 24px solid #F8F8F8;
 }
 .CodeMirror .CodeMirror-code {
   text-shadow: none;
@@ -1644,9 +1643,9 @@ body {
   min-width: 500px;
   max-width: 800px;
   text-align: center;
-  background: #f8f8f8;
-  border: 24px solid #f8f8f8;
-  border-top: 10px solid #f8f8f8;
+  background: #F8F8F8;
+  border: 24px solid #F8F8F8;
+  border-top: 10px solid #F8F8F8;
   border-bottom: 0px ;
   top: 25px;
   left: 0;
@@ -1695,9 +1694,9 @@ body {
   height: 300px;
   text-shadow: none;
   font-family: "dauphine_regular";
-  color: #3f5f58;
+  color: #3F5F58;
   line-height: 130%;
-  background-color: #f8f8f8;
+  background-color: #F8F8F8;
 }
 .importer-input {
   display: block;
@@ -1724,18 +1723,18 @@ body {
 }
 .importer-hints {
   -webkit-animation: fadein 01s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
+  /* Firefox < 16 */
   -ms-animation: fadein 01s;
+  /* Internet Explorer */
   -o-animation: fadein 01s;
+  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   position: absolute;
   top: 0px;
   left: 0px;
@@ -1806,19 +1805,27 @@ canvas.tool-draw,
 canvas.tool-trace {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
+  /* Safari, Chrome and Opera > 12.1 */
+  /* Firefox < 16 */
+  /* Internet Explorer */
+  /* Opera < 12.1 */
+  /* Firefox < 16 */
+  /* Safari, Chrome and Opera > 12.1 */
+  /* Internet Explorer */
+  /* Opera < 12.1 */
   -webkit-animation: fadein 01s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
+  /* Firefox < 16 */
   -ms-animation: fadein 01s;
+  /* Internet Explorer */
   -o-animation: fadein 01s;
+  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   cursor: crosshair;
 }
 @keyframes fadein {
@@ -1933,18 +1940,18 @@ canvas.tool-trace {
 }
 .draw-hints {
   -webkit-animation: fadein 01s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
+  /* Firefox < 16 */
   -ms-animation: fadein 01s;
+  /* Internet Explorer */
   -o-animation: fadein 01s;
+  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   position: absolute;
   top: 0px;
   left: 0px;
@@ -2013,18 +2020,18 @@ canvas.tool-trace {
 }
 .trace-buttons {
   -webkit-animation: fadein 01s;
+  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
+  /* Firefox < 16 */
   -ms-animation: fadein 01s;
+  /* Internet Explorer */
   -o-animation: fadein 01s;
+  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
-
   /* Safari, Chrome and Opera > 12.1 */
-
   /* Internet Explorer */
-
   /* Opera < 12.1 */
-
   position: absolute;
   top: 0px;
   left: 0px;
@@ -2128,7 +2135,7 @@ canvas.tool-trace {
 }
 .stylewidget-wrapper {
   width: 324px;
-  background-color: #f8f8f8;
+  background-color: #F8F8F8;
   padding: 12px;
 }
 .widget-form {
