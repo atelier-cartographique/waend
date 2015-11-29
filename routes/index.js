@@ -28,6 +28,11 @@ module.exports = exports = function(app){
     router.get('/console', function(request, response){
         response.render('console');
     });
+
+    router.get('/view*', function(request, response){
+        response.render('view');
+    });
+
     router.get('/map*', function(request, response){
         if (request.isAuthenticated()) {
             response.render('map', {

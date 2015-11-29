@@ -559,9 +559,9 @@ function showGroupLegend(node, group) {
     descLabel.setAttribute('class', 'view-group-label');
     desc.setAttribute('class', 'view-group-description');
 
-    titleLabel.innerHTML = "name ";
+    // titleLabel.innerHTML = "name ";
     title.innerHTML = group.get('name', 'Title');
-    descLabel.innerHTML = "description — ";
+    // descLabel.innerHTML = "description — ";
     desc.innerHTML = group.get('description', 'Description');
 
 
@@ -576,20 +576,37 @@ function showGroupLegend(node, group) {
 
 function lookupResults(container) {
     var callback = function (data) {
-        while (container.firstChild) {
-            container.removeChild(container.firstChild);
-        }
+        helpers.emptyElement(container);
+
         if('results' in data) {
+            var groups = {};
             for (var i = 0; i < data.results.length; i++) {
+                var result = data.results[i];
+                if (!(result.id in groups)) {
+                    groups[result.id] = {
+                        model: result,
+                        score: 1
+                    };
+                }
+                else {
+                    groups[result.id].score += 1;
+                }
+            }
+            var og = _.values(groups);
+            og.sort(function(a, b){
+                return b.score - a.score;
+            });
+
+            for (var i = 0; i < og.length; i++) {
                 var elem = document.createElement('div'),
                     anchor = document.createElement('a'),
-                    result = data.results[i],
+                    result = result = og[i].model,
                     props = result.properties,
-                    name = props.name || result.id,
+                    name = props.name,
                     ctxPath = '/' + result.user_id + '/' + result.id;
 
                 elem.setAttribute('class', 'view-lookup-result');
-                anchor.setAttribute('href', '/map' + ctxPath + '?c=view');
+                anchor.setAttribute('href', '/view' + ctxPath);
                 anchor.innerHTML = name;
                 elem.appendChild(anchor);
                 container.appendChild(elem);
@@ -641,7 +658,16 @@ function showLookup (node) {
         input.value = '';
         lookupTerm(term, lookupResults(results));
     };
+
+    var triggerOnEnter = function (event) {
+        if(isKeyCode(event, 13)) {
+            var term = input.value.trim();
+            input.value = '';
+            lookupTerm(term, lookupResults(results));
+        }
+    }
     button.addEventListener('click', lookup, false);
+    input.addEventListener('keyup', triggerOnEnter, false);
 }
 
 
@@ -703,6 +729,9 @@ function view () {
         binder.getGroup(userId, groupId)
             .then(function(group){
                 showGroupLegend(display.node, group);
+            })
+            .catch(function(err){
+                console.error('getgroup', err);
             });
         waendCredit(display.node);
     };

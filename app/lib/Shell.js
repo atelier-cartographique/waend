@@ -33,7 +33,9 @@ var SHELL = 0,
     FEATURE = 4;
 
 var hasHistory = ((typeof window !== 'undefined') && window.history && window.history.pushState);
-var FRAGMENT_ROOT = '/map/';
+var FRAGMENT_ROOT = ((typeof window !== 'undefined') && window.FRAGMENT_ROOT) ?
+                    window.FRAGMENT_ROOT :
+                    '/map/';
 
 
 function getCliChunk (chars, start, endChar) {
@@ -363,11 +365,11 @@ var Shell = O.extend({
         for(i = 1; i < start; i++){
             path.push(this._contexts[i].data.id);
         }
-        semaphore.signal('shell:change:context', this._currentContext, path);
         for (i = 0; i < this.postSwitchCallbacks.length; i++) {
             var cb = this.postSwitchCallbacks[i];
             cb();
         }
+        semaphore.signal('shell:change:context', this._currentContext, path);
     },
 
     switchContext: function (pathComps) {
