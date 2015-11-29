@@ -154,15 +154,6 @@ NavigatorModeBase.prototype.mousedown = function (event) {
     event.stopPropagation();
     this.startPoint = [event.clientX, event.clientY];
     this.isStarted = true;
-    // if (!this.select) {
-    //     this.select = document.createElement('div');
-    //     this.select.setAttribute('class', 'navigate-select');
-    //     this.select.style.position = 'absolute';
-    //     this.select.style.pointerEvents = 'none';
-    //     this.select.style.display = 'none';
-    //     this.navigator.options.container.appendChild(this.select);
-    // }
-
 };
 
 
@@ -171,38 +162,55 @@ NavigatorModeBase.prototype.mousemove = function (event) {
         var sp = this.startPoint,
             hp = [event.clientX, event.clientY],
             extent = new Geometry.Extent(sp.concat(hp)),
-            ctx = this.navigator.context;
+            ctx = this.navigator.context,
+            view = this.navigator.view,
+            rect = view.getRect();
         extent.normalize();
         var tl = extent.getBottomLeft().getCoordinates();
-        if (this.previewImageData) {
+        if (this.isMoving && this.previewImageData) {
             ctx.save();
             ctx.fillStyle = 'white';
+            ctx.strokeStyle = 'blue';
             ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-            ctx.putImageData(this.previewImageData, hp[0] - sp[0], hp[1] - sp[1]);
+            ctx.putImageData(this.previewImageData,
+                                hp[0] - sp[0],
+                                hp[1] - sp[1]);
+            // ctx.strokeRect(
+            //     hp[0] - sp[0],
+            //     hp[1] - sp[1],
+            //     rect.width,
+            //     rect.height
+            // );
             ctx.restore();
         }
         if (!this.isMoving) {
-            this.isMoving = true;
             ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-            this.previewImageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.fillRect(0, 0, rect.width, rect.height);
+            this.previewImageData = ctx.getImageData(0, 0, rect.width, rect.height);
             var data = this.previewImageData.data;
+            var images = [];
             this.navigator.map.getView()
                 .forEachImage(function(imageData){
-                    var thisData = imageData.data,
-                        alpha;
-                    for (var i = 0; i < data.length; i += 4) {
-                        alpha = thisData[i + 3] / 255,
-                            r = i,
-                            g = i + 1,
-                            b = i + 2;
-                        if (alpha > 0) {
-                            data[r] = (data[r] * (1 - alpha)) + (thisData[r] * alpha);
-                            data[g] = (data[g] * (1 - alpha)) + (thisData[g] * alpha);
-                            data[b] = (data[b] * (1 - alpha)) + (thisData[b] * alpha);
-                        }
-                    }
+                    images.push(imageData);
                 });
+
+            var alpha, idata;
+
+            for (var i = 0; i < data.length; i += 4) {
+                for (var j = 0; j < images.length; j++) {
+                    idata = images[j].data;
+                    alpha = idata[i + 3] / 255,
+                        r = i,
+                        g = i + 1,
+                        b = i + 2;
+                    if (alpha > 0) {
+                        data[r] = (data[r] * (1 - alpha)) + (idata[r] * alpha);
+                        data[g] = (data[g] * (1 - alpha)) + (idata[g] * alpha);
+                        data[b] = (data[b] * (1 - alpha)) + (idata[b] * alpha);
+                    }
+                }
+            }
+            this.isMoving = true;
 
         }
 
@@ -249,10 +257,11 @@ var NAVIGATOR_MODES = [
 
 function Navigator (options) {
     this.options = options;
+    this.map = options.map;
+    this.view = options.map.getView();
     this.setupModes();
     this.setupCanvas();
     this.setupButtons();
-    this.map = options.map;
 
     var view = options.map.getView();
 
@@ -261,6 +270,18 @@ function Navigator (options) {
             return view.transform.clone();
         }
     });
+
+    semaphore.on('view:resize', function (view) {
+        this.transform = view.transform.clone();
+        if (this.canvas) {
+            var rect = view.getRect();
+            this.canvas.width = rect.width;
+            this.canvas.height = rect.height;
+            this.canvas.style.top = rect.top + 'px';
+            this.canvas.style.left = rect.left + 'px';
+            this.draw();
+        }
+    }, this);
 }
 
 
@@ -308,8 +329,8 @@ Navigator.prototype.setupButtons = function () {
 };
 
 Navigator.prototype.setupCanvas = function () {
-    var container = this.options.container;
-        rect = container.getBoundingClientRect();
+    var container = this.options.container,
+        rect = this.view.getRect();
 
     this.canvas = document.createElement('canvas');
     this.canvas.width = rect.width;
@@ -357,80 +378,8 @@ Navigator.prototype.end = function () {
 };
 
 
-Navigator.prototype.drawScale = function () {
-    var ctx = this.context,
-        rect = this.canvas.getBoundingClientRect(),
-        extent = region.get(),
-        bl = extent.getBottomLeft().getCoordinates(),
-        tr = extent.getTopRight().getCoordinates(),
-        centerLatLong = extent.getCenter().getCoordinates(),
-        center;
-
-    bl = Proj3857.forward(bl);
-    tr = Proj3857.forward(tr);
-    center = Proj3857.forward(centerLatLong);
-    this.transform.mapVec2(bl);
-    this.transform.mapVec2(tr);
-    this.transform.mapVec2(center);
-
-    var left = 13,
-        right = 74,
-        top = rect.height - 17,
-	thickness = 6,
-        bottom = top + thickness,
-	length = right - left,
-	hw = ((length - 1) / 2) + left,
-        leftVec = this.map.getCoordinateFromPixel([left, top]),
-        rightVec = this.map.getCoordinateFromPixel([right, top]),
-        dist = turf.distance(turf.point(leftVec), turf.point(rightVec), 'kilometers') * 100000; // centimeters
-
-    var formatNumber = function (n) {
-        if (Math.floor(n) === n) {
-            return n;
-        }
-        return n.toFixed(2);
-    };
-
-    var labelRight, labelCenter;
-    if (dist < 100) {
-        labelRight = formatNumber(dist) + ' cm';
-        labelCenter = formatNumber(dist/2) + ' cm';
-    }
-    else if (dist < 100000) {
-        labelRight = formatNumber(dist / 100) + ' m';
-        labelCenter = formatNumber((dist/2)/100) + ' m';
-    }
-    else {
-        labelRight = formatNumber(dist / 100000) + ' km';
-        labelCenter = formatNumber((dist/2) / 100000) + ' km';
-    }
-
-    ctx.save();
-    ctx.fillStyle = 'black';
-    ctx.font = '11px sansguiltmb';
-    ctx.textAlign = 'left';
-    // ctx.fillText('0', left, top - 8);
-    // ctx.fillText(labelCenter, hw, top - 4);
-    ctx.fillText(labelRight, right + 5, top + thickness);
-    ctx.restore();
-
-    ctx.save();
-    ctx.fillStyle = 'black';
-    ctx.beginPath();
-    ctx.fillRect(left, top, right - left, thickness);
-    ctx.restore();
-
-    ctx.save();
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.fillRect(left + 1, top + 1, (length / 2) - 1, (thickness / 2) - 1);
-    ctx.fillRect(hw + 1, top + (thickness / 2), (length / 2) - 1, (thickness / 2) - 1);
-    ctx.restore();
-};
-
 Navigator.prototype.draw = function (selected) {
     this.clear();
-    // this.drawScale();
     return this;
 };
 
@@ -477,7 +426,7 @@ Navigator.prototype.dispatcher = function (event) {
     event.stopPropagation();
     var type = event.type,
         mode = this.getMode();
-
+    console.log(type);
     if (type in mode) {
         mode[type](event);
     }
