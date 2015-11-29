@@ -110,6 +110,7 @@ function createLayer (ctx, user, groupId, resolve, reject) {
                 .then(function(model){
                     shell.exec('cc /' + user.id + '/' + groupId + '/' + model.id);
                     ensureVisibility(binder, user.id, groupId, model.id);
+                    semaphore.signal('create:layer', model);
                     resolve(model);
                 })
                 .catch(reject)

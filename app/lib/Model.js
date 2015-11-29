@@ -11,7 +11,9 @@
 
 var _ = require('underscore'),
     O = require('../../lib/object').Object,
-    Promise = require("bluebird");
+    Promise = require('bluebird');
+
+var binder;
 
 function pathKey (obj, path, def) {
     path = path.split('.');
@@ -29,15 +31,21 @@ function pathKey (obj, path, def) {
 
 
 var Model = O.extend({
-    constructor: function(binder, data) {
-        this.binder = binder;
+    constructor: function(data) {
         this.data = data;
         this.id = data.id; // read-only: TODO objectpropertize accordingly
         O.apply(this, [data]);
+
+        // delay binder loading, ugly but still better than having
+        // a refernce to it on each model.
+        if(!binder) {
+            var Bind = require('./Bind');
+            binder = Bind.get();
+        }
     },
 
     getPath: function () {
-        return this.binder.getComps(this.id);
+        return binder.getComps(this.id);
     },
 
     isNew: function () {
@@ -83,13 +91,13 @@ var Model = O.extend({
             }
         }
         this.emit('set', key, val);
-        return this.binder.update(this);
+        return binder.update(this);
     },
 
     setData: function (data) {
         this.data.properties = data;
         this.emit('set:data', data);
-        return this.binder.update(this);
+        return binder.update(this);
     },
 
     toJSON: function () {
