@@ -26,25 +26,31 @@
     max-height: 50%;
     padding: 1px;
 
-    .view-visible-title {text-transform: uppercase;}
+    .view-visible-title {
+        text-transform: uppercase;
+        margin-bottom: 4px;
+    }
+
     .visible-layer-label:hover{cursor: pointer;}
 
     .visible-yes:before,
     .visible-no:before {
         display: inline-block;
-        width: 15px;
-        height: 8px;
-        margin-right: 6px;
+        width: 12px;
+        height: 9px;
+        padding-right: 9px;
         content: "";
+        cursor: pointer;
+
     }
 
     .visible-yes:before {
-        background: url(../../styles/svg/eye-open.svg) center no-repeat;
+        background: url(../../styles/svg/eye-open.svg) left no-repeat;
         background-size: contain;
     }
 
     .visible-no:before {
-        background: url(../../styles/svg/eye-closed.svg) center no-repeat;
+        background: url(../../styles/svg/eye-closed.svg) left no-repeat;
         background-size: contain;
 
     }
@@ -101,12 +107,12 @@
 
 .credit-waend {
     font-size: 9pt;
+    position: absolute;
+    bottom: 0px;
     text-transform: lowercase;
-    text-align: right;
     width: 200px;
-    margin: auto;
+    margin-left: calc(~"50vw - 100px");
     text-align: center;
-    margin-top: calc(~"100vh - 13px");
 
     a{
         text-decoration: none;
