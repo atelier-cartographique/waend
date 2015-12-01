@@ -17,6 +17,7 @@
 }
 
 .view-visible-wrapper {
+    font-size: 10pt;
     position: absolute;
     width: 300px;
     overflow-y: auto;
@@ -24,6 +25,30 @@
     left: 15px;
     max-height: 50%;
     padding: 1px;
+
+    .view-visible-title {text-transform: uppercase;}
+    .visible-layer-label:hover{cursor: pointer;}
+
+    .visible-yes:before,
+    .visible-no:before {
+        display: inline-block;
+        width: 15px;
+        height: 8px;
+        margin-right: 6px;
+        content: "";
+    }
+
+    .visible-yes:before {
+        background: url(../../styles/svg/eye-open.svg) center no-repeat;
+        background-size: contain;
+    }
+
+    .visible-no:before {
+        background: url(../../styles/svg/eye-closed.svg) center no-repeat;
+        background-size: contain;
+
+    }
+
 }
 
 .view-lookup-wrapper {
@@ -77,10 +102,11 @@
 .credit-waend {
     font-size: 9pt;
     text-transform: lowercase;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
     text-align: right;
+    width: 200px;
+    margin: auto;
+    text-align: center;
+    margin-top: calc(~"100vh - 13px");
 
     a{
         text-decoration: none;

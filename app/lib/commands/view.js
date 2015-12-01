@@ -593,7 +593,7 @@ function showLookup (node) {
     button.setAttribute('class', 'view-lookup-search icon-lookup');
     results.setAttribute('class', 'view-lookup-results');
 
-    button.innerHTML = "lookup";
+    button.innerHTML = "";
 
     wrapperInput.appendChild(input);
     wrapperInput.appendChild(inputBottomLine);
@@ -724,7 +724,7 @@ function listLayers (context, node) {
         toggleClass(wrapper, 'unfold');
     }, false);
 
-    wrapper.setAttribute('class', 'view-visible-title');
+    title.setAttribute('class', 'view-visible-title');
     wrapper.setAttribute('class', 'view-visible-wrapper');
     list.setAttribute('class', 'view-visible-list');
 

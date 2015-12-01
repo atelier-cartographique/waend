@@ -667,6 +667,7 @@ body {
   letter-spacing: 0.5pt;
 }
 .view-visible-wrapper {
+  font-size: 10pt;
   position: absolute;
   width: 300px;
   overflow-y: auto;
@@ -674,6 +675,28 @@ body {
   left: 15px;
   max-height: 50%;
   padding: 1px;
+}
+.view-visible-wrapper .view-visible-title {
+  text-transform: uppercase;
+}
+.view-visible-wrapper .visible-layer-label:hover {
+  cursor: pointer;
+}
+.view-visible-wrapper .visible-yes:before,
+.view-visible-wrapper .visible-no:before {
+  display: inline-block;
+  width: 15px;
+  height: 8px;
+  margin-right: 6px;
+  content: "";
+}
+.view-visible-wrapper .visible-yes:before {
+  background: url(../../styles/svg/eye-open.svg) center no-repeat;
+  background-size: contain;
+}
+.view-visible-wrapper .visible-no:before {
+  background: url(../../styles/svg/eye-closed.svg) center no-repeat;
+  background-size: contain;
 }
 .view-lookup-wrapper {
   position: absolute;
@@ -729,10 +752,11 @@ body {
 .credit-waend {
   font-size: 9pt;
   text-transform: lowercase;
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
   text-align: right;
+  width: 200px;
+  margin: auto;
+  text-align: center;
+  margin-top: calc(100vh - 13px);
 }
 .credit-waend a {
   text-decoration: none;
