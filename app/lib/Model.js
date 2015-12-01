@@ -11,6 +11,7 @@
 
 var _ = require('underscore'),
     O = require('../../lib/object').Object,
+    Geometry = require('./Geometry'),
     Promise = require('bluebird');
 
 var binder;
@@ -140,5 +141,36 @@ var Model = O.extend({
 
 });
 
+module.exports.Model = Model;
+// models
 
-module.exports = exports = Model;
+module.exports.User = Model.extend({
+    type: 'user',
+});
+
+module.exports.Group = Model.extend({
+    type: 'group',
+});
+
+module.exports.Layer = Model.extend({
+    type: 'layer',
+});
+
+module.exports.Feature = Model.extend({
+    type: 'feature',
+
+    getGeometry: function () {
+        return (new Geometry.Geometry(this.data.geom));
+    },
+
+    setGeometry: function(geom) {
+        if (geom instanceof Geometry.Geometry) {
+            this.data.geom = geom.toGeoJSON();
+        }
+        else {
+            this.data.geom = geom;
+        }
+        this.emit('set', 'geom', this.getGeometry());
+        return binder.update(this);
+    }
+});

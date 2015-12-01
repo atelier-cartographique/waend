@@ -47,12 +47,26 @@ SyncHandler.prototype.onUpdate = function (chan, data) {
 
 
     var model = db.get(data.id),
-        comps = binder.getComps(model.id),
+        comps = model.getPath(),
         path = 'cc /' + comps.join('/'),
         modelElem = document.createElement('div');
 
+    if ('user_id' in data) {
+        var userElem = document.createElement('span');
+        elem.appendChild(userElem);
+        binder.getUser(data.user_id)
+            .then(function(user){
+                userElem.innerHTML = helpers.getModelName(user) + ' ';
+            })
+            .catch(function(){
+                elem.removeChild(userElem);
+            });
+    }
+
     modelElem.appendChild(document.createTextNode(helpers.getModelName(model)));
-    elem.appendChild(document.createTextNode(model.type.toString() + ' updated'));
+    elem.appendChild(
+        document.createTextNode('updated a ' + model.type.toString())
+    );
     elem.appendChild(modelElem);
 
     modelElem.addEventListener('click', function(){
@@ -78,8 +92,23 @@ SyncHandler.prototype.onCreate = function (chan, data) {
                 path = 'cc /' + comps.join('/'),
                 modelElem = document.createElement('div');
 
+            if ('user_id' in data) {
+                var userElem = document.createElement('span');
+                elem.appendChild(userElem);
+                binder.getUser(data.user_id)
+                    .then(function(user){
+                        userElem.innerHTML = helpers.getModelName(user) + ' ';
+                    })
+                    .catch(function(){
+                        elem.removeChild(userElem);
+                    });
+            }
+
+
             modelElem.appendChild(document.createTextNode(helpers.getModelName(model)));
-            elem.appendChild(document.createTextNode(model.type.toString() + ' created'));
+            elem.appendChild(
+                document.createTextNode('created a' + model.type.toString())
+            );
             elem.appendChild(modelElem);
 
             modelElem.addEventListener('click', function(){

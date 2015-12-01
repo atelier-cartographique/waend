@@ -25,39 +25,10 @@ var _ = require('underscore'),
 
 var API_URL = config.public.apiUrl;
 
-// models
-
-var User = Model.extend({
-    type: 'user',
-});
-
-var Group = Model.extend({
-    type: 'group',
-});
-
-var Layer = Model.extend({
-    type: 'layer',
-});
-
-var Feature = Model.extend({
-    type: 'feature',
-
-    getGeometry: function () {
-        return (new Geometry.Geometry(this.data.geom));
-    },
-
-    setGeometry: function(geom) {
-        if (geom instanceof Geometry.Geometry) {
-            this.data.geom = geom.toGeoJSON();
-        }
-        else {
-            this.data.geom = geom;
-        }
-        this.emit('set', 'geom', this.getGeometry());
-        return this.binder.update(this);
-    }
-});
-
+var User = Model.User,
+    Group = Model.Group,
+    Layer = Model.Layer,
+    Feature = Model.Feature;
 
 function Record (model, comps, parent) {
     Object.defineProperty(this, 'model', {
