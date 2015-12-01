@@ -55,6 +55,7 @@ function register (req, res) {
             });
         })
         .catch(function(err){
+            console.error('register err', err);
             res.status(500).render('registerFailed', {
                 email: email,
                 error: err
