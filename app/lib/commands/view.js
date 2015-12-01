@@ -21,7 +21,8 @@ var _ = require('underscore'),
     turf = require('turf'),
     config = require('../../../config'),
     Transport = require('../Transport'),
-    helpers = require('../helpers');
+    helpers = require('../helpers'),
+    SyncHandler = require('./SyncHandler');
 
 var API_URL = config.public.apiUrl;
 
@@ -31,18 +32,18 @@ var Proj3857 = Projection('EPSG:3857');
 var projectExtent = helpers.projectExtent,
     unprojectExtent = helpers.unprojectExtent,
     transformExtent = helpers.transformExtent,
-    vecDist = helpers.vecDist;
+    vecDist = helpers.vecDist,
+    isKeyCode = helpers.isKeyCode,
+    setAttributes = helpers.setAttributes,
+    toggleClass = helpers.toggleClass;
 
-function isKeyCode (event, kc) {
-    return (kc === event.which || kc === event.keyCode);
-}
 
 function getStep (extent) {
     var width = extent.getWidth(),
         height = extent.getHeight(),
         diag = Math.sqrt((width*width) + (height*height));
 
-    return (diag / 10);
+    return (diag / 6);
 
 }
 
@@ -261,7 +262,7 @@ function Navigator (options) {
     this.view = options.map.getView();
     this.setupModes();
     this.setupCanvas();
-    this.setupButtons();
+    // this.setupButtons();
 
     var view = options.map.getView();
 
@@ -626,17 +627,17 @@ var waendCredit = document.createElement('div');
 
     waendCreditLink = document.createElement('a');
     waendCreditLink.setAttribute('href', 'http://waend.com');
-    waendCreditLink.setAttribute('target', 'blank');
+    // waendCreditLink.setAttribute('target', 'blank');
     waendCreditLink.innerHTML = 'wænd.com';
 
     waendCreditLinkToLogin = document.createElement('a');
     waendCreditLinkToLogin.setAttribute('href', 'http://alpha.waend.com');
-    waendCreditLinkToLogin.setAttribute('target', 'blank');
+    // waendCreditLinkToLogin.setAttribute('target', 'blank');
     waendCreditLinkToLogin.innerHTML = ' • login • ';
 
     waendCreditLinkToRegister = document.createElement('a');
     waendCreditLinkToRegister.setAttribute('href', 'http://alpha.waend.com/register');
-    waendCreditLinkToRegister.setAttribute('target', 'blank');
+    // waendCreditLinkToRegister.setAttribute('target', 'blank');
     waendCreditLinkToRegister.innerHTML = 'register';
 
     waendCredit.appendChild(waendCreditLink);
@@ -645,6 +646,138 @@ var waendCredit = document.createElement('div');
     node.appendChild(waendCredit);
 }
 
+
+function listLayers (context, node) {
+    function Lister (l) {
+        l = l || [];
+        this._list = JSON.parse(JSON.stringify(l));
+    }
+
+    Lister.prototype.index = function (x) {
+        return _.indexOf(this._list, x);
+    };
+
+    Lister.prototype.has = function (x) {
+        return (this.index(x) > -1);
+    };
+
+    Lister.prototype.insert = function (idx, x) {
+        if (this._list.length < idx) {
+            this._list.push(x);
+        }
+        else {
+            this._list.splice(idx, 0, x);
+        }
+    };
+
+    Lister.prototype.remove = function (x) {
+        this._list = _.without(this._list, x);
+    };
+
+    Lister.prototype.getList = function () {
+        return JSON.parse(JSON.stringify(this._list));
+    };
+
+    function listItem (layer, container, idx, lister) {
+        var isVisible = lister.has(layer.id),
+            elem = document.createElement('div'),
+            label = document.createElement('span');
+
+        elem.setAttribute('class', 'visible-layer visible-' + (
+            isVisible ? 'yes' : 'no'
+        ));
+        label.setAttribute('class', 'visible-layer-label');
+
+        label.innerHTML = layer.get('name', layer.id);
+
+        elem.appendChild(label);
+        container.appendChild(elem);
+
+        var toggle = function () {
+            if (lister.has(layer.id)) {
+                lister.remove(layer.id);
+                elem.setAttribute('class', 'view-visible-layer visible-no');
+            }
+            else {
+                lister.insert(idx, layer.id);
+                elem.setAttribute('class', 'view-visible-layer visible-yes');
+            }
+            semaphore.signal('visibility:change', lister.getList());
+        };
+
+        elem.addEventListener('click', toggle, false);
+    }
+
+    var self = context,
+        userId = self.getUser(),
+        groupId = self.getGroup(),
+        data = self.data,
+        binder = self.binder;
+
+    var wrapper = document.createElement('div'),
+        title = document.createElement('div'),
+        list = document.createElement('div');
+
+    title.innerHTML = 'layers';
+
+    title.addEventListener('click', function(){
+        toggleClass(wrapper, 'unfold');
+    }, false);
+
+    wrapper.setAttribute('class', 'view-visible-title');
+    wrapper.setAttribute('class', 'view-visible-wrapper');
+    list.setAttribute('class', 'view-visible-list');
+
+    wrapper.appendChild(title);
+    wrapper.appendChild(list);
+    node.appendChild(wrapper);
+
+    var vl = data.get('visible'),
+        visibleLayers = new Lister(vl),
+        fv = !vl;
+
+    binder.getLayers(userId, groupId)
+        .then(function(layers){
+            for(var i = 0; i < layers.length; i++){
+                var layer = layers[i];
+                if (fv) {
+                    visibleLayers.insert(i, layer.id);
+                }
+                listItem(layer, list, i, visibleLayers);
+            }
+        })
+        .catch(function(err){
+            console.error('lister', err);
+        });
+
+}
+
+
+function notifier(context, node) {
+    var wrapper = document.createElement('div'),
+        title = document.createElement('div'),
+        container = document.createElement('div'),
+        sync = new SyncHandler(container, context);
+
+    setAttributes(wrapper, {
+        'class': 'view-notify'
+    });
+
+    setAttributes(title, {
+        'class': 'view-notify-title'
+    });
+
+    setAttributes(container, {
+        'class': 'view-notify-container'
+    });
+
+    title.innerHTML = 'notify';
+
+    wrapper.appendChild(title);
+    wrapper.appendChild(container);
+    node.appendChild(wrapper);
+    sync.start();
+}
 
 
 function view () {
@@ -682,6 +815,9 @@ function view () {
             .catch(function(err){
                 console.error('getgroup', err);
             });
+
+        listLayers(self, display.node);
+        notifier(self, display.node);
         waendCredit(display.node);
     };
 

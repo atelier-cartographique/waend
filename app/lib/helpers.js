@@ -117,6 +117,13 @@ module.exports.eventPreventer = function (elem, events) {
     });
 };
 
+
+// events
+
+module.exports.isKeyCode = function (event, kc) {
+    return (kc === event.which || kc === event.keyCode);
+};
+
 // GEOM
 
 module.exports.vecDist = function (v1, v2) {
