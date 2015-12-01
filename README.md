@@ -29,6 +29,7 @@ then compile the javascript  files with:
 ```bash
 mkdir bin
 browserify app/src/wmap.js  > bin/wmap.js
+browserify app/src/wview.js  > bin/wview.js
 browserify app/src/libworker.js  > bin/libworker.js
 ```
 
