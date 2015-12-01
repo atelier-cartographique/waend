@@ -339,7 +339,7 @@ var WebConsole = Terminal.extend({
             events = navigator.events,
             self = this;
         var forward = function (event) {
-            if (!self.isFullscreen) {
+            if (!self.onDisplay) {
                 var extent = new Geometry.Extent(node.getBoundingClientRect());
                 if (extent.intersects([event.clientX, event.clientY])) {
                     navigator.dispatcher(event);
@@ -662,39 +662,6 @@ var WebConsole = Terminal.extend({
         semaphore.on('stop:loader', this.stopLoader, this);
     },
 
-    // setMapBlock: function () {
-    //     var self = this,
-    //         mapBlock = document.createElement('div'),
-    //         nav = document.createElement('div'),
-    //         select = document.createElement('div');
-    //         drawZoom = document.createElement('div');
-    //
-    //     nav.innerHTML = 'navigate';
-    //     select.innerHTML = 'select';
-    //     drawZoom.innerHTML = 'draw zoom';
-    //
-    //     addClass(mapBlock, 'wc-mapblock wc-element');
-    //     addClass(nav, 'wc-nav');
-    //     addClass(select, 'wc-select');
-    //     addClass(drawZoom, 'wc-draw-zoom');
-    //
-    //     nav.addEventListener('click', function(){
-    //         self.runCommand('navigate');
-    //     }, false);
-    //     select.addEventListener('click', function(){
-    //         self.runCommand('select');
-    //     }, false);
-    //     drawZoom.addEventListener('click', function(){
-    //         self.runCommand('draw | region set');
-    //     }, false);
-    //
-    //     mapBlock.appendChild(drawZoom);
-    //     mapBlock.appendChild(nav);
-    //     mapBlock.appendChild(select);
-    //     self.root.appendChild(mapBlock);
-    //     this.mapBlock = mapBlock;
-    // },
-
     internalCommand: function (str) {
         if (':' !== str[0]) {
             return false;
@@ -890,14 +857,15 @@ var WebConsole = Terminal.extend({
     },
 
     hide: function () {
+        this.onDisplay = true;
         addClass(this.container, 'wc-hide');
         addClass(this.pages, 'wc-hide');
         addClass(this.buttonsContainer, 'wc-hide');
-        // addClass(this.mapBlock, 'wc-hide');
         addClass(this.dockContainer, 'wc-hide');
     },
 
     show: function () {
+        this.onDisplay = false;
         removeClass(this.container, 'wc-hide');
         removeClass(this.pages, 'wc-hide');
         removeClass(this.buttonsContainer, 'wc-hide');
