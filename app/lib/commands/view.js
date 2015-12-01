@@ -753,10 +753,13 @@ function listLayers (context, node) {
 }
 
 
+
+
 function notifier(context, node) {
     var wrapper = document.createElement('div'),
         title = document.createElement('div'),
         container = document.createElement('div'),
+        follow = document.createElement('span'),
         sync = new SyncHandler(container, context);
 
     setAttributes(wrapper, {
@@ -771,12 +774,35 @@ function notifier(context, node) {
         'class': 'view-notify-container'
     });
 
-    title.innerHTML = 'notify';
+    title.innerHTML = 'notifications ';
+    follow.innerHTML = ' follow';
+    var doFollow = false;
+    function follower (model) {
+        if (!doFollow) {
+            return;
+        }
+        if ('feature' === model.type) {
+            var geom = model.getGeometry();
+            region.push(geom);
+        }
+    }
 
+    setAttributes(follow, {
+        'class': 'view-notification-follow button button-state'
+    });
+
+    follow.addEventListener('click', function(){
+        toggleClass(follow, 'state-yes');
+        doFollow = !doFollow;
+    }, false);
+
+    title.appendChild(follow);
     wrapper.appendChild(title);
     wrapper.appendChild(container);
     node.appendChild(wrapper);
-    sync.start();
+
+    sync.follow(follower)
+        .start();
 }
 
 

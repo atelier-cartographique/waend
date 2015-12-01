@@ -12,17 +12,25 @@ var _ = require('underscore'),
     semaphore = require('../Semaphore'),
     helpers = require('../helpers');
 
-
-
 function SyncHandler (container, context) {
     this.container = container;
     this.binder = context.binder;
     this.shell = context.shell;
+    this.follower = null;
 }
 
 SyncHandler.prototype.start = function () {
     semaphore.on('sync', this.dispatch, this);
+    return this;
 }
+
+SyncHandler.prototype.follow = function (cb, ctx) {
+    this.follower = {
+        callback: cb,
+        context: ctx
+    };
+    return this;
+};
 
 SyncHandler.prototype.dispatch = function (chan, cmd, data) {
     if ('update' === cmd) {
@@ -74,6 +82,10 @@ SyncHandler.prototype.onUpdate = function (chan, data) {
     }, false);
 
     container.insertBefore(elem, container.firstChild);
+
+    if (this.follower) {
+        this.follower.callback.call(this.follower.context, model);
+    }
 }
 
 SyncHandler.prototype.onCreate = function (chan, data) {
@@ -116,6 +128,9 @@ SyncHandler.prototype.onCreate = function (chan, data) {
             }, false);
 
             container.insertBefore(elem, container.firstChild);
+        }
+        if (this.follower) {
+            this.follower.callback.call(this.follower.context, model);
         }
     }
 }
