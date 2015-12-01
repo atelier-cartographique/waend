@@ -4,7 +4,7 @@
     cursor: default;
     position: absolute;
     left: 15px;
-    bottom: 33px;
+    top: 35px;
     width: 300px;
     font-size: 12pt;
 
@@ -16,11 +16,21 @@
     .view-group-description {}
 }
 
+.view-visible-wrapper {
+    position: absolute;
+    width: 300px;
+    overflow-y: auto;
+    bottom: 15px;
+    left: 15px;
+    max-height: 50%;
+    padding: 1px;
+}
+
 .view-lookup-wrapper {
     position: absolute;
     top: 2px;
-    right: 5px;
- 
+    left: 15px;
+
     .input-wrapper {
         float: left;
         margin: 0px;
@@ -49,7 +59,7 @@
     .view-lookup-results {
         padding: 23px;
         padding-top: 0;
-        text-align: center;
+        text-align: left;
         font-size: 12pt;
         .view-lookup-result {
             padding-bottom: 4px;
@@ -69,14 +79,31 @@
     text-transform: lowercase;
     position: absolute;
     bottom: 0px;
-    right: 0px; 
+    right: 0px;
     text-align: right;
- 
-    a{    
+
+    a{
         text-decoration: none;
         color: #000;
         &:hover {cursor: pointer;}
         &:focus {outline: none;}
     }
-    
+
+}
+
+.view-notify {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 200px;
+    max-height: 50%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    .view-notify-title {
+
+    }
+
+    .view-notify-container {
+
+    }
 }
