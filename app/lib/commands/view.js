@@ -515,11 +515,11 @@ function showGroupLegend(node, group) {
     desc.innerHTML = group.get('description', 'Description');
 
 
-    titleWrapper.appendChild(titleLabel);
+    // titleWrapper.appendChild(titleLabel);
     titleWrapper.appendChild(title);
-    wrapper.appendChild(descLabel);
-    wrapper.appendChild(desc);
+    // wrapper.appendChild(descLabel);
     wrapper.appendChild(titleWrapper);
+    wrapper.appendChild(desc);
     node.appendChild(wrapper);
 }
 
