@@ -85,12 +85,12 @@ function loginButton(console, button) {
      },
      'Show - Hide layers': {
          type: 'display',
-         command: ['visible | set visible']
+         command: ['visible']
      },
-     'Re-order layers': {
-         type: 'display',
-         command: ['visible | edit | set visible']
-     },
+     // 'Re-order layers': {
+     //     type: 'display',
+     //     command: ['visible | edit | set visible']
+     // },
      'Set map extent': {
          type: 'shell',
          command: ['region get | set extent']
