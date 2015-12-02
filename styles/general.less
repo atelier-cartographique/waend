@@ -1,8 +1,8 @@
 body{
-    background-color: #f8f8f8;
-    text-shadow: 0 0 6px black;
+    background-color: @lightgrey;
+    // text-shadow: 0 0 6px black;
     letter-spacing: 1px;
-    font-size: 14pt;
+    font-size: @font-size;
     font-family: "dauphine_regular";
     .white-text-shadow;
 }
@@ -12,28 +12,16 @@ body{
 }
 
 #map{
-    position:absolute;
-    top:0;
-    left:@widthMenuLeft + 24px;
-    right:0;
-    bottom: 0;
+    .absolute-fullscreen;
+    left:@widthMenuLeft + 2 * @margin;
     background-color: white;
-    // transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
     &.wc-fullscreen {
-        top:0;
-        left:0;
-        right:0;
-        bottom: 0;
-        // transition: all 0.8s cubic-bezier(0.8, 0.04, 0.45, 0.98);
+        .absolute-fullscreen;
     }
 }
 
 #wc{
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom: 0;
+    .absolute-fullscreen;
     background-color: transparent;
     cursor: move; //trick for having a proper cursor on map, default is "move", then it is re-defined for each zone
 }
