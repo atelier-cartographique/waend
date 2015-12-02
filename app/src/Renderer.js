@@ -51,21 +51,15 @@ CanvasRenderer.prototype.getNewRenderId = function () {
 };
 
 CanvasRenderer.prototype.dispatch = function () {
-    // var rid = arguments[0];
-    // if (rid !== this.renderId) {
-    //     console.warn('discarding render event', rid, this.renderId);
-    //     return;
-    // }
-
     var painter = this.painter,
         handlers = painter.handlers,
         revent = arguments[0],
         args = [];
-    for (var i = 1; i < arguments.length; i++) {
-        args.push(arguments[i]);
-    }
 
     if (revent in handlers) {
+        for (var i = 1; i < arguments.length; i++) {
+            args.push(arguments[i]);
+        }
         painter[handlers[revent]].apply(painter, args);
     }
 
@@ -74,18 +68,6 @@ CanvasRenderer.prototype.dispatch = function () {
 CanvasRenderer.prototype.initWorker = function () {
     var self = this;
     var worker = new W(this.layer.getProgram());
-    // var handler = function (m) {
-    //     return function () {
-    //         m.apply(self.painter, arguments);
-    //     };
-    // };
-    // for (var pk in this.painter.handlers) {
-    //     var method = this.painter[this.painter.handlers[pk]];
-    //     worker.on(pk, handler(method));
-    // }
-
-
-    var ts;
 
     worker.start();
     this.layer.on('update', function(){
@@ -96,16 +78,12 @@ CanvasRenderer.prototype.initWorker = function () {
     }, this);
 
     worker.once('data:init', function(){
-    console.log('R' + this.id, 'sent data in', _.now() - ts);
         this.isReady = true;
         if (this.pendingUpdate) {
             this.render();
         }
     }, this);
-    ts = _.now()
     var data = this.layer.toJSON();
-    console.log('R' + this.id, 'got data in', _.now() - ts);
-    ts = _.now();
     worker.post('init:data', data);
     this.worker = worker;
 };
@@ -125,7 +103,6 @@ CanvasRenderer.prototype.drawBackround = function () {
     bl = trans.mapVec2(Proj3857.forward(bl));
 
     var coordinates = [ [tl, tr, br, bl] ];
-    console.log('world', coordinates[0]);
 
     painter.save();
     painter.set('strokeStyle', '#888');
@@ -151,14 +128,12 @@ CanvasRenderer.prototype.render = function (isBackground) {
         worker.removeAllListeners(rid);
     }
     this.renderId = this.getNewRenderId();
-    // worker.on('worker:render_id', function(rid){
     this.painter.clear();
-
     if (isBackground) {
         this.drawBackround();
     }
 
-    console.log('RENDER START', this.renderId);
+    // console.log('RENDER START', this.renderId);
     var extent = this.view.getGeoExtent(this.proj);
     worker.on(this.renderId, this.dispatch, this);
     worker.post('update:view', this.renderId,

@@ -18,12 +18,98 @@ var _ = require('underscore'),
 
 var MEDIA_URL = config.public.mediaUrl;
 
+function ImageLoader (painter) {
+    this.painter = painter;
+};
+
+ImageLoader.prototype.load = function (coordinates, extentArray, options) {
+    var self = this,
+        painter = self.painter,
+        img = document.createElement('img'),
+        url = MEDIA_URL + '/' + options.image,
+        extent = new Geometry.Extent(extentArray),
+        width = extent.getWidth(),
+        height = extent.getHeight();
+
+    var complete = function () {
+        if (self.cancelDrawing) {
+            return;
+        }
+        // now we're supposed to have access to image size
+        var imgWidth = img.naturalWidth,
+            imgHeight = img.naturalHeight,
+            sw = extent.getBottomLeft().getCoordinates(),
+            scale;
+
+        if ('none' === options.adjust) {
+            imgWidth = width;
+            imgHeight = height;
+        }
+        else if ('fit' === options.adjust) {
+            scale = Math.min(width/imgWidth, height/imgHeight);
+            imgWidth = imgWidth * scale;
+            imgHeight = imgHeight * scale;
+            if ((width - imgWidth) < (height - imgHeight)) {
+                sw[1] += (height - imgHeight) / 2;
+            }
+            else {
+                sw[0] += (width - imgWidth) / 2;
+            }
+        }
+        else if ('cover' === options.adjust) {
+            scale = Math.max(width/imgWidth, height/imgHeight);
+            imgWidth = imgWidth * scale;
+            imgHeight = imgHeight * scale;
+            if ((width - imgWidth) > (height - imgHeight)) {
+                sw[1] += (height - imgHeight) / 2;
+            }
+            else {
+                sw[0] += (width - imgWidth) / 2;
+            }
+        }
+
+        painter.save();
+        if (options.clip) {
+            painter.drawPolygon(coordinates, ['clip']);
+        }
+        painter.context.drawImage(img, sw[0], sw[1], imgWidth, imgHeight);
+        painter.restore();
+    };
+
+    var getStep = function (sz) {
+        var steps = [ 4, 8, 16, 32, 64, 128, 256, 512, 1024 ],
+            sl = steps.length;
+        for (var i = sl - 1; i >= 0; i--) {
+            if (sz >= steps[i]) {
+                if (i < (sl - 1)){
+                    return steps[i + 1];
+                }
+                return steps[i];
+            }
+        }
+    };
+
+    img.src = url + '/' + getStep(Math.max(width, height));
+    if (img.complete) {
+        complete();
+    }
+    else {
+        img.addEventListener('load', complete, false);
+    }
+};
+
+ImageLoader.prototype.cancel = function () {
+    this.cancelDrawing = true;
+};
+
+
 function Painter (view, layerId) {
     this.context = view.getContext(layerId);
     this.transform = view.transform.clone();
     this.view = view;
     semaphore.on('view:change', this.resetTransform, this);
     this.stateInc = 0;
+    this.imagesLoading = [];
     this.clear();
 
 }
@@ -50,7 +136,6 @@ Painter.prototype.resetTransform = function () {
         view = this.view,
         T = view.transform;
     this.transform = T.clone();
-    // ctx.setTransform.apply(ctx, T.flatMatrix()); it scales linewidth
 };
 
 
@@ -68,15 +153,16 @@ Painter.prototype.clear = function () {
     while (this.stateInc > 0) {
         this.restore();
     }
+    for (var i = 0; i < this.imagesLoading.length; i++) {
+        this.imagesLoading[i].cancel();
+    }
+    this.imagesLoading = [];
     this.resetTransform();
     this.resetClip();
     this.context.clearRect(0, 0, this.view.size.width, this.view.size.height);
     this.context.globalCompositeOperation = 'multiply';
 };
-//
-// Painter.prototype.mapPoint = function (p) {
-//     return this.transform.mapVec2(p);
-// };
+
 
 Painter.prototype.save = function () {
     this.context.save();
@@ -141,75 +227,9 @@ Painter.prototype.drawPolygon = function (coordinates, ends) {
 };
 
 Painter.prototype.image = function (coordinates, extentArray, options) {
-    var self = this,
-        img = document.createElement('img'),
-        url = MEDIA_URL + '/' + options.image,
-        extent = new Geometry.Extent(extentArray),
-        width = extent.getWidth(),
-        height = extent.getHeight();
-
-    var complete = function () {
-        // now we're supposed to have access to image size
-        var imgWidth = img.naturalWidth,
-            imgHeight = img.naturalHeight,
-            sw = extent.getBottomLeft().getCoordinates(),
-            scale;
-
-        if ('none' === options.adjust) {
-            imgWidth = width;
-            imgHeight = height;
-        }
-        else if ('fit' === options.adjust) {
-            scale = Math.min(width/imgWidth, height/imgHeight);
-            imgWidth = imgWidth * scale;
-            imgHeight = imgHeight * scale;
-            if ((width - imgWidth) < (height - imgHeight)) {
-                sw[1] += (height - imgHeight) / 2;
-            }
-            else {
-                sw[0] += (width - imgWidth) / 2;
-            }
-        }
-        else if ('cover' === options.adjust) {
-            scale = Math.max(width/imgWidth, height/imgHeight);
-            imgWidth = imgWidth * scale;
-            imgHeight = imgHeight * scale;
-            if ((width - imgWidth) > (height - imgHeight)) {
-                sw[1] += (height - imgHeight) / 2;
-            }
-            else {
-                sw[0] += (width - imgWidth) / 2;
-            }
-        }
-
-        self.save();
-        if (options.clip) {
-            self.drawPolygon(coordinates, ['clip']);
-        }
-        self.context.drawImage(img, sw[0], sw[1], imgWidth, imgHeight);
-        self.restore();
-    };
-
-    var getStep = function (sz) {
-        var steps = [ 4, 8, 16, 32, 64, 128, 256, 512, 1024 ],
-            sl = steps.length;
-        for (var i = sl - 1; i >= 0; i--) {
-            if (sz >= steps[i]) {
-                if (i < (sl - 1)){
-                    return steps[i + 1];
-                }
-                return steps[i];
-            }
-        }
-    };
-
-    img.src = url + '/' + getStep(Math.max(width, height));
-    if (img.complete) {
-        complete();
-    }
-    else {
-        img.addEventListener('load', complete, false);
-    }
+    var loader = new ImageLoader(this);
+    this.imagesLoading.push(loader);
+    loader.load(coordinates, extentArray, options);
 };
 
 Painter.prototype.drawLine = function (coordinates) {
@@ -285,9 +305,7 @@ Painter.prototype.rawContext = function () {
 };
 
 Painter.prototype.processInstructions = function (instructions) {
-    // console.log('painter.processInstructions', instructions.length);
     for (var i = 0; i < instructions.length; i++) {
-        // console.log('>', i);
         this.rawContext.apply(this, instructions[i]);
     }
 };

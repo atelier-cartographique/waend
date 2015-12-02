@@ -26,16 +26,14 @@ var _ = require('underscore'),
 
 var API_URL = config.public.apiUrl;
 
-
-var Proj3857 = Projection('EPSG:3857');
-
 var projectExtent = helpers.projectExtent,
     unprojectExtent = helpers.unprojectExtent,
     transformExtent = helpers.transformExtent,
     vecDist = helpers.vecDist,
     isKeyCode = helpers.isKeyCode,
     setAttributes = helpers.setAttributes,
-    toggleClass = helpers.toggleClass;
+    toggleClass = helpers.toggleClass,
+    makeButton = helpers.makeButton;
 
 
 function getStep (extent) {
@@ -55,26 +53,27 @@ function transformRegion (T, opt_extent) {
     region.push(newExtent);
 }
 
-function makeButton (label, attrs, callback, ctx) {
-    var button = document.createElement('div'),
-        labelElement = document.createElement('span');
-    labelElement.setAttribute('class', 'label');
-    labelElement.innerHTML = label;
+function sampleData (data, rate) {
+    var step = Math.floor(data.length * rate),
+        sample = new Array(Math.ceil(data.length / step));
 
-    _.each(attrs, function (val, k) {
-        button.setAttribute(k, val);
-    });
-
-    if (callback) {
-        button.addEventListener('click', function(event){
-            callback.call(ctx, event);
-        }, false);
+    for (var i = 0; i < data.length; i += step) {
+        sample.push(data[i]);
     }
-
-    button.appendChild(labelElement);
-    return button;
+    return sample;
 }
 
+function compareSample (a, b) {
+    if (a.length !== b.length) {
+        return false;
+    }
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) {
+            return false;
+        }
+    }
+    return true;
+}
 
 function NavigatorMode (nav) {
     this.navigator = nav;
@@ -114,6 +113,19 @@ NavigatorMode.prototype.keyup = function (event) {
 };
 
 
+NavigatorMode.prototype.getMouseEventPos = function (ev) {
+    if (ev instanceof MouseEvent) {
+        var target = ev.target,
+            trect = target.getBoundingClientRect();
+            return [
+                ev.clientX - trect.left,
+                ev.clientY - trect.top
+            ];
+    }
+    return [0, 0];
+}
+
+
 function NavigatorModeBase () {
     NavigatorMode.apply(this, arguments);
     this.modeName = 'ModeBase';
@@ -129,14 +141,86 @@ util.inherits(NavigatorModeBase, NavigatorMode);
 NavigatorModeBase.prototype.enter = function () {
     this.navigator.draw();
     this.isActive = true;
+    this.previewImageData = null;
+    var prepare = _.bind(this.preparePreview, this);
+    this.prepPreviewId = setInterval(prepare, 100);
 };
 
 NavigatorModeBase.prototype.exit = function () {
     this.navigator.clear();
-    this.isActive = true;
+    this.isActive = false;
+    clearInterval(this.prepPreviewId);
+    this.prepPreviewId = null;
 };
 
+NavigatorModeBase.prototype.preparePreview = function () {
+    if (this.isMoving || this.isPreparingPreview) {
+        return;
+    }
+    var now = _.now(),
+        firstRun = !this.previewImageData,
+        lastRunAt,
+        nextRunIn,
+        next;
+    if (!firstRun) {
+        lastRunAt = this.previewImageData.lastRunAt;
+        nextRunIn = this.previewImageData.nextRunIn;
+        next = lastRunAt + nextRunIn;
 
+        if ((next - now) > 0) {
+            return;
+        }
+    }
+    this.isPreparingPreview = true;
+    var ts = _.now();
+    var view = this.navigator.view,
+        rect = view.getRect(),
+        canvas = document.createElement('canvas'),
+        images = [],
+        ctx, data, alpha, idata;
+
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, rect.width, rect.height);
+    this.previewImageData = ctx.getImageData(0, 0, rect.width, rect.height);
+    data = this.previewImageData.data;
+
+    this.navigator.map.getView()
+        .forEachImage(function(imageData){
+            images.push(imageData);
+        });
+
+    for (var i = 0; i < data.length; i += 4) {
+        for (var j = 0; j < images.length; j++) {
+            idata = images[j].data;
+            alpha = idata[i + 3] / 255,
+                r = i,
+                g = i + 1,
+                b = i + 2;
+            if (alpha > 0) {
+                data[r] = (data[r] * (1 - alpha)) + (idata[r] * alpha);
+                data[g] = (data[g] * (1 - alpha)) + (idata[g] * alpha);
+                data[b] = (data[b] * (1 - alpha)) + (idata[b] * alpha);
+            }
+        }
+    }
+    var sample = sampleData(data, 0.1);
+    this.previewImageData.nextRunIn = 200;
+    if (firstRun) {
+        this.previewSample = sample;
+    }
+    else {
+        if(compareSample(this.previewSample, sample)) {
+            this.previewImageData.nextRunIn = nextRunIn * 2;
+        }
+    }
+    this.previewImageData.lastRunAt = _.now();
+    this.previewSample = sample;
+    this.isPreparingPreview = false;
+    console.log('NavigatorModeBase.preparePreview END', _.now() - ts);
+};
 
 NavigatorModeBase.prototype.wheel = function (event) {
     if (Math.abs(event.deltaY) > 2) {
@@ -151,9 +235,7 @@ NavigatorModeBase.prototype.wheel = function (event) {
 
 
 NavigatorModeBase.prototype.mousedown = function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.startPoint = [event.clientX, event.clientY];
+    this.startPoint = this.getMouseEventPos(event);
     this.isStarted = true;
 };
 
@@ -161,7 +243,7 @@ NavigatorModeBase.prototype.mousedown = function (event) {
 NavigatorModeBase.prototype.mousemove = function (event) {
     if (this.isStarted) {
         var sp = this.startPoint,
-            hp = [event.clientX, event.clientY],
+            hp = this.getMouseEventPos(event),
             extent = new Geometry.Extent(sp.concat(hp)),
             ctx = this.navigator.context,
             view = this.navigator.view,
@@ -176,41 +258,9 @@ NavigatorModeBase.prototype.mousemove = function (event) {
             ctx.putImageData(this.previewImageData,
                                 hp[0] - sp[0],
                                 hp[1] - sp[1]);
-            // ctx.strokeRect(
-            //     hp[0] - sp[0],
-            //     hp[1] - sp[1],
-            //     rect.width,
-            //     rect.height
-            // );
             ctx.restore();
         }
         if (!this.isMoving) {
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, rect.width, rect.height);
-            this.previewImageData = ctx.getImageData(0, 0, rect.width, rect.height);
-            var data = this.previewImageData.data;
-            var images = [];
-            this.navigator.map.getView()
-                .forEachImage(function(imageData){
-                    images.push(imageData);
-                });
-
-            var alpha, idata;
-
-            for (var i = 0; i < data.length; i += 4) {
-                for (var j = 0; j < images.length; j++) {
-                    idata = images[j].data;
-                    alpha = idata[i + 3] / 255,
-                        r = i,
-                        g = i + 1,
-                        b = i + 2;
-                    if (alpha > 0) {
-                        data[r] = (data[r] * (1 - alpha)) + (idata[r] * alpha);
-                        data[g] = (data[g] * (1 - alpha)) + (idata[g] * alpha);
-                        data[b] = (data[b] * (1 - alpha)) + (idata[b] * alpha);
-                    }
-                }
-            }
             this.isMoving = true;
 
         }
@@ -220,7 +270,7 @@ NavigatorModeBase.prototype.mousemove = function (event) {
 
 NavigatorModeBase.prototype.mouseup = function (event) {
     if (this.isStarted) {
-        var endPoint = [event.clientX, event.clientY],
+        var endPoint = this.getMouseEventPos(event),
             startPoint = this.startPoint,
             dist = vecDist(startPoint, endPoint),
             map = this.navigator.map,
@@ -250,6 +300,83 @@ NavigatorModeBase.prototype.mouseup = function (event) {
     }
 };
 
+
+NavigatorModeBase.prototype.touchstart = function (event) {
+    this.touches = _.reduce(event.changedTouches, function(memo, touch){
+        memo[touch.identifier] = this.getMouseEventPos(touch);
+        return memo;
+    }, {}, this);
+
+    var tKeys = _.keys(this.touches),
+        isZooming = 2 === tKeys.length,
+        isPanning = 1 === tKeys.length;
+
+    this.touchZooming = isZooming;
+    this.touchPanning = isPanning;
+};
+
+NavigatorModeBase.prototype.touchmove = function (event) {
+    if (this.touchPanning) {
+        var touches = event.changedTouches,
+            touch = touches[0],
+            sp = this.touches[touch.identifier],
+            hp = this.getMouseEventPos(touch),
+            extent = new Geometry.Extent(sp.concat(hp)),
+            ctx = this.navigator.context,
+            view = this.navigator.view,
+            rect = view.getRect();
+        extent.normalize();
+        var tl = extent.getBottomLeft().getCoordinates();
+        if (this.isMoving && this.previewImageData) {
+            ctx.save();
+            ctx.fillStyle = 'white';
+            ctx.strokeStyle = 'blue';
+            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.putImageData(this.previewImageData,
+                                hp[0] - sp[0],
+                                hp[1] - sp[1]);
+            ctx.restore();
+        }
+        if (!this.isMoving) {
+            this.isMoving = true;
+
+        }
+    }
+};
+
+NavigatorModeBase.prototype.touchend = function (event) {
+    if (this.touchPanning) {
+        var touches = event.changedTouches,
+            touch = touches[0],
+            endPoint = this.getMouseEventPos(touch),
+            startPoint = this.touches[touch.identifier],
+            dist = vecDist(startPoint, endPoint),
+            map = this.navigator.map,
+            extent = new Geometry.Extent(startPoint.concat(endPoint)),
+            ctx = this.navigator.context;
+        extent.normalize();
+        var tl = extent.getBottomLeft().getCoordinates();
+
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        if (dist > 4) {
+            var startCoordinates = map.getCoordinateFromPixel(startPoint),
+                endCoordinates = map.getCoordinateFromPixel(endPoint);
+            var T = new Transform(),
+                extent = region.get();
+
+            T.translate(startCoordinates[0] - endCoordinates[0],
+                        startCoordinates[1] - endCoordinates[1]);
+            transformRegion(T, extent);
+        }
+        else {
+            this.navigator.centerOn(startPoint);
+        }
+        this.touchPanning = false;
+        this.isMoving = false;
+        this.previewImageData = null;
+    }
+};
 
 var NAVIGATOR_MODES = [
     NavigatorModeBase,
@@ -351,7 +478,8 @@ Navigator.prototype.setupCanvas = function () {
             'click', 'dblclick',
             'mousedown', 'mousemove', 'mouseup',
             'keypress', 'keydown', 'keyup',
-            'wheel'
+            'wheel',
+            'touchstart', 'touchend', 'touchcancel', 'touchmove'
             ];
     for (var i = 0; i < events.length; i++) {
         this.canvas.addEventListener(events[i], dispatcher, false);
