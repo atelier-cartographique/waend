@@ -847,12 +847,16 @@ var WebConsole = Terminal.extend({
         display.setFinalizer(function () {
             removeClass(mc, 'wc-fullscreen');
             this.show();
-            this.isFullscreen = false;
-            semaphore.signal('map:resize');
+            if (fullscreen) {
+                this.isFullscreen = false;
+                semaphore.signal('map:resize');
+            }
         }, this);
-        _.defer(function(){
-            semaphore.signal('map:resize');
-        });
+        if (fullscreen) {
+            _.defer(function(){
+                semaphore.signal('map:resize');
+            });
+        }
         return display;
     },
 
