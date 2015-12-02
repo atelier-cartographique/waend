@@ -77,7 +77,7 @@ function visible () {
     var self = this,
         userId = self.getUser(),
         groupId = self.getGroup(),
-        data = self.data,
+        data = self.data, // this is a group
         shell = self.shell,
         stdout = self.sys.stdout,
         binder = self.binder,
@@ -93,8 +93,8 @@ function visible () {
     list.setAttribute('class', 'visible-list');
     cancelButton.setAttribute('class', 'visible-cancel push-cancel');
     submitButton.setAttribute('class', 'visible-validate push-validate');
-    submitButton.innerHTML = '<a>validate</a>';
-    cancelButton.innerHTML = '<a>cancel</a>';
+    submitButton.innerHTML = '<a>save</a>';
+    cancelButton.innerHTML = '<a>close</a>';
 
     wrapper.appendChild(list);
     wrapper.appendChild(submitButton);
@@ -109,13 +109,15 @@ function visible () {
 
         var submit = function () {
             var vList = visibleLayers.getList();
+            data.set('visible', vList);
             display.end();
             resolve(vList);
         };
 
-        var cancel = function () {
+        var close = function () {
+            var vList = visibleLayers.getList();
             display.end();
-            reject('Cancel');
+            resolve(vList);
         };
 
         binder.getLayers(userId, groupId)
@@ -128,10 +130,10 @@ function visible () {
                     listItem(layer, list, i, visibleLayers);
                 }
             })
-            .catch(cancel);
+            .catch(close);
 
         submitButton.addEventListener('click', submit, false);
-        cancelButton.addEventListener('click', cancel, false);
+        cancelButton.addEventListener('click', close, false);
     };
     return (new Promise(res));
 }

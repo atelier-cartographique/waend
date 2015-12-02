@@ -1,7 +1,7 @@
 
 .media-wrapper {
     position: relative;
-    padding:72px 12px;
+    padding:@margin * 6 @margin;
     width: 100%;
     height: 100%;
     background-color: @lightgrey;
@@ -14,8 +14,8 @@
         font-size: 20pt;
         color: @blue;
         position: absolute;
-        top: 12px;
-        left: 12px;
+        top: @margin;
+        left: @margin;
         z-index: 2;
         text-shadow: none;
     }
@@ -24,8 +24,8 @@
         .push-cancel;
         .linkwaend;
         position: absolute;
-        top: 12px;
-        right: 36px;
+        top: @margin;
+        right: @margin * 3;
         text-align: center;
         
     }
@@ -36,7 +36,7 @@
     .media-item {
         display: inline-block;
         float: left;
-        margin: 0px 12px 12px 0px;
+        margin: 0px @margin @margin 0px;
         border: 1px solid grey;
     }
 }

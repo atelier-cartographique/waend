@@ -6,7 +6,7 @@
         left: 0;
         z-index: 0;
         letter-spacing: 1px;
-        padding: 12px;
+        padding: @margin;
         background-color: #fff;
         width: @widthMenuLeft;
         height: 100vh;
@@ -30,7 +30,7 @@
             .wc-buttons-group-title-value a:hover{
                 font-size: 12pt;
                 text-decoration: underline;
-                margin-left: 6px;
+                margin-left: @margin / 2;
                 color: #000;
                 font-family: "dauphine_regular";
                 font-style: normal;
@@ -39,7 +39,7 @@
         }
 
         .wc-current {
-            padding-left: 6px;
+            padding-left: @margin / 2;
             border-left: 1px dotted #000;
         }
 
@@ -60,14 +60,14 @@
             border-bottom: 1px solid transparent;
             font-family: "dauphine_regular";
             font-size: 10pt;
-            padding-left: 6px;
+            padding-left: @margin / 2;
             display: table;
 
             &:first-child{
-                padding-top: 3px;
+                padding-top: @margin / 4;
             }
             &:last-child{
-                margin-bottom: 6px;
+                margin-bottom: @margin / 2;
             }
 
             .wc-button-pager {
@@ -80,18 +80,17 @@
                     display: block;
                     width: 155px;
                     background: #FFF;
-                    padding: 6px;
+                    padding: @margin / 2;
                     border: 1px solid #000;
                     border-left: 1px solid #fff;
 
                     .pager-actions {
                         span { 
                             .white-text-shadow;
+                            .label;
                             display: inline-block;
                             margin-right: 5px;
-                            margin-bottom: 12px; 
-                            font-size: 9pt;
-                            text-transform: uppercase;
+                            margin-bottom: @margin; 
 
                             &.pager-action-close {
                                 margin-left: 20px;
@@ -106,7 +105,7 @@
 
                     .wc-page {
                         border-left: 1px dashed black;
-                        padding-left: 6px;
+                        padding-left: @margin / 2;
                         a {
                             .linkwaend;
                             .white-text-shadow;
