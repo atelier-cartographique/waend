@@ -53,6 +53,12 @@ SourceProvider.prototype.updateGroup = function(userId, groupId, opt_force) {
             self.loadLayers()
                 .then(function(){
                     self.updateLayers();
+                    if (group.has('visible')) {
+                        var layers = group.get('visible');
+                        semaphore.once('layer:update:complete', function(){
+                            semaphore.signal('visibility:change', layers);
+                        });
+                    }
                     semaphore.signal('source:change', self.getSources());
                 })
                 .catch(console.error.bind(console));
@@ -82,20 +88,21 @@ SourceProvider.prototype.loadLayers = function () {
             self.updateGroup(self.userId, self.groupId, true);
         }
     });
-    if (self.group.has('visible')) {
-        var layers = self.group.get('visible');
-        self.clearLayers();
-        return Promise.reduce(layers, function(total, item, index) {
-            var lidx = layers[index];
-            return binder.getLayer(self.userId, self.groupId, lidx)
-                         .then(function(layer){
-                             self.layerSources.push(new Source(
-                                 self.userId,
-                                 self.groupId,
-                                 layer));
-                         });
-        }, 0);
-    }
+
+    // if (self.group.has('visible')) {
+    //     var layers = self.group.get('visible');
+    //     self.clearLayers();
+    //     return Promise.reduce(layers, function(total, item, index) {
+    //         var lidx = layers[index];
+    //         return binder.getLayer(self.userId, self.groupId, lidx)
+    //                      .then(function(layer){
+    //                          self.layerSources.push(new Source(
+    //                              self.userId,
+    //                              self.groupId,
+    //                              layer));
+    //                      });
+    //     }, 0);
+    // }
 
     return binder
         .getLayers(self.userId, self.groupId)
