@@ -552,7 +552,6 @@ function Navigator (options) {
     });
 
     semaphore.on('view:resize', function (view) {
-        this.transform = view.transform.clone();
         if (this.canvas) {
             var rect = view.getRect();
             this.canvas.width = rect.width;
