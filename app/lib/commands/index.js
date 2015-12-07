@@ -43,7 +43,8 @@ var commandModules = [
     require('./styleWidget'),
     require('./widget'),
     require('./wSet'),
-    require('./notify')
+    require('./notify'),
+    require('./capture'),
     ];
 
 

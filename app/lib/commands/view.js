@@ -8,7 +8,7 @@
  *
  */
 
-// 'use strict';
+'use strict';
 
 var _ = require('underscore'),
     util = require('util'),
@@ -24,7 +24,8 @@ var _ = require('underscore'),
     helpers = require('../helpers'),
     SyncHandler = require('./SyncHandler');
 
-var API_URL = config.public.apiUrl;
+var API_URL = config.public.apiUrl,
+    MEDIA_URL = config.public.mediaUrl;
 
 var projectExtent = helpers.projectExtent,
     unprojectExtent = helpers.unprojectExtent,
@@ -32,6 +33,7 @@ var projectExtent = helpers.projectExtent,
     vecDist = helpers.vecDist,
     isKeyCode = helpers.isKeyCode,
     setAttributes = helpers.setAttributes,
+    removeClass = helpers.removeClass,
     toggleClass = helpers.toggleClass,
     makeButton = helpers.makeButton;
 
@@ -833,12 +835,34 @@ function lookupResults(container) {
                     name = props.name,
                     ctxPath = '/' + result.user_id + '/' + result.id;
 
+                anchor.setAttribute('class', 'view-lookup-result-title');
                 elem.setAttribute('class', 'view-lookup-result');
                 anchor.setAttribute('href', '/view' + ctxPath);
-                anchor.innerHTML = name;
+                anchor.appendChild(document.createTextNode(name));
                 elem.appendChild(anchor);
+
+
+                if ('image' in props) {
+                    var img = document.createElement('img');
+                    img.setAttribute('class', 'view-lookup-result-image');
+                    img.setAttribute('src', MEDIA_URL + '/' + props.image + '/400');
+                    elem.appendChild(img);
+                }
+
+                if ('description' in props) {
+                    var desc = document.createElement('div');
+                    desc.setAttribute('class', 'view-lookup-result-description');
+                    desc.appendChild(
+                        document.createTextNode(
+                            props.description.slice(0, 200)
+                        )
+                    );
+                    elem.appendChild(desc);
+                }
+
                 container.appendChild(elem);
             }
+            removeClass(container, 'hidden');
         }
     };
     return callback;
@@ -869,7 +893,7 @@ function showLookup (node) {
     input.setAttribute('placeholder', 'search');
     inputBottomLine.setAttribute('class', 'input-bottomLine');
     button.setAttribute('class', 'view-lookup-search icon-lookup');
-    results.setAttribute('class', 'view-lookup-results');
+    results.setAttribute('class', 'view-lookup-results hidden');
 
     button.innerHTML = "";
 
