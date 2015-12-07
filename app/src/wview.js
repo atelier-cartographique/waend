@@ -39,7 +39,7 @@ function init () {
     wc.hide();
     semaphore.on('shell:change:context', function(ctxIndex){
         if (ctxIndex > 1) {
-            wc.runCommand('view', pager);
+            wc.shell.exec('view');
         }
     });
 }

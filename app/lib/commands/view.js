@@ -923,20 +923,21 @@ function showLookup (node) {
 
 
 function waendCredit (node) {
-var waendCredit = document.createElement('div');
+    var waendCredit = document.createElement('div'),
+        waendCreditLink = document.createElement('a'),
+        waendCreditLinkToLogin = document.createElement('a'),
+        waendCreditLinkToRegister = document.createElement('a');
+
     waendCredit.setAttribute('class', 'credit-waend');
 
-    waendCreditLink = document.createElement('a');
     waendCreditLink.setAttribute('href', 'http://waend.com');
     // waendCreditLink.setAttribute('target', 'blank');
     waendCreditLink.innerHTML = 'wænd.com';
 
-    waendCreditLinkToLogin = document.createElement('a');
     waendCreditLinkToLogin.setAttribute('href', 'http://alpha.waend.com');
     // waendCreditLinkToLogin.setAttribute('target', 'blank');
     waendCreditLinkToLogin.innerHTML = ' • login • ';
 
-    waendCreditLinkToRegister = document.createElement('a');
     waendCreditLinkToRegister.setAttribute('href', 'http://alpha.waend.com/register');
     // waendCreditLinkToRegister.setAttribute('target', 'blank');
     waendCreditLinkToRegister.innerHTML = 'register';
