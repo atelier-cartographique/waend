@@ -126,6 +126,24 @@ NavigatorMode.prototype.getMouseEventPos = function (ev) {
 }
 
 
+NavigatorMode.prototype.getTouchEventPos = function (ev, id) {
+    if (ev instanceof TouchEvent) {
+        var touch = _.find(ev.changedTouches, function(t){
+            return t.identifier === id;
+        });
+        if (touch) {
+            var target = ev.target,
+                trect = target.getBoundingClientRect();
+            return [
+                touch.clientX - trect.left,
+                touch.clientY - trect.top
+            ];
+        }
+    }
+    return [0, 0];
+}
+
+
 function NavigatorModeBase () {
     NavigatorMode.apply(this, arguments);
     this.modeName = 'ModeBase';
@@ -154,7 +172,7 @@ NavigatorModeBase.prototype.exit = function () {
 };
 
 NavigatorModeBase.prototype.preparePreview = function () {
-    if (this.isMoving || this.isPreparingPreview) {
+    if (this.isMoving || this.isWheeling || this.isPreparingPreview) {
         return;
     }
     var now = _.now(),
@@ -216,6 +234,8 @@ NavigatorModeBase.prototype.preparePreview = function () {
             this.previewImageData.nextRunIn = nextRunIn * 2;
         }
     }
+    ctx.putImageData(this.previewImageData, 0, 0);
+    this.previewCanvas = canvas;
     this.previewImageData.lastRunAt = _.now();
     this.previewSample = sample;
     this.isPreparingPreview = false;
@@ -223,14 +243,72 @@ NavigatorModeBase.prototype.preparePreview = function () {
 };
 
 NavigatorModeBase.prototype.wheel = function (event) {
-    if (Math.abs(event.deltaY) > 2) {
-        if (event.deltaY < 0) {
-            this.navigator.zoomIn();
+    var toId = this.wheelToId;
+    this.wheelDeltas = this.wheelDeltas || [];
+    var extent = region.get(),
+        newExtent = new Geometry.Extent(extent);
+
+    this.wheelDeltas.push(event.deltaY);
+
+    // replays deltas
+    for (var i = 0; i < this.wheelDeltas.length; i++) {
+        var delta = this.wheelDeltas[i],
+            val = getStep(newExtent);
+        if (delta < 0) {
+            newExtent.buffer(-val);
         }
         else {
-            this.navigator.zoomOut();
+            newExtent.buffer(val);
         }
     }
+
+    if (this.isWheeling && this.previewImageData) {
+        var ts = _.now();
+        console.log('wheel draw');
+        var ctx = this.navigator.context,
+            rect = this.navigator.view.getRect(),
+            geoCenter = newExtent.getCenter().getCoordinates(),
+            center = this.navigator.map.getPixelFromCoordinate(geoCenter),
+            canvasCenter = [rect.width / 2, rect.height /2],
+            t1a = extent.getTopLeft().getCoordinates(),
+            t1b = newExtent.getTopLeft().getCoordinates(),
+            t2a = extent.getBottomRight().getCoordinates(),
+            t2b = newExtent.getBottomRight().getCoordinates(),
+            d0 = vecDist(t1a, t2a),
+            d1 = vecDist(t1b, t2b),
+            scale = d0 / d1,
+            tr = new Transform();
+
+        tr.translate(center[0] - canvasCenter[0],
+                     center[1] - canvasCenter[1]);
+        tr.scale(scale, scale, center);
+        console.log('wheel.draw init took', _.now() - ts);
+        ts = _.now();
+        ctx.save();
+        ctx.fillStyle = 'white';
+        ctx.strokeStyle = 'blue';
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.setTransform.apply(ctx, tr.flatMatrix());
+        // ctx.strokeRect(0, 0, rect.width, rect.height);
+        ctx.drawImage(this.previewCanvas, 0, 0, rect.width, rect.height);
+        ctx.restore();
+        console.log('wheel.draw drawImage took', _.now() - ts);
+    }
+
+    this.isWheeling  = true;
+    var that = this;
+
+    if (toId) {
+        clearTimeout(toId);
+    }
+
+    this.wheelToId = setTimeout(function () {
+        console.log('wheel completed');
+        region.push(newExtent);
+        that.isWheeling= false;
+        that.wheelDeltas = [];
+        that.previewImageData = null;
+    }, 300);
 };
 
 
@@ -303,7 +381,7 @@ NavigatorModeBase.prototype.mouseup = function (event) {
 
 NavigatorModeBase.prototype.touchstart = function (event) {
     this.touches = _.reduce(event.changedTouches, function(memo, touch){
-        memo[touch.identifier] = this.getMouseEventPos(touch);
+        memo[touch.identifier] = this.getTouchEventPos(event, touch.identifier);
         return memo;
     }, {}, this);
 
@@ -313,34 +391,85 @@ NavigatorModeBase.prototype.touchstart = function (event) {
 
     this.touchZooming = isZooming;
     this.touchPanning = isPanning;
+    this.touchStartTS = _.now();
 };
 
 NavigatorModeBase.prototype.touchmove = function (event) {
-    if (this.touchPanning) {
-        var touches = event.changedTouches,
-            touch = touches[0],
-            sp = this.touches[touch.identifier],
-            hp = this.getMouseEventPos(touch),
-            extent = new Geometry.Extent(sp.concat(hp)),
-            ctx = this.navigator.context,
-            view = this.navigator.view,
-            rect = view.getRect();
-        extent.normalize();
-        var tl = extent.getBottomLeft().getCoordinates();
-        if (this.isMoving && this.previewImageData) {
-            ctx.save();
-            ctx.fillStyle = 'white';
-            ctx.strokeStyle = 'blue';
-            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-            ctx.putImageData(this.previewImageData,
-                                hp[0] - sp[0],
-                                hp[1] - sp[1]);
-            ctx.restore();
-        }
-        if (!this.isMoving) {
-            this.isMoving = true;
+    var touches = _.reduce(event.changedTouches,
+    function(memo, touch){
+        memo[touch.identifier] = this.getTouchEventPos(event, touch.identifier);
+        return memo;
+    }, {}, this);
+    var keys = _.keys(touches);
+    if (this.touchPanning && (2 === keys.length)) {
+        var ts = _.now();
+        if ((ts - this.touchStartTS) < 1000) {
+            this.touchPanning = false;
+            this.touchZooming = true;
+            _.defaults(this.touches, touches);
 
         }
+        else {
+            this.touchend(event);
+            this.touchstart(event);
+            return;
+        }
+    }
+    if (this.isMoving && this.previewImageData) {
+        if (this.touchPanning) {
+                var touch = event.changedTouches[0],
+                    sp = this.touches[touch.identifier],
+                    hp = this.getTouchEventPos(event, touch.identifier),
+                    extent = new Geometry.Extent(sp.concat(hp)),
+                    ctx = this.navigator.context,
+                    view = this.navigator.view,
+                    rect = view.getRect();
+                extent.normalize();
+                var tl = extent.getBottomLeft().getCoordinates();
+
+                ctx.save();
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                ctx.putImageData(this.previewImageData,
+                                    hp[0] - sp[0],
+                                    hp[1] - sp[1]);
+                ctx.restore();
+
+        }
+        else if (this.touchZooming) {
+
+                if (2 !== keys.length) {
+                    return;
+                }
+
+                var ctx = this.navigator.context,
+                    rect = this.navigator.view.getRect(),
+                    center = [rect.width / 2, rect.height /2],
+                    t1a = this.touches[keys[0]],
+                    t1b = touches[keys[0]],
+                    t2a = this.touches[keys[1]],
+                    t2b = touches[keys[1]],
+                    d0 = vecDist(t1a, t2a),
+                    d1 = vecDist(t1b, t2b),
+                    scale = d1 / d0,
+                    tr = new Transform();
+
+                tr.scale(scale, scale, center);
+
+                ctx.save();
+                ctx.fillStyle = 'white';
+                ctx.strokeStyle = 'blue';
+                ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                ctx.setTransform.apply(ctx, tr.flatMatrix());
+                ctx.strokeRect(0, 0, rect.width, rect.height);
+                ctx.drawImage(this.previewCanvas, 0, 0, rect.width, rect.height);
+                ctx.restore();
+                this.zoomTouches = touches;
+        }
+    }
+
+    if (!this.isMoving) {
+        this.isMoving = true;
     }
 };
 
@@ -348,20 +477,19 @@ NavigatorModeBase.prototype.touchend = function (event) {
     if (this.touchPanning) {
         var touches = event.changedTouches,
             touch = touches[0],
-            endPoint = this.getMouseEventPos(touch),
+            endPoint = this.getTouchEventPos(event, touch.identifier),
             startPoint = this.touches[touch.identifier],
             dist = vecDist(startPoint, endPoint),
             map = this.navigator.map,
-            extent = new Geometry.Extent(startPoint.concat(endPoint)),
-            ctx = this.navigator.context;
+            extent = new Geometry.Extent(startPoint.concat(endPoint));
         extent.normalize();
         var tl = extent.getBottomLeft().getCoordinates();
 
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         if (dist > 4) {
             var startCoordinates = map.getCoordinateFromPixel(startPoint),
                 endCoordinates = map.getCoordinateFromPixel(endPoint);
+
             var T = new Transform(),
                 extent = region.get();
 
@@ -372,10 +500,32 @@ NavigatorModeBase.prototype.touchend = function (event) {
         else {
             this.navigator.centerOn(startPoint);
         }
-        this.touchPanning = false;
-        this.isMoving = false;
-        this.previewImageData = null;
     }
+    else if (this.touchZooming) {
+        var touches = this.zoomTouches,
+            keys = _.keys(touches);
+
+        var extent = region.get(),
+            center = extent.getCenter().getCoordinates(),
+            t1a = this.touches[keys[0]],
+            t1b = touches[keys[0]],
+            t2a = this.touches[keys[1]],
+            t2b = touches[keys[1]],
+            d0 = vecDist(t1a, t1b),
+            d1 = vecDist(t2a, t2b),
+            scale = d1 / d0,
+            tr = new Transform();
+
+        tr.scale(scale, scale, center);
+        transformRegion(tr, extent);
+
+    }
+    var ctx = this.navigator.context;
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    this.touchPanning = false;
+    this.touchZooming = false;
+    this.isMoving = false;
+    this.previewImageData = null;
 };
 
 var NAVIGATOR_MODES = [
