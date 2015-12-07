@@ -11,9 +11,11 @@
 
 var _ = require('underscore'),
     Promise = require("bluebird"),
-    helpers = require('../../helpers');
+    helpers = require('../../helpers'),
+    region = require('../../Region');
 
-var getModelName = helpers.getModelName;
+var getModelName = helpers.getModelName,
+    layerExtent = helpers.layerExtent;
 
 
 function listLayers () {
@@ -27,13 +29,27 @@ function listLayers () {
         terminal = shell.terminal;
 
     var makeOutput = function (layer) {
+        var fragment = document.createElement('div'),
+            zoomer = document.createElement('div'),
+            label = layer.getDomFragment('name');
+
+        zoomer.setAttribute('class', 'll-zoomer icon-setmapextent');
+        zoomer.innerHTML = '';
+        zoomer.addEventListener('click', function () {
+            layerExtent(layer)
+                .then(_.bind(region.push, region))
+                .catch(function(err){console.error(err)});
+        }, false);
+
+        label.addEventListener('click', function () {
+            terminal.runCommand('cc /' + userId + '/' + groupId + '/' + layer.id);
+        }, false);
+
+        fragment.appendChild(zoomer);
+        fragment.appendChild(label);
         return terminal.makeCommand({
-            fragment: layer.getDomFragment('name'),
-            text: getModelName(layer),
-            args: [
-                'cc /' + userId + '/' + groupId + '/' + layer.id,
-                'get'
-            ]
+            fragment: fragment,
+            text: getModelName(layer)
         });
     };
 

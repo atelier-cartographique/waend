@@ -1088,7 +1088,6 @@ body {
 .wc-element.wc-dock .wc-dock-page .wc-page .wc-line {
   cursor: pointer;
   border-bottom: 1px solid transparent;
-  display: table;
   margin-bottom: 1px;
 }
 .wc-element.wc-dock .wc-dock-page .wc-page .wc-line:hover {
@@ -1284,6 +1283,10 @@ body {
   text-align: center;
   font-size: 200%;
 }
+.ll-zoomer {
+  float: right;
+  clear: both;
+}
 .navigate-buttons {
   position: absolute;
   top: 12px;
@@ -1452,7 +1455,6 @@ body {
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page .wc-line {
   cursor: pointer;
   border-bottom: 1px solid transparent;
-  display: table;
   margin-bottom: 1px;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page .wc-line:hover {
