@@ -215,8 +215,8 @@ NavigatorModeBase.prototype.preparePreview = function () {
     for (var i = 0; i < data.length; i += 4) {
         for (var j = 0; j < images.length; j++) {
             idata = images[j].data;
-            alpha = idata[i + 3] / 255,
-                r = i,
+            alpha = idata[i + 3] / 255;
+            var r = i,
                 g = i + 1,
                 b = i + 2;
             if (alpha > 0) {
