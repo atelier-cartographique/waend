@@ -17,7 +17,8 @@
 
 .view-visible-wrapper {
     position: absolute;
-    width: 300px;
+    width: auto;
+    max-width: 300px;
     overflow-y: auto;
     bottom: @margin;
     left: @margin;
@@ -25,33 +26,72 @@
     padding: 1px;
 
     .view-visible-title {
-        .label;
-        margin-bottom: 4px;
+        margin-bottom: 16px;
+        text-transform: uppercase;
     }
 
-    .visible-layer{cursor: pointer;}
+    .layer-item {
+        margin-bottom: 8px;
+        .layer-item-label {
+            font-size: 10pt;
+            cursor: pointer;
+        }
 
-    .visible-yes:before,
-    .visible-no:before {
-        display: inline-block;
-        width: 12px;
-        height: 9px;
-        padding-right: 9px;
-        content: "";
-        cursor: pointer;
+        .layer-item-extra {
+            display: none;
+        }
 
+        &.unfold {
+            border: 1px solid;
+            padding: 12px 12px 12px 0;
+            border-left: none;
+            .layer-item-label {
+                border-bottom: 1px solid;
+            }
+            .layer-item-extra {
+                display: block;
+                padding-top: 16px;
+            }
+        }
+
+        &.visible-yes {
+
+        }
+
+        &.visible-no {
+            color: gray;
+        }
+
+        .layer-item-actions {
+            margin-top: 8px;
+            span {
+                display: inline-block;
+                padding: 3px;
+                cursor: pointer;
+                border: 1px solid;
+                margin-right: 9px;
+            }
+        }
     }
-
-    .visible-yes:before {
-        background: url(../../styles/svg/eye-open.svg) left no-repeat;
-        background-size: contain;
-    }
-
-    .visible-no:before {
-        background: url(../../styles/svg/eye-closed.svg) left no-repeat;
-        background-size: contain;
-
-    }
+    //
+    // .visible-yes:before,
+    // .visible-no:before {
+    //     display: inline-block;
+    //     width: 12px;
+    //     height: 9px;
+    //     padding-right: 9px;
+    //     content: "";
+    //     cursor: pointer;
+    //     background-size: contain;
+    // }
+    //
+    // .visible-yes:before {
+    //     background: url(../../styles/svg/eye-open.svg) left no-repeat;
+    // }
+    //
+    // .visible-no:before {
+    //     background: url(../../styles/svg/eye-closed.svg) left no-repeat;
+    // }
 
 }
 

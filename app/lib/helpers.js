@@ -8,9 +8,13 @@
  *
  */
 
+'use strict';
+
 var _ = require('underscore'),
     Projection = require('proj4'),
-    semaphore = require('./Semaphore');
+    semaphore = require('./Semaphore'),
+    Bind = require('./Bind'),
+    Geometry = require('./Geometry');
 
 module.exports.getModelName = function (model) {
     if (model.get('name')) {
@@ -168,4 +172,33 @@ module.exports.unprojectExtent = function (extent, proj) {
     var min = proj.inverse(extent.slice(0,2)),
         max = proj.inverse(extent.slice(2));
     return min.concat(max);
+};
+
+
+function addExtent (feature, extent) {
+    var geom = feature.getGeometry();
+    extent.add(geom);
+}
+
+module.exports.layerExtent = function (layer) {
+    var path = layer.getPath(),
+        binder = Bind.get();
+
+    return binder.getFeatures.apply(binder, path)
+        .then(function(features){
+            var extent;
+            for (var i = 0; i < features.length; i++) {
+                var feature = features[i];
+                if (extent) {
+                    addExtent(feature, extent);
+                }
+                else {
+                    extent = new Geometry.Extent(feature.getGeometry());
+                }
+            }
+            return extent;
+        })
+        .catch(function(err){
+            console.error('layerExtent', err);
+        });
 };

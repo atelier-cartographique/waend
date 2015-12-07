@@ -33,9 +33,12 @@ var projectExtent = helpers.projectExtent,
     vecDist = helpers.vecDist,
     isKeyCode = helpers.isKeyCode,
     setAttributes = helpers.setAttributes,
+    addClass = helpers.addClass,
     removeClass = helpers.removeClass,
     toggleClass = helpers.toggleClass,
-    makeButton = helpers.makeButton;
+    makeButton = helpers.makeButton,
+    layerExtent = helpers.layerExtent,
+    getModelName = helpers.getModelName;
 
 
 function getStep (extent) {
@@ -983,31 +986,71 @@ function listLayers (context, node) {
     function listItem (layer, container, idx, lister) {
         var isVisible = lister.has(layer.id),
             elem = document.createElement('div'),
-            label = document.createElement('span');
+            vis = document.createElement('span'),
+            ext = document.createElement('span'),
+            label = document.createElement('span'),
+            extra = document.createElement('div'),
+            actions = document.createElement('div'),
+            desc = document.createElement('div');
 
-        elem.setAttribute('class', 'visible-layer visible-' + (
-            isVisible ? 'yes' : 'no'
-        ));
-        label.setAttribute('class', 'visible-layer-label');
 
-        label.innerHTML = layer.get('name', layer.id);
+        addClass(elem, 'layer-item');
+        addClass(label, 'layer-item-label');
+        addClass(extra, 'layer-item-extra');
+        addClass(desc, 'layer-item-description');
+        addClass(actions, 'layer-item-actions');
+        addClass(vis, 'layer-item-action-visible');
+        addClass(ext, 'layer-item-action-extent');
+
+        if (isVisible) {
+            addClass(elem, 'visible-yes');
+        }
+        else {
+            addClass(elem, 'visible-no');
+        }
+
+        label.appendChild(document.createTextNode(getModelName(layer)));
+        desc.appendChild(document.createTextNode(layer.get('description' , '---')));
+        vis.appendChild(document.createTextNode('visible'));
+        ext.appendChild(document.createTextNode('zoom to extent'));
 
         elem.appendChild(label);
+        elem.appendChild(extra);
+        extra.appendChild(desc);
+        extra.appendChild(actions);
+        actions.appendChild(vis);
+        actions.appendChild(ext);
         container.appendChild(elem);
 
-        var toggle = function () {
+        var toggleExtra = function () {
+
+            toggleClass(elem, 'unfold');
+        };
+
+
+        var toggleVisible = function () {
             if (lister.has(layer.id)) {
                 lister.remove(layer.id);
-                elem.setAttribute('class', 'view-visible-layer visible-no');
+                removeClass(elem, 'visible-yes');
+                addClass(elem, 'visible-no');
             }
             else {
                 lister.insert(idx, layer.id);
-                elem.setAttribute('class', 'view-visible-layer visible-yes');
+                removeClass(elem, 'visible-no');
+                addClass(elem, 'visible-yes');
             }
             semaphore.signal('visibility:change', lister.getList());
         };
 
-        elem.addEventListener('click', toggle, false);
+        var toExtent = function () {
+            layerExtent(layer)
+                .then(_.bind(region.push, region))
+                .catch(function(err){console.error(err)});
+        };
+
+        vis.addEventListener('click', toggleVisible, false);
+        ext.addEventListener('click', toExtent, false);
+        label.addEventListener('click', toggleExtra, false);
     }
 
     var self = context,

@@ -162,6 +162,15 @@ Extent.prototype.intersects = function(v) {
     );
 };
 
+Extent.prototype.add = function(extent) {
+    extent = (extent instanceof Extent) ? extent : new Extent(extent);
+    this.extent[0] = Math.min(this.extent[0], extent.extent[0]);
+    this.extent[1] = Math.min(this.extent[1], extent.extent[1]);
+    this.extent[2] = Math.max(this.extent[2], extent.extent[2]);
+    this.extent[3] = Math.max(this.extent[3], extent.extent[3]);
+    return this;
+};
+
 Extent.prototype.bound = function (optExtent) {
     var e = (new Extent(optExtent)).getCoordinates(),
         result = new Array(4);

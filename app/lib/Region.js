@@ -86,7 +86,7 @@ var Region = O.extend({
             extent = new Geometry.Extent(geom);
         }
         else{
-            extent = (new Geometry(geom)).getExtent();
+            extent = (new Geometry.Geometry(geom)).getExtent();
         }
         return this.pushExtent(extent);
     },

@@ -679,7 +679,8 @@ body {
 }
 .view-visible-wrapper {
   position: absolute;
-  width: 300px;
+  width: auto;
+  max-width: 300px;
   overflow-y: auto;
   bottom: 12px;
   left: 12px;
@@ -687,30 +688,43 @@ body {
   padding: 1px;
 }
 .view-visible-wrapper .view-visible-title {
-  font-size: 9pt;
+  margin-bottom: 16px;
   text-transform: uppercase;
-  letter-spacing: 0.5pt;
-  margin-bottom: 4px;
 }
-.view-visible-wrapper .visible-layer {
+.view-visible-wrapper .layer-item {
+  margin-bottom: 8px;
+}
+.view-visible-wrapper .layer-item .layer-item-label {
+  font-size: 10pt;
   cursor: pointer;
 }
-.view-visible-wrapper .visible-yes:before,
-.view-visible-wrapper .visible-no:before {
+.view-visible-wrapper .layer-item .layer-item-extra {
+  display: none;
+}
+.view-visible-wrapper .layer-item.unfold {
+  border: 1px solid;
+  padding: 12px 12px 12px 0;
+  border-left: none;
+}
+.view-visible-wrapper .layer-item.unfold .layer-item-label {
+  border-bottom: 1px solid;
+}
+.view-visible-wrapper .layer-item.unfold .layer-item-extra {
+  display: block;
+  padding-top: 16px;
+}
+.view-visible-wrapper .layer-item.visible-no {
+  color: gray;
+}
+.view-visible-wrapper .layer-item .layer-item-actions {
+  margin-top: 8px;
+}
+.view-visible-wrapper .layer-item .layer-item-actions span {
   display: inline-block;
-  width: 12px;
-  height: 9px;
-  padding-right: 9px;
-  content: "";
+  padding: 3px;
   cursor: pointer;
-}
-.view-visible-wrapper .visible-yes:before {
-  background: url(../../styles/svg/eye-open.svg) left no-repeat;
-  background-size: contain;
-}
-.view-visible-wrapper .visible-no:before {
-  background: url(../../styles/svg/eye-closed.svg) left no-repeat;
-  background-size: contain;
+  border: 1px solid;
+  margin-right: 9px;
 }
 .view-lookup-wrapper {
   position: absolute;

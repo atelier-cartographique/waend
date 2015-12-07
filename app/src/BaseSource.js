@@ -28,7 +28,7 @@ var BaseSource = O.Object.extend({
         this.tree.clear();
     },
 
-    addFeature : function (f) {
+    addFeature: function (f) {
         var geom = f.getGeometry(),
             extent = geom.getExtent().getArray();
         this.index[f.id] = f;
