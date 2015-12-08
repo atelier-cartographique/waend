@@ -42,7 +42,10 @@ function Program (ctx) {
             var T = new ctx.Transform(fm);
             ctx.lineProject(coordinates);
             ctx.lineTransform(T, coordinates);
-            ctx.emit('draw', 'line', coordinates);
+            var extent = (new ctx.Geometry.LineString(coordinates)).getExtent();
+            if ((extent.getHeight() > 1) || (extent.getWidth() > 1)) {
+                ctx.emit('draw', 'line', coordinates);
+            }
         }
         endFeature();
     };
@@ -54,8 +57,13 @@ function Program (ctx) {
         var p = new ctx.Geometry.Polygon(coordinates),
             initialExtent = p.getExtent(),
             initialHeight = initialExtent.getHeight(),
-            initialWidth = initialExtent.getWidth(),
-            center = initialExtent.getCenter(),
+            initialWidth = initialExtent.getWidth();
+
+        if ((initialHeight < 1) || (initialWidth < 1)) {
+            return;
+        }
+
+        var center = initialExtent.getCenter(),
             bufExtent = initialExtent.maxSquare().buffer(initialExtent.getWidth() * 0.7),
             extent = new ctx.Geometry.Extent(bufExtent),
             height = extent.getHeight(),
