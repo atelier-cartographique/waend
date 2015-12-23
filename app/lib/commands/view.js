@@ -619,6 +619,8 @@ Navigator.prototype.setupCanvas = function () {
     this.canvas.height = rect.height;
     this.canvas.backgroundColor = 'transparent';
     this.canvas.style.position = 'absolute';
+    this.canvas.style.willChange = 'transform';
+    this.canvas.style.transform = 'translateZ(0)';
     this.canvas.style.top = '0';
     this.canvas.style.left = '0';
 
