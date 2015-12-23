@@ -104,7 +104,25 @@ ImageLoader.prototype.cancel = function () {
 
 
 function Painter (view, layerId) {
-    this.context = view.getContext(layerId);
+    var baseContext = view.getContext(layerId);
+    var currentContext = baseContext;
+
+
+
+    Object.defineProperty(this, 'context', {
+        get: function () {
+            return currentContext;
+        },
+
+        set: function (ctx) {
+            currentContext = ctx;
+        }
+    });
+
+    this.restoreContext = function () {
+        currentContext = baseContext;
+    };
+
     this.transform = view.transform.clone();
     this.view = view;
     semaphore.on('view:change', this.resetTransform, this);
@@ -124,7 +142,10 @@ Painter.prototype.handlers = {
     'save': 'save',
     'restore': 'restore',
     'transform': 'setTransform',
-    'clear' : 'clear'
+    'clear' : 'clear',
+    'startTexture': 'startTexture',
+    'endTexture': 'endTexture',
+    'applyTexture': 'applyTexture'
 };
 
 Painter.prototype.setTransform = function (a,b,c,d,e,f) {
@@ -157,6 +178,7 @@ Painter.prototype.clear = function () {
         this.imagesLoading[i].cancel();
     }
     this.imagesLoading = [];
+    this.textures = {};
     this.resetTransform();
     this.resetClip();
     this.context.clearRect(0, 0, this.view.size.width, this.view.size.height);
@@ -203,6 +225,28 @@ Painter.prototype.clip = function (cmd, coordinates) {
         this.drawPolygon(coordinates, ['clip']);
         // this.drawPolygon(coordinates, ['closePath', 'stroke']);
     }
+};
+
+Painter.prototype.startTexture = function (tid) {
+    var canvas = document.createElement('canvas');
+    canvas.width = this.context.canvas.width;
+    canvas.height = this.context.canvas.height;
+    var ctx = canvas.getContext('2d');
+    ctx.textureId = tid;
+    this.textures[tid] = {
+        canvas: canvas,
+        context: ctx
+    };
+    this.context = ctx;
+};
+
+Painter.prototype.endTexture = function () {
+    this.restoreContext();
+};
+
+Painter.prototype.applyTexture = function (tid) {
+    var canvas = this.textures[tid].canvas;
+    this.context.drawImage(canvas, 0, 0);
 };
 
 Painter.prototype.drawPolygon = function (coordinates, ends) {
