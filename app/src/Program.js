@@ -189,7 +189,7 @@ function Program (ctx) {
 
         var tkey = getTexture(initialExtent, props);
 
-        ctx.emit('clip', 'begin', ctx.polygonFloor(coordinates));
+        ctx.emit('clip', 'begin', coordinates);
         ctx.emit('applyTexture', tkey);
         ctx.emit('clip', 'end');
     };
