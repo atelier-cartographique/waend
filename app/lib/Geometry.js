@@ -251,6 +251,10 @@ Extent.prototype.getCenter = function () {
         ]);
 };
 
+Extent.prototype.getSurface = function () {
+    return this.getHeight() * this.getWidth();
+};
+
 
 function toDMS (lat, lng) {
     var latD, latM, latS,

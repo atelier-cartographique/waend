@@ -11,6 +11,11 @@
 
 function Program (ctx) {
 
+    var currentExtent,
+        currentTransform,
+        viewport,
+        textures;
+
     var getParameter = function (props, k, def) {
         return ctx.getProperty(props, 'params.'+k, def);
     };
@@ -29,6 +34,18 @@ function Program (ctx) {
         ctx.drawTextOnLine(T, coordinates,
             getParameter(props, 'text'),
             getParameter(props, 'fontsize'));
+    };
+
+    ctx.startFrame = function (startedWith, opt_extent, opt_matrix, features) {
+        currentExtent = new ctx.Geometry.Extent(opt_extent);
+        currentTransform = new ctx.Transform(opt_matrix);
+
+        var poly = currentExtent.toPolygon().getCoordinates();
+        ctx.polygonProject(poly);
+        ctx.polygonTransform(currentTransform, poly);
+        var tpoly = new ctx.Geometry.Polygon(poly);
+        viewport = tpoly.getExtent();
+        textures = {};
     };
 
 
@@ -50,6 +67,113 @@ function Program (ctx) {
         endFeature();
     };
 
+    var addTexture = function (tkey, extent, props) {
+
+        var bviewport = viewport.clone().maxSquare().buffer(viewport.getWidth() * 0.7)
+            center = viewport.getCenter(),
+            height = extent.getHeight(),
+            paramHN = getParameter(props, 'hn', 24),
+            hatchLen = Math.floor((bviewport.getHeight() * paramHN) / height),
+            bottomLeft = bviewport.getBottomLeft().getCoordinates(),
+            topRight = bviewport.getTopRight().getCoordinates(),
+            start =  bottomLeft[1],
+            left = bottomLeft[0],
+            right = topRight[0],
+            patternCoordinates = [],
+            strokeColor = getParameter(props, 'color', '#000'),
+            step = Math.ceil(bviewport.getHeight() / hatchLen),
+            lineWidth = getParameter(props, 'hatchwidth',
+                                    getParameter(props, 'linewidth', 1)),
+            turnFlag = false,
+            rotation = getParameter(props, 'rotation'),
+            paramStep = getParameter(props, 'step');
+
+        patternCoordinates.push([left, start]);
+
+        if (paramStep) {
+            step = Math.ceil(paramStep * currentTransform.getScale()[0]);
+            hatchLen = Math.floor(bviewport.getHeight() / step);
+        }
+
+        ctx.emit('startTexture', tkey);
+        if (step <= (1 * lineWidth)) {
+            if (!('style' in props)) {
+                props.style = {};
+            }
+            props.style.fillStyle = props.style.strokeStyle;
+            ctx.processStyle(props, currentTransform);
+            var rcoords = viewport.toPolygon().getCoordinates();
+            ctx.emit('draw', 'polygon', rcoords, ['closePath', 'fill']);
+        }
+        else {
+            ctx.processStyle(props, currentTransform);
+            var y;
+            for (i = 0; i < hatchLen; i++) {
+                y = start + (i*step);
+                if (turnFlag) {
+                    if (i > 0) {
+                      patternCoordinates.push([right, y]);
+                    }
+                    patternCoordinates.push([left, y]);
+                }
+                else {
+                    if (i > 0) {
+                      patternCoordinates.push([left, y]);
+                    }
+                    patternCoordinates.push([right, y]);
+                }
+                turnFlag = !turnFlag;
+            }
+
+            if (rotation) {
+                var rt = new ctx.Transform(),
+                    ccoords = center.getCoordinates();
+                rt.rotate(rotation, ccoords);
+                ctx.lineTransform(rt, patternCoordinates);
+            }
+
+            ctx.emit('draw', 'line', patternCoordinates);
+        }
+        ctx.emit('endTexture');
+        textures[tkey] = true;
+    };
+
+    var getTexture = function (extent, props) {
+        var strokeColor = getParameter(props, 'color', '#000'),
+            lineWidth = getParameter(props, 'hatchwidth',
+                                    getParameter(props, 'linewidth', 1)),
+            rotation = getParameter(props, 'rotation', 0),
+            paramHN = Math.floor((viewport.getHeight() * getParameter(props, 'hn', 24)) / extent.getHeight()),
+            step = viewport.getHeight() / paramHN,
+            paramStep = getParameter(props, 'step'),
+            hs = [];
+
+
+        if (paramStep) {
+            step = paramStep * currentTransform.getScale()[0];
+            paramHN = 'n';
+        }
+        else {
+            paramStep = 'n';
+        }
+
+        step = Math.ceil(step);
+
+        hs.push(step.toString());
+        hs.push(strokeColor.toString());
+        hs.push(lineWidth.toString());
+        hs.push(rotation.toString());
+
+        var tkey = hs.join('-');
+
+        if (!(tkey in textures)) {
+            var ts = Date.now();
+            addTexture(tkey, extent, props);
+            console.log('create texture', tkey, Object.keys(textures).length, Date.now() - ts);
+        }
+        return tkey;
+    };
+
     var hatchedPolygon = function (coordinates, props, fm) {
         var T = new ctx.Transform(fm);
         ctx.polygonProject(coordinates);
@@ -63,61 +187,10 @@ function Program (ctx) {
             return;
         }
 
-        var center = initialExtent.getCenter(),
-            bufExtent = initialExtent.maxSquare().buffer(initialExtent.getWidth() * 0.7),
-            extent = new ctx.Geometry.Extent(bufExtent),
-            height = extent.getHeight(),
-            paramHN = getParameter(props, 'hn', 24),
-            hatchLen = (height * paramHN) / initialHeight,
-            bottomLeft = extent.getBottomLeft().getCoordinates(),
-            topRight = extent.getTopRight().getCoordinates(),
-            start = bottomLeft[1],
-            left = bottomLeft[0],
-            right = topRight[0],
-            patternCoordinates = [],
-            strokeColor = getParameter(props, 'color', '#000'),
-            step = height / hatchLen,
-            lineWidth = getParameter(props, 'hatchwidth',
-                                    getParameter(props, 'linewidth', 1)),
-            turnFlag = false,
-            rotation = getParameter(props, 'rotation'),
-            paramStep = getParameter(props, 'step');
-
-        patternCoordinates.push([left, bottomLeft[1]]);
-
-        if (paramStep) {
-            step = paramStep * T.getScale()[0];
-            hatchLen = height / step;
-        }
-
-        for (i = 0; i < hatchLen; i++) {
-          var y = start + (i*step);
-          if (turnFlag) {
-            if (i > 0) {
-              patternCoordinates.push([right, y]);
-            }
-            patternCoordinates.push([left, y]);
-          }
-          else {
-            if (i > 0) {
-              patternCoordinates.push([left, y]);
-            }
-            patternCoordinates.push([right, y]);
-          }
-          turnFlag = !turnFlag;
-        }
-
-        if (rotation) {
-            var rt = new ctx.Transform(),
-                ccoords = center.getCoordinates();
-            rt.rotate(rotation, ccoords);
-            // console.log('rotation', props.rotation, ccoords, rt.flatMatrix());
-            ctx.lineTransform(rt, patternCoordinates);
-        }
+        var tkey = getTexture(initialExtent, props);
 
         ctx.emit('clip', 'begin', coordinates);
-        // ctx.emit('draw', 'polygon', coordinates);
-        ctx.emit('draw', 'line', patternCoordinates);
+        ctx.emit('applyTexture', tkey);
         ctx.emit('clip', 'end');
     };
 

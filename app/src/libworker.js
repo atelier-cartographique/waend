@@ -52,11 +52,18 @@ var lineProject = function (coordinates) {
 };
 
 
+function floorVec2 (v) {
+    v[0] = Math.floor(v[0]);
+    v[1] = Math.floor(v[1]);
+    return v;
+}
+
 var polygonTransform = function (T, coordinates) {
     for (var i = 0; i < coordinates.length; i++) {
         var ringLength = coordinates[i].length;
         for (var ii = 0; ii < ringLength; ii++) {
             coordinates[i][ii] = T.mapVec2(coordinates[i][ii]);
+            // coordinates[i][ii] = floorVec2(T.mapVec2(coordinates[i][ii]));
         }
     }
     return coordinates;
@@ -65,10 +72,29 @@ var polygonTransform = function (T, coordinates) {
 var lineTransform = function (T, coordinates) {
     for (var i = 0; i < coordinates.length; i++) {
         coordinates[i] = T.mapVec2(coordinates[i]);
+        // coordinates[i] = floorVec2(T.mapVec2(coordinates[i]));
     }
     return coordinates;
 };
 
+var polygonFloor = function (coordinates) {
+    for (var i = 0; i < coordinates.length; i++) {
+        var ringLength = coordinates[i].length;
+        for (var ii = 0; ii < ringLength; ii++) {
+            coordinates[i][ii] = floorVec2(coordinates[i][ii]);
+            // coordinates[i][ii] = floorVec2(T.mapVec2(coordinates[i][ii]));
+        }
+    }
+    return coordinates;
+};
+
+var lineFloor = function (coordinates) {
+    for (var i = 0; i < coordinates.length; i++) {
+        coordinates[i] = floorVec2(coordinates[i]);
+        // coordinates[i] = floorVec2(T.mapVec2(coordinates[i]));
+    }
+    return coordinates;
+};
 
 var dataSource;
 var renderId;
@@ -592,6 +618,8 @@ workerContext.waend = {
     'lineTransform': lineTransform,
     'polygonProject': polygonProject,
     'lineProject': lineProject,
+    'polygonFloor': polygonFloor,
+    'lineFloor': lineFloor,
     'drawTextOnLine': drawTextOnLine,
     'drawTextInPolygon': drawTextInPolygon,
     'drawTextInPolygonAuto': drawTextInPolygonAuto,
