@@ -7,6 +7,8 @@ var buffer = require('vinyl-buffer');
 // var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var gutil = require('gulp-util');
+var less = require('gulp-less');
+var path = require('path');
 
 gulp.task('map', function () {
   // set up the browserify instance on a task basis
@@ -57,4 +59,13 @@ gulp.task('worker', function () {
 });
 
 
-gulp.task('default', ['map', 'view', 'worker']);
+gulp.task('style', function(){
+    return gulp.src('./styles/waend.less')
+    .pipe(less({
+      paths: [ path.join(__dirname, 'styles') ]
+    }))
+    .pipe(gulp.dest('./styles/'));
+});
+
+gulp.task('default', ['map', 'view', 'worker', 'style']);
+gulp.task('dev', ['map', 'style']);

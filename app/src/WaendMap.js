@@ -70,10 +70,11 @@ Map.prototype.setVisibility = function (layerIds) {
             rdr.render();
         }
     });
+    this.view.reorderLayers(layerIds);
 };
 
 Map.prototype.render = function () {
-    var isBackground = true;
+    var isBackground = false;
     _.each(this.renderers, function(rdr){
         rdr.render(isBackground);
         if (rdr.isVisible) {

@@ -129,9 +129,9 @@ CanvasRenderer.prototype.render = function (isBackground) {
     }
     this.renderId = this.getNewRenderId();
     this.painter.clear();
-    if (isBackground) {
-        this.drawBackround();
-    }
+    // if (isBackground) {
+    //     this.drawBackround();
+    // }
 
     // console.log('RENDER START', this.renderId);
     var extent = this.view.getGeoExtent(this.proj);

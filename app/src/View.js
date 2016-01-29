@@ -153,16 +153,14 @@ View.prototype.getLayer = function (layerId) {
     return this.layers[idx];
 };
 
-View.prototype.getFeatures = function (extent) {
-    var features = [];
-    for (var i = 0; i < this.layers.length; i++) {
-        var lyr = this.layers[i],
-            fts = lyr.getFeatures(extent);
-        if (fts) {
-            features = features.concat(fts);
-        }
+View.prototype.getCanvas = function (layerId) {
+    var idx = _.findIndex(this.canvas, function (cvns) {
+        return (layerId === cvns.id);
+    });
+    if (idx < 0) {
+        return null;
     }
-    return features;
+    return this.canvas[idx];
 };
 
 View.prototype.getContext = function (layerId) {
@@ -175,6 +173,18 @@ View.prototype.getContext = function (layerId) {
     return this.contexts[idx];
 };
 
+View.prototype.getFeatures = function (extent) {
+    var features = [];
+    for (var i = 0; i < this.layers.length; i++) {
+        var lyr = this.layers[i],
+            fts = lyr.getFeatures(extent);
+        if (fts) {
+            features = features.concat(fts);
+        }
+    }
+    return features;
+};
+
 View.prototype.createCanvas = function (layerId) {
     var canvas = document.createElement('canvas'),
         rect = this.getRect();
@@ -185,7 +195,7 @@ View.prototype.createCanvas = function (layerId) {
     canvas.style.position = 'absolute';
     canvas.style.top = '0';
     canvas.style.left = '0';
-    canvas.zIndex = this.canvas.length;
+    canvas.style.zIndex = -this.canvas.length;
     this.canvas.push(canvas);
     this.root.insertBefore(canvas, this.navigator.getNode());
     return canvas;
@@ -229,6 +239,24 @@ View.prototype.removeLayer = function (layer) {
         });
         return this;
     }
+};
+
+View.prototype.reorderLayers = function (ids) {
+    var ll = this.layers.length;
+
+    _.each(this.canvas, function(cnvs) {
+        cnvs.style.zIndex = -ll;
+    });
+
+    for (var i = 0; i < ids.length; i++) {
+        var id = ids[i],
+            cnvs = this.getCanvas(id);
+
+        if (cnvs) {
+            cnvs.style.zIndex = -i;
+        }
+    }
+
 };
 
 View.prototype.forEachImage = function (fn, ctx) {
