@@ -8,7 +8,7 @@
  *
  */
 
- // 'use strict';
+'use strict';
 
 var O = require('../../lib/object').Object,
     _ = require('underscore'),
@@ -114,7 +114,7 @@ function getUrl () {
     }
     fragment.replace(routeStripper, '');
     var path = fragment.split('/');
-    while(path.length > 0 && path[0].length === 0) {
+    while(path.length > 0 && 0 === path[0].length) {
         path = path.slice(1);
     }
     purl.fragment = fragment;

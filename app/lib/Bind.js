@@ -19,7 +19,7 @@ var _ = require('underscore'),
     Geometry = require('./Geometry'),
     Sync = require('./Sync'),
     semaphore = require('./Semaphore'),
-    Promise = require("bluebird");
+    Promise = require('bluebird');
 
 
 
@@ -30,6 +30,13 @@ var User = Model.User,
     Layer = Model.Layer,
     Feature = Model.Feature;
 
+/**
+ * A Record in Database
+ * 
+ * @param {object} model  A model
+ * @param {Array}  comps  Paths components
+ * @param {string} parent Parent Id
+ */
 function Record (model, comps, parent) {
     Object.defineProperty(this, 'model', {
         value: model
@@ -160,7 +167,7 @@ var Bind = O.extend({
         this.featurePages = {};
 
         semaphore.on('sync', function(chan, cmd, data){
-            if ('update' === cmd) {4
+            if ('update' === cmd) {
                 if (this.db.has(data.id)) {
                     var model = this.db.get(data.id);
                     model._updateData(data);
@@ -295,7 +302,7 @@ var Bind = O.extend({
                     ret.push(db.get(groupData.id));
                 }
                 else if (groupData.id in gc) {
-                    ret.push(gc[groupData.id])
+                    ret.push(gc[groupData.id]);
                 }
                 else {
                     var g = new Group(groupData);

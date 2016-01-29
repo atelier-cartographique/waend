@@ -8,7 +8,7 @@
  *
  */
 
-// 'use strict';
+'use strict';
 
 
 var _ = require('underscore'),
@@ -195,7 +195,7 @@ Extent.prototype.buffer = function (value) {
         c[1] - (hn / 2),
         c[0] + (wn / 2),
         c[1] + (hn / 2)
-      ];
+    ];
     return this;
 };
 
@@ -248,7 +248,7 @@ Extent.prototype.getCenter = function () {
     return new Point([
         (this.extent[0] + this.extent[2]) / 2,
         (this.extent[1] + this.extent[3]) / 2
-        ]);
+    ]);
 };
 
 Extent.prototype.getSurface = function () {
@@ -280,9 +280,9 @@ function toDMS (lat, lng) {
     lngS = 3600 * (lngAbs - lngD - lngM/60);
 
     return [
-        latD + '°', latM + "′", latS.toPrecision(4) + "″", latAz,
-        lngD + '°', lngM + "′", lngS.toPrecision(4) + "″", lngAz
-        ].join(' ');
+        latD + '°', latM + '\'', latS.toPrecision(4) + '\'', latAz,
+        lngD + '°', lngM + '\'', lngS.toPrecision(4) + '\'', lngAz
+    ].join(' ');
 }
 
 
