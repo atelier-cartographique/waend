@@ -10,12 +10,26 @@
 
 // 'use strict';
 
-var _ = require('underscore');
+var _ = require('underscore'),
+    Geometry = require('../../Geometry');
 
-function setGeometry () {
+function setGeometry (geoJSON) {
     var self = this,
         feature = self.data,
+        geom;
+
+    if (geoJSON) {
+        try {
+            var data = JSON.parse(geoJSON);
+            geom = new Geometry.Geometry(data);
+        }
+        catch (err) {
+            return this.endWithError(err);
+        }
+    }
+    else {
         geom = self.shell.env.DELIVERED;
+    }
 
 
     return feature.setGeometry(geom);
