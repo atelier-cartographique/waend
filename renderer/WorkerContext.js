@@ -37,6 +37,11 @@ var lineProject = function (coordinates) {
     return coordinates;
 };
 
+function floorVec2 (v) {
+    v[0] = Math.floor(v[0]);
+    v[1] = Math.floor(v[1]);
+    return v;
+}
 
 var polygonTransform = function (T, coordinates) {
     for (var i = 0; i < coordinates.length; i++) {
@@ -55,6 +60,24 @@ var lineTransform = function (T, coordinates) {
     return coordinates;
 };
 
+var polygonFloor = function (coordinates) {
+    for (var i = 0; i < coordinates.length; i++) {
+        var ringLength = coordinates[i].length;
+        for (var ii = 0; ii < ringLength; ii++) {
+            coordinates[i][ii] = floorVec2(coordinates[i][ii]);
+            // coordinates[i][ii] = floorVec2(T.mapVec2(coordinates[i][ii]));
+        }
+    }
+    return coordinates;
+};
+
+var lineFloor = function (coordinates) {
+    for (var i = 0; i < coordinates.length; i++) {
+        coordinates[i] = floorVec2(coordinates[i]);
+        // coordinates[i] = floorVec2(T.mapVec2(coordinates[i]));
+    }
+    return coordinates;
+};
 
 
 function GeomItem (data) {
@@ -95,7 +118,7 @@ function updateView (startedWith, opt_extent, opt_matrix) {
         rf(f);
     }
     // console.log('frame:end');
-    underscore.delay(this.endFrame.bind(this), 5000);
+    underscore.delay(this.endFrame.bind(this), 100);
 }
 
 
@@ -461,7 +484,7 @@ var WorkerContext = O.extend({
     },
 
     messageHandler: function  (event) {
-        try {
+        // try {
             var data = event.data,
                 name = data.name,
                 args = data.args || [];
@@ -481,10 +504,10 @@ var WorkerContext = O.extend({
                 var localRenderId = this.renderId;
                 updateView.call(this, localRenderId, args[1], args[2]);
             }
-        }
-        catch (err) {
-            O.prototype.emit.apply(this, ['error', err]);
-        }
+        // }
+        // catch (err) {
+        //     O.prototype.emit.apply(this, ['error', err]);
+        // }
     },
 
     emit: function () {
@@ -513,6 +536,8 @@ var WorkerContext = O.extend({
     'lineTransform': lineTransform,
     'polygonProject': polygonProject,
     'lineProject': lineProject,
+    'polygonFloor': polygonFloor,
+    'lineFloor': lineFloor,
     'getProperty': getProperty,
     'initData': function(){ initData.apply(this, arguments); },
     'drawTextOnLine': function(){ drawTextOnLine.apply(this, arguments); },

@@ -17,8 +17,8 @@ var _ = require('underscore'),
     Transform = require('../app/lib/Transform');
 
 var defaultRect = {
-    'width': 1000,
-    'height': 1000
+    'width': 1920,
+    'height': 1080
 };
 
 function View (options) {
@@ -145,6 +145,7 @@ View.prototype.getContext = function (layerId) {
 View.prototype.createCanvas = function (layerId) {
     var rect = this.getRect();
     this.canvas = new Canvas(rect.width, rect.height, 'pdf');
+    // this.canvas = new Canvas(rect.width, rect.height, "png");
 };
 
 View.prototype.createContext = function () {
@@ -159,8 +160,8 @@ View.prototype.addLayer = function (layer) {
     return this;
 };
 
-View.prototype.getBuffer = function () {
-    return this.canvas.toBuffer();
+View.prototype.getBuffer = function (cb) {
+    return this.canvas.toBuffer(cb);
 };
 
 

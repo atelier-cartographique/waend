@@ -15,7 +15,8 @@ var _ = require('underscore'),
     cache = require('../lib/cache'),
     Extent = require('../app/lib/Geometry').Extent,
     Map = require('./WaendMap'),
-    waendLayerProgram = require('../app/src/Program');
+    waendLayerProgram = require('../app/src/Program'),
+    Font = require('../app/src/Font');
 
 function makeLayer (lyr) {
     lyr.toJSON = function () {
@@ -62,50 +63,58 @@ function makeLayer (lyr) {
 
 function render (request, response) {
     var gid = request.params.group_id;
-    var success = function (data) {
-        var group = data.group,
+    var success = function (jsonData) {
+        // console.log(data);
+        //
+        var data = JSON.parse(jsonData),
+            group = data.group,
             gprops = group.properties;
         console.log('render', group.id);
         if (!('extent' in gprops)) {
             return response.status(500)
                            .send('missing extent');
         }
-        try {
+        // try {
             var extent = new Extent(gprops.extent);
             var wm = new Map({
-                'extent': extent
+                'extent': extent,
+                'rect': gprops.render
             });
-            var rendered = 0;
+            var layers = group.layers;
             var ender = function () {
-                rendered += 1;
-                console.log('Rendered', rendered, group.layers.length);
-                if (rendered >= group.layers.length) {
-                    response.set('Content-Type', 'application/pdf');
-                    response.status(200);
-                    response.send(wm.view.getBuffer());
-                }
-            };
-            for (var i = 0; i < group.layers.length; i++) {
-                try {
-                    var layer = makeLayer(group.layers[i]);
+                if (layers.length > 0) {
+                    var layer = makeLayer(layers.shift());
                     console.log('Add Layer', layer.id);
                     wm.waendAddLayer(layer, ender);
+
                 }
-                catch (err) {
-                    console.error(err, err.stack.split("\n"));
-                    ender();
+                else {
+                    response.set('Content-Type', 'application/pdf');
+                    // response.set('Content-Type', 'image/png');
+                    response.status(200);
+                    var buf = wm.view.getBuffer();
+                    response.send(buf);
+                    // wm.view.getBuffer(function(err, buf){
+                    //     if (err) {
+                    //         throw err;
+                    //     }
+                    //     console.log('send', buf);
+                    //     response.send(buf);
+                    // });
                 }
-            }
-        }
-        catch (err) {
-            console.error(err, err.stack.split("\n"));
-            response.status(500).send(err);
-        }
+            };
+            ender();
+        // }
+        // catch (err) {
+        //     console.error(err, err.stack.split("\n"));
+        //     response.status(500).send(err);
+        // }
     };
     cache.client()
         .getGroup(gid)
         .then(success)
         .catch(function(err){
+            throw (err);
             response.status(500).send(err);
         });
 }
@@ -131,11 +140,13 @@ module.exports = function(config){
 
     app.start = function(postStart){
         // app.use(fof);
-        var server = app.listen(app.get('port'), function(){
-            console.log('Express server listening on port ' + server.address().port);
-            if(postStart){
-                postStart(app, server);
-            }
+        Font.select('default', function(){
+            var server = app.listen(app.get('port'), function(){
+                console.log('Express server listening on port ' + server.address().port);
+                if(postStart){
+                    postStart(app, server);
+                }
+            });
         });
     };
 

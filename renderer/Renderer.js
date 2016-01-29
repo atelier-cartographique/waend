@@ -84,7 +84,9 @@ CanvasRenderer.prototype.render = function (ender) {
     }
     worker.once('frame:end', function () {
         if (ender) {
-            ender();
+            // ender();
+            console.log('got end frame, waiting a second');
+            _.delay(ender, 1000);
         }
     });
     this.renderId = this.getNewRenderId();

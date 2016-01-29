@@ -57,6 +57,7 @@ var WWorker = O.extend({
         var self = this;
         var handler = function (event) {
             console.error(event);
+            throw (new Error(event));
         };
         return handler;
     }
