@@ -1,9 +1,8 @@
 #HELP WÆND
 
-This is a quite rought help for now, it will be improved from time to time.  
-Feel free to give a hand !
+***Wænd is in alpha version, if you like to create a user account, visit http://alpha.waend.com/register.***
 
-If you like to create a user acount, visit http://alpha.waend.com/register.
+This help is improved from time to time, and you can help us by sending your suggestions at contact@atelier-cartographique.be
 
 
 An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/waend-tutorial-09-2015_2.pdf" target="_blank">here</a>
@@ -46,6 +45,8 @@ An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/
 7.1  [Searching maps on Wænd](#search)   
 7.2  [Sharing maps](#share)  
 7.3  [Embedding a map in another web-page](#embed)  
+7.4  [Batch import geo-tagged images](#batch-img)   
+7.5  [Create and import images tiles](#tiles) 
  
 8.  [Memento : List of common commands](#commands-list) 
 
@@ -579,8 +580,39 @@ Your iframe will look like :
 
 	<iframe style="position: absolute; top: -9999em; visibility: hidden;" onload="this.style.position='static'; this.style.visibility='visible';" src="http://alpha.waend.com/map/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994?c=view" height="600px" width="1000px"></iframe>
  
-	
-	
+ 
+##<a name="batch-img"></a>Batch import geo-tagged images
+  
+So far, batch import of geotaged images is not supported natively in Wænd. But there is a workaround. Here is a how to, using Qgis :
+
+- install the experimental Qgis pluggin "Geotag and import photos".
+- import your geo-tagged images in Qgis, you will get points with the path to your images as an attribute.
+- transform your points into polygons using the Buffer function. You can set the buffer distance according to the size you want your images to be in Wænd (like 5m for trees illustrations..).
+- export your polygons in GEOjson.
+- edit your GEOjson with a code editor, and change the image path the way they are stored on Wænd (yourUserId/ImageNameWithoutExtension).
+- Upload your images on Wænd
+- Import your edited GEOjson in a new layer
+- At this layer level, set the image path for every feature like this : set params.image @ImagePathAttributeName
+- And voilà !
+
+##<a name="tiles"></a>Create and import images tiles
+
+Following the logic as described above, you can import tiles when you need a very big and zoomable image. 
+
+Using QGIS, you will need to :  
+
+- work on a project in EPSG:3857 (projection used in Wænd)
+- geo-locate you image / raster 
+- use gridSplitter plugin to split the raster 
+- create a tile index shapefile from the tiles with image path key checked
+- Export tile index in geoJSON (WGS84 : Wænd datas are stored in this projection)
+- Modify geoJSON with Wænd img path (userID/image-name-without-extention)
+- Export tif tiles in jpg or png to reduce files size
+- Import exported tiles in waend
+- Import GEOjson in waend layer
+- At layer level : set params.image @your-image-path-key (default would be "@location")
+
+Do not forget to work in EPSG3857 in Qgis and to export your GEOjson in WGS84, otherwise you will get glitches. 
 	
 	
 ## <a name="commands-details"></a> Memento : List of common commands

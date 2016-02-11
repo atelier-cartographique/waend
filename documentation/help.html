@@ -324,10 +324,9 @@ sup {
 <body>
 <h1 id="toc_0">HELP WÆND</h1>
 
-<p>This is a quite rought help for now, it will be improved from time to time.<br>
-Feel free to give a hand !</p>
+<p><strong><em>Wænd is in alpha version, if you like to create a user account, visit http://alpha.waend.com/register.</em></strong></p>
 
-<p>If you like to create a user acount, visit http://alpha.waend.com/register.</p>
+<p>This help is improved from time to time, and you can help us by sending your suggestions at contact@atelier-cartographique.be</p>
 
 <p>An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/waend-tutorial-09-2015_2.pdf" target="_blank">here</a></p>
 
@@ -361,7 +360,9 @@ Feel free to give a hand !</p>
 <li><p><a href="">Other</a><br>
 7.1  <a href="#search">Searching maps on Wænd</a><br>
 7.2  <a href="#share">Sharing maps</a><br>
-7.3  <a href="#embed">Embedding a map in another web-page</a>  </p></li>
+7.3  <a href="#embed">Embedding a map in another web-page</a><br>
+7.4  <a href="#batch-img">Batch import geo-tagged images</a><br>
+7.5  <a href="#tiles">Create and import images tiles</a> </p></li>
 <li><p><a href="#commands-list">Memento : List of common commands</a> </p></li>
 </ol>
 
@@ -455,9 +456,9 @@ Eg : If you want a green park, you have will have to set this color infomation t
 
 <p>Example :</p>
 
-<pre><code class="language-none">set name my-element-name
+<div><pre><code class="language-none">set name my-element-name
 set description &quot;here is my description&quot;
-set &quot;city population&quot; 1000000</code></pre>
+set &quot;city population&quot; 1000000</code></pre></div>
 
 <h3 id="toc_11"><a name="get"></a> Get attributes : <code>get</code></h3>
 
@@ -476,7 +477,7 @@ set &quot;city population&quot; 1000000</code></pre>
 <p>There is no <em>edit</em> button yet, but the functionality is here.<br>
 To edit a specific attribute, we use the pipe <code>|</code> sign to chain commands together :</p>
 
-<pre><code class="language-none">get attribute_name | edit | set attribute_name</code></pre>
+<div><pre><code class="language-none">get attribute_name | edit | set attribute_name</code></pre></div>
 
 <p>Eg :  <code>get name | edit | set name</code> will <em>get the name value</em>, <em>open the editor</em> with the name value in it, and <em>set the new value</em> as name. </p>
 
@@ -486,9 +487,9 @@ To edit a specific attribute, we use the pipe <code>|</code> sign to chain comma
 
 <p>Example:</p>
 
-<pre><code class="language-none">del description
+<div><pre><code class="language-none">del description
 or
-del name</code></pre>
+del name</code></pre></div>
 
 <h3 id="toc_14"><a name="profile"></a> Exemple : customize your profile</h3>
 
@@ -514,7 +515,7 @@ hatches step : <code>set params.step</code> + number (in meter)</p>
 
 <p>Exemples : </p>
 
-<pre><code class="language-none">line color (value can be any HTML color value): 
+<div><pre><code class="language-none">line color (value can be any HTML color value): 
 set style.strokeStyle orange  
 set style.strokeStyle #FF7F00  
 set style.strokeStyle &quot;rgb(255, 127, 0)&quot;  
@@ -530,7 +531,7 @@ Hatches rotation :
 set params.rotation -45
 
 Hatches step : 
-set params.step 10</code></pre>
+set params.step 10</code></pre></div>
 
 <p>Here is an illustration of what it does :  </p>
 
@@ -545,14 +546,14 @@ Font color :  <code>set style.fillStyle</code> + any html color value </p>
 
 <p>Exemples : </p>
 
-<pre><code class="language-none">Font size (value in meters): 
+<div><pre><code class="language-none">Font size (value in meters): 
 set params.fontsize 12.6  
 
 Font color (value can be any HTML color value) :
 set style.fillStyle orange  
 set style.fillStyle #FF7F00  
 set style.fillStyle &quot;rgb(255, 127, 0)&quot;  
-set style.fillStyle &quot;rgba(255, 127, 0, 1)&quot;  </code></pre>
+set style.fillStyle &quot;rgba(255, 127, 0, 1)&quot;  </code></pre></div>
 
 <p>Here is an illustration of what it does :  </p>
 
@@ -567,14 +568,14 @@ clip :  <code>set params.clip</code> + true OR false (default is &quot;true&quot
 
 <p>Exemples : </p>
 
-<pre><code class="language-none">Adjust : 
+<div><pre><code class="language-none">Adjust : 
 set params.adjust none  
 set params.adjust cover  
 set params.adjust fit  
 
 Clip : 
 set params.clip true
-set params.clip false   </code></pre>
+set params.clip false   </code></pre></div>
 
 <p>Here is an illustration of what it does :  </p>
 
@@ -620,7 +621,7 @@ They are all green, with -45° rotation, except one, wich has specific style.</p
 
 <p>Let say you are the author of a layerA, and you want to attach it to a mapZ :</p>
 
-<pre><code class="language-none">attach /userZ_id/mapZ_id/layerA_id</code></pre>
+<div><pre><code class="language-none">attach /userZ_id/mapZ_id/layerA_id</code></pre></div>
 
 <p>How it works :</p>
 
@@ -634,7 +635,7 @@ They are all green, with -45° rotation, except one, wich has specific style.</p
 
 <p>To detach layerA from mapZ, do :</p>
 
-<pre><code class="language-none">detach /userZ_id/mapZ_id/layerA_id</code></pre>
+<div><pre><code class="language-none">detach /userZ_id/mapZ_id/layerA_id</code></pre></div>
 
 <h3 id="toc_25"><a name="delete-layer"></a> Delete a layer - See <code>detach</code></h3>
 
@@ -673,7 +674,7 @@ The restrictions so far are :</p>
 
 <h5 id="toc_29">Query for buildings in selection box</h5>
 
-<pre><code class="language-none">[out:json][timeout:25];
+<div><pre><code class="language-none">[out:json][timeout:25];
 // gather results
 (
   // query part for: “building”
@@ -683,11 +684,11 @@ The restrictions so far are :</p>
 // print results
 out body;
 &gt;;
-out skel qt;</code></pre>
+out skel qt;</code></pre></div>
 
 <h5 id="toc_30">Query for all roads in selection box</h5>
 
-<pre><code class="language-none">[out:json][timeout:25];
+<div><pre><code class="language-none">[out:json][timeout:25];
 // gather results
 (
   // query part for: “highway”
@@ -698,16 +699,16 @@ out skel qt;</code></pre>
 // print results
 out body;
 &gt;;
-out skel qt;</code></pre>
+out skel qt;</code></pre></div>
 
 <h5 id="toc_31">Query for everything in the selection box</h5>
 
-<pre><code class="language-none">// gather results
+<div><pre><code class="language-none">// gather results
 (way({{bbox}}););
 // print results
 out body;
 &gt;;
-out skel qt;</code></pre>
+out skel qt;</code></pre></div>
 
 <h2 id="toc_32"><a name="style-tips"></a> Style tips &amp; tricks</h2>
 
@@ -731,7 +732,7 @@ If you want to change it, please refer to <a href="https://developer.mozilla.org
 
 <p>Exemple for no compositing :</p>
 
-<pre><code class="language-none">set style.globalCompositeOperation source-over</code></pre>
+<div><pre><code class="language-none">set style.globalCompositeOperation source-over</code></pre></div>
 
 <h3 id="toc_36"><a name="image"></a>Image at layer level</h3>
 
@@ -756,18 +757,55 @@ To embed your map in view mode, you have to add <code>?c=view</code> at the end 
 
 <p>Your iframe will look like : </p>
 
-<pre><code class="language-none">&lt;iframe style=&quot;position: absolute; top: -9999em; visibility: hidden;&quot; onload=&quot;this.style.position=&#39;static&#39;; this.style.visibility=&#39;visible&#39;;&quot; src=&quot;http://alpha.waend.com/map/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994?c=view&quot; height=&quot;600px&quot; width=&quot;1000px&quot;&gt;&lt;/iframe&gt;</code></pre>
+<div><pre><code class="language-none">&lt;iframe style=&quot;position: absolute; top: -9999em; visibility: hidden;&quot; onload=&quot;this.style.position=&#39;static&#39;; this.style.visibility=&#39;visible&#39;;&quot; src=&quot;http://alpha.waend.com/map/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994?c=view&quot; height=&quot;600px&quot; width=&quot;1000px&quot;&gt;&lt;/iframe&gt;</code></pre></div>
 
-<h2 id="toc_40"><a name="commands-details"></a> Memento : List of common commands</h2>
+<h2 id="toc_40"><a name="batch-img"></a>Batch import geo-tagged images</h2>
 
-<h5 id="toc_41">General attribute commands :</h5>
+<p>So far, batch import of geotaged images is not supported natively in Wænd. But there is a workaround. Here is a how to, using Qgis :</p>
+
+<ul>
+<li>install the experimental Qgis pluggin &quot;Geotag and import photos&quot;.</li>
+<li>import your geo-tagged images in Qgis, you will get points with the path to your images as an attribute.</li>
+<li>transform your points into polygons using the Buffer function. You can set the buffer distance according to the size you want your images to be in Wænd (like 5m for trees illustrations..).</li>
+<li>export your polygons in GEOjson.</li>
+<li>edit your GEOjson with a code editor, and change the image path the way they are stored on Wænd (yourUserId/ImageNameWithoutExtension).</li>
+<li>Upload your images on Wænd</li>
+<li>Import your edited GEOjson in a new layer</li>
+<li>At this layer level, set the image path for every feature like this : set params.image @ImagePathAttributeName</li>
+<li>And voilà !</li>
+</ul>
+
+<h2 id="toc_41"><a name="tiles"></a>Create and import images tiles</h2>
+
+<p>Following the logic as described above, you can import tiles when you need a very big and zoomable image. </p>
+
+<p>Using QGIS, you will need to :  </p>
+
+<ul>
+<li>work on a project in EPSG:3857 (projection used in Wænd)</li>
+<li>geo-locate you image / raster </li>
+<li>use gridSplitter plugin to split the raster </li>
+<li>create a tile index shapefile from the tiles with image path key checked</li>
+<li>Export tile index in geoJSON (WGS84 : Wænd datas are stored in this projection)</li>
+<li>Modify geoJSON with Wænd img path (userID/image-name-without-extention)</li>
+<li>Export tif tiles in jpg or png to reduce files size</li>
+<li>Import exported tiles in waend</li>
+<li>Import GEOjson in waend layer</li>
+<li>At layer level : set params.image @your-image-path-key (default would be &quot;@location&quot;)</li>
+</ul>
+
+<p>Do not forget to work in EPSG3857 in Qgis and to export your GEOjson in WGS84, otherwise you will get glitches. </p>
+
+<h2 id="toc_42"><a name="commands-details"></a> Memento : List of common commands</h2>
+
+<h5 id="toc_43">General attribute commands :</h5>
 
 <p><code>set</code> : set something to something, often attribute to current context<br>
 <code>get</code> : get current context attributes / metadatas<br>
 <code>edit</code> : open text editor<br>
 <code>del</code> : delete + attribute name to delete  </p>
 
-<h5 id="toc_42">Style commands :</h5>
+<h5 id="toc_44">Style commands :</h5>
 
 <p>Line color :  <code>set style.strokeStyle</code> + any html color value<br>
 Line width :  <code>set style.lineWidth</code> + number (in meter)</p>
@@ -779,11 +817,11 @@ hatches step : <code>set params.step</code> + number (in meter)</p>
 <p>Font size :  <code>set params.fontsize</code> +  number (in meter)<br>
 Font color :  <code>set style.fillStyle</code> + any html color value  </p>
 
-<h5 id="toc_43">Other commands :</h5>
+<h5 id="toc_45">Other commands :</h5>
 
 <p>Search on Wænd : <code>lookup</code> + a word</p>
 
-<h5 id="toc_44">Good to know :</h5>
+<h5 id="toc_46">Good to know :</h5>
 
 <p>Pipe (|) is allowed to chain commands together.  </p>
 
