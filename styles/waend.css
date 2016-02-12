@@ -705,6 +705,7 @@ body {
   border: 1px solid;
   padding: 12px 12px 12px 0;
   border-left: none;
+  background-color: #FFF;
 }
 .view-visible-wrapper .layer-item.unfold .layer-item-label {
   border-bottom: 1px solid;
