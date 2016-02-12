@@ -180,6 +180,7 @@ var Transport = O.extend({
             var errorhandler = function (evt, xhr) {
                 reject(xhr.statusText);
             };
+
             var successHandler = function (evt, xhr) {
                 if(xhr.status >= 400){
                     return reject(xhr.statusText);
@@ -189,6 +190,16 @@ var Transport = O.extend({
                 }
                 else{
                     resolve(xhr.response);
+                }
+            };
+
+            var progressHandler = function (evt) {
+                if(_.isFunction(postOptions.progress)){
+                    postOptions.progress(
+                        evt.lengthComputable,
+                        evt.loaded,
+                        evt.total
+                    );
                 }
             };
 
@@ -213,6 +224,7 @@ var Transport = O.extend({
                     'abort' : {callback:errorhandler, context:undefined},
                     'timeout' : {callback:errorhandler, context:undefined},
                     'load' : {callback:successHandler, context:undefined},
+                    'progress': {callback:progressHandler, context:undefined}
                 },
                 'headers': headers,
                 'params': postOptions.params,

@@ -35,8 +35,42 @@ Lister.prototype.insert = function (idx, x) {
     }
 };
 
+Lister.prototype.at = function (idx) {
+    return this._list[idx];
+};
+
 Lister.prototype.remove = function (x) {
     this._list = _.without(this._list, x);
+};
+
+Lister.prototype.swap = function (i0, i1) {
+    var list = this._list,
+        tmp = list[i0];
+    list[i0] = list[i1];
+    list[i1] = tmp;
+};
+
+Lister.prototype.up = function (x) {
+    var idx = this.index(x),
+        newIdx = idx + 1;
+    if (idx < 0) {
+        return;
+    }
+    if (newIdx >= this._list.length) {
+        var list =  new Array(this._list.length);
+        list[0] = this.at(this._list.length - 1);
+        for (var i = 0; i < (this._list.length - 2); i++) {
+            list[i+1] = this.at(i);
+        }
+        this._list = list;
+    }
+    else {
+        this.swap(idx, newIdx);
+    }
+};
+
+Lister.prototype.down = function (x) {
+    // TODO
 };
 
 Lister.prototype.getList = function () {

@@ -1653,6 +1653,12 @@ body {
   margin: 0px 12px 12px 0px;
   border: 1px solid grey;
 }
+.pg-container {
+  background-color: #D0F9D0;
+  width: 30%;
+  margin: auto;
+  height: 64px;
+}
 .CodeMirror {
   background: transparent;
   position: absolute;

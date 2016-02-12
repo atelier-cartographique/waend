@@ -48,6 +48,13 @@ function setupCancel (container) {
     return cancel;
 }
 
+function setupProgress (container) {
+    var pg = document.createElement('div');
+    pg.setAttribute('class', 'pg-container');
+    container.appendChild(pg);
+    return pg;
+}
+
 function setupHints (container) {
     var hints = document.createElement('div');
     hints.setAttribute('class', 'importer-hints');
@@ -118,6 +125,35 @@ function listMedia () {
     return (new Promise(resolver));
 }
 
+function progress (length, name, options) {
+    if (!options.progess) {
+        var container = options.container;
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+        options.progress = document.createElement('div');
+        options.progress.total = document.createElement('span');
+        options.progress.counter = document.createElement('span');
+        options.progress.mediaName = document.createElement('div');
+
+        options.progress.setAttribute('class', 'media-progress');
+        options.progress.total.setAttribute('class', 'media-total');
+        options.progress.counter.setAttribute('class', 'media-counter');
+        options.progress.mediaName.setAttribute('class', 'media-name');
+
+        options.progress.mediaName.appendChild(
+            document.createTextNode(name)
+        );
+        options.progress.counter.innerHTML = '0';
+        options.progress.total.innerHTML = ' / ' + length;
+
+        options.progress.appendChild(options.progress.mediaName);
+        options.progress.appendChild(options.progress.counter);
+        options.progress.appendChild(options.progress.total);
+        container.appendChild(options.progress);
+    }
+
+}
 
 function uploadMedia () {
     var self = this,
@@ -127,7 +163,8 @@ function uploadMedia () {
         display = terminal.display(),
         dropbox = setupDropZone(display.node),
         input = setupInput(display.node),
-        cancel = setupCancel(display.node);
+        cancel = setupCancel(display.node),
+        progressNode = setupProgress(display.node);
 
         var resolver = function (resolve, reject) {
             var dragenter = function (e) {
@@ -151,20 +188,45 @@ function uploadMedia () {
             };
 
             var handleFiles = function (files) {
-                var formData = new FormData(),
-                    transport = new Transport();
+                var transport = new Transport(),
+                    files_array = [];
                 for (var i = 0; i < files.length; i++) {
-                    formData.append('media', files[i]);
+                    // formData.append('media', files[i]);
+                    files_array.push(files[i]);
                 }
 
+                var progressHandler = function (node) {
+                    return function (lengthComputable, loaded, total) {
+                        if (lengthComputable) {
+                            node.innerHTML = loaded.toString();
+                        }
+                        else {
+                            node.innerHTML = '??';
+                        }
+                    };
+                };
 
+                var single_uploader = function (accumulator, item, index, length) {
+                    var pgOpts = {container: progressNode},
+                        formData = new FormData();
 
-                transport.post(MEDIA_URL, {
-                    'headers' : {
-                        'Content-Type': false //'multipart/form-data'
-                    },
-                    'body': formData
-                })
+                    progress(item.size, item.name, pgOpts);
+                    formData.append('media', item);
+                    console.log('upload', item.name);
+                    transport.post(MEDIA_URL, {
+                        'headers' : {
+                            'Content-Type': false //'multipart/form-data'
+                        },
+                        'body': formData,
+                        'progress': progressHandler(pgOpts.progress.counter),
+                        'parse': function () {
+                            pgOpts.progress.counter.innerHTML = 'UPLOADED';
+                        }
+                    });
+                    return accumulator + 1;
+                };
+
+                Promise.reduce(files_array, single_uploader, 0)
                 .then(resolve)
                 .catch(reject)
                 .finally(function(){
