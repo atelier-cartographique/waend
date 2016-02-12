@@ -591,7 +591,7 @@ set params.clip false   </code></pre></div>
 
 <p>To edit + duplicate a feature, type : <code>gg | trace | create</code>  </p>
 
-<p>To re-trace a feature in polygon mode, type : <code>trace | sg</code>  </p>
+<p>To re-trace a polygon, type : <code>trace | sg</code>  </p>
 
 <p>To re-draw a freehand line, type : <code>draw | sg</code></p>
 
@@ -745,15 +745,16 @@ The parameters are used like described above, at the layer level.</p>
 
 <h2 id="toc_37"><a name="share"></a> Sharing maps</h2>
 
-<h3 id="toc_38"><a name="view"></a> Share map link in &quot;view mode</h3>
+<h3 id="toc_38"><a name="view"></a> Share map link in &quot;view mode&quot;</h3>
 
-<p>To share a map, you can just send the url of your map.<br>
-To share it in <em>view mode</em>, just add <code>?c=view</code> at the end of the URL.  </p>
+<p>To see your map published, use the command <code>view</code> or replace <code>map</code> by <code>view</code>in the URL.<br>
+To share a map, you can just send the url containing <code>view</code> of your map.<br>
+eg : <code>http://alpha.waend.com/view/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994</code></p>
 
 <h3 id="toc_39"><a name="embed"></a> Embedding a map in another web-page</h3>
 
 <p>You can embed maps in web pages using iframes.<br>
-To embed your map in view mode, you have to add <code>?c=view</code> at the end of the URL.  </p>
+To embed your map in view mode, you have to replace <code>map</code>by <code>view</code> at the begining of the URL.  </p>
 
 <p>Your iframe will look like : </p>
 
@@ -765,14 +766,14 @@ To embed your map in view mode, you have to add <code>?c=view</code> at the end 
 
 <ul>
 <li>install the experimental Qgis pluggin &quot;Geotag and import photos&quot;.</li>
-<li>import your geo-tagged images in Qgis, you will get points with the path to your images as an attribute.</li>
+<li>import your geo-tagged images in Qgis, you will get points with the path to your images as an attribute (like <strong><em>pathAttribute</em></strong>).</li>
 <li>transform your points into polygons using the Buffer function. You can set the buffer distance according to the size you want your images to be in Wænd (like 5m for trees illustrations..).</li>
 <li>export your polygons in GEOjson.</li>
-<li>edit your GEOjson with a code editor, and change the image path the way they are stored on Wænd (yourUserId/ImageNameWithoutExtension).</li>
+<li>edit the GEOjson file with a code editor, and change the image path the way they are stored on Wænd (yourUserId/ImageNameWithoutExtension).</li>
 <li>Upload your images on Wænd</li>
 <li>Import your edited GEOjson in a new layer</li>
-<li>At this layer level, set the image path for every feature like this : set params.image @ImagePathAttributeName</li>
-<li>And voilà !</li>
+<li>At this layer level, set the image path for every feature like this : <code>set params.image @pathAttribute</code></li>
+<li>And voilà ! You can continue to style your images at a layer level, according to your needs.</li>
 </ul>
 
 <h2 id="toc_41"><a name="tiles"></a>Create and import images tiles</h2>
@@ -787,11 +788,11 @@ To embed your map in view mode, you have to add <code>?c=view</code> at the end 
 <li>use gridSplitter plugin to split the raster </li>
 <li>create a tile index shapefile from the tiles with image path key checked</li>
 <li>Export tile index in geoJSON (WGS84 : Wænd datas are stored in this projection)</li>
-<li>Modify geoJSON with Wænd img path (userID/image-name-without-extention)</li>
+<li>Modify the geoJSON file to replace the images path with Wænd img path (userID/image-name-without-extention)</li>
 <li>Export tif tiles in jpg or png to reduce files size</li>
 <li>Import exported tiles in waend</li>
-<li>Import GEOjson in waend layer</li>
-<li>At layer level : set params.image @your-image-path-key (default would be &quot;@location&quot;)</li>
+<li>Import the modified GEOjson in your layer</li>
+<li>At layer level : <code>set params.image @your-image-path-key</code> (default would be &quot;@location&quot;)</li>
 </ul>
 
 <p>Do not forget to work in EPSG3857 in Qgis and to export your GEOjson in WGS84, otherwise you will get glitches. </p>
@@ -819,7 +820,8 @@ Font color :  <code>set style.fillStyle</code> + any html color value  </p>
 
 <h5 id="toc_45">Other commands :</h5>
 
-<p>Search on Wænd : <code>lookup</code> + a word</p>
+<p>Search on Wænd : <code>lookup</code> + a word<br>
+Display your map in &quot;view mode&quot; : <code>view</code></p>
 
 <h5 id="toc_46">Good to know :</h5>
 

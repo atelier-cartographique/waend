@@ -392,7 +392,7 @@ To edit a feature geometry, type : ```gg | trace | sg```
 
 To edit + duplicate a feature, type : ```gg | trace | create```  
 
-To re-trace a feature in polygon mode, type : ```trace | sg```  
+To re-trace a polygon, type : ```trace | sg```  
 
 To re-draw a freehand line, type : ```draw | sg```
 	
@@ -565,16 +565,17 @@ To do so, type at a layer level :
 
 ##<a name="share"></a> Sharing maps
 
-###<a name="view"></a> Share map link in "view mode
+###<a name="view"></a> Share map link in "view mode"
 
-To share a map, you can just send the url of your map.  
-To share it in *view mode*, just add ```?c=view``` at the end of the URL.  
+To see your map published, use the command ```view``` or replace ```map``` by ```view```in the URL.   
+To share a map, you can just send the url containing ```view``` of your map.  
+eg : ```http://alpha.waend.com/view/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994```
 
 
 ###<a name="embed"></a> Embedding a map in another web-page
 
 You can embed maps in web pages using iframes.  
-To embed your map in view mode, you have to add ```?c=view``` at the end of the URL.  
+To embed your map in view mode, you have to replace ```map```by ```view``` at the begining of the URL.  
 
 Your iframe will look like : 
 
@@ -586,14 +587,14 @@ Your iframe will look like :
 So far, batch import of geotaged images is not supported natively in Wænd. But there is a workaround. Here is a how to, using Qgis :
 
 - install the experimental Qgis pluggin "Geotag and import photos".
-- import your geo-tagged images in Qgis, you will get points with the path to your images as an attribute.
+- import your geo-tagged images in Qgis, you will get points with the path to your images as an attribute (like ***pathAttribute***).
 - transform your points into polygons using the Buffer function. You can set the buffer distance according to the size you want your images to be in Wænd (like 5m for trees illustrations..).
 - export your polygons in GEOjson.
-- edit your GEOjson with a code editor, and change the image path the way they are stored on Wænd (yourUserId/ImageNameWithoutExtension).
+- edit the GEOjson file with a code editor, and change the image path the way they are stored on Wænd (yourUserId/ImageNameWithoutExtension).
 - Upload your images on Wænd
 - Import your edited GEOjson in a new layer
-- At this layer level, set the image path for every feature like this : set params.image @ImagePathAttributeName
-- And voilà !
+- At this layer level, set the image path for every feature like this : ```set params.image @pathAttribute```
+- And voilà ! You can continue to style your images at a layer level, according to your needs.
 
 ##<a name="tiles"></a>Create and import images tiles
 
@@ -606,11 +607,11 @@ Using QGIS, you will need to :
 - use gridSplitter plugin to split the raster 
 - create a tile index shapefile from the tiles with image path key checked
 - Export tile index in geoJSON (WGS84 : Wænd datas are stored in this projection)
-- Modify geoJSON with Wænd img path (userID/image-name-without-extention)
+- Modify the geoJSON file to replace the images path with Wænd img path (userID/image-name-without-extention)
 - Export tif tiles in jpg or png to reduce files size
 - Import exported tiles in waend
-- Import GEOjson in waend layer
-- At layer level : set params.image @your-image-path-key (default would be "@location")
+- Import the modified GEOjson in your layer
+- At layer level : ```set params.image @your-image-path-key``` (default would be "@location")
 
 Do not forget to work in EPSG3857 in Qgis and to export your GEOjson in WGS84, otherwise you will get glitches. 
 	
@@ -639,7 +640,8 @@ Font color :  ```set style.fillStyle``` + any html color value
 
 #####Other commands :
 
-Search on Wænd : ```lookup``` + a word
+Search on Wænd : ```lookup``` + a word  
+Display your map in "view mode" : ```view```
 
 #####Good to know : 
 
