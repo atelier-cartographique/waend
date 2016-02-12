@@ -134,7 +134,7 @@ function progress (length, name, options) {
         options.progress = document.createElement('div');
         options.progress.total = document.createElement('span');
         options.progress.counter = document.createElement('span');
-        options.progress.mediaName = document.createElement('div');
+        options.progress.mediaName = document.createElement('span');
 
         options.progress.setAttribute('class', 'media-progress');
         options.progress.total.setAttribute('class', 'media-total');
@@ -142,7 +142,7 @@ function progress (length, name, options) {
         options.progress.mediaName.setAttribute('class', 'media-name');
 
         options.progress.mediaName.appendChild(
-            document.createTextNode(name)
+            document.createTextNode(name + ' : ')
         );
         options.progress.counter.innerHTML = '0';
         options.progress.total.innerHTML = ' / ' + length;
@@ -195,38 +195,42 @@ function uploadMedia () {
                     files_array.push(files[i]);
                 }
 
-                var progressHandler = function (node) {
+                var progressHandler = function (node, lock) {
                     return function (lengthComputable, loaded, total) {
-                        if (lengthComputable) {
-                            node.innerHTML = loaded.toString();
-                        }
-                        else {
-                            node.innerHTML = '??';
+                        if (lock.o) {
+                            if (lengthComputable) {
+                                node.innerHTML = loaded.toString();
+                            }
+                            else {
+                                node.innerHTML = '??';
+                            }
                         }
                     };
                 };
 
-                var single_uploader = function (accumulator, item, index, length) {
+                var single_uploader = function (item) {
                     var pgOpts = {container: progressNode},
-                        formData = new FormData();
+                        formData = new FormData(),
+                        lock = {o:true};
 
                     progress(item.size, item.name, pgOpts);
                     formData.append('media', item);
                     console.log('upload', item.name);
-                    transport.post(MEDIA_URL, {
+                    return transport.post(MEDIA_URL, {
                         'headers' : {
                             'Content-Type': false //'multipart/form-data'
                         },
                         'body': formData,
-                        'progress': progressHandler(pgOpts.progress.counter),
+                        'progress': progressHandler(pgOpts.progress.counter, lock),
                         'parse': function () {
+                            lock.o = false;
                             pgOpts.progress.counter.innerHTML = 'UPLOADED';
+                            return item.name;
                         }
                     });
-                    return accumulator + 1;
                 };
 
-                Promise.reduce(files_array, single_uploader, 0)
+                Promise.each(files_array, single_uploader)
                 .then(resolve)
                 .catch(reject)
                 .finally(function(){

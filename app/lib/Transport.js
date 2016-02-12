@@ -24,12 +24,36 @@ function transportXHR () {
         var headers = _.omit(options.headers || {}, 'Connection', 'Content-Length');
 
         var listeners = options.listeners || {};
-        for(var listener in listeners){
-            var cb = listeners[listener].callback;
-            var ctx = listeners[listener].context;
-            xhr.addEventListener(listener, function(evt){
+
+        function mkLisetner (emitter, eventName, cb, ctx) {
+            emitter.addEventListener(eventName, function(evt){
+                console.log('XHR event', eventName);
                 cb.apply(ctx, [evt, xhr]);
             }, false);
+        }
+
+        for(var listener in listeners){
+            var lili = listeners[listener];
+            if('upload' === listener) {
+                if ('upload' in xhr) {
+                    for (ulistener in lili) {
+                        console.log('XHR.upload set event handler', ulistener);
+                        var cb = lili[ulistener].callback;
+                        var ctx = lili[ulistener].context;
+                        mkLisetner(xhr.upload, ulistener, cb, ctx);
+                    }
+                }
+            }
+            else {
+                console.log('XHR set event handler', listener);
+                var cb = lili.callback;
+                var ctx = lili.context;
+                mkLisetner(xhr, listener, cb, ctx);
+                // xhr.addEventListener(listener, function(evt){
+                //     console.log('XHR event', listener);
+                //     cb.apply(ctx, [evt, xhr]);
+                // }, false);
+            }
         }
 
         var url = options.url;
@@ -224,7 +248,9 @@ var Transport = O.extend({
                     'abort' : {callback:errorhandler, context:undefined},
                     'timeout' : {callback:errorhandler, context:undefined},
                     'load' : {callback:successHandler, context:undefined},
-                    'progress': {callback:progressHandler, context:undefined}
+                    'upload': {
+                        'progress': {callback:progressHandler, context:undefined}
+                    }
                 },
                 'headers': headers,
                 'params': postOptions.params,

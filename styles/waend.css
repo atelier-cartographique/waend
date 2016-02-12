@@ -1654,10 +1654,21 @@ body {
   border: 1px solid grey;
 }
 .pg-container {
-  background-color: #D0F9D0;
-  width: 30%;
+  width: 50%;
   margin: auto;
+  padding-top: 12px;
   height: 64px;
+  text-align: center;
+}
+.pg-container .media-name {
+  font-style: bold;
+}
+.pg-container .media-counter,
+.pg-container .media-total {
+  font-family: monospace;
+}
+.pg-container .media-total {
+  font-size: 60%;
 }
 .CodeMirror {
   background: transparent;
