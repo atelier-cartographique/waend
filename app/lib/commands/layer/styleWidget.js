@@ -1,5 +1,5 @@
 /*
- * app/lib/commands/textEdit.js
+ * app/lib/commands/layer/styleWidget.js
  *
  *
  * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>

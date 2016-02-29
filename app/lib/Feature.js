@@ -13,7 +13,8 @@
 var Context = require('./Context'),
     Bind = require('./Bind'),
     getGeometry = require('./commands/feature/getGeometry'),
-    setGeometry = require('./commands/feature/setGeometry');
+    setGeometry = require('./commands/feature/setGeometry'),
+    styleWidget = require('./commands/feature/styleWidget');
 
 
 
@@ -21,7 +22,8 @@ var Feature = Context.extend({
     name: 'group',
     commands:{
         'gg' : getGeometry.command,
-        'sg' : setGeometry.command
+        'sg' : setGeometry.command,
+        'style': styleWidget.command
     }
 });
 
