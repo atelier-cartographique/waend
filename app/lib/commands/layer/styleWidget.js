@@ -21,7 +21,7 @@ function imageStyleClip (layer) {
         labelElement = document.createElement('div'),
         wrapper = document.createElement('div');
 
-    labelElement.innerHTML = 'image clip';
+    labelElement.innerHTML = 'image : clip to shape';
     inputElement.setAttribute('type', 'checkbox');
     inputElement.value = 'yes/no';
 
@@ -39,10 +39,10 @@ function imageStyleClip (layer) {
 function imageStyleAdjust (layer) {
     var labelElement = document.createElement('div'),
         wrapper = document.createElement('div'),
-        options = ['none', 'fit', 'cover'];
+        options = ['adjust to shape', 'fit in shape', 'cover shape'];
 
 
-    labelElement.innerHTML = 'image adjust';
+    labelElement.innerHTML = 'image : proportion adjustment';
     wrapper.appendChild(labelElement);
 
     _.each(options, function(option){
@@ -72,12 +72,12 @@ function styler (ctx) {
 
 
     var params = [
-        ['stroke color', 'color', 'style.strokeStyle'],
-        ['line width', 'number', 'style.lineWidth'],
+        ['line color', 'color', 'style.strokeStyle'],
+        ['line width (in meters)', 'number', 'style.lineWidth'],
         ['hatches number', 'number', 'params.hn'],
-        ['hatches step', 'number', 'params.step'],
-        ['hatches rotation', 'number', 'params.rotation'],
-        ['font size', 'number', 'params.fontsize'],
+        ['hatches step (in meters)', 'number', 'params.step'],
+        ['hatches rotation (degrees)', 'number', 'params.rotation'],
+        ['font size (in meters)', 'number', 'params.fontsize'],
         ['font color', 'color', 'style.fillStyle'],
         imageStyleClip,
         imageStyleAdjust
