@@ -16,6 +16,55 @@ var _ = require('underscore'),
 
 var makeInput = helpers.makeInput;
 
+function imageStyleClip (layer) {
+    var inputElement = document.createElement('input'),
+        labelElement = document.createElement('div'),
+        wrapper = document.createElement('div');
+
+    labelElement.innerHTML = 'image clip';
+    inputElement.setAttribute('type', 'checkbox');
+    inputElement.value = 'yes/no';
+
+    inputElement.addEventListener('change', function(event){
+        layer.set('params.clip', !!inputElement.checked);
+    }, false);
+
+    inputElement.checked = layer.get('params.clip', false);
+
+    wrapper.appendChild(labelElement);
+    wrapper.appendChild(inputElement);
+    return wrapper;
+}
+
+function imageStyleAdjust (layer) {
+    var labelElement = document.createElement('div'),
+        wrapper = document.createElement('div'),
+        options = ['none', 'fit', 'cover'];
+
+
+    labelElement.innerHTML = 'image adjust';
+    wrapper.appendChild(labelElement);
+
+    _.each(options, function(option){
+        var radio = document.createElement('input'),
+            radioWrapper= document.createElement('div');
+        radio.setAttribute('type', 'radio');
+        radio.setAttribute('name', 'imageClip');
+        radio.setAttribute('value', option);
+        if (layer.get('params.adjust', 'none') === option) {
+            radio.setAttribute('checked', 1);
+        }
+        radioWrapper.appendChild(radio);
+        radioWrapper.appendChild(document.createTextNode(option));
+        wrapper.appendChild(radioWrapper);
+        radio.addEventListener('change', function(event){
+            layer.set('params.adjust', option);
+        }, false);
+    });
+
+    return wrapper;
+}
+
 function styler (ctx) {
     var container = ctx.container,
         layer = ctx.layer,
@@ -28,6 +77,10 @@ function styler (ctx) {
         ['hatches number', 'number', 'params.hn'],
         ['hatches step', 'number', 'params.step'],
         ['hatches rotation', 'number', 'params.rotation'],
+        ['font size', 'number', 'params.fontsize'],
+        ['font color', 'color', 'style.fillStyle'],
+        imageStyleClip,
+        imageStyleAdjust
     ];
 
     var genCB = function (prop) {
@@ -37,16 +90,22 @@ function styler (ctx) {
     };
 
     _.each(params, function(p){
-        var label = p[0],
-            type = p[1],
-            prop = p[2];
+        if (_.isFunction(p)) {
+            container.appendChild(p(layer));
+        }
+        else {
+            var label = p[0],
+                type = p[1],
+                prop = p[2];
 
-        var input = makeInput({
-            label: label,
-            type: type,
-            value: layer.get(prop)
-        }, genCB(prop));
-        container.appendChild(input);
+            var input = makeInput({
+                label: label,
+                type: type,
+                value: layer.get(prop)
+            }, genCB(prop));
+            container.appendChild(input);
+        }
+
     });
 }
 

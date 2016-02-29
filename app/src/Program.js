@@ -69,7 +69,7 @@ function Program (ctx) {
 
     var addTexture = function (tkey, extent, props) {
 
-        var bviewport = viewport.clone().maxSquare().buffer(viewport.getWidth() * 0.7)
+        var bviewport = viewport.clone().maxSquare().buffer(viewport.getWidth() * 0.7),
             center = viewport.getCenter(),
             height = extent.getHeight(),
             paramHN = getParameter(props, 'hn', 24),
