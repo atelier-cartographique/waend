@@ -112,6 +112,28 @@ module.exports.makeButton = function (label, attrs, callback, ctx) {
     return button;
 };
 
+
+module.exports.makeInput = function (options, callback, ctx) {
+    var inputElement = document.createElement('input'),
+        labelElement = document.createElement('div'),
+        wrapper = document.createElement('div');
+
+    exports.setAttributes(wrapper, options.attrs || {});
+
+    labelElement.innerHTML = options.label;
+    inputElement.setAttribute('type', options.type);
+    inputElement.value = options.value;
+    if (callback) {
+        inputElement.addEventListener('change', function(event){
+            callback.call(ctx, inputElement.value);
+        }, false);
+    }
+
+    wrapper.appendChild(labelElement);
+    wrapper.appendChild(inputElement);
+    return wrapper;
+};
+
 module.exports.eventPreventer = function (elem, events) {
     _.each(events, function (eventName) {
         elem.addEventListener(eventName, function(e){

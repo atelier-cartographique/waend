@@ -40,7 +40,6 @@ var commandModules = [
     require('./delFeature'),
     require('./attach'),
     require('./detach'),
-    require('./styleWidget'),
     require('./widget'),
     require('./wSet'),
     require('./notify'),

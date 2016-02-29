@@ -13,7 +13,8 @@
 var Context = require('./Context'),
     listFeatures = require('./commands/layer/listFeatures'),
     createFeature = require('./commands/layer/createFeature'),
-    importer = require('./commands/layer/importer');
+    importer = require('./commands/layer/importer'),
+    styler = require('./commands/layer/styleWidget');
 
 
 
@@ -22,7 +23,8 @@ var Layer = Context.extend({
     commands:{
         'lf': listFeatures.command,
         'create': createFeature.command,
-        'import': importer.command
+        'import': importer.command,
+        'style': styler.command
     }
 });
 
