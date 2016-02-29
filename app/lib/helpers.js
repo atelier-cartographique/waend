@@ -115,7 +115,7 @@ module.exports.makeButton = function (label, attrs, callback, ctx) {
 
 module.exports.makeInput = function (options, callback, ctx) {
     var inputElement = document.createElement('input'),
-        labelElement = document.createElement('div'),
+        labelElement = document.createElement('label'),
         wrapper = document.createElement('div');
 
     exports.setAttributes(wrapper, options.attrs || {});

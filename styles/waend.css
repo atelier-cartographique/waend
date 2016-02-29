@@ -184,7 +184,8 @@ table {
   border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
-.label {
+.label,
+label {
   font-size: 9pt;
   text-transform: uppercase;
   letter-spacing: 0.5pt;
@@ -2262,9 +2263,20 @@ canvas.tool-trace {
   background-size: contain;
 }
 .stylewidget-wrapper {
-  width: 324px;
+  width: 155px;
   background-color: #F8F8F8;
   padding: 12px;
+}
+.stylewidget-wrapper .stylewidget-element {
+  margin-bottom: 12px;
+}
+.stylewidget-wrapper input {
+  width: 143px;
+  font-size: 12pt;
+  padding: 6px;
+}
+.stylewidget-wrapper input[type="radio"] {
+  width: auto;
 }
 .widget-form {
   position: absolute;
