@@ -1,5 +1,19 @@
 .stylewidget-wrapper{
-	width : 324px;
+	width : @widthMenuLeft;
 	background-color: @lightgrey;
 	padding: 12px;
+
+	.stylewidget-element {
+		margin-bottom: @margin;
+	}
+
+	input {
+		width: @widthMenuLeft - @margin;
+		font-size: 12pt;
+		padding: @margin / 2;
+
+		&[type="radio"] {
+			width: auto;
+		}
+	}
 }
