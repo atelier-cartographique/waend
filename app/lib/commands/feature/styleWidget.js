@@ -14,7 +14,8 @@ var _ = require('underscore'),
     helpers = require('../../helpers'),
     Promise = require('bluebird');
 
-var makeInput = helpers.makeInput;
+var makeInput = helpers.makeInput,
+    addClass = helpers.addClass;
 
 
 function getFeatureStyle (layer, feature, style, def) {
@@ -55,7 +56,7 @@ function imageStyleClip (layer, feature) {
         labelElement = document.createElement('div'),
         wrapper = document.createElement('div');
 
-    labelElement.innerHTML = 'image clip';
+    labelElement.innerHTML = 'image clip : true/false';
     inputElement.setAttribute('type', 'checkbox');
     inputElement.value = 'yes/no';
 
@@ -67,6 +68,7 @@ function imageStyleClip (layer, feature) {
 
     inputElement.checked = getFeatureProp(layer, feature, 'params.clip', false);
 
+    wrapper.setAttribute('class','stylewidget-element');
     wrapper.appendChild(labelElement);
     wrapper.appendChild(inputElement);
     return wrapper;
@@ -75,10 +77,11 @@ function imageStyleClip (layer, feature) {
 function imageStyleAdjust (layer, feature) {
     var labelElement = document.createElement('div'),
         wrapper = document.createElement('div'),
-        options = ['none', 'fit', 'cover'];
+        options = ['adjust to shape', 'fit in shape', 'cover shape'];
 
 
-    labelElement.innerHTML = 'image adjust';
+    labelElement.innerHTML = 'image proportions';
+    wrapper.setAttribute('class','stylewidget-element');
     wrapper.appendChild(labelElement);
 
     _.each(options, function(option){
@@ -142,7 +145,7 @@ function text (ctx) {
         inputs = [];
 
     var params = [
-        ['font size', 'number', 'params.fontsize'],
+        ['font size (meters)', 'number', 'params.fontsize'],
         ['font color', 'color', 'style.fillStyle'],
         textContent,
     ];
@@ -179,11 +182,11 @@ function polygon (ctx) {
         inputs = [];
 
     var params = [
-        ['stroke color', 'color', 'style.strokeStyle'],
-        ['line width', 'number', 'style.lineWidth'],
+        ['line color', 'color', 'style.strokeStyle'],
+        ['line width (meters)', 'number', 'style.lineWidth'],
         ['hatches number', 'number', 'params.hn'],
-        ['hatches step', 'number', 'params.step'],
-        ['hatches rotation', 'number', 'params.rotation'],
+        ['hatches step (meters)', 'number', 'params.step'],
+        ['hatches angle (degrees)', 'number', 'params.rotation'],
     ];
 
     function genCB (prop) {
@@ -206,6 +209,7 @@ function polygon (ctx) {
                 type: type,
                 value: getFeatureProp(layer, feature, prop, null)
             }, genCB(prop));
+            addClass(input, 'stylewidget-element');
             container.appendChild(input);
         }
     });
@@ -299,7 +303,7 @@ function styleWidget (opt_txt) {
                     });
 
                     var closeButton = document.createElement('div');
-                    closeButton.setAttribute('class', 'stylewidget-close');
+                    closeButton.setAttribute('class', 'stylewidget-close push-cancel');
                     closeButton.innerHTML = 'Close';
 
                     closeButton.addEventListener('click', function(){

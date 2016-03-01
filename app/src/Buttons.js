@@ -103,6 +103,10 @@ function loginButton(console, button) {
 
 
  var layerButtons = {
+    'Style layer': {
+        type: 'display',
+        command: ['sl']
+    },
     'List features': {
         type: 'embed',
         command: ['lf']
@@ -126,6 +130,10 @@ function loginButton(console, button) {
  };
 
  var featureButtons = {
+    'Style feature': {
+        type: 'display',
+        command: ['sf']
+    },
      'Set name': {
          type: 'display',
          command: ['get name | edit | set name']
@@ -133,10 +141,6 @@ function loginButton(console, button) {
      'Set image': {
          type: 'display',
          command: ['media pick | set params.image']
-     },
-     'Set color': {
-         type: 'display',
-         command: ['get style.strokeStyle | edit | set style.strokeStyle']
      },
      'Set text': {
          type: 'display',

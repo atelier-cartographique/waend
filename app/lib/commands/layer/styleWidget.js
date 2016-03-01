@@ -15,7 +15,8 @@ var _ = require('underscore'),
     Promise = require('bluebird');
 
 var makeInput = helpers.makeInput,
-    addClass = helpers.addClass;
+    addClass = helpers.addClass,
+    getModelName = helpers.getModelName;
 
 
 function imageStyleClip (layer) {
@@ -23,7 +24,7 @@ function imageStyleClip (layer) {
         labelElement = document.createElement('label'),
         wrapper = document.createElement('div');
 
-    labelElement.innerHTML = 'image : clip to shape';
+    labelElement.innerHTML = 'image clip : Yes/No';
     inputElement.setAttribute('type', 'checkbox');
     inputElement.value = 'yes/no';
 
@@ -69,6 +70,37 @@ function imageStyleAdjust (layer) {
     return wrapper;
 }
 
+function layerCompositing (layer) {
+    var labelElement = document.createElement('label'),
+        wrapper = document.createElement('div'),
+        options = ['source-over', 'multiply'];
+
+
+    labelElement.innerHTML = 'layer compositing';
+    wrapper.setAttribute('class','stylewidget-element');
+    wrapper.appendChild(labelElement);
+
+    _.each(options, function(option){
+        var radio = document.createElement('input'),
+            radioWrapper= document.createElement('div');
+        radio.setAttribute('type', 'radio');
+        radio.setAttribute('name', 'compositing');
+        radio.setAttribute('value', option);
+        if (layer.get('style.globalCompositeOperation', 'multiply') === option) {
+            radio.setAttribute('checked', 1);
+        }
+        radioWrapper.appendChild(radio);
+        radioWrapper.appendChild(document.createTextNode(option));
+        wrapper.appendChild(radioWrapper);
+        radio.addEventListener('change', function(event){
+            layer.set('style.globalCompositeOperation', option);
+        }, false);
+    });
+
+    return wrapper;
+}
+
+
 function styler (ctx) {
     var container = ctx.container,
         layer = ctx.layer,
@@ -84,7 +116,8 @@ function styler (ctx) {
         ['font size (meters)', 'number', 'params.fontsize'],
         ['font color', 'color', 'style.fillStyle'],
         imageStyleClip,
-        imageStyleAdjust
+        imageStyleAdjust,
+        layerCompositing
     ];
 
     var genCB = function (prop) {
@@ -114,6 +147,23 @@ function styler (ctx) {
     });
 }
 
+function prepareContainer (layer) {
+    var styleWidgetWrapper = document.createElement('div'),
+        styleWidgetHeader = document.createElement('div');
+
+    addClass(styleWidgetWrapper, 'stylewidget-wrapper');
+    addClass(styleWidgetHeader, 'stylewidget-header');
+
+    styleWidgetHeader.appendChild(
+        document.createTextNode(
+            'Apply styles to all elements in layer "' + getModelName(layer) + '"'
+            )
+        );
+
+    styleWidgetWrapper.appendChild(styleWidgetHeader);
+    return styleWidgetWrapper;
+}
+
 
 function styleWidget (opt_txt) {
     var self = this,
@@ -128,15 +178,14 @@ function styleWidget (opt_txt) {
         lid = current[2],
         display = terminal.display();
 
-    var styleWidgetWrapper = document.createElement('div');
-    styleWidgetWrapper.setAttribute('class', 'stylewidget-wrapper');
-    display.node.appendChild(styleWidgetWrapper);
+
 
 
     var resolver = function (resolve, reject) {
 
         binder.getLayer(uid, gid, lid)
             .then(function(layer){
+                var styleWidgetWrapper = prepareContainer(layer);
                 styler({
                     container: styleWidgetWrapper,
                     layer: layer
@@ -152,7 +201,7 @@ function styleWidget (opt_txt) {
                 }, false);
 
                 styleWidgetWrapper.appendChild(closeButton);
-
+                display.node.appendChild(styleWidgetWrapper);
             })
             .catch(reject);
     };
