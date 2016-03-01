@@ -583,7 +583,7 @@ function processStyle (props, T) {
     if ('style' in props) {
         var style = props.style, val;
         for (var k in style) {
-            val = getProperty(props, 'style.'+k, null);
+            val = getProperty(props, 'style.' + k, null);
             if (val) {
                 if (underscore.isNumber(val)) {
                     var tv = val * scale;

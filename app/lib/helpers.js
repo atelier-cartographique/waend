@@ -116,16 +116,21 @@ module.exports.makeButton = function (label, attrs, callback, ctx) {
 module.exports.makeInput = function (options, callback, ctx) {
     var inputElement = document.createElement('input'),
         labelElement = document.createElement('label'),
-        wrapper = document.createElement('div');
+        wrapper = document.createElement('div'),
+        type = options.type;
 
     exports.setAttributes(wrapper, options.attrs || {});
 
     labelElement.innerHTML = options.label;
-    inputElement.setAttribute('type', options.type);
+    inputElement.setAttribute('type', type);
     inputElement.value = options.value;
     if (callback) {
         inputElement.addEventListener('change', function(event){
-            callback.call(ctx, inputElement.value);
+            var val = inputElement.value;
+            if ('number' === type) {
+                val = Number(val);
+            }
+            callback.call(ctx, val);
         }, false);
     }
 
