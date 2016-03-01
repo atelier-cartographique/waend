@@ -34,7 +34,6 @@ var BaseSource = O.Object.extend({
         this.index[f.id] = f;
         extent.push(f.id);
         this.tree.insert(extent);
-        // console.log('BaseSource.addFeature', f.id, Object.keys(this.index).length);
         this.emit('add', f);
     },
 
