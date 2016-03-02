@@ -34,7 +34,8 @@ function imageStyleClip (layer) {
 
     inputElement.checked = layer.get('params.clip', false);
 
-    wrapper.setAttribute('class','stylewidget-element');
+    addClass(wrapper, 'stylewidget-element');
+
     wrapper.appendChild(labelElement);
     wrapper.appendChild(inputElement);
     return wrapper;
@@ -47,7 +48,7 @@ function imageStyleAdjust (layer) {
 
 
     labelElement.innerHTML = 'image proportions';
-    wrapper.setAttribute('class','stylewidget-element');
+    addClass(wrapper, 'stylewidget-element');
     wrapper.appendChild(labelElement);
 
     _.each(options, function(option){
@@ -77,7 +78,7 @@ function layerCompositing (layer) {
 
 
     labelElement.innerHTML = 'layer compositing';
-    wrapper.setAttribute('class','stylewidget-element');
+    addClass(wrapper, 'stylewidget-element');
     wrapper.appendChild(labelElement);
 
     _.each(options, function(option){
@@ -113,8 +114,8 @@ function styler (ctx) {
         ['hatches number', 'number', 'params.hn'],
         ['hatches step (meters)', 'number', 'params.step'],
         ['hatches angle (degrees)', 'number', 'params.rotation'],
-        ['font size (meters)', 'number', 'params.fontsize'],
-        ['font color', 'color', 'style.fillStyle'],
+        ['text size (meters)', 'number', 'params.fontsize'],
+        ['text color', 'color', 'style.fillStyle'],
         imageStyleClip,
         imageStyleAdjust,
         layerCompositing
@@ -192,7 +193,7 @@ function styleWidget (opt_txt) {
                 });
 
                 var closeButton = document.createElement('div');
-                closeButton.setAttribute('class', 'stylewidget-close push-cancel');
+                addClass(closeButton, 'stylewidget-close push-cancel');
                 closeButton.innerHTML = 'Close';
 
                 closeButton.addEventListener('click', function(){

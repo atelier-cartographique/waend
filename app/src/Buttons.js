@@ -150,6 +150,10 @@ function loginButton(console, button) {
          type: 'display',
          command: ['gg | trace | sg']
      },
+     'Duplicate feature' : {
+         type: 'shell',
+         command: ['gg | create']
+     },
      'Zoom to feature' : {
          type: 'shell',
          command: ['gg | region set']
