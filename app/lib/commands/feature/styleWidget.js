@@ -79,7 +79,7 @@ function imageStyleClip (layer, feature) {
 function imageStyleAdjust (layer, feature) {
     var labelElement = document.createElement('div'),
         wrapper = document.createElement('div'),
-        options = ['adjust to shape', 'fit in shape', 'cover shape'];
+        options = ['none', 'fit', 'cover'];
 
 
     labelElement.innerHTML = 'image proportions';
