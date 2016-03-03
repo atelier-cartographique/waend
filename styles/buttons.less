@@ -1,142 +1,189 @@
-
-.wc-element {
-    &.wc-buttons {
-        position: absolute;
-        top: 0px;
-        left: 0;
-        z-index: 0;
-        letter-spacing: 1px;
-        padding: @margin;
-        background-color: #fff;
+.wc-buttons {
+        /* position: absolute; */
+        /* top: 0px; */
+        /* left: 0; */
+        /* z-index: 0; */
+        /* letter-spacing: 1px; */
+        padding: 12px;
+        /* background-color: #fff; */
         width: @widthMenuLeft;
         height: 100vh;
         text-shadow: none;
         border-right: solid 1px #000;
-        // .white-text-shadow;
-        .transition-move;
-        &.wc-hide {
-            left: -(2 * @widthMenuLeft + 44px);
-            .transition-move;
-        }
+        // .transition-move;
 
 
-        .wc-buttons-group-title-wrapper {
-            .wc-buttons-group-title-label {
-                .label;
-            }
-            .wc-buttons-group-title-value a,
-            .wc-buttons-group-title-value a:link,
-            .wc-buttons-group-title-value a:visited,
-            .wc-buttons-group-title-value a:hover{
-                font-size: 12pt;
-                text-decoration: underline;
-                margin-left: @margin / 2;
-                color: #000;
-                font-family: "dauphine_regular";
-                font-style: normal;
-            }
-
-        }
-
-        .wc-current {
-            padding-left: @margin / 2;
-            border-left: 1px dotted #000;
-        }
-
-
-
-        .wc-buttons-group {
-
-            &.wc-inactive {
+        .wc-inactive {
                 display: none;
-                font-size: 0pt;
-                transition-property: font-size;
-                transition-duration: 0.5s;
-            }
+                // font-size: 0pt;
+                // transition-property: font-size;
+                // transition-duration: 0.5s;
         }
 
-        .wc-button {
+        .wc-active {
+            margin-bottom: @margin;
+
+
+            .wc-buttons-group-title-wrapper {
+                margin-bottom: @margin / 2;
+
+                .wc-buttons-group-title-label {
+                    .label;
+                }
+                .wc-buttons-group-title-value a,
+                .wc-buttons-group-title-value a:link,
+                .wc-buttons-group-title-value a:visited,
+                .wc-buttons-group-title-value a:hover{
+                    font-size: 12pt;
+                    text-decoration: underline;
+                    margin-left: @margin / 2;
+                    color: #000;
+                    // font-family: "dauphine_regular";
+                    // font-style: normal;
+                }
+
+            }
+
+            .wc-button {
             cursor: pointer;
             border-bottom: 1px solid transparent;
-            font-family: "dauphine_regular";
-            font-size: 10pt;
             padding-left: @margin / 2;
             display: table;
 
-            &:first-child{
-                padding-top: @margin / 4;
-            }
-            &:last-child{
-                margin-bottom: @margin / 2;
-            }
-
-            .wc-button-pager {
-                display:none;
-                position: absolute;
-                left: 179px;
-                cursor: default;
-
-                &.wc-active {
-                    display: block;
-                    width: 155px;
-                    background: #FFF;
-                    padding: @margin / 2;
-                    border: 1px solid #000;
-                    border-left: 1px solid #fff;
-
-                    .pager-actions {
-                        span {
-                            .white-text-shadow;
-                            .label;
-                            display: inline-block;
-                            margin-right: 5px;
-                            margin-bottom: @margin;
-
-                            &.pager-action-close {
-                                margin-left: 20px;
-                                cursor: pointer;
-                            }
-
-                            &.pager-action-dock {
-                                cursor: pointer;
-                            }
-                        }
-                    }
-
-                    .wc-page {
-                        border-left: 1px dashed black;
-                        padding-left: @margin / 2;
-                        max-height: 45vh;
-                        overflow-y: auto;       
-                        a {
-                            .linkwaend;
-                            .white-text-shadow;
-                            color: #000;
-                        }
-
-                        .wc-line {
-                            cursor: pointer;
-                            border-bottom: 1px solid transparent;
-                            // display: table;
-                            margin-bottom: 1px;
-
-                            &:hover {
-                                cursor: pointer;
-                                text-decoration: underline;
-                            }
-                        }
-                    }
-                }
-                &.wc-inactive {
-                    display:none;
-                }
-
-
-            }
-        }
-
-        .wc-button:hover {
-            .link-hover;
+            &:hover {.link-hover;}
         }
     }
 }
+
+
+
+
+
+// .wc-element {
+//     &.wc-buttons {
+//         &.wc-hide {
+//             left: -(2 * @widthMenuLeft + 44px);
+//             .transition-move;
+//         }
+
+
+//         .wc-buttons-group-title-wrapper {
+//             .wc-buttons-group-title-label {
+//                 .label;
+//             }
+//             .wc-buttons-group-title-value a,
+//             .wc-buttons-group-title-value a:link,
+//             .wc-buttons-group-title-value a:visited,
+//             .wc-buttons-group-title-value a:hover{
+//                 font-size: 12pt;
+//                 text-decoration: underline;
+//                 margin-left: @margin / 2;
+//                 color: #000;
+//                 font-family: "dauphine_regular";
+//                 font-style: normal;
+//             }
+
+//         }
+
+//         .wc-current {
+//             padding-left: @margin / 2;
+//             border-left: 1px dotted #000;
+//         }
+
+
+
+//         .wc-buttons-group {
+
+//             &.wc-inactive {
+//                 display: none;
+//                 font-size: 0pt;
+//                 transition-property: font-size;
+//                 transition-duration: 0.5s;
+//             }
+//         }
+
+//         .wc-button {
+//             cursor: pointer;
+//             border-bottom: 1px solid transparent;
+//             font-family: "dauphine_regular";
+//             font-size: 10pt;
+//             padding-left: @margin / 2;
+//             display: table;
+
+//             &:first-child{
+//                 padding-top: @margin / 4;
+//             }
+//             &:last-child{
+//                 margin-bottom: @margin / 2;
+//             }
+
+//             .wc-button-pager {
+//                 display:none;
+//                 position: absolute;
+//                 left: 179px;
+//                 cursor: default;
+
+//                 &.wc-active {
+//                     display: block;
+//                     width: 155px;
+//                     background: #FFF;
+//                     padding: @margin / 2;
+//                     border: 1px solid #000;
+//                     border-left: 1px solid #fff;
+
+//                     .pager-actions {
+//                         span {
+//                             .white-text-shadow;
+//                             .label;
+//                             display: inline-block;
+//                             margin-right: 5px;
+//                             margin-bottom: @margin;
+
+//                             &.pager-action-close {
+//                                 margin-left: 20px;
+//                                 cursor: pointer;
+//                             }
+
+//                             &.pager-action-dock {
+//                                 cursor: pointer;
+//                             }
+//                         }
+//                     }
+
+//                     .wc-page {
+//                         border-left: 1px dashed black;
+//                         padding-left: @margin / 2;
+//                         max-height: 45vh;
+//                         overflow-y: auto;       
+//                         a {
+//                             .linkwaend;
+//                             .white-text-shadow;
+//                             color: #000;
+//                         }
+
+//                         .wc-line {
+//                             cursor: pointer;
+//                             border-bottom: 1px solid transparent;
+//                             // display: table;
+//                             margin-bottom: 1px;
+
+//                             &:hover {
+//                                 cursor: pointer;
+//                                 text-decoration: underline;
+//                             }
+//                         }
+//                     }
+//                 }
+//                 &.wc-inactive {
+//                     display:none;
+//                 }
+
+
+//             }
+//         }
+
+//         .wc-button:hover {
+//             .link-hover;
+//         }
+//     }
+// }
