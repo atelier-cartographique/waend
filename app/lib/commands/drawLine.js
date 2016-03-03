@@ -14,12 +14,18 @@ var _ = require('underscore'),
     Promise = require('bluebird'),
     Geometry = require('../Geometry'),
     semaphore = require('../Semaphore'),
-    paper = require('../../vendors/paper');
+    paper = require('../../vendors/paper'),
+    helpers = require('../helpers');
+
+var makeButton = helpers.makeButton,
+    addClass = helpers.addClass;
 
 
 function setupCanvas (container, view) {
     var canvas = document.createElement('canvas'),
         rect = view.getRect();
+
+    // setup canvas properties
     canvas.setAttribute('class', 'tool-draw');
     canvas.style.position = 'absolute';
     canvas.width = rect.width;
@@ -27,13 +33,12 @@ function setupCanvas (container, view) {
     canvas.style.top = rect.top + 'px';
     canvas.style.left = rect.left + 'px';
     canvas.backgroundColor = 'transparent';
-    var hints = document.createElement('div');
-    hints.setAttribute('class', 'draw-hints');
-    hints.innerHTML = "click and hold on map to draw";
-    container.appendChild(hints);
+    
+    // 
     container.appendChild(canvas);
     paper.setup(canvas);
     paper.view.draw();
+
     semaphore.on('view:resize', function () {
         var vrect = view.getRect();
         canvas.width = vrect.width;
@@ -41,6 +46,17 @@ function setupCanvas (container, view) {
         canvas.style.top = vrect.top + 'px';
         canvas.style.left = vrect.left + 'px';
     }, this);
+}
+
+function insertLeftPannel (container, closer) {
+    var wrapper = document.createElement('div'),
+        infos = document.createElement('div'),
+        button = makeButton('Cancel', {}, closer);
+
+
+    wrapper.appendChild(infos);
+    wrapper.appendChild(button);
+    container.appendChild(wrapper);
 }
 
 function drawLine () {
@@ -54,10 +70,18 @@ function drawLine () {
     setupCanvas(display.node, map.getView());
 
     var resolver = function (resolve, reject) {
-
         var path,
             points =[],
             tool = new paper.Tool();
+
+        var closer = function (arg) {
+            display.end();
+            if (arg) {
+                return resolve(arg);
+            }
+            reject('Cancelled');
+        };
+
 
         var onMouseDown = function (event) {
             path = new paper.Path({
@@ -92,11 +116,12 @@ function drawLine () {
             tool.off('mousedrag', onMouseDrag);
             tool.off('mouseup', onMouseUp);
             tool.remove();
+
             paper.project.remove();
-            display.end();
-            resolve(line);
+            closer(line);
         };
 
+        insertLeftPannel(display.node, closer);
         tool.on('mousedown', onMouseDown);
         tool.on('mousedrag', onMouseDrag);
         tool.on('mouseup', onMouseUp);
