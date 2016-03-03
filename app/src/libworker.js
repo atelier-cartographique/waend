@@ -599,9 +599,6 @@ function processStyle (props, T) {
                 }
             }
         }
-        // underscore.each(style, function(value, key){
-        //     emit('set', key, value);
-        // });
     }
 }
 
