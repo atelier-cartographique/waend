@@ -389,7 +389,7 @@ input {
 input[type="submit"] {
   background-color: #3F5F58;
   cursor: pointer;
-  color: #F8F8F8;
+  color: #FAFAFA;
   margin-top: 18px;
 }
 .transition-move {
@@ -619,10 +619,10 @@ input[type="submit"] {
 }
 .grp-form {
   width: 324px;
-  background: #F8F8F8;
+  background: #FAFAFA;
   margin: auto;
   margin-top: 61px;
-  border: 24px solid #F8F8F8;
+  border: 24px solid #FAFAFA;
 }
 .grp-form .form-label {
   text-align: center;
@@ -639,19 +639,18 @@ input[type="submit"] {
 .grp-button-wrapper {
   width: 324px;
   margin: auto;
-  background: #F8F8F8;
-  border: 24px solid #F8F8F8;
+  background: #FAFAFA;
+  border: 24px solid #FAFAFA;
 }
 .grp-button-wrapper .button {
   width: 128px;
   display: inline-block;
 }
 body {
-  background-color: #F8F8F8;
+  background-color: #FEFEFE;
   letter-spacing: 1px;
   font-size: 10pt;
   font-family: "dauphine_regular";
-  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
 }
 #page-title {
   display: none;
@@ -866,7 +865,7 @@ body {
 }
 #register {
   position: absolute;
-  background-color: #F8F8F8;
+  background-color: #FAFAFA;
   text-shadow: none;
   width: 100%;
   height: 100%;
@@ -964,7 +963,7 @@ body {
   cursor: pointer;
 }
 .wc-element.wc-pages {
-  background: #F8F8F8;
+  background: #FAFAFA;
   position: absolute;
   left: 193px;
   bottom: 30px;
@@ -1640,7 +1639,7 @@ body {
   padding: 72px 12px;
   width: 100%;
   height: 100%;
-  background-color: #F8F8F8;
+  background-color: #FAFAFA;
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -1725,11 +1724,11 @@ body {
   width: 50%;
   min-width: 500px;
   max-width: 800px;
-  background: #F8F8F8;
+  background: #FAFAFA;
   height: calc(100vh - 160px);
   margin: auto;
   margin-top: 61px;
-  border: 24px solid #F8F8F8;
+  border: 24px solid #FAFAFA;
 }
 .CodeMirror .CodeMirror-code {
   text-shadow: none;
@@ -1740,9 +1739,9 @@ body {
   min-width: 500px;
   max-width: 800px;
   text-align: center;
-  background: #F8F8F8;
-  border: 24px solid #F8F8F8;
-  border-top: 10px solid #F8F8F8;
+  background: #FAFAFA;
+  border: 24px solid #FAFAFA;
+  border-top: 10px solid #FAFAFA;
   border-bottom: 0px ;
   top: 25px;
   left: 0;
@@ -1793,7 +1792,7 @@ body {
   font-family: "dauphine_regular";
   color: #3F5F58;
   line-height: 130%;
-  background-color: #F8F8F8;
+  background-color: #FAFAFA;
 }
 .importer-input {
   display: block;
@@ -2305,7 +2304,7 @@ canvas.tool-trace {
 }
 .stylewidget-wrapper {
   width: 155px;
-  background-color: #F8F8F8;
+  background-color: #FAFAFA;
   padding: 12px;
 }
 .stylewidget-wrapper .stylewidget-header {
