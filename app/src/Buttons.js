@@ -143,15 +143,15 @@ function loginButton(console, button) {
      },
      'Set text': {
          type: 'display',
-         command: ['get params.text | edit | set params.text']
+         command: ['del params.image | get params.text | edit | set params.text']
      },
      'Edit geometry' : {
          type: 'display',
          command: ['gg | trace | sg']
      },
-     'Duplicate feature' : {
+     'Duplicate geometry' : {
          type: 'shell',
-         command: ['gg | create']
+         command: ['gg | create | cc']
      },
      'Zoom to feature' : {
          type: 'shell',
