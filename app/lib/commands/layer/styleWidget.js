@@ -44,8 +44,11 @@ function imageStyleClip (layer) {
 function imageStyleAdjust (layer) {
     var labelElement = document.createElement('label'),
         wrapper = document.createElement('div'),
-        options = ['none', 'fit', 'cover'];
-
+        options = [
+            ['none', 'adjust to shape'],
+            ['fit', 'fit in shape'],
+            ['cover', 'cover shape']
+        ];
 
     labelElement.innerHTML = 'image proportions';
     addClass(wrapper, 'stylewidget-element');
@@ -53,23 +56,27 @@ function imageStyleAdjust (layer) {
 
     _.each(options, function(option){
         var radio = document.createElement('input'),
-            radioWrapper= document.createElement('div');
+            radioWrapper= document.createElement('div'),
+            optionValue = option[0],
+            optionLabel = option[1];
+
         radio.setAttribute('type', 'radio');
-        radio.setAttribute('name', 'imageClip');
-        radio.setAttribute('value', option);
-        if (layer.get('params.adjust', 'none') === option) {
+        radio.setAttribute('name', 'imageAdjust');
+        radio.setAttribute('value', optionValue);
+        if (layer.get('params.adjust', 'none') === optionValue) {
             radio.setAttribute('checked', 1);
         }
         radioWrapper.appendChild(radio);
-        radioWrapper.appendChild(document.createTextNode(option));
+        radioWrapper.appendChild(document.createTextNode(optionLabel));
         wrapper.appendChild(radioWrapper);
         radio.addEventListener('change', function(event){
-            layer.set('params.adjust', option);
+            layer.set('params.adjust', optionValue);
         }, false);
     });
 
     return wrapper;
 }
+
 
 function layerCompositing (layer) {
     var labelElement = document.createElement('label'),
@@ -176,8 +183,8 @@ function styleWidget (opt_txt) {
         current = self.current(),
         uid = current[0],
         gid = current[1],
-        lid = current[2],
-        display = terminal.display();
+        lid = current[2];
+        // display = terminal.display();
 
 
 
@@ -191,18 +198,25 @@ function styleWidget (opt_txt) {
                     container: styleWidgetWrapper,
                     layer: layer
                 });
+                var com = terminal.makeCommand({
+                            fragment: styleWidgetWrapper,
+                            text: 'style' //dummy text to prevent troubles..
+                        });
 
-                var closeButton = document.createElement('div');
-                addClass(closeButton, 'stylewidget-close push-cancel');
-                closeButton.innerHTML = 'Close';
+                stdout.write(com);
+                resolve(layer.get('style'));
 
-                closeButton.addEventListener('click', function(){
-                    display.end();
-                    resolve(0);
-                }, false);
+                // var closeButton = document.createElement('div');
+                // addClass(closeButton, 'stylewidget-close push-cancel');
+                // closeButton.innerHTML = 'Close';
 
-                styleWidgetWrapper.appendChild(closeButton);
-                display.node.appendChild(styleWidgetWrapper);
+                // closeButton.addEventListener('click', function(){
+                //     display.end();
+                //     resolve(0);
+                // }, false);
+
+                // styleWidgetWrapper.appendChild(closeButton);
+                // display.node.appendChild(styleWidgetWrapper);
             })
             .catch(reject);
     };

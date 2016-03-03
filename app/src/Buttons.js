@@ -103,7 +103,7 @@ function loginButton(console, button) {
 
  var layerButtons = {
     'Style layer': {
-        type: 'display',
+        type: 'embed',
         command: ['sl']
     },
      'Trace': {
