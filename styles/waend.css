@@ -233,7 +233,13 @@ label {
 }
 .push-buttons:hover {
   cursor: pointer;
-  background-color: #dfdfdf;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_light.svg);
+}
+.push-buttons.active {
+  border: 1px solid #aaa;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_dark.svg);
 }
 .push-validate {
   font-family: "dauphine_regular";
@@ -253,7 +259,13 @@ label {
 }
 .push-validate:hover {
   cursor: pointer;
-  background-color: #dfdfdf;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_light.svg);
+}
+.push-validate.active {
+  border: 1px solid #aaa;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_dark.svg);
 }
 .push-cancel {
   font-family: "dauphine_regular";
@@ -273,7 +285,13 @@ label {
 }
 .push-cancel:hover {
   cursor: pointer;
-  background-color: #dfdfdf;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_light.svg);
+}
+.push-cancel.active {
+  border: 1px solid #aaa;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_dark.svg);
 }
 .push-edit {
   font-family: "dauphine_regular";
@@ -293,7 +311,13 @@ label {
 }
 .push-edit:hover {
   cursor: pointer;
-  background-color: #dfdfdf;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_light.svg);
+}
+.push-edit.active {
+  border: 1px solid #aaa;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_dark.svg);
 }
 .push-add {
   font-family: "dauphine_regular";
@@ -313,7 +337,13 @@ label {
 }
 .push-add:hover {
   cursor: pointer;
-  background-color: #dfdfdf;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_light.svg);
+}
+.push-add.active {
+  border: 1px solid #aaa;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_dark.svg);
 }
 .center-content {
   display: flex;
@@ -1443,6 +1473,8 @@ body {
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page {
   border-left: 1px dashed black;
   padding-left: 6px;
+  max-height: 45vh;
+  overflow-y: auto;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page a {
   text-decoration: none !important;
@@ -1461,7 +1493,7 @@ body {
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-active .wc-page .wc-line:hover {
   cursor: pointer;
-  border-bottom: 1px solid #000;
+  text-decoration: underline;
 }
 .wc-element.wc-buttons .wc-button .wc-button-pager.wc-inactive {
   display: none;
@@ -1646,7 +1678,13 @@ body {
 }
 .media-wrapper .media-close:hover {
   cursor: pointer;
-  background-color: #dfdfdf;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_light.svg);
+}
+.media-wrapper .media-close.active {
+  border: 1px solid #aaa;
+  background-color: transparent;
+  background-image: url(svg/btn_hatch_dark.svg);
 }
 .media-wrapper .media-close:hover {
   border-bottom: 1px solid #282F35;

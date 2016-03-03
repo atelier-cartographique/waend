@@ -193,8 +193,16 @@
     margin: 6px;
 
     &:hover {
-        cursor: pointer;
-        background-color: @lightgrey - 25%;
+      cursor: pointer;
+      background-color: transparent;
+      background-image: url(svg/btn_hatch_light.svg);
+
+    }
+
+    &.active {
+      border: 1px solid #aaa;
+      background-color: transparent;
+      background-image: url(svg/btn_hatch_dark.svg);
     }
 
     // .linkwaend;
