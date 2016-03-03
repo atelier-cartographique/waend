@@ -154,6 +154,43 @@ module.exports.Group = Model.extend({
 
 module.exports.Layer = Model.extend({
     type: 'layer',
+
+    getGroup: function() {
+        var path = this.getPath();
+        return binder.getGroup.apply(binder, path);
+    },
+
+    isVisible: function () {
+        that = this;
+        var resolver = function (yes, no) {
+            that.getGroup()
+                .then(function (group) {
+                    var visibleList = group.get('params.visible', null);
+                    if (null === visible) {
+                        return yes();
+                    }
+                    if (_.indexOf(visibleList, that.id) < 0) {
+                        return no();
+                    }
+                    yes();
+                })
+                .catch(no);
+        };
+        return (new Promise(resolver));
+    },
+
+    setVisible: function (visible) {
+
+    },
+
+    groupIndex: function () {
+
+    },
+
+    setGroupIndex: function (idx) {
+
+    }
+
 });
 
 module.exports.Feature = Model.extend({

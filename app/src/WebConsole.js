@@ -524,8 +524,10 @@ var WebConsole = Terminal.extend({
                     groupElement.appendChild(buttonElement);
                 }
                 else {
-                    var bnNoSpace = bn.replace(/\s+/g, '');
-                    var bnClass = bnNoSpace.toLowerCase();
+                    var bnNoSpace = bn.replace(/\s+/g, ''),
+                        bnClass = bnNoSpace.toLowerCase(),
+                        buttonWrapper = document.createElement('div');
+
                     addClass(buttonElement, 'icon-' + bnClass);
                     buttonElement.appendChild(document.createTextNode(bn));
 
@@ -552,9 +554,10 @@ var WebConsole = Terminal.extend({
                             'click',
                             pagerHandler(buttonElement, pager, spec.command)
                         );
-                        buttonElement.appendChild(pager);
+                        buttonWrapper.appendChild(pager);
                     }
-                    groupElement.appendChild(buttonElement);
+                    buttonWrapper.appendChild(buttonElement);
+                    groupElement.appendChild(buttonWrapper);
                 }
             }
         }
