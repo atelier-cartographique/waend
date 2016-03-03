@@ -423,12 +423,17 @@ var WebConsole = Terminal.extend({
         };
         var displayHandler = cmdHandler;
 
+        var currentPager = null;
         var pagerHandler = function (button, pager, cmds) {
+            var closePager_ = function (pager_) {
+                emptyElement(pager_);
+                removeClass(pager_, 'wc-active');
+                addClass(pager_, 'wc-inactive');
+            };
+
             var closePager = function (ev) {
                 ev.stopPropagation();
-                emptyElement(pager);
-                removeClass(pager, 'wc-active');
-                addClass(pager, 'wc-inactive');
+                closePager_(pager);
             };
             var dockPage = function (ev) {
                 ev.stopPropagation();
@@ -440,7 +445,11 @@ var WebConsole = Terminal.extend({
             };
             return (function (ev) {
                 ev.stopPropagation();
-                emptyElement(pager);
+                if (currentPager) {
+                    closePager_(currentPager);
+                }
+                // emptyElement(pager);
+                currentPager = pager;
                 removeClass(pager, 'wc-inactive');
                 addClass(pager, 'wc-active');
                 var pagerBtns = document.createElement('div'),
@@ -516,6 +525,7 @@ var WebConsole = Terminal.extend({
                 var bn = buttonKeys[bi],
                     spec = buttons[gn][bn],
                     buttonElement = document.createElement('div');
+
                 addClass(buttonElement, 'wc-button');
                 eventPreventer(buttonElement, eventsToFilter);
 
@@ -526,8 +536,10 @@ var WebConsole = Terminal.extend({
                 else {
                     var bnNoSpace = bn.replace(/\s+/g, ''),
                         bnClass = bnNoSpace.toLowerCase(),
-                        buttonWrapper = document.createElement('div');
+                        buttonWrapper = document.createElement('div'),
+                        pager = null;
 
+                    addClass(buttonWrapper, 'button-wrapper ' + bnClass);
                     addClass(buttonElement, 'icon-' + bnClass);
                     buttonElement.appendChild(document.createTextNode(bn));
 
@@ -544,7 +556,7 @@ var WebConsole = Terminal.extend({
                         );
                     }
                     else if ('embed' === spec.type) {
-                        var pager = document.createElement('div');
+                        pager = document.createElement('div');
                         addClass(pager, 'wc-button-pager');
                         pager.attachPage = function (page) {
                             this.appendChild(page);
@@ -554,9 +566,12 @@ var WebConsole = Terminal.extend({
                             'click',
                             pagerHandler(buttonElement, pager, spec.command)
                         );
+                    }
+
+                    buttonWrapper.appendChild(buttonElement);
+                    if (pager) {
                         buttonWrapper.appendChild(pager);
                     }
-                    buttonWrapper.appendChild(buttonElement);
                     groupElement.appendChild(buttonWrapper);
                 }
             }
