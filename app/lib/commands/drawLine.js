@@ -53,6 +53,10 @@ function insertLeftPannel (container, closer) {
         infos = document.createElement('div'),
         button = makeButton('Cancel', {}, closer);
 
+        infos.innerHTML = 'Click and hold to draw on map';
+        addClass(wrapper, 'widget-block-left');
+        addClass(button, 'push-buttons push-cancel');
+
 
     wrapper.appendChild(infos);
     wrapper.appendChild(button);

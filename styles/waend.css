@@ -486,7 +486,7 @@ input[type="submit"] {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: #f8f8f8;
+  background: #FAFAFA;
   font-size: 10pt;
   border-right: 1px solid #000;
 }
@@ -1838,7 +1838,7 @@ body {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: #f8f8f8;
+  background: #FAFAFA;
   font-size: 10pt;
   border-right: 1px solid #000;
 }
@@ -2055,7 +2055,7 @@ canvas.tool-trace {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: #f8f8f8;
+  background: #FAFAFA;
   font-size: 10pt;
   border-right: 1px solid #000;
 }
@@ -2135,7 +2135,7 @@ canvas.tool-trace {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: #f8f8f8;
+  background: #FAFAFA;
   font-size: 10pt;
   border-right: 1px solid #000;
 }
@@ -2219,7 +2219,7 @@ canvas.tool-trace {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: #f8f8f8;
+  background: #FAFAFA;
   font-size: 10pt;
   border-right: 1px solid #000;
 }
