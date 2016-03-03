@@ -17,7 +17,11 @@ function Program (ctx) {
         textures;
 
     var getParameter = function (props, k, def) {
-        return ctx.getProperty(props, 'params.'+k, def);
+        return ctx.getProperty(props, 'params.'+ k, def);
+    };
+
+    var getStyle = function (props, k, def) {
+        return ctx.getProperty(props, 'style.'+ k, def);
     };
 
     var startFeature = function (props, fm) {
@@ -80,10 +84,9 @@ function Program (ctx) {
             left = bottomLeft[0],
             right = topRight[0],
             patternCoordinates = [],
-            strokeColor = getParameter(props, 'color', '#000'),
+            strokeColor = getStyle(props, 'strokeStyle', '#000'),
             step = Math.ceil(bviewport.getHeight() / hatchLen),
-            lineWidth = getParameter(props, 'hatchwidth',
-                                    getParameter(props, 'linewidth', 1)),
+            lineWidth = getStyle(props, 'lineWidth', 1),
             turnFlag = false,
             rotation = getParameter(props, 'rotation'),
             paramStep = getParameter(props, 'step');
@@ -100,7 +103,7 @@ function Program (ctx) {
             if (!('style' in props)) {
                 props.style = {};
             }
-            props.style.fillStyle = props.style.strokeStyle;
+            props.style.fillStyle = strokeColor;
             ctx.processStyle(props, currentTransform);
             var rcoords = viewport.toPolygon().getCoordinates();
             ctx.emit('draw', 'polygon', rcoords, ['closePath', 'fill']);
@@ -139,9 +142,8 @@ function Program (ctx) {
     };
 
     var getTexture = function (extent, props) {
-        var strokeColor = getParameter(props, 'color', '#000'),
-            lineWidth = getParameter(props, 'hatchwidth',
-                                    getParameter(props, 'linewidth', 1)),
+        var strokeColor = getStyle(props, 'strokeStyle', '#000'),
+            lineWidth = getStyle(props, 'lineWidth', 1),
             rotation = getParameter(props, 'rotation', 0),
             paramHN = Math.floor((viewport.getHeight() * getParameter(props, 'hn', 24)) / extent.getHeight()),
             step = viewport.getHeight() / paramHN,
@@ -157,9 +159,9 @@ function Program (ctx) {
             paramStep = 'n';
         }
 
-        step = Math.ceil(step);
+        var ceiledStep = Math.ceil(step);
 
-        hs.push(step.toString());
+        hs.push(ceiledStep.toString());
         hs.push(strokeColor.toString());
         hs.push(lineWidth.toString());
         hs.push(rotation.toString());
