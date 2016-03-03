@@ -1529,6 +1529,9 @@ body {
 .icon-setmapextent:before {
   content: "\e847";
 }
+.icon-stylelayer:before {
+  content: "\e84E";
+}
 .icon-selectfeatures:before {
   content: "\2193";
 }
@@ -1553,7 +1556,7 @@ body {
 .icon-setimage:before {
   content: "\e84D";
 }
-.icon-setcolor:before {
+.icon-stylefeature:before {
   content: "\e84E";
 }
 .icon-settext:before {
@@ -2267,16 +2270,23 @@ canvas.tool-trace {
   background-color: #F8F8F8;
   padding: 12px;
 }
+.stylewidget-wrapper .stylewidget-header {
+  margin-bottom: 12px;
+}
 .stylewidget-wrapper .stylewidget-element {
   margin-bottom: 12px;
 }
 .stylewidget-wrapper input {
-  width: 143px;
-  font-size: 12pt;
-  padding: 6px;
+  width: 155px;
+  font-size: 10pt;
+  padding: 2px;
 }
-.stylewidget-wrapper input[type="radio"] {
+.stylewidget-wrapper input[type="radio"],
+.stylewidget-wrapper input[type="checkbox"] {
   width: auto;
+}
+.stylewidget-wrapper input[type="checkbox"] {
+  margin-left: 12px;
 }
 .widget-form {
   position: absolute;

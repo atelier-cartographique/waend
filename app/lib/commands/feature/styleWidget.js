@@ -14,7 +14,10 @@ var _ = require('underscore'),
     helpers = require('../../helpers'),
     Promise = require('bluebird');
 
-var makeInput = helpers.makeInput;
+var makeInput = helpers.makeInput,
+    addClass = helpers.addClass,
+    getModelName = helpers.getModelName;
+
 
 
 function getFeatureStyle (layer, feature, style, def) {
@@ -55,7 +58,7 @@ function imageStyleClip (layer, feature) {
         labelElement = document.createElement('div'),
         wrapper = document.createElement('div');
 
-    labelElement.innerHTML = 'image clip';
+    labelElement.innerHTML = 'image clip : true/false';
     inputElement.setAttribute('type', 'checkbox');
     inputElement.value = 'yes/no';
 
@@ -67,6 +70,7 @@ function imageStyleClip (layer, feature) {
 
     inputElement.checked = getFeatureProp(layer, feature, 'params.clip', false);
 
+    addClass(wrapper, 'stylewidget-element');
     wrapper.appendChild(labelElement);
     wrapper.appendChild(inputElement);
     return wrapper;
@@ -78,7 +82,8 @@ function imageStyleAdjust (layer, feature) {
         options = ['none', 'fit', 'cover'];
 
 
-    labelElement.innerHTML = 'image adjust';
+    labelElement.innerHTML = 'image proportions';
+    addClass(wrapper, 'stylewidget-element');
     wrapper.appendChild(labelElement);
 
     _.each(options, function(option){
@@ -114,6 +119,7 @@ function textContent (layer, feature) {
 
     // textArea.appendChild(document.createTextNode(content));
     textArea.value = content;
+    addClass(wrapper, 'stylewidget-element');
     wrapper.appendChild(labelElement);
     wrapper.appendChild(textArea);
     return wrapper;
@@ -131,6 +137,7 @@ function image (ctx) {
     ];
 
     _.each(params, function(p){
+        addClass(input, 'stylewidget-element');
         container.appendChild(p(layer, feature));
     });
 }
@@ -142,8 +149,8 @@ function text (ctx) {
         inputs = [];
 
     var params = [
-        ['font size', 'number', 'params.fontsize'],
-        ['font color', 'color', 'style.fillStyle'],
+        ['text size (meters)', 'number', 'params.fontsize'],
+        ['text color', 'color', 'style.fillStyle'],
         textContent,
     ];
 
@@ -167,6 +174,7 @@ function text (ctx) {
                 type: type,
                 value: getFeatureProp(layer, feature, prop, null)
             }, genCB(prop));
+            addClass(input, 'stylewidget-element');
             container.appendChild(input);
         }
     });
@@ -179,11 +187,11 @@ function polygon (ctx) {
         inputs = [];
 
     var params = [
-        ['stroke color', 'color', 'style.strokeStyle'],
-        ['line width', 'number', 'style.lineWidth'],
+        ['line color', 'color', 'style.strokeStyle'],
+        ['line width (meters)', 'number', 'style.lineWidth'],
         ['hatches number', 'number', 'params.hn'],
-        ['hatches step', 'number', 'params.step'],
-        ['hatches rotation', 'number', 'params.rotation'],
+        ['hatches step (meters)', 'number', 'params.step'],
+        ['hatches angle (degrees)', 'number', 'params.rotation'],
     ];
 
     function genCB (prop) {
@@ -206,6 +214,7 @@ function polygon (ctx) {
                 type: type,
                 value: getFeatureProp(layer, feature, prop, null)
             }, genCB(prop));
+            addClass(input, 'stylewidget-element');
             container.appendChild(input);
         }
     });
@@ -242,6 +251,7 @@ function line (ctx) {
                 type: type,
                 value: getFeatureProp(layer, feature, prop, null)
             }, genCB(prop));
+            addClass(input, 'stylewidget-element');
             container.appendChild(input);
         }
     });
@@ -267,6 +277,24 @@ function typeSelector (options) {
     }
 }
 
+function prepareContainer (feature) {
+    var styleWidgetWrapper = document.createElement('div'),
+        styleWidgetHeader = document.createElement('div');
+
+    addClass(styleWidgetWrapper, 'stylewidget-wrapper');
+    addClass(styleWidgetHeader, 'stylewidget-header');
+
+    styleWidgetHeader.appendChild(
+        document.createTextNode(
+            'Apply styles to feature "' + getModelName(feature) + '"'
+            )
+        );
+
+    styleWidgetWrapper.appendChild(styleWidgetHeader);
+    return styleWidgetWrapper;
+}
+
+
 function styleWidget (opt_txt) {
     var self = this,
         env = self.shell.env,
@@ -281,10 +309,6 @@ function styleWidget (opt_txt) {
         fid = current[3],
         display = terminal.display();
 
-    var styleWidgetWrapper = document.createElement('div');
-    styleWidgetWrapper.setAttribute('class', 'stylewidget-wrapper');
-    display.node.appendChild(styleWidgetWrapper);
-
 
     var resolver = function (resolve, reject) {
 
@@ -292,6 +316,7 @@ function styleWidget (opt_txt) {
             .then(function(layer){
                 binder.getFeature(uid, gid, lid, fid)
                 .then(function(feature){
+                    var styleWidgetWrapper = prepareContainer(feature);
                     typeSelector({
                         container: styleWidgetWrapper,
                         layer: layer,
@@ -299,7 +324,7 @@ function styleWidget (opt_txt) {
                     });
 
                     var closeButton = document.createElement('div');
-                    closeButton.setAttribute('class', 'stylewidget-close');
+                    addClass(closeButton, 'stylewidget-close push-cancel');
                     closeButton.innerHTML = 'Close';
 
                     closeButton.addEventListener('click', function(){
@@ -308,6 +333,7 @@ function styleWidget (opt_txt) {
                     }, false);
 
                     styleWidgetWrapper.appendChild(closeButton);
+                    display.node.appendChild(styleWidgetWrapper);
                 })
                 .catch(reject);
             })

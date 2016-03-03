@@ -23,7 +23,7 @@ var Feature = Context.extend({
     commands:{
         'gg' : getGeometry.command,
         'sg' : setGeometry.command,
-        'style': styleWidget.command
+        'sf': styleWidget.command
     }
 });
 

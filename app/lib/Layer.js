@@ -24,7 +24,7 @@ var Layer = Context.extend({
         'lf': listFeatures.command,
         'create': createFeature.command,
         'import': importer.command,
-        'style': styler.command
+        'sl': styler.command
     }
 });
 

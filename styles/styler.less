@@ -3,17 +3,25 @@
 	background-color: @lightgrey;
 	padding: 12px;
 
+	.stylewidget-header {
+		margin-bottom: @margin;
+	}
+
 	.stylewidget-element {
 		margin-bottom: @margin;
 	}
 
 	input {
-		width: @widthMenuLeft - @margin;
-		font-size: 12pt;
-		padding: @margin / 2;
+		width: @widthMenuLeft;
+		font-size: 10pt;
+		padding: 2px;
 
-		&[type="radio"] {
+		&[type="radio"], &[type="checkbox"] {
 			width: auto;
+		}
+
+		&[type="checkbox"] {
+			margin-left: @margin;
 		}
 	}
 }
