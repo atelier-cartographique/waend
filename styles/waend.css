@@ -1420,14 +1420,70 @@ body {
 .wc-buttons .wc-active .wc-button {
   cursor: pointer;
   border-bottom: 1px solid transparent;
-  font-family: "dauphine_regular";
-  font-size: 10pt;
   padding-left: 6px;
   display: table;
 }
 .wc-buttons .wc-active .wc-button:hover {
   border-bottom: 1px solid #282F35;
   cursor: pointer;
+}
+.wc-buttons .wc-active .wc-button-pager {
+  display: none;
+  position: absolute;
+  left: 179px;
+  cursor: default;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active {
+  display: block;
+  width: 155px;
+  background: #FFF;
+  padding: 6px;
+  border: 1px solid #000;
+  border-left: 1px solid #fff;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active .pager-actions span {
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  font-size: 9pt;
+  text-transform: uppercase;
+  letter-spacing: 0.5pt;
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 12px;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active .pager-actions span.pager-action-close {
+  margin-left: 20px;
+  cursor: pointer;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active .pager-actions span.pager-action-dock {
+  cursor: pointer;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page {
+  border-left: 1px dashed black;
+  padding-left: 6px;
+  max-height: 45vh;
+  overflow-y: auto;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page a {
+  text-decoration: none !important;
+  font-family: "dauphine_italic";
+  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  color: #000;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page a:hover {
+  border-bottom: 1px solid #282F35;
+  cursor: pointer;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page .wc-line {
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  margin-bottom: 1px;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page .wc-line:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-inactive {
+  display: none;
 }
 [class^="icon-"],
 [class*=" icon-"] {
