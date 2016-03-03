@@ -55,8 +55,10 @@ function getFeatureProp (layer, feature, prop, def) {
 
 function imageStyleClip (layer, feature) {
     var inputElement = document.createElement('input'),
-        labelElement = document.createElement('div'),
+        labelElement = document.createElement('label'),
         wrapper = document.createElement('div');
+
+    addClass(wrapper, 'stylewidget-element');
 
     labelElement.innerHTML = 'image clip : true/false';
     inputElement.setAttribute('type', 'checkbox');
@@ -68,7 +70,7 @@ function imageStyleClip (layer, feature) {
 
 
 
-    inputElement.checked = getFeatureProp(layer, feature, 'params.clip', false);
+    inputElement.checked = getFeatureProp(layer, feature, 'params.clip', true);
 
     addClass(wrapper, 'stylewidget-element');
     wrapper.appendChild(labelElement);
@@ -77,10 +79,15 @@ function imageStyleClip (layer, feature) {
 }
 
 function imageStyleAdjust (layer, feature) {
-    var labelElement = document.createElement('div'),
+    var labelElement = document.createElement('label'),
         wrapper = document.createElement('div'),
-        options = ['none', 'fit', 'cover'];
+        options = [
+            ['none', 'adjust to shape'],
+            ['fit', 'fit in shape'],
+            ['cover', 'cover shape']
+        ];
 
+    addClass(wrapper, 'stylewidget-element');
 
     labelElement.innerHTML = 'image proportions';
     addClass(wrapper, 'stylewidget-element');
@@ -88,18 +95,21 @@ function imageStyleAdjust (layer, feature) {
 
     _.each(options, function(option){
         var radio = document.createElement('input'),
-            radioWrapper= document.createElement('div');
+            radioWrapper= document.createElement('div'),
+            optionValue = option[0],
+            optionLabel = option[1];
+
         radio.setAttribute('type', 'radio');
-        radio.setAttribute('name', 'imageClip');
-        radio.setAttribute('value', option);
-        if (getFeatureProp(layer, feature, 'params.adjust', 'none') === option) {
+        radio.setAttribute('name', 'imageAdjust');
+        radio.setAttribute('value', optionValue);
+        if (getFeatureProp(layer, feature, 'params.adjust', 'none') === optionValue) {
             radio.setAttribute('checked', 1);
         }
         radioWrapper.appendChild(radio);
-        radioWrapper.appendChild(document.createTextNode(option));
+        radioWrapper.appendChild(document.createTextNode(optionLabel));
         wrapper.appendChild(radioWrapper);
         radio.addEventListener('change', function(event){
-            feature.set('params.adjust', option);
+            feature.set('params.adjust', optionValue);
         }, false);
     });
 
@@ -137,7 +147,6 @@ function image (ctx) {
     ];
 
     _.each(params, function(p){
-        addClass(input, 'stylewidget-element');
         container.appendChild(p(layer, feature));
     });
 }

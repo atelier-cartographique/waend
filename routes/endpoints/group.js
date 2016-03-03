@@ -82,9 +82,12 @@ module.exports = exports = base.RequestHandler.extend({
         },
 
         get: function(request, response) {
+            var ts = _.now();
             cache.client()
                 .getGroup(request.params.group_id)
                 .then(function(data){
+                    // console.log('group.get', data);
+                    console.log('group.get [' + request.params.group_id + '] in', _.now() - ts, 'ms');
                     response.send(data);
                 })
                 .catch(function(err){
