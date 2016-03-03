@@ -22,7 +22,7 @@ var makeInput = helpers.makeInput,
 
 function getFeatureStyle (layer, feature, style, def) {
     var layerStyle = layer.get('style', {}),
-        featureStyle = _.defaults(feature.get('syle', {}), layerStyle);
+        featureStyle = _.defaults(feature.get('style', {}), layerStyle);
 
     if (style in featureStyle) {
         return featureStyle[style];
