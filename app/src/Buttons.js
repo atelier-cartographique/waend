@@ -130,7 +130,7 @@ function loginButton(console, button) {
 
  var featureButtons = {
     'Style feature': {
-        type: 'display',
+        type: 'embed',
         command: ['sf']
     },
      'Set name': {
@@ -145,11 +145,11 @@ function loginButton(console, button) {
          type: 'display',
          command: ['del params.image | get params.text | edit | set params.text']
      },
-     'Edit geometry' : {
+     'Edit shape' : {
          type: 'display',
          command: ['gg | trace | sg']
      },
-     'Duplicate geometry' : {
+     'Duplicate shape' : {
          type: 'shell',
          command: ['gg | create | cc']
      },
