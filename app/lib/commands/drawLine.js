@@ -33,8 +33,8 @@ function setupCanvas (container, view) {
     canvas.style.top = rect.top + 'px';
     canvas.style.left = rect.left + 'px';
     canvas.backgroundColor = 'transparent';
-    
-    // 
+
+    //
     container.appendChild(canvas);
     paper.setup(canvas);
     paper.view.draw();
@@ -78,11 +78,12 @@ function drawLine () {
             points =[],
             tool = new paper.Tool();
 
-        var closer = function (arg) {
+        var closeOk = function (arg) {
             display.end();
-            if (arg) {
-                return resolve(arg);
-            }
+            resolve(arg);
+        };
+        var closeCancel = function () {
+            display.end();
             reject('Cancelled');
         };
 
@@ -122,10 +123,10 @@ function drawLine () {
             tool.remove();
 
             paper.project.remove();
-            closer(line);
+            closeOk(line);
         };
 
-        insertLeftPannel(display.node, closer);
+        insertLeftPannel(display.node, closeCancel);
         tool.on('mousedown', onMouseDown);
         tool.on('mousedrag', onMouseDrag);
         tool.on('mouseup', onMouseUp);
