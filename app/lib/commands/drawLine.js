@@ -78,11 +78,21 @@ function drawLine () {
             points =[],
             tool = new paper.Tool();
 
+        var endPaper = function () {
+            tool.off('mousedown', onMouseDown);
+            tool.off('mousedrag', onMouseDrag);
+            tool.off('mouseup', onMouseUp);
+            tool.remove();
+            paper.project.remove();
+        };
+
         var closeOk = function (arg) {
+            endPaper();
             display.end();
             resolve(arg);
         };
         var closeCancel = function () {
+            endPaper();
             display.end();
             reject('Cancelled');
         };
@@ -116,13 +126,6 @@ function drawLine () {
                     line.appendCoordinate(map.getCoordinateFromPixel(pixel));
                 }
             }
-
-            tool.off('mousedown', onMouseDown);
-            tool.off('mousedrag', onMouseDrag);
-            tool.off('mouseup', onMouseUp);
-            tool.remove();
-
-            paper.project.remove();
             closeOk(line);
         };
 
