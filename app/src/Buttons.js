@@ -113,15 +113,15 @@ function loginButton(console, button) {
     },
      'Trace': {
          type: 'display',
-         command: ['trace | create']
+         command: ['trace | create | cc', 'edit | set name']
      },
      'Draw line': {
          type: 'display',
-         command: ['draw | create']
+         command: ['draw | create | cc', 'edit | set name']
      },
      'Draw zone': {
          type: 'display',
-         command: ['draw | close | create']
+         command: ['draw | close | create | cc', 'edit | set name']
      },
      'Import geo-datas': {
          type: 'display',
