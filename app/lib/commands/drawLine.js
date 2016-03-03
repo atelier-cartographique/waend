@@ -33,8 +33,8 @@ function setupCanvas (container, view) {
     canvas.style.top = rect.top + 'px';
     canvas.style.left = rect.left + 'px';
     canvas.backgroundColor = 'transparent';
-    
-    // 
+
+    //
     container.appendChild(canvas);
     paper.setup(canvas);
     paper.view.draw();
@@ -78,11 +78,22 @@ function drawLine () {
             points =[],
             tool = new paper.Tool();
 
-        var closer = function (arg) {
+        var endPaper = function () {
+            tool.off('mousedown', onMouseDown);
+            tool.off('mousedrag', onMouseDrag);
+            tool.off('mouseup', onMouseUp);
+            tool.remove();
+            paper.project.remove();
+        };
+
+        var closeOk = function (arg) {
+            endPaper();
             display.end();
-            if (arg) {
-                return resolve(arg);
-            }
+            resolve(arg);
+        };
+        var closeCancel = function () {
+            endPaper();
+            display.end();
             reject('Cancelled');
         };
 
@@ -115,17 +126,10 @@ function drawLine () {
                     line.appendCoordinate(map.getCoordinateFromPixel(pixel));
                 }
             }
-
-            tool.off('mousedown', onMouseDown);
-            tool.off('mousedrag', onMouseDrag);
-            tool.off('mouseup', onMouseUp);
-            tool.remove();
-
-            paper.project.remove();
-            closer(line);
+            closeOk(line);
         };
 
-        insertLeftPannel(display.node, closer);
+        insertLeftPannel(display.node, closeCancel);
         tool.on('mousedown', onMouseDown);
         tool.on('mousedrag', onMouseDrag);
         tool.on('mouseup', onMouseUp);
