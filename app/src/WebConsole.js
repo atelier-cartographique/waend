@@ -339,7 +339,7 @@ var WebConsole = Terminal.extend({
             events = navigator.events,
             self = this;
         var forward = function (event) {
-            if (!self.onDisplay) {
+            if (!self.onDisplay && (event.target === root)) {
                 var extent = new Geometry.Extent(node.getBoundingClientRect());
                 if (extent.intersects([event.clientX, event.clientY])) {
                     navigator.dispatcher(event);

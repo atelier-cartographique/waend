@@ -51,37 +51,36 @@ function loginButton(console, button) {
 
 
  var userButtons = {
-     'List maps': {
+    'My profile' : {
         type: 'embed',
-        command: ['lg']
-     },
-     'Add map': {
+        command: ['cc /me', 'get']
+    },
+    'Add map': {
         type: 'display',
         command: ['mkgroup']
     },
-     'Upload image': {
+    'List maps': {
+        type: 'embed',
+        command: ['lg']
+    },
+    'Upload image': {
          type: 'display',
          command: ['media upload']
-     },
+    },
      'Browse images': {
          type: 'display',
          command: ['media pick']
-     },
-     'My profile' : {
-         type: 'shell',
-         command: ['cc /me', 'get']
-     }
-
+    }
  };
 
  var groupButtons = {
+    'Add layer': {
+        type: 'display',
+        command: ['mklayer']
+    },
      'List layers' : {
          type: 'embed',
          command: ['ll']
-     },
-     'Add layer': {
-         type: 'display',
-         command: ['mklayer']
      },
      'Show - Hide layers': {
          type: 'display',
@@ -107,10 +106,6 @@ function loginButton(console, button) {
         type: 'display',
         command: ['sl']
     },
-    'List features': {
-        type: 'embed',
-        command: ['lf']
-    },
      'Trace': {
          type: 'display',
          command: ['trace | create | cc']
@@ -126,12 +121,16 @@ function loginButton(console, button) {
      'Import geo-datas': {
          type: 'display',
          command: ['import','lf']
+     },
+     'List features': {
+         type: 'embed',
+         command: ['lf']
      }
  };
 
  var featureButtons = {
     'Style feature': {
-        type: 'display',
+        type: 'embed',
         command: ['sf']
     },
      'Set name': {
@@ -144,15 +143,15 @@ function loginButton(console, button) {
      },
      'Set text': {
          type: 'display',
-         command: ['get params.text | edit | set params.text']
+         command: ['del params.image | get params.text | edit | set params.text']
      },
-     'Edit geometry' : {
+     'Edit shape' : {
          type: 'display',
          command: ['gg | trace | sg']
      },
-     'Duplicate feature' : {
+     'Duplicate shape' : {
          type: 'shell',
-         command: ['gg | create']
+         command: ['gg | create | cc']
      },
      'Zoom to feature' : {
          type: 'shell',

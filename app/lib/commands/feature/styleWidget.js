@@ -286,18 +286,15 @@ function typeSelector (options) {
     }
 }
 
-function prepareContainer (feature) {
+function prepareContainer (layer, feature) {
     var styleWidgetWrapper = document.createElement('div'),
         styleWidgetHeader = document.createElement('div');
 
     addClass(styleWidgetWrapper, 'stylewidget-wrapper');
     addClass(styleWidgetHeader, 'stylewidget-header');
 
-    styleWidgetHeader.appendChild(
-        document.createTextNode(
-            'Apply styles to feature "' + getModelName(feature) + '"'
-            )
-        );
+    styleWidgetHeader.appendChild(layer.getDomFragment('name'));
+    styleWidgetHeader.appendChild(feature.getDomFragment('name'));
 
     styleWidgetWrapper.appendChild(styleWidgetHeader);
     return styleWidgetWrapper;
@@ -315,8 +312,8 @@ function styleWidget (opt_txt) {
         uid = current[0],
         gid = current[1],
         lid = current[2],
-        fid = current[3],
-        display = terminal.display();
+        fid = current[3];
+        // display = terminal.display();
 
 
     var resolver = function (resolve, reject) {
@@ -325,24 +322,19 @@ function styleWidget (opt_txt) {
             .then(function(layer){
                 binder.getFeature(uid, gid, lid, fid)
                 .then(function(feature){
-                    var styleWidgetWrapper = prepareContainer(feature);
+                    var styleWidgetWrapper = prepareContainer(layer, feature);
                     typeSelector({
                         container: styleWidgetWrapper,
                         layer: layer,
                         feature: feature
                     });
+                    var com = terminal.makeCommand({
+                                fragment: styleWidgetWrapper,
+                                text: 'style' //dummy text to prevent troubles..
+                            });
 
-                    var closeButton = document.createElement('div');
-                    addClass(closeButton, 'stylewidget-close push-cancel');
-                    closeButton.innerHTML = 'Close';
-
-                    closeButton.addEventListener('click', function(){
-                        display.end();
-                        resolve(0);
-                    }, false);
-
-                    styleWidgetWrapper.appendChild(closeButton);
-                    display.node.appendChild(styleWidgetWrapper);
+                    stdout.write(com);
+                    resolve(feature.get('style'));
                 })
                 .catch(reject);
             })
