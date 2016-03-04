@@ -143,7 +143,7 @@ function loginButton(console, button) {
      },
      'Set text': {
          type: 'display',
-         command: ['del params.image | get params.text | edit | set params.text']
+         command: ['del params.image', 'get params.text | edit | set params.text']
      },
      'Edit shape' : {
          type: 'display',

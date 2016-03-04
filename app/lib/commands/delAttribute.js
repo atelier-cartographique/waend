@@ -12,7 +12,7 @@ var _ = require('underscore');
 
 function delKey (obj, pathStr) {
     var path = pathStr.split('.'),
-    	key;
+        key;
     for(var i = 0, len = path.length - 1; i < len; i++){
         key = path.shift();
         obj = obj[key];
@@ -25,10 +25,10 @@ function delKey (obj, pathStr) {
 function delAttr (key) {
     var data = this.data.getData();
     try {
-    	delKey(data, key);
+        delKey(data, key);
     }
     catch (err) {
-    	return this.endWithError(err);
+        return this.endWithError(err);
     }
     return this.data.setData(data);
 }
