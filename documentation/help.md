@@ -228,7 +228,13 @@ Example:
 
 	del description
 	or
-	del name
+	del params.text
+	
+Another option to delete attributes is to use ```edit``` : 
+
+	get style | edit | set style
+	
+will get all the ```style``` attributes, send them to the text editor (```edit```), and ```set``` the editor output as ```style``` attributes.
 
 
 

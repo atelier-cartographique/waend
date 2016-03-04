@@ -489,7 +489,13 @@ To edit a specific attribute, we use the pipe <code>|</code> sign to chain comma
 
 <div><pre><code class="language-none">del description
 or
-del name</code></pre></div>
+del params.text</code></pre></div>
+
+<p>Another option to delete attributes is to use <code>edit</code> : </p>
+
+<div><pre><code class="language-none">get style | edit | set style</code></pre></div>
+
+<p>will get all the <code>style</code> attributes, send them to the text editor (<code>edit</code>), and <code>set</code> the editor output as <code>style</code> attributes.</p>
 
 <h3 id="toc_14"><a name="profile"></a> Exemple : customize your profile</h3>
 
