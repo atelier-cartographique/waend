@@ -14,7 +14,7 @@ An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/
 1.4  [Datas & Metadatas](#metadata)  
 
  
-2.  [Play with attributes / metadatas](#working-metadatas)  
+2.  [Attributes & metadatas](#working-metadatas)  
 3.1  [Set attribute (set)](#set)  
 3.2  [Get attributes (get)](#get)  
 3.3  [Edit attribute (edit)](#edit)  
@@ -82,7 +82,7 @@ There are two surprising aspects you will discover :
 - There is no map background : you will start on a blank page. It’s not a bug, but a choice we’ve made to wide-up the spectrum of what cartography could be. No map background means no influence from us on how a territory should be represented. You can do whatever you want.  
 
 ![illustration map-layers](images/map-thumb.png)  
-*exemple of maps created with wænd* 
+*exemples of maps created with wænd* 
 
 
 
@@ -103,17 +103,22 @@ There are two surprising aspects you will discover :
 
 Waend structure is pretty simple, it goes like russian dolls : 
 
-User account / Map  x / Layer y / Feature z  
+User account / Map / Layer / Feature 	  
 
 A user account host maps.  
 A map host layers.  
 A layer host features.
 
 We call each of them "context" (User context, map context, etc.)
-Features are the most simple a-map élément : like a parc, or an image.
+
 While maps are groups of layers, we also call them "groups".
 
+A features is the most simple map element, it's a shape. It could be a line, a polygon : a parc, a street, an image...
 
+There are no points yet in Wænd, because in most of digital maps points are not represented with a spatial influence, and we think things do.  
+Often, trees are points on maps, but a tree has a circumference, from its trunk and from its branches, so it has a spatial influence. We all have been under the shadow of a tree. So a tree is not only a point on a map, it's a shape with an area and an influence, and we would like to promote this way of thinking about digital maps. 
+
+Meanwhile, they are many great things to do about points on digital maps, and we would like to come with a nice proposal, still under development. So, no points for now :)
 
 
 ###<a name="metadatas"></a>Writting informations in Wænd : about datas & metadatas  
@@ -176,7 +181,7 @@ Eg : If you want a green park, you have will have to set this color infomation t
 
 
 
-## <a name="working-metadatas"></a> Play with attributes / metadatas
+## <a name="working-metadatas"></a> Attributes & Metadatas
 
 
 ### <a name="set"></a> Set attribute : ```set```
