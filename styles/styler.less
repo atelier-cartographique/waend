@@ -1,20 +1,22 @@
 .stylewidget-wrapper{
-	width : @widthMenuLeft;
-	background-color: @lightgrey;
-	padding: 12px;
 
 	.stylewidget-header {
 		margin-bottom: @margin;
 	}
 
 	.stylewidget-element {
-		margin-bottom: @margin;
+		margin-bottom: @margin / 2;
+	}
+	label {
+		font-size: 7pt;
 	}
 
 	input {
-		width: @widthMenuLeft;
-		font-size: 10pt;
-		padding: 2px;
+		width: 100%;
+		font-size: 9pt;
+		padding: 0px;
+		margin-top: 2px;
+		background-color: @lightgrey;
 
 		&[type="radio"], &[type="checkbox"] {
 			width: auto;
