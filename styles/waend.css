@@ -1,8 +1,8 @@
+@import "codemirror.css";
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
-@import "codemirror.css";
 html,
 body,
 div,
@@ -173,7 +173,7 @@ table {
   left: 0;
 }
 .link-hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 .linkwaend {
@@ -181,7 +181,7 @@ table {
   font-family: "dauphine_italic";
 }
 .linkwaend:hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 .label,
@@ -191,19 +191,21 @@ label {
   letter-spacing: 0.5pt;
 }
 .white-text-shadow {
-  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .yellow-text-shadow {
-  text-shadow: 0 0 10px gold, 0 0 6px gold, 1px 1px 0px #fff, -1px -1px 0px #fff, -1px 1px 0px #fff, 1px -1px 0px #fff;
+  text-shadow: 0 0 10px #ffd700, 0 0 6px #ffd700, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff, 1px -1px 0px #ffffff;
 }
 .dark-text-shadow {
   text-shadow: 0 0 6px #555555, 0 0 6px #555555, 1px 1px 0px #555555, -1px -1px 0px #555555, -1px 1px 0px #555555, 1px -1px 0px #555555;
 }
 .word-wrap {
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -255,7 +257,7 @@ label {
   border: 1px solid #000;
   background-color: #fff;
   margin: 6px;
-  color: #3F5F58;
+  color: #3f5f58;
 }
 .push-validate:hover {
   cursor: pointer;
@@ -307,7 +309,7 @@ label {
   border: 1px solid #000;
   background-color: #fff;
   margin: 6px;
-  color: #39598C;
+  color: #39598c;
 }
 .push-edit:hover {
   cursor: pointer;
@@ -333,7 +335,7 @@ label {
   border: 1px solid #000;
   background-color: #fff;
   margin: 6px;
-  color: #FF974C;
+  color: #ff974c;
 }
 .push-add:hover {
   cursor: pointer;
@@ -387,9 +389,9 @@ input {
   border: 0px;
 }
 input[type="submit"] {
-  background-color: #3F5F58;
+  background-color: #3f5f58;
   cursor: pointer;
-  color: #FAFAFA;
+  color: #fafafa;
   margin-top: 18px;
 }
 .transition-move {
@@ -397,18 +399,18 @@ input[type="submit"] {
 }
 .fade-in {
   -webkit-animation: fadein 01s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
-  /* Firefox < 16 */
   -ms-animation: fadein 01s;
-  /* Internet Explorer */
   -o-animation: fadein 01s;
-  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
 }
 @keyframes fadein {
   0% {
@@ -467,18 +469,18 @@ input[type="submit"] {
 }
 .widget-block-left {
   -webkit-animation: fadein 01s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
-  /* Firefox < 16 */
   -ms-animation: fadein 01s;
-  /* Internet Explorer */
   -o-animation: fadein 01s;
-  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   position: absolute;
   top: 0px;
   left: 0px;
@@ -486,7 +488,7 @@ input[type="submit"] {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: #FAFAFA;
+  background: #fafafa;
   font-size: 10pt;
   border-right: 1px solid #000;
 }
@@ -549,18 +551,18 @@ input[type="submit"] {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
   -webkit-animation: fadein 01s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
-  /* Firefox < 16 */
   -ms-animation: fadein 01s;
-  /* Internet Explorer */
   -o-animation: fadein 01s;
-  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
 }
 @keyframes fadein {
   0% {
@@ -619,10 +621,10 @@ input[type="submit"] {
 }
 .grp-form {
   width: 324px;
-  background: #FAFAFA;
+  background: #fafafa;
   margin: auto;
   margin-top: 61px;
-  border: 24px solid #FAFAFA;
+  border: 24px solid #fafafa;
 }
 .grp-form .form-label {
   text-align: center;
@@ -639,15 +641,15 @@ input[type="submit"] {
 .grp-button-wrapper {
   width: 324px;
   margin: auto;
-  background: #FAFAFA;
-  border: 24px solid #FAFAFA;
+  background: #fafafa;
+  border: 24px solid #fafafa;
 }
 .grp-button-wrapper .button {
   width: 128px;
   display: inline-block;
 }
 body {
-  background-color: #FEFEFE;
+  background-color: #fefefe;
   letter-spacing: 1px;
   font-size: 10pt;
   font-family: "dauphine_regular";
@@ -681,16 +683,16 @@ body {
   cursor: move;
 }
 .wc-context-feature {
-  color: #282F35 !important;
+  color: #282f35 !important;
 }
 .wc-context-layer {
-  color: #39598C !important;
+  color: #39598c !important;
 }
 .wc-context-group {
-  color: #3F5F58 !important;
+  color: #3f5f58 !important;
 }
 .wc-context-user {
-  color: #CFB84C !important;
+  color: #cfb84c !important;
 }
 .wc-context-shell {
   color: #993358 !important;
@@ -769,12 +771,12 @@ body {
   margin-right: 6px;
 }
 .view-lookup-wrapper .input-wrapper input {
-  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
   margin-bottom: -5px;
   font-size: 12pt;
 }
 .view-lookup-wrapper .view-lookup-search {
-  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
   font-size: 9pt;
   text-transform: uppercase;
   letter-spacing: 0.5pt;
@@ -815,7 +817,7 @@ body {
   padding: 2px 0px;
 }
 .view-lookup-wrapper .view-lookup-results .view-lookup-result .view-lookup-result-title:hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 .view-lookup-wrapper .view-lookup-results .view-lookup-result .view-lookup-result-image {
@@ -865,7 +867,7 @@ body {
 }
 #register {
   position: absolute;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
   text-shadow: none;
   width: 100%;
   height: 100%;
@@ -907,7 +909,7 @@ body {
   font-family: "dauphine_italic";
 }
 #register .footer:hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 #register .footer a:link {
@@ -942,7 +944,7 @@ body {
   font-weight: normal;
   letter-spacing: 2px;
   text-align: right;
-  text-shadow: 0 0 1px #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+  text-shadow: 0 0 1px #ffffff, 1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 .wc-element.wc-mapblock.wc-hide {
   top: -64px;
@@ -959,11 +961,11 @@ body {
 .wc-element.wc-mapblock .wc-nav:hover,
 .wc-element.wc-mapblock .wc-select:hover,
 .wc-element.wc-mapblock .wc-draw-zoom:hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 .wc-element.wc-pages {
-  background: #FAFAFA;
+  background: #fafafa;
   position: absolute;
   left: 193px;
   bottom: 30px;
@@ -1045,7 +1047,7 @@ body {
   color: #000;
 }
 .wc-element.wc-pages .wc-line a:hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 .wc-element.wc-pages .wc-line [class^="group-"] {
@@ -1111,7 +1113,7 @@ body {
   font-family: "dauphine_italic";
 }
 .wc-element.wc-dock .wc-dock-page .wc-page a:hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 .wc-element.wc-dock .wc-dock-page .wc-page .wc-line {
@@ -1122,9 +1124,11 @@ body {
   color: #993358;
   display: block;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -1136,9 +1140,11 @@ body {
   display: block;
   margin-bottom: 6px;
   /* Warning: Needed for oldIE support, but words are broken up letter-by-letter */
+
   -ms-word-break: break-all;
   word-break: break-all;
   /* Non standard for webkit */
+
   word-break: break-word;
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
@@ -1149,10 +1155,10 @@ body {
   font-family: "dauphine_regular";
   text-shadow: none;
   display: inline-block;
-  color: #91B391;
+  color: #91b391;
 }
 .wc-element.wc-dock .wc-dock-page .wc-page .hint a {
-  color: #91B391;
+  color: #91b391;
   text-decoration: none !important;
   display: inline-block;
   border-bottom: 1px solid transparent;
@@ -1162,7 +1168,7 @@ body {
   font-family: "dauphine_italic";
 }
 .wc-element.wc-dock .wc-dock-page .wc-page .hint a:hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 .wc-element.wc-container {
@@ -1220,6 +1226,7 @@ body {
 .wc-element.wc-container .wc-input.wc-inactive {
   color: #252525;
   /*display: none;*/
+
 }
 .wc-element.wc-container .wc-pending {
   color: #2B71FF;
@@ -1375,12 +1382,18 @@ body {
 }
 .wc-buttons {
   /* position: absolute; */
+
   /* top: 0px; */
+
   /* left: 0; */
+
   /* z-index: 0; */
+
   /* letter-spacing: 1px; */
+
   padding: 12px;
   /* background-color: #fff; */
+
   width: 155px;
   height: 100vh;
   text-shadow: none;
@@ -1419,7 +1432,7 @@ body {
   display: table;
 }
 .wc-buttons .wc-active .wc-button:hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 .wc-buttons .wc-active .wc-button-pager {
@@ -1457,7 +1470,7 @@ body {
   border-left: 1px solid black;
   margin: 0;
   padding: 6px;
-  border-top: 12px solid #fff;
+  border-top: 12px solid #ffffff;
   max-height: 45vh;
   overflow-y: auto;
 }
@@ -1467,7 +1480,7 @@ body {
   color: #000;
 }
 .wc-buttons .wc-active .wc-button-pager.wc-active .wc-page a:hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 .wc-buttons .wc-active .wc-button-pager.wc-active .wc-page .wc-line {
@@ -1568,7 +1581,7 @@ body {
 .icon-settext:before {
   content: "t";
 }
-.icon-editgeometry:before {
+.icon-editshape:before {
   content: "\e863";
 }
 .icon-zoomtofeature:before {
@@ -1614,7 +1627,7 @@ body {
   padding: 72px 12px;
   width: 100%;
   height: 100%;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -1622,7 +1635,7 @@ body {
 }
 .media-wrapper .picker-title {
   font-size: 20pt;
-  color: #39598C;
+  color: #39598c;
   position: absolute;
   top: 12px;
   left: 12px;
@@ -1661,7 +1674,7 @@ body {
   background-image: url(svg/btn_hatch_dark.svg);
 }
 .media-wrapper .media-close:hover {
-  border-bottom: 1px solid #282F35;
+  border-bottom: 1px solid #282f35;
   cursor: pointer;
 }
 .media-wrapper .media-item {
@@ -1699,11 +1712,11 @@ body {
   width: 50%;
   min-width: 500px;
   max-width: 800px;
-  background: #FAFAFA;
+  background: #fafafa;
   height: calc(100vh - 160px);
   margin: auto;
   margin-top: 61px;
-  border: 24px solid #FAFAFA;
+  border: 24px solid #fafafa;
 }
 .CodeMirror .CodeMirror-code {
   text-shadow: none;
@@ -1714,9 +1727,9 @@ body {
   min-width: 500px;
   max-width: 800px;
   text-align: center;
-  background: #FAFAFA;
-  border: 24px solid #FAFAFA;
-  border-top: 10px solid #FAFAFA;
+  background: #fafafa;
+  border: 24px solid #fafafa;
+  border-top: 10px solid #fafafa;
   border-bottom: 0px ;
   top: 25px;
   left: 0;
@@ -1765,9 +1778,9 @@ body {
   height: 300px;
   text-shadow: none;
   font-family: "dauphine_regular";
-  color: #3F5F58;
+  color: #3f5f58;
   line-height: 130%;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
 }
 .importer-input {
   display: block;
@@ -1794,18 +1807,18 @@ body {
 }
 .importer-hints {
   -webkit-animation: fadein 01s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
-  /* Firefox < 16 */
   -ms-animation: fadein 01s;
-  /* Internet Explorer */
   -o-animation: fadein 01s;
-  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   position: absolute;
   top: 0px;
   left: 0px;
@@ -1813,7 +1826,7 @@ body {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: #FAFAFA;
+  background: #fafafa;
   font-size: 10pt;
   border-right: 1px solid #000;
 }
@@ -1876,27 +1889,19 @@ canvas.tool-draw,
 canvas.tool-trace {
   background: url(svg/grid.svg);
   background-position: -50px -50px;
-  /* Safari, Chrome and Opera > 12.1 */
-  /* Firefox < 16 */
-  /* Internet Explorer */
-  /* Opera < 12.1 */
-  /* Firefox < 16 */
-  /* Safari, Chrome and Opera > 12.1 */
-  /* Internet Explorer */
-  /* Opera < 12.1 */
   -webkit-animation: fadein 01s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
-  /* Firefox < 16 */
   -ms-animation: fadein 01s;
-  /* Internet Explorer */
   -o-animation: fadein 01s;
-  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   cursor: crosshair;
 }
 @keyframes fadein {
@@ -2011,18 +2016,18 @@ canvas.tool-trace {
 }
 .draw-hints {
   -webkit-animation: fadein 01s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
-  /* Firefox < 16 */
   -ms-animation: fadein 01s;
-  /* Internet Explorer */
   -o-animation: fadein 01s;
-  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   position: absolute;
   top: 0px;
   left: 0px;
@@ -2030,7 +2035,7 @@ canvas.tool-trace {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: #FAFAFA;
+  background: #fafafa;
   font-size: 10pt;
   border-right: 1px solid #000;
 }
@@ -2091,18 +2096,18 @@ canvas.tool-trace {
 }
 .trace-buttons {
   -webkit-animation: fadein 01s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
-  /* Firefox < 16 */
   -ms-animation: fadein 01s;
-  /* Internet Explorer */
   -o-animation: fadein 01s;
-  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   position: absolute;
   top: 0px;
   left: 0px;
@@ -2110,7 +2115,7 @@ canvas.tool-trace {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: #FAFAFA;
+  background: #fafafa;
   font-size: 10pt;
   border-right: 1px solid #000;
 }
@@ -2175,18 +2180,18 @@ canvas.tool-trace {
 }
 .visible-wrapper {
   -webkit-animation: fadein 01s;
-  /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 01s;
-  /* Firefox < 16 */
   -ms-animation: fadein 01s;
-  /* Internet Explorer */
   -o-animation: fadein 01s;
-  /* Opera < 12.1 */
   animation: fadein 01s;
   /* Firefox < 16 */
+
   /* Safari, Chrome and Opera > 12.1 */
+
   /* Internet Explorer */
+
   /* Opera < 12.1 */
+
   position: absolute;
   top: 0px;
   left: 0px;
@@ -2194,7 +2199,7 @@ canvas.tool-trace {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: #FAFAFA;
+  background: #fafafa;
   font-size: 10pt;
   border-right: 1px solid #000;
 }
@@ -2295,16 +2300,24 @@ canvas.tool-trace {
   font-size: 9pt;
   padding: 0px;
   margin-top: 2px;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
 }
 .stylewidget-wrapper input[type="radio"],
 .stylewidget-wrapper input[type="checkbox"] {
-  width: auto;
+  width: 10px;
+  cursor: pointer;
 }
 .stylewidget-wrapper input[type="checkbox"] {
   margin-left: 12px;
 }
 .stylewidget-wrapper input[type="color"] {
+  width: 50px;
+  height: 22px;
+  padding: 0px;
+  background-color: #fff;
+  position: absolute;
+  margin-left: 6px;
+  margin-top: -5px;
   cursor: pointer;
 }
 .widget-form {

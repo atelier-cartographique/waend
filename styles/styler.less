@@ -21,13 +21,21 @@
 		background-color: @lightgrey;
 
 		&[type="radio"], &[type="checkbox"] {
-			width: auto;
+			width: 10px;
+			cursor: pointer;
 		}
 
 		&[type="checkbox"] {
 			margin-left: @margin;
 		}
 		&[type="color"] {
+			width: 50px;
+			height: 22px;
+			padding: 0px;
+			background-color: #fff;
+			position: absolute;
+			margin-left: 6px;
+			margin-top: -5px;
 			cursor: pointer;
 		}
 	}
