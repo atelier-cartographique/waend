@@ -1394,6 +1394,9 @@ body {
   text-shadow: none;
   border-right: solid 1px #000;
 }
+.wc-buttons.wc-hide {
+  display: none;
+}
 .wc-buttons .wc-inactive {
   display: none;
 }
