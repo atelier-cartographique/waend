@@ -2280,6 +2280,10 @@ canvas.tool-trace {
 .stylewidget-wrapper .stylewidget-header {
   margin-bottom: 12px;
 }
+.stylewidget-wrapper .stylewidget-header .layer-name,
+.stylewidget-wrapper .stylewidget-header .feature-name {
+  display: inline-block;
+}
 .stylewidget-wrapper .stylewidget-element {
   margin-bottom: 6px;
 }
@@ -2299,6 +2303,9 @@ canvas.tool-trace {
 }
 .stylewidget-wrapper input[type="checkbox"] {
   margin-left: 12px;
+}
+.stylewidget-wrapper input[type="color"] {
+  cursor: pointer;
 }
 .widget-form {
   position: absolute;

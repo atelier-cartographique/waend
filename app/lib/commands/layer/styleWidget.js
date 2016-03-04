@@ -32,7 +32,7 @@ function imageStyleClip (layer) {
         layer.set('params.clip', !!inputElement.checked);
     }, false);
 
-    inputElement.checked = layer.get('params.clip', false);
+    inputElement.checked = layer.get('params.clip', true);
 
     addClass(wrapper, 'stylewidget-element');
 
@@ -157,16 +157,22 @@ function styler (ctx) {
 
 function prepareContainer (layer) {
     var styleWidgetWrapper = document.createElement('div'),
-        styleWidgetHeader = document.createElement('div');
+        styleWidgetHeader = document.createElement('div'),
+        styleWidgetHeaderLayer = document.createElement('div'),
+        styleWidgetHeaderLayerLabel = document.createElement('label');
+
 
     addClass(styleWidgetWrapper, 'stylewidget-wrapper');
     addClass(styleWidgetHeader, 'stylewidget-header');
 
-    styleWidgetHeader.appendChild(
-        document.createTextNode(
-            'Apply styles to all elements in layer "' + getModelName(layer) + '"'
-            )
+    styleWidgetHeaderLayerLabel.innerHTML = 'Layer : ';
+
+    styleWidgetHeaderLayer.appendChild(styleWidgetHeaderLayerLabel);
+    styleWidgetHeaderLayer.appendChild(
+        document.createTextNode(getModelName(layer))
         );
+
+    styleWidgetHeader.appendChild(styleWidgetHeaderLayer);
 
     styleWidgetWrapper.appendChild(styleWidgetHeader);
     return styleWidgetWrapper;

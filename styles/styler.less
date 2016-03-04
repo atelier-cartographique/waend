@@ -2,6 +2,8 @@
 
 	.stylewidget-header {
 		margin-bottom: @margin;
+
+		.layer-name, .feature-name {display: inline-block;}
 	}
 
 	.stylewidget-element {
@@ -24,6 +26,9 @@
 
 		&[type="checkbox"] {
 			margin-left: @margin;
+		}
+		&[type="color"] {
+			cursor: pointer;
 		}
 	}
 }

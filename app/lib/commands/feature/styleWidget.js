@@ -60,7 +60,7 @@ function imageStyleClip (layer, feature) {
 
     addClass(wrapper, 'stylewidget-element');
 
-    labelElement.innerHTML = 'image clip : true/false';
+    labelElement.innerHTML = 'image clip : yes/no';
     inputElement.setAttribute('type', 'checkbox');
     inputElement.value = 'yes/no';
 
@@ -288,13 +288,30 @@ function typeSelector (options) {
 
 function prepareContainer (layer, feature) {
     var styleWidgetWrapper = document.createElement('div'),
-        styleWidgetHeader = document.createElement('div');
+        styleWidgetHeader = document.createElement('div'),
+        styleWidgetHeaderLayer = document.createElement('div'),
+        styleWidgetHeaderFeature = document.createElement('div'),
+        styleWidgetHeaderLayerLabel = document.createElement('label'),
+        styleWidgetHeaderFeatureLabel = document.createElement('label');
+
+
 
     addClass(styleWidgetWrapper, 'stylewidget-wrapper');
     addClass(styleWidgetHeader, 'stylewidget-header');
+    addClass(styleWidgetHeaderLayer, 'stylewidget-header-layer');
+    addClass(styleWidgetHeaderFeature, 'stylewidget-header-feature');
 
-    styleWidgetHeader.appendChild(layer.getDomFragment('name'));
-    styleWidgetHeader.appendChild(feature.getDomFragment('name'));
+    styleWidgetHeaderLayerLabel.innerHTML = 'LAYER : ';
+    styleWidgetHeaderFeatureLabel.innerHTML = 'FEATURE : ';
+
+    styleWidgetHeaderLayer.appendChild(styleWidgetHeaderLayerLabel);
+    styleWidgetHeaderLayer.appendChild(layer.getDomFragment('name'));
+    styleWidgetHeaderFeature.appendChild(styleWidgetHeaderFeatureLabel);
+    styleWidgetHeaderFeature.appendChild(feature.getDomFragment('name'));
+    
+
+    styleWidgetHeader.appendChild(styleWidgetHeaderLayer);
+    styleWidgetHeader.appendChild(styleWidgetHeaderFeature);
 
     styleWidgetWrapper.appendChild(styleWidgetHeader);
     return styleWidgetWrapper;
