@@ -81,8 +81,9 @@ CanvasRenderer.prototype.initWorker = function () {
         var geom = feature.getGeometry(),
             extent = geom.getExtent();
         worker.once('data:update', function(){
-            worker.post('update:view', this.renderId,
-                        extent.getCoordinates(), this.view.transform.flatMatrix());
+            // worker.post('update:view', this.renderId,
+            //             extent.getCoordinates(), this.view.transform.flatMatrix());
+            this.render();
         }, this);
         worker.post('update:data', this.layer.toJSON([feature]));
     }, this);
