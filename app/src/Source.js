@@ -45,41 +45,48 @@ var Source = BaseSource.extend({
             var feat = this;
             self.emit('update:feature', feat);
         };
+
         binder.getFeatures(self.uid, self.gid, self.layer.id)
             .then(function(features){
                 var ts = _.now();
-                var index = self.index,
-                    newIds = [],
-                    keys =  Object.keys(index);
-                for (var ki = 0; ki < keys.length; ki++) {
-                    index[keys[ki]]._df = true;
-                }
+                // var index = self.index,
+                //     newIds = [],
+                //     keys =  Object.keys(index);
+                // for (var ki = 0; ki < keys.length; ki++) {
+                //     index[keys[ki]]._df = true;
+                // }
+                // for (var i = 0; i < features.length; i++) {
+                //     var feature = features[i];
+                //     if (!(feature.id in index)) {
+                //         newIds.push(feature.id);
+                //         self.addFeature(feature, true);
+                //     }
+                //     else {
+                //         index[feature.id]._df = false;
+                //     }
+                // }
+                // var took = _.now() - ts;
+                //
+                //
+                // var len = keys.length;
+                // for (var ki = 0; ki < len; ki++) {
+                //     if (index[keys[ki]]._df) {
+                //         self.removeFeature(keys[ki]);
+                //     }
+                // }
+                // len = newIds.length;
+                // for (var n = 0; n < len; n++) {
+                //     index[newIds[n]].on('set set:data', emitUpdate);
+                // }
+                self.clear();
                 for (var i = 0; i < features.length; i++) {
                     var feature = features[i];
-                    if (!(feature.id in index)) {
-                        newIds.push(feature.id);
-                        self.addFeature(feature);
-                    }
-                    else {
-                        index[feature.id]._df = false;
-                    }
+                    self.addFeature(feature, true);
+                    feature.on('set set:data', emitUpdate);
                 }
-                var took = _.now() - ts;
+                self.buildTree();
 
-                setTimeout(function(){
-                    var len = keys.length;
-                    for (var ki = 0; ki < len; ki++) {
-                        if (index[keys[ki]]._df) {
-                            self.removeFeature(keys[ki]);
-                        }
-                    }
-                    len = newIds.length;
-                    for (var n = 0; n < len; n++) {
-                        index[newIds[n]].on('set set:data', emitUpdate);
-                    }
-                }, 1000);
-
-                console.log('END SOURCE UPDATE', features.length, took, took/features.length);
+                console.log('END SOURCE UPDATE', features.length, _.now() - ts);
 
                 self.emit('update');
             })

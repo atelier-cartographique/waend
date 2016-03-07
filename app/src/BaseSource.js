@@ -20,47 +20,56 @@ var BaseSource = O.Object.extend({
     constructor: function () {
         this.tree = rbush();
         this.index = {};
+        this.features = [];
         O.Object.apply(this, arguments);
     },
 
     clear: function () {
         this.index = {};
+        this.features = [];
         this.tree.clear();
     },
 
-    addFeature: function (f) {
-        var geom = f.getGeometry(),
+    addFeature: function (f, skipSpatialIndex) {
+        this.features.push(f);
+        this.index[f.id] = this.features.length - 1;
+        if (!skipSpatialIndex) {
+            var geom = f.getGeometry(),
             extent = geom.getExtent().getCoordinates();
-        this.index[f.id] = f;
-        extent.push(f.id);
-        this.tree.insert(extent);
+            this.tree.insert(extent.concat(f.id));
+        }
         this.emit('add', f);
     },
 
     removeFeature: function (id) {
+        this.features.splice(this.index[id], 1);
         delete this.index[id];
         this.buildTree();
     },
 
     buildTree: function () {
-        var _ts = _.now();
-        var featureIds = Object.keys(this.index),
-            flen = featureIds.length,
+        var _ts = _.now(), _ts2;
+        var features = this.features,
+            flen = features.length,
             items = [],
             feature, geom, extent;
         this.tree.clear();
-        for (i = 0; i < flen; i++) {
-            feature = this.index[featureIds[i]];
-            geom = feature.getGeometry();
-            extent = geom.getExtent().getCoordinates();
+        for (var i = 0; i < flen; i++) {
+            feature = features[i];
+            extent = feature.getExtent().getCoordinates();
             items.push(extent.concat([feature.id]));
         }
+         _ts2 = _.now() - _ts
         this.tree.load(items);
-        console.log('buildTree', flen, _.now() - _ts);
+        console.log('buildTree', flen, _ts2, _.now() - (_ts + _ts2));
     },
 
     getLength: function () {
-        return Object.keys(this.index).length;
+        return this.features.length;
+    },
+
+    getFeature: function (id) {
+        return this.features[this.index[id]];
     },
 
     getFeatures: function (opt_extent) {
@@ -75,14 +84,13 @@ var BaseSource = O.Object.extend({
 
             for (i = 0; i < items.length; i++) {
                 var item = items[i];
-                features.push(this.index[item[4]]);
+                features.push(
+                    this.features[this.index[item[4]]]
+                );
             }
         }
         else {
-            items = Object.keys(this.index);
-            for (i = 0; i < items.length; i++) {
-                features.push(this.index[items[i]]);
-            }
+            return this.features;
         }
         return features;
     },

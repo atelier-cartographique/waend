@@ -92,8 +92,9 @@ function initData (data) {
     this.dataSource = new BaseSource();
     for (var i = 0; i < data.length; i++) {
         var item = new GeomItem(data[i]);
-        this.dataSource.addFeature(item);
+        this.dataSource.addFeature(item, true);
     }
+    this.dataSource.buildTree();
 }
 
 function updateView (startedWith, opt_extent, opt_matrix) {

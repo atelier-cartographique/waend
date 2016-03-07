@@ -200,6 +200,10 @@ module.exports.Feature = Model.extend({
         return (new Geometry.Geometry(this.data.geom));
     },
 
+    getExtent: function () {
+        return (new Geometry.Geometry(this.data.geom)).getExtent();
+    },
+
     setGeometry: function(geom) {
         if (geom instanceof Geometry.Geometry) {
             this.data.geom = geom.toGeoJSON();

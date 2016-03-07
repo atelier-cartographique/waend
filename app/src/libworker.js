@@ -107,12 +107,17 @@ GeomItem.prototype.getGeometry = function () {
     return (new Geometry.Geometry(this.geom));
 };
 
+GeomItem.prototype.getExtent = function () {
+    return (new Geometry.Geometry(this.geom)).getExtent();
+};
+
 function initData (data) {
     dataSource = new BaseSource();
     for (var i = 0; i < data.length; i++) {
         var item = new GeomItem(data[i]);
-        dataSource.addFeature(item);
+        dataSource.addFeature(item, true);
     }
+    dataSource.buildTree();
 }
 
 function updateData (featureData) {
