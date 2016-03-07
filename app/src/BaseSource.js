@@ -30,7 +30,7 @@ var BaseSource = O.Object.extend({
 
     addFeature: function (f) {
         var geom = f.getGeometry(),
-            extent = geom.getExtent().getArray();
+            extent = geom.getExtent().getCoordinates();
         this.index[f.id] = f;
         extent.push(f.id);
         this.tree.insert(extent);
@@ -38,12 +38,25 @@ var BaseSource = O.Object.extend({
     },
 
     removeFeature: function (id) {
-        var f = this.index[id],
-            geom = f.getGeometry(),
-            extent = geom.getExtent().getArray();
-        extent.push(id);
-        this.tree.remove(extent);
         delete this.index[id];
+        this.buildTree();
+    },
+
+    buildTree: function () {
+        var _ts = _.now();
+        var featureIds = Object.keys(this.index),
+            flen = featureIds.length,
+            items = [],
+            feature, geom, extent;
+        this.tree.clear();
+        for (i = 0; i < flen; i++) {
+            feature = this.index[featureIds[i]];
+            geom = feature.getGeometry();
+            extent = geom.getExtent().getCoordinates();
+            items.push(extent.concat([feature.id]));
+        }
+        this.tree.load(items);
+        console.log('buildTree', flen, _.now() - _ts);
     },
 
     getLength: function () {

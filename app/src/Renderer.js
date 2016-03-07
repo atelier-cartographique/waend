@@ -77,6 +77,17 @@ CanvasRenderer.prototype.initWorker = function () {
         worker.post('init:data', this.layer.toJSON());
     }, this);
 
+    this.layer.on('update:feature', function(feature){
+        var geom = feature.getGeometry(),
+            extent = geom.getExtent();
+        worker.once('data:update', function(){
+            worker.post('update:view', this.renderId,
+                        extent.getCoordinates(), this.view.transform.flatMatrix());
+        }, this);
+        worker.post('update:data', this.layer.toJSON([feature]));
+    }, this);
+
+
     worker.once('data:init', function(){
         this.isReady = true;
         if (this.pendingUpdate) {

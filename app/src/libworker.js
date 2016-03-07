@@ -115,6 +115,16 @@ function initData (data) {
     }
 }
 
+function updateData (featureData) {
+    featureData = underscore.isArray(featureData) ?
+                  featureData : [featureData];
+    for (var i = 0; i < featureData.length; i++) {
+        var feature = new GeomItem(featureData[i]);
+        dataSource.removeFeature(feature.id);
+        dataSource.addFeature(feature);
+    }
+}
+
 function updateView (startedWith, opt_extent, opt_matrix) {
     var features = dataSource.getFeatures(opt_extent);
     if ('startFrame' in workerContext.waend) {
@@ -180,6 +190,11 @@ function messageHandler (event) {
         var localRenderId = renderId;
         // updateView(renderId, args[1], args[2]);
         underscore.defer(updateView, localRenderId, args[1], args[2]);
+    }
+    else if ('update:data' === name) {
+        var featureData = args[0];
+        updateData(featureData);
+        workerContext.postMessage(['data:update']);
     }
 }
 

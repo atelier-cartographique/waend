@@ -49,6 +49,8 @@ function Program (ctx) {
         ctx.polygonTransform(currentTransform, poly);
         var tpoly = new ctx.Geometry.Polygon(poly);
         viewport = tpoly.getExtent();
+        ctx.emit('clearRect', viewport.getCoordinates());
+        ctx.emit('clip', 'begin', tpoly.getCoordinates());
         textures = {};
     };
 

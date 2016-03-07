@@ -143,6 +143,7 @@ Painter.prototype.handlers = {
     'restore': 'restore',
     'transform': 'setTransform',
     'clear' : 'clear',
+    'clearRect' : 'clearRect',
     'startTexture': 'startTexture',
     'endTexture': 'endTexture',
     'applyTexture': 'applyTexture'
@@ -185,6 +186,13 @@ Painter.prototype.clear = function () {
     this.context.globalCompositeOperation = 'multiply';
 };
 
+
+Painter.prototype.clearRect = function (coordinates) {
+    var extent = new Geometry.Extent(coordinates),
+    tl = extent.getBottomLeft().getCoordinates();
+    this.context.clearRect(tl[0], tl[1],
+        extent.getWidth(), extent.getHeight());
+    };
 
 Painter.prototype.save = function () {
     this.context.save();

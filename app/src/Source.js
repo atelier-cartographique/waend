@@ -42,47 +42,55 @@ var Source = BaseSource.extend({
     update : function () {
         var self = this;
         var emitUpdate = function () {
-            self.emit('update');
+            var feat = this;
+            self.emit('update:feature', feat);
         };
         binder.getFeatures(self.uid, self.gid, self.layer.id)
             .then(function(features){
                 var ts = _.now();
-                var newSize = 0, ids = [];
-                // for (var i = 0; i < features.length; i++) {
-                //     var feature = features[i];
-                //     ids.push(feature.id);
-                //     var featureIsNew = !(feature.id in self.index);
-                //     if(featureIsNew){
-                //         feature.on('set set:data', emitUpdate);
-                //         self.addFeature(feature);
-                //         newSize += 1;
-                //     }
-                // }
-                // var diff = _.difference(Object.keys(self.index), ids);
-                // for (var di = 0; di < diff.length; di++) {
-                //     self.removeFeature([diff[di]]);
-                // }
-                self.clear();
+                var index = self.index,
+                    newIds = [],
+                    keys =  Object.keys(index);
+                for (var ki = 0; ki < keys.length; ki++) {
+                    index[keys[ki]]._df = true;
+                }
                 for (var i = 0; i < features.length; i++) {
                     var feature = features[i];
-                    feature.on('set set:data', emitUpdate);
-                    self.addFeature(feature);
+                    if (!(feature.id in index)) {
+                        newIds.push(feature.id);
+                        self.addFeature(feature);
+                    }
+                    else {
+                        index[feature.id]._df = false;
+                    }
                 }
-                // var diff = _.difference(Object.keys(self.index), ids);
-                // for (var di = 0; di < diff.length; di++) {
-                //     self.removeFeature([diff[di]]);
-                // }
-                emitUpdate();
-                console.log('END SOURCE UPDATE', _.now() - ts);
+                var took = _.now() - ts;
+
+                setTimeout(function(){
+                    var len = keys.length;
+                    for (var ki = 0; ki < len; ki++) {
+                        if (index[keys[ki]]._df) {
+                            self.removeFeature(keys[ki]);
+                        }
+                    }
+                    len = newIds.length;
+                    for (var n = 0; n < len; n++) {
+                        index[newIds[n]].on('set set:data', emitUpdate);
+                    }
+                }, 1000);
+
+                console.log('END SOURCE UPDATE', features.length, took, took/features.length);
+
+                self.emit('update');
             })
             .catch(function(err){
                 console.error('Source.update', err);
             });
     },
 
-    toJSON : function () {
-        var features = this.getFeatures(),
-            a = new Array(features.length),
+    toJSON : function (features) {
+        features = features || this.getFeatures();
+        var a = new Array(features.length),
             layerData = this.layer.getData(),
             layerStyle = layerData.style || {},
             layerParams = layerData.params || {};
