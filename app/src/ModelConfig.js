@@ -23,8 +23,8 @@ function getDomFragmentFactory (type) {
         if ('name' === key) {
             return getModelName(model);
         }
-        return JSON.stringify(model.getData()[key])
-    }
+        return JSON.stringify(model.get(key));
+    };
 
     function getDomFragment(key, tagName, attrs) {
         tagName = tagName || 'div';
@@ -46,7 +46,7 @@ function getDomFragmentFactory (type) {
                 emptyElement(element);
                 element.appendChild(
                     document.createTextNode(getValue(self, key))
-                )
+                );
             }
         };
 

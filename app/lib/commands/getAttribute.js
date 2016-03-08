@@ -46,7 +46,7 @@ function getAttr () {
             fragment: wrapper,
             text: k.toString()
         });
-    }
+    };
 
     var result = key ? self.data.get(key) : self.data.getData(),
         keys = key ? [key] : _.keys(self.data.getData());
