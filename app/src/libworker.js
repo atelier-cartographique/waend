@@ -288,7 +288,7 @@ function getWritableSegments (p, lineHeight, start) {
         top = topRight[1],
         segments = [];
 
-    start = start || 0;
+    start = start || 1;
     var offset = start * lineHeight;
     if(offset > height) {
         return null;
@@ -331,24 +331,21 @@ function drawTextInPolygon (T, polygon, txt, fs) {
     var startSegment = 0,
         segments = getWritableSegments(polygon, fs * 1.2, startSegment),
         t = (txt instanceof Text) ? txt : (new Text(txt)),
-        result, tOffsets = [0,0],
+        result, cursor = t.cursor(),
         paths, p, cmd,
         tfn = T.mapVec2Fn(),
         instructions = [];
 
     var proceed = function () {
         while (segments) {
-            if( !tOffsets) {
+            if( !cursor) {
                 break;
             }
             if (segments.length > 0) {
-                result = t.draw(fs, segments, tOffsets);
-                tOffsets = result[0];
+                result = t.draw(fs, segments, cursor);
+                cursor = result[0];
                 paths = result[1];
 
-                // for (var s = 0; s < segments.length; s++) {
-                //     emit('draw', 'line', segments[s]);
-                // }
                 for (var i = 0; i < paths.length; i++) {
                     p = paths[i];
                     instructions.push(['beginPath']);
@@ -472,7 +469,8 @@ function lineAngle (start, end) {
 function drawTextOnLine (T, coordinates, txt, fsz) {
     var fs = fsz || 100,
         startSegment = 0,
-        t = new Text(txt), result, tOffsets = [0,0],
+        t = new Text(txt),
+        result, cursor = t.cursor(),
         tfn = T.mapVec2Fn(),
         instructions = [],
         segments = [],
@@ -483,7 +481,7 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
         translate = (new Transform()).translate(ttr[0] / tsc[0], ttr[1] / tsc[1]),
         scale = (new Transform()).scale(tsc[0], tsc[1]),
         translator = translate.mapVec2Fn('translate'),
-        scalator = scale.mapVec2Fn('scale')
+        scalator = scale.mapVec2Fn('scale'),
         ident = (new Transform()).mapVec2Fn();
 
 
@@ -497,11 +495,11 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
 
     var proceed = function () {
         if (segments.length > 0) {
-            var result = t.draw(fs, segments, tOffsets, true),
+            var result = t.draw(fs, segments, cursor, true),
                 paths = result[1],
                 TT, rotator, angle, p, pos;
 
-            tOffsets = result[0];
+            cursor = result[0];
 
             for (var i = 0; i < paths.length; i++) {
                 p = paths[i];
@@ -528,47 +526,7 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
             }
         }
     };
-    //
-    // var proceedDebug = function () {
-    //     // translator = (new Transform()).translate(ttr[0], ttr[1]).mapVec2Fn();
-    //     if (segments.length > 0) {
-    //         var result = t.draw(fs, segments, tOffsets, true),
-    //             paths = result[1],
-    //             TT, rotator, angle, p, pos,
-    //             ident = (new Transform()).mapVec2Fn();
-    //
-    //         tOffsets = result[0];
-    //
-    //         // pos = T.mapVec2([0, 0]);
-    //         for (var i = 360; i > 0; i-=8) {
-    //             instructions = [];
-    //             emit('save');
-    //             p = paths[4];
-    //             // pos = T.mapVec2([-p.pos[0], -p.pos[1]]);
-    //             pos = [p.pos[0] + (ttr[0] / tsc[0]), p.pos[1] + (ttr[1] / tsc[1])];
-    //             angle = i;
-    //             TT = new Transform();
-    //             TT.multiply(translate);
-    //             TT.rotate(angle, pos);
-    //             TT.multiply(scale);
-    //             emit.apply(self, ['transform'].concat(TT.flatMatrix()));
-    //             // TT.scale(tsi[0], tsi[1]);
-    //             rotator = TT.mapVec2Fn('rot');
-    //             // console.log('zero', rotator([0,0]));
-    //             instructions.push(['beginPath']);
-    //             for (var ii = 0; ii < p.commands.length; ii++) {
-    //                 instructions.push(transformCommand([ident], p.commands[ii]));
-    //
-    //             }
-    //             instructions.push(['fill']);
-    //             emit('instructions', instructions);
-    //             emit('restore');
-    //         }
-    //     }
-    //     // emit('instructions', instructions);
-    // };
 
-    // t.whenReady(proceedDebug);
     t.whenReady(proceed);
 }
 

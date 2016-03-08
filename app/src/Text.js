@@ -9,70 +9,60 @@
  */
 
 var _ = require('underscore'),
-    Hyph = require('hypher'),
-    en = require('hyphenation.en-us'),
-    hyph = new Hyph(en),
     Font = require('./Font');
 
-function TextCursor (txt, parIndex, clusterIndex, index) {
-    this.p = parIndex || 0;
-    this.c = clusterIndex || 0;
-    this.i = index || 0;
 
+
+function TextCursor (txt) {
     this.text = txt;
+    this.p =  0;
+    this.i =  0;
 }
 
-TextCursor.prototype.END_PARAGRAPH = -1;
-TextCursor.prototype.END_TEXT = -2;
+TextCursor.END_PARAGRAPH = -1;
+TextCursor.END_TEXT = -2;
 
 TextCursor.prototype.next = function () {
-    var par = this.text.paragraphs[this.p],
-        cluster = par[this.c];
+    var par = this.text.paragraphs[this.p];
 
-    this.i = this.i + 1;
-
-    if (this.i >= cluster.length) {
-        this.c = this.c + 1;
-        if (this.c >= par.length) {
-            this.p = this.p + 1;
-            this.c = 0;
-            this.i = 0;
-            if (this.p >= this.text.paragraphs) {
-                this.p = 0;
-                return TextCursor.END_TEXT;
-            }
-            return TextCursor.END_PARAGRAPH;
-        }
-        cluster = par[this.c];
+    if (this.i >= par.length) {
+        this.p = this.p + 1;
         this.i = 0;
+        if (this.p >= this.text.paragraphs.length) {
+            this.p = 0;
+            return TextCursor.END_TEXT;
+        }
+        return TextCursor.END_PARAGRAPH;
     }
-    return cluster[this.i];
+    var c = par[this.i];
+    this.i += 1;
+    return c;
 };
 
+TextCursor.prototype.rewind = function () {
+    var par = this.text.paragraphs[this.p];
+    var i = this.i - 1;
+
+    if (i < 0) {
+        this.p -= 1;
+        if (this.p < 0) {
+            this.p = 0;
+            this.i = 0;
+            return this;
+        }
+        par = this.text.paragraphs[this.p];
+        this.i = par.length - 1;
+        return this;
+    }
+
+    this.i = i;
+    return this;
+};
 
 
 function Text (str, fontName) {
     this._string = str.toString();
-    this.paragraphs = [];
-
-    var paragraphs_tmp = this._string.split('\n');
-
-    for (var i = 0; i < paragraphs_tmp.length; i++) {
-        var paragraph = paragraphs_tmp[i],
-            words = paragraph.split(' '),
-            clusters = [];
-
-        for (var j = 0; j < words.length; j++) {
-            if(j > 0) {
-                clusters.push(' ');
-            }
-            var hc = hyph.hyphenate(words[j]);
-            for (var c = 0; c < hc.length; c++) {
-                clusters.push(hc[c]);
-            }
-        }
-        this.paragraphs.push(clusters);
-    }
+    this.paragraphs = this._string.split('\n');
 
     // font loading
     this._pendings = [];
@@ -94,6 +84,10 @@ function Text (str, fontName) {
         this.font = fontName;
     }
 }
+
+Text.prototype.cursor = function () {
+    return (new TextCursor(this));
+};
 
 Text.prototype.whenReady = function (fn, ctx) {
     if(!this.ready) {
@@ -169,7 +163,7 @@ Text.prototype.getFlatLength = function (fontSize) {
 
 // font size & horizontal segments
 // a hyper basic text composer
-Text.prototype.draw = function (fontsz, segments, offset, mergeSegments) {
+Text.prototype.draw = function (fontsz, segments, cursor, mergeSegments) {
 
     if (!this.font) {
         console.warn('Text.prototype.draw NoFont');
@@ -177,36 +171,53 @@ Text.prototype.draw = function (fontsz, segments, offset, mergeSegments) {
     }
 
     var csIdx = 0, cs = segments[csIdx],
-        gc,
         curPos = cs[0],
         endPos = cs[1],
+        nextPos,
         scale =  fontsz / this.font.unitsPerEm, sa,
         paths = [],
-        clusters = this.clusters,
         currentPath;
 
-    offset = offset || [0,0];
-    var cOffset = offset[0];
-    var gOffset = offset[1];
-    for (var ii = cOffset; ii < clusters.length; ii++) {
-        gc = this.font.stringToGlyphs(clusters[ii]);
-        for (var iii = gOffset; iii < gc.length; iii++) {
-            g = gc[iii];
-            sa = g.advanceWidth * scale;
-            if (sa < vecDist(curPos, endPos)) {
-                currentPath = getPath.apply(g, [curPos[0], curPos[1], fontsz]);
-                currentPath.segment = cs;
-                currentPath.pos = curPos;
-                currentPath.nextPos = vecAdd(curPos, endPos, sa);
-                paths.push(currentPath);
-                gOffset += 1;
-                curPos = currentPath.nextPos;
+    while (true) {
+        var character = cursor.next();
+        if (TextCursor.END_TEXT === character) {
+            return [null, paths];
+        }
+        else if (TextCursor.END_PARAGRAPH === character) {
+            csIdx++;
+            if(csIdx >= segments.length) {
+                return [cursor, paths];
+            }
+            continue;
+        }
+        else {
+            var glyphs = this.font.stringToGlyphs(character),
+                accAdvance = 0,
+                glyph, gi;
+
+            for (gi = 0; gi < glyphs.length; gi++) {
+                glyph = glyphs[gi];
+                accAdvance += glyph.advanceWidth * scale;
+            }
+
+            if (accAdvance < vecDist(curPos, endPos)) {
+                for (gi = 0; gi < glyphs.length; gi++) {
+                    glyph = glyphs[gi];
+                    var advance = glyph.advanceWidth * scale;
+                    currentPath = getPath.apply(glyph, [curPos[0], curPos[1], fontsz]);
+                    nextPos = vecAdd(curPos, endPos, accAdvance);
+                    currentPath.segment = cs;
+                    currentPath.pos = curPos;
+                    currentPath.nextPos = nextPos;
+                    paths.push(currentPath);
+                    curPos = nextPos;
+                }
             }
             else {
                 csIdx++;
-                if(csIdx >= (segments.length - 1)) {
-                    // no more space
-                    return [[cOffset, gOffset], paths];
+                cursor.rewind();
+                if(csIdx >= segments.length) {
+                    return [cursor, paths];
                 }
                 if (mergeSegments) {
                     cs = [curPos, segments[csIdx][1]];
@@ -216,13 +227,11 @@ Text.prototype.draw = function (fontsz, segments, offset, mergeSegments) {
                 }
                 curPos = cs[0];
                 endPos = cs[1];
-                iii--; // try again on next segment
             }
         }
-        gOffset = 0;
-        cOffset += 1;
     }
-    return [null, paths];
+
+    throw (new Error('Return Undefined From Text Draw'));
 };
 
 Text.prototype.drawOnCanvas = function (ctx, startPos, sz) {
@@ -231,9 +240,9 @@ Text.prototype.drawOnCanvas = function (ctx, startPos, sz) {
     this.font.forEachGlyph(
         this._string, startPos[0], startPos[1], sz, {},
         function(glyph, gX, gY, gFontSize) {
-        var glyphPath = glyph.getPath(gX, gY, gFontSize);
-        fullPath.extend(glyphPath);
-    });
+            var glyphPath = glyph.getPath(gX, gY, gFontSize);
+            fullPath.extend(glyphPath);
+        });
     fullPath.fill = ctx.fillStyle;
     fullPath.stroke = undefined;
     fullPath.draw(ctx);
