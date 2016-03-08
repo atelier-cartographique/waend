@@ -14,19 +14,67 @@ var _ = require('underscore'),
     hyph = new Hyph(en),
     Font = require('./Font');
 
+function TextCursor (txt, parIndex, clusterIndex, index) {
+    this.p = parIndex || 0;
+    this.c = clusterIndex || 0;
+    this.i = index || 0;
+
+    this.text = txt;
+}
+
+TextCursor.prototype.END_PARAGRAPH = -1;
+TextCursor.prototype.END_TEXT = -2;
+
+TextCursor.prototype.next = function () {
+    var par = this.text.paragraphs[this.p],
+        cluster = par[this.c];
+
+    this.i = this.i + 1;
+
+    if (this.i >= cluster.length) {
+        this.c = this.c + 1;
+        if (this.c >= par.length) {
+            this.p = this.p + 1;
+            this.c = 0;
+            this.i = 0;
+            if (this.p >= this.text.paragraphs) {
+                this.p = 0;
+                return TextCursor.END_TEXT;
+            }
+            return TextCursor.END_PARAGRAPH;
+        }
+        cluster = par[this.c];
+        this.i = 0;
+    }
+    return cluster[this.i];
+};
+
+
+
 function Text (str, fontName) {
     this._string = str.toString();
-    var strs = this._string.split(' ');
-    this.clusters = [];
-    for (var i = 0; i < strs.length; i++) {
-        if(i > 0) {
-            this.clusters.push(' ');
+    this.paragraphs = [];
+
+    var paragraphs_tmp = this._string.split('\n');
+
+    for (var i = 0; i < paragraphs_tmp.length; i++) {
+        var paragraph = paragraphs_tmp[i],
+            words = paragraph.split(' '),
+            clusters = [];
+
+        for (var j = 0; j < words.length; j++) {
+            if(j > 0) {
+                clusters.push(' ');
+            }
+            var hc = hyph.hyphenate(words[j]);
+            for (var c = 0; c < hc.length; c++) {
+                clusters.push(hc[c]);
+            }
         }
-        var hc = hyph.hyphenate(strs[i]);
-        for (var c = 0; c < hc.length; c++) {
-            this.clusters.push(hc[c]);
-        }
+        this.paragraphs.push(clusters);
     }
+
+    // font loading
     this._pendings = [];
     if (!fontName || _.isString(fontName)) {
         fontName = fontName || 'default';
@@ -122,12 +170,14 @@ Text.prototype.getFlatLength = function (fontSize) {
 // font size & horizontal segments
 // a hyper basic text composer
 Text.prototype.draw = function (fontsz, segments, offset, mergeSegments) {
+
     if (!this.font) {
         console.warn('Text.prototype.draw NoFont');
         return [null, []];
     }
+
     var csIdx = 0, cs = segments[csIdx],
-        gcs, gc,
+        gc,
         curPos = cs[0],
         endPos = cs[1],
         scale =  fontsz / this.font.unitsPerEm, sa,
