@@ -288,7 +288,7 @@ function getWritableSegments (p, lineHeight, start) {
         top = topRight[1],
         segments = [];
 
-    start = start || 1;
+    start = (start || 0) + 1;
     var offset = start * lineHeight;
     if(offset > height) {
         return null;
