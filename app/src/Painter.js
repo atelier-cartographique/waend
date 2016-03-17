@@ -72,6 +72,15 @@ ImageLoader.prototype.load = function (coordinates, extentArray, options) {
         if (options.clip) {
             painter.drawPolygon(coordinates, ['clip']);
         }
+        if (options.rotation) {
+            var rot = options.rotation * Math.PI / 180,
+                cx = sw[0] + (imgWidth / 2),
+                cy = sw[1] + (imgHeight / 2);
+
+            painter.context.translate(cx, cy);
+            painter.context.rotate(rot);
+            painter.context.translate(-cx, -cy);
+        }
         painter.context.drawImage(img, sw[0], sw[1], imgWidth, imgHeight);
         painter.restore();
     };

@@ -224,7 +224,8 @@ function Program (ctx) {
         var options = {
             'image': img,
             'clip' : getParameter(props, 'clip', true),
-            'adjust': getParameter(props, 'adjust', 'none') // 'fit', 'cover'
+            'adjust': getParameter(props, 'adjust', 'none'), // 'fit', 'cover'
+            'rotation': getParameter(props, 'rotation', false)
         };
 
         ctx.emit('image', coordinates, extent, options);
