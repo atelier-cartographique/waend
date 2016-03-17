@@ -1039,12 +1039,14 @@ body {
 .wc-element.wc-pages .wc-line:hover {
   cursor: default;
 }
-.wc-element.wc-pages .wc-line a {
+.wc-element.wc-pages .wc-line a,
+.wc-element.wc-pages .wc-line .group-name {
   text-decoration: none !important;
   font-family: "dauphine_italic", sans-serif;
   color: #000;
 }
-.wc-element.wc-pages .wc-line a:hover {
+.wc-element.wc-pages .wc-line a:hover,
+.wc-element.wc-pages .wc-line .group-name:hover {
   border-bottom: 1px solid #282F35;
   cursor: pointer;
 }
@@ -1116,6 +1118,17 @@ body {
 }
 .wc-element.wc-dock .wc-dock-page .wc-page .wc-line {
   margin-bottom: 1px;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .wc-line .group-name {
+  text-decoration: none !important;
+  font-family: "dauphine_italic", sans-serif;
+  border-bottom: 1px solid transparent;
+  display: table;
+  font-family: "dauphine_regular", Helvetica, arial, sans-serif;
+}
+.wc-element.wc-dock .wc-dock-page .wc-page .wc-line .group-name:hover {
+  border-bottom: 1px solid #282F35;
+  cursor: pointer;
 }
 .wc-element.wc-dock .wc-dock-page .wc-page .key-value .key {
   padding-right: 6px;
@@ -1472,6 +1485,21 @@ body {
 }
 .wc-buttons .wc-active .wc-button-pager.wc-active .wc-page .wc-line {
   margin-bottom: 1px;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page .wc-line .group-name,
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page .wc-line .layer-name,
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page .wc-line .feature-name {
+  text-decoration: none !important;
+  font-family: "dauphine_italic", sans-serif;
+  border-bottom: 1px solid transparent;
+  display: table;
+  font-family: "dauphine_regular", Helvetica, arial, sans-serif;
+}
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page .wc-line .group-name:hover,
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page .wc-line .layer-name:hover,
+.wc-buttons .wc-active .wc-button-pager.wc-active .wc-page .wc-line .feature-name:hover {
+  border-bottom: 1px solid #282F35;
+  cursor: pointer;
 }
 .wc-buttons .wc-active .wc-button-pager.wc-inactive {
   display: none;

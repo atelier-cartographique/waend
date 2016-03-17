@@ -5,8 +5,6 @@
 This help is improved from time to time, and you can help us by sending your suggestions at contact@atelier-cartographique.be
 
 
-An ongoing tutorial is available <a href ="http://alpha.waend.com/documentation/waend-tutorial-09-2015_2.pdf" target="_blank">here</a>
-
 1. [Generalities](#generalities)  
 1.1  [Logic of map publishing](#logic)  
 1.2  [Presentation of Wænd interface](#interface)  
@@ -256,6 +254,11 @@ will get all the ```style``` attributes, send them to the text editor (```edit``
 
 
 ### <a name="style-feature"></a>Style your features
+
+There is a style widget in waend, but we like to describe all functionalities, so you can get the whole picture of the plateform. 
+
+![illustration map-layers](images/style-widget.png)  
+*the style widget* 
 
 
 #### 1- Style hatches

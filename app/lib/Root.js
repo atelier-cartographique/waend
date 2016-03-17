@@ -43,12 +43,6 @@ var Root = Context.extend({
             return bind.searchGroup(term).then(_.partial(processResult, shell));
         },
 
-        help: function(){
-            var stdout = this.shell.stdout;
-            stdout.write('hello, not yet written');
-            stdout.write('feel free to help :)');
-            return this.end();
-        },
     }
 });
 
