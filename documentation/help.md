@@ -1,34 +1,41 @@
-#HELP WÆND
+#HELP WÆND 
+*Last update : march 18th 2016*  
 
-***Wænd is in alpha version, if you like to create a user account, visit http://alpha.waend.com/register.***
+**Survival hints**  
+- To create a user account, visit http://alpha.waend.com/register.  
+- To search for existing maps on Waend, use the command ```lookup``` in the command line. Eg : ```lookup carto``` will search for maps containing the word "carto".  
+- To visit a map in view mode, simply type ```view``` in the command line.  
+- (do not forget to press enter to validate)
 
+  
 This help is improved from time to time, and you can help us by sending your suggestions at contact@atelier-cartographique.be
 
 
 1. [Generalities](#generalities)  
 1.1  [Logic of map publishing](#logic)  
 1.2  [Presentation of Wænd interface](#interface)  
-1.3  [Structure of Wænd](#structure)  
+1.3  [Wænd Structure](#structure)  
 1.4  [Datas & Metadatas](#metadata)  
 
  
 2.  [Attributes & metadatas](#working-metadatas)  
-3.1  [Set attribute (set)](#set)  
-3.2  [Get attributes (get)](#get)  
-3.3  [Edit attribute (edit)](#edit)  
-3.4  [Delete attribute (del)](#del)  
-3.5  [Exemple : customize your profile](#profile)  
+2.1  [Set attribute (set)](#set)  
+2.2  [Get attributes (get)](#get)  
+2.3  [Edit attribute (edit)](#edit)  
+2.4  [Delete attribute (del)](#del)  
+2.5  [Exemple : customize your profile](#profile)  
+2.6  [Search engine](#lookup) 
 
 3.  [Play with features](#feature)   
-4.1  [Style your features](#style-feature)   
-4.2  [Edit feature geometry](#edit_geometry)  
+3.1  [Style your features](#style-feature)   
+3.2  [Edit feature geometry](#edit_geometry)  
 
 
 4.  [Play with layers](#layer)  
-5.1  [Style at layer level](#style-feature)  
-5.3  [Attach a layer to another map](#attach)  
-5.4  [Detach a layer from a map](#detach)   
-5.5  [Delete a layer](#delete-layer)   
+4.1  [Style at layer level](#style-feature)  
+4.3  [Attach a layer to another map](#attach)  
+4.4  [Detach a layer from a map](#detach)   
+4.5  [Delete a layer](#delete-layer)   
 
 5. 	[Import Geo-Datas]()  
 5.1  [Geo-Datas : Working with GeoJSON](#GeoJSON)    
@@ -53,9 +60,9 @@ This help is improved from time to time, and you can help us by sending your sug
  
 
 
-## <a name="generalities"></a>Generalities
+## <a name="generalities"></a>1- Generalities
 
-###<a name="logic"></a>logic of map publishing
+###<a name="logic"></a>1.1 logic of map publishing
 ![illustration map-layers](images/map-layers.png)
 
 
@@ -64,7 +71,7 @@ This help is improved from time to time, and you can help us by sending your sug
 
 
 
-###<a name="interface"></a>Presentation of Wænd interface 
+###<a name="interface"></a>1.2 Presentation of Wænd interface 
 There are two surprising aspects you will discover : 
 
 - While most of the actions can be done by clicking on the menu buttons, the main tool to work on Wænd so far is a command line. To fully use the plateform, you will have to use this command line interface. Try it, it’s easy and you won’t break anything. The different commands are listed in this Help section.
@@ -97,7 +104,7 @@ There are two surprising aspects you will discover :
 
 
 
-###<a name="structure"></a>Wænd structure
+###<a name="structure"></a>1.3 Wænd structure
 
 Waend structure is pretty simple, it goes like russian dolls : 
 
@@ -119,7 +126,7 @@ Often, trees are points on maps, but a tree has a circumference, from its trunk 
 Meanwhile, they are many great things to do about points on digital maps, and we would like to come with a nice proposal, still under development. So, no points for now :)
 
 
-###<a name="metadatas"></a>Writting informations in Wænd : about datas & metadatas  
+###<a name="metadatas"></a>1.4 Writting informations in Wænd : about datas & metadatas  
 
 There is basicaly two types of informations on wænd : 
 
@@ -179,10 +186,10 @@ Eg : If you want a green park, you have will have to set this color infomation t
 
 
 
-## <a name="working-metadatas"></a> Attributes & Metadatas
+## <a name="working-metadatas"></a>2- Attributes & Metadatas
 
 
-### <a name="set"></a> Set attribute : ```set```
+### <a name="set"></a>2.1 Set attribute : ```set```
 Set attribute to current context (user, group, layer or feature).
 
 Use ```set``` to qualify things, to give informations about your maps, etc.
@@ -198,7 +205,7 @@ Example :
 
 
 
-### <a name="get"></a> Get attributes : ```get```
+### <a name="get"></a>2.2 Get attributes : ```get```
 The command ```get``` is very usefull : it displays all attributes from current element.
 
 You can also specify wich attribute value you want to show. 
@@ -211,7 +218,7 @@ Examples :
 
 
 
-### <a name="edit"></a> Edit : ```edit```
+### <a name="edit"></a>2.3 Edit : ```edit```
 There is no *edit* button yet, but the functionality is here.  
 To edit a specific attribute, we use the pipe ```|``` sign to chain commands together :
 
@@ -223,7 +230,7 @@ Eg :  ```get name | edit | set name``` will *get the name value*, *open the edit
 
 
 
-### <a name="del"></a> Delete attribute: ```del attributeName```
+### <a name="del"></a>2.4 Delete attribute: ```del attributeName```
 
 The command ```del attributeName``` will remove the attribute.
 
@@ -241,19 +248,24 @@ will get all the ```style``` attributes, send them to the text editor (```edit``
 
 
 
-### <a name="profile"></a> Exemple : customize your profile
+### <a name="profile"></a>2.5 Exemple : customize your profile
 
 1- Click on the USER link in the menu to go in your user context.  
 2- In the command line, type ```set name "the name you want on Wænd"``` and press enter to validate.  
 3- Then type ```get```. Your name is here !  
 4- You can add more informations on your profile doing this way, it's completely free. Just remember that your profil is public.  
 
+### <a name="lookup"></a>2.6 Search engine
+
+All the metadatas are indexed by the internal search engine (except profiles datas). It means that your titles, feature names, description etc, can make your map more easyly discoverable when someone search for a specific topic. 
+
+The command to search maps on waend is ```lookup key-word-of-your-choice```
 
 
-## <a name="feature"></a> Play with features
+## <a name="feature"></a>3- Play with features
 
 
-### <a name="style-feature"></a>Style your features
+### <a name="style-feature"></a>3.1 Style your features
 
 There is a style widget in waend, but we like to describe all functionalities, so you can get the whole picture of the plateform. 
 
@@ -261,7 +273,7 @@ There is a style widget in waend, but we like to describe all functionalities, s
 *the style widget* 
 
 
-#### 1- Style hatches
+#### 3.1.1- Style hatches
 
 Used commands : 
 
@@ -311,7 +323,7 @@ Here is an illustration of what it does :
 
 
 
-#### 2- Style text
+#### 3.1.2- Style text
 
 Used commands : 
 
@@ -348,7 +360,7 @@ Here is an illustration of what it does :
 
 
 	
-#### 3- Style image
+#### 3.1.3- Style image
 
 
 Used commands : 
@@ -395,7 +407,7 @@ Here is an illustration of what it does :
 
 
 
-### <a name="edit_geometry"></a> Edit feature geometry
+### <a name="edit_geometry"></a>3.2 Edit feature geometry
 
 To edit feature geometry, we use the commands :  
 ```gg``` to get the geometry of that feature  
@@ -415,9 +427,9 @@ To re-draw a freehand shape, type : ```draw | close | sg```
 
 
 
-## <a name="layer"></a> Play with layer
+## <a name="layer"></a>4- Play with layer
 
-### <a name="layer-style"></a> Style at layer level
+### <a name="layer-style"></a>4.1 Style at layer level
 
 You can use all the style attribute explained on the feature section at a layer level.  
 
@@ -438,7 +450,7 @@ They are all green, with -45° rotation, except one, wich has specific style.
 
 
 
-### <a name="attach"></a> attach a layer to a map : ```attach```
+### <a name="attach"></a>4.2 attach a layer to a map : ```attach```
 
 If you're the owner of the layer, the command will attach the said layer to a map. It doesn't *move* the layer but will *display* it within this other map.
 
@@ -457,7 +469,7 @@ How it works :
 ```layerA_id``` : the id of the layer you *own* and you want to attach somewhere.
 
 
-### <a name="detach"></a> detach a layer from a map : ```detach```
+### <a name="detach"></a>4.3 detach a layer from a map : ```detach```
 
 The ```detach``` command *undo* what has been done by the ```attach``` command, and works the same way.
 
@@ -467,15 +479,15 @@ To detach layerA from mapZ, do :
 detach /userZ_id/mapZ_id/layerA_id
 ```
 
-### <a name="delete-layer"></a> Delete a layer - See ```detach```
+### <a name="delete-layer"></a>4.4 Delete a layer - See ```detach```
 
 A subtlety about *compositions* ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that's created at the same time.  
 
 It does mean that if you're willing to *remove* a layer, at the moment, your best option is to detach it from all maps it's attached to.
 
-##<a name="import"></a> Import Geo-datas
+##<a name="import"></a>5- Import Geo-datas
 
-###<a name="GeoJSON"></a> Working with GeoJSON
+###<a name="GeoJSON"></a>5.1 Working with GeoJSON
 
 While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:
 
@@ -492,7 +504,7 @@ Another option is to use <a href="http://www.qgis.org/en/site/" target="_blank">
 
 *Good to know* : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  
 
-###<a name="overpass"></a> Tips with Overpass Turbo
+###<a name="overpass"></a>5.2 Tips with Overpass Turbo
 
 Use the wizard to help you building your query :   
 
@@ -541,23 +553,23 @@ Exemples :
  	out skel qt;
  	
 
-##<a name="style-tips"></a> Style tips & tricks
+##<a name="style-tips"></a>6- Style tips & tricks
 
-###<a name="tip-colorgenerator"></a>HTML Color generators
+###<a name="tip-colorgenerator"></a>6.1 HTML Color generators
 
 Many colors generators exists online, giving you the HTML value you would need. 
 
 Here are two of them: [coolors.co](https://coolors.co/) and [paletton.com](http://paletton.com/)
 
 
-###<a name="tip-fill"></a> polygon fill color
+###<a name="tip-fill"></a>6.2 polygon fill color
 
 Set ```params.hn``` key to 1 (One line to this polygon).  
 Set ```style.lineWidth``` to 3000 (the line will be 3000m wide)
 
 You are done with a filled polygon !
 
-###<a name="tip-composite"></a> Play with Composite Operation
+###<a name="tip-composite"></a>6.3 Play with Composite Operation
 
 We use multiply compositing mode by default in layers.  
 If you want to change it, please refer to [Canvas MDN documentation] (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation)
@@ -566,7 +578,7 @@ Exemple for no compositing :
 
 	set style.globalCompositeOperation source-over
 	
-### <a name="image"></a>Image at layer level
+### <a name="image"></a>6.4 Image at layer level
 
 If you set an image at the layer level, it will cover *all* your polygons with this image in that layer.  
 The parameters are used like described above, at the layer level.
@@ -577,16 +589,16 @@ To do so, type at a layer level :
 
 
 
-##<a name="share"></a> Sharing maps
+##<a name="share"></a>7- Sharing maps
 
-###<a name="view"></a> Share map link in "view mode"
+###<a name="view"></a>7.1 Share map link in "view mode"
 
 To see your map published, use the command ```view``` or replace ```map``` by ```view```in the URL.   
 To share a map, you can just send the url containing ```view``` of your map.  
 eg : ```http://alpha.waend.com/view/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994```
 
 
-###<a name="embed"></a> Embedding a map in another web-page
+###<a name="embed"></a>7.2 Embedding a map in another web-page
 
 You can embed maps in web pages using iframes.  
 To embed your map in view mode, you have to replace ```map```by ```view``` at the begining of the URL.  
@@ -596,7 +608,7 @@ Your iframe will look like :
 	<iframe style="position: absolute; top: -9999em; visibility: hidden;" onload="this.style.position='static'; this.style.visibility='visible';" src="http://alpha.waend.com/map/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994?c=view" height="600px" width="1000px"></iframe>
  
  
-##<a name="batch-img"></a>Batch import geo-tagged images
+###<a name="batch-img"></a>7.3 Batch import geo-tagged images
   
 So far, batch import of geotaged images is not supported natively in Wænd. But there is a workaround. Here is a how to, using Qgis :
 
@@ -610,7 +622,7 @@ So far, batch import of geotaged images is not supported natively in Wænd. But 
 - At this layer level, set the image path for every feature like this : ```set params.image @pathAttribute```
 - And voilà ! You can continue to style your images at a layer level, according to your needs.
 
-##<a name="tiles"></a>Create and import images tiles
+###<a name="tiles"></a>7.4 Create and import images tiles
 
 Following the logic as described above, you can import tiles when you need a very big and zoomable image. 
 
@@ -630,7 +642,7 @@ Using QGIS, you will need to :
 Do not forget to work in EPSG3857 in Qgis and to export your GEOjson in WGS84, otherwise you will get glitches. 
 	
 	
-## <a name="commands-details"></a> Memento : List of common commands
+## <a name="commands-details"></a>8- Memento : List of common commands
 
 #####General attribute commands : 
 

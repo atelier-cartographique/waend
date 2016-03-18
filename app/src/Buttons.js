@@ -97,7 +97,13 @@ function loginButton(console, button) {
      'Select Features': {
          type: 'display',
          command: ['select']
+     },
+
+     'View mode': {
+         type: 'shell',
+         command: ['view']
      }
+
  };
 
 
