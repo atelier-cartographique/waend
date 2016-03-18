@@ -100,19 +100,21 @@ View.prototype.setExtent = function (extent) {
 View.prototype.setTransform = function () {
     var extent = this.extent,
         rect = this.getRect(),
-        halfSize = [rect.width / 2, rect.height / 2],
+        targetCenter = [rect.width / 2, rect.height / 2],
+        sourceCenter = extent.getCenter().getCoordinates(),
         sx = rect.width / Math.abs(extent.getWidth()),
         sy = rect.height / Math.abs(extent.getHeight()),
-        s = (sx < sy) ? sx : sy,
-        is = (1 / s),
-        center = extent.getCenter().getCoordinates(),
-        tcx = (halfSize[0] * is) - center[0],
-        tcy = ((halfSize[1] * is) - center[1]) - Math.abs(extent.getHeight());
-        // tcx = halfSize[0]  - (center[0] * s),
-        // tcy = (Math.abs(extent.getHeight()) * s) - (halfSize[1] - (center[1] * s)) ;
+        s = (sx < sy) ? sx : sy;
+
+    var trX = (targetCenter[0] - sourceCenter[0]) * s,
+        trY = (targetCenter[1] - sourceCenter[1]) * s,
+        axis = [-targetCenter[0], -targetCenter[1]];
+
     var t = new Transform();
-    t.translate(tcx, tcy);
-    t.scale(s, -s, [tcx, tcy]);
+    t.translate(trX , -trY);
+    t.scale(s, -s, axis);
+    console.log('center',
+            targetCenter, t.mapVec2(sourceCenter));
     this.transform.reset(t);
 };
 

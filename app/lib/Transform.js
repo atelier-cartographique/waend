@@ -110,6 +110,39 @@ Transform.prototype.flatMatrix = function () {
     return this.m.flat();
 };
 
+Transform.prototype.toString = function () {
+
+    function decimalAdjust(type, value, exp) {
+    // If the exp is undefined or zero...
+        if (typeof exp === 'undefined' || +exp === 0) {
+            return Math[type](value);
+        }
+        value = +value;
+        exp = +exp;
+        // If the value is not a number or the exp is not an integer...
+        if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+            return NaN;
+        }
+        // Shift
+        value = value.toString().split('e');
+        value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+        // Shift back
+        value = value.toString().split('e');
+        return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+    }
+
+    function adjust (type, a, exp) {
+        for (var i = 0; i < a.length; i++) {
+            a[i] = decimalAdjust(type, a[i], exp);
+        }
+        return a;
+    }
+
+    var f = adjust('round', this.m.flat(), -5);
+    var s = '<Matrix: (' + f.join(', ') + ')>';
+    return s;
+};
+
 
 Transform.prototype.reset = function(t){
     this.m = t.m.clone();
@@ -175,22 +208,6 @@ Transform.prototype.rotate = function (r, origin) {
         rotMat = new Matrix();
 
     if (undefined !== origin) {
-        var base = mat3.create(),
-            trMat0 = mat3.create(),
-            rMat = mat3.create(),
-            trMat1 = mat3.create();
-        //
-        // mat3.translate(trMat0, base, [origin[0], origin[1]]);
-        // mat3.rotate(rMat, base, rGrad);
-        // mat3.translate(trMat1, base, [-origin[0], -origin[1]]);
-        //
-        // mat3.multiply(rotMat.m, rotMat.m, trMat0);
-        // mat3.multiply(rotMat.m, rotMat.m, rMat);
-        // mat3.multiply(rotMat.m, rotMat.m, trMat1);
-
-        // console.log(mat3.str(rotMat.m));
-
-
         mat3.translate(rotMat.m, rotMat.m, [origin[0], origin[1]]);
         mat3.rotate(rotMat.m, rotMat.m, rGrad);
         mat3.translate(rotMat.m, rotMat.m, [-origin[0], -origin[1]]);
