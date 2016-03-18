@@ -284,18 +284,20 @@ NavigatorModeBase.prototype.wheel = function (event) {
             scale = d0 / d1,
             tr = new Transform();
 
-        tr.translate(center[0] - canvasCenter[0],
-                     center[1] - canvasCenter[1]);
-        tr.scale(scale, scale, center);
+        tr.scale(scale, scale, canvasCenter);
         console.log('wheel.draw init took', _.now() - ts);
+        // var tl = tr.mapVec2([0,0]);
         ts = _.now();
         ctx.save();
         ctx.fillStyle = 'white';
         ctx.strokeStyle = 'blue';
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.setTransform.apply(ctx, tr.flatMatrix());
-        // ctx.strokeRect(0, 0, rect.width, rect.height);
-        ctx.drawImage(this.previewCanvas, 0, 0, rect.width, rect.height);
+        // ctx.strokeRect(tl[0], tl[1],
+        //                 rect.width * scale, rect.height * scale);
+        ctx.drawImage(this.previewCanvas,
+                        0, 0,
+                        rect.width, rect.height);
         ctx.restore();
         console.log('wheel.draw drawImage took', _.now() - ts);
     }

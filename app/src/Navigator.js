@@ -93,13 +93,13 @@ NavigatorMode.prototype.getMouseEventPos = function (ev) {
             trect = target.getBoundingClientRect(),
             node = this.navigator.getNode(),
             nrect = node.getBoundingClientRect();
-            return [
-                ev.clientX - (nrect.left - trect.left),
-                ev.clientY - (nrect.top - trect.top)
-            ];
+        return [
+            ev.clientX - (nrect.left - trect.left),
+            ev.clientY - (nrect.top - trect.top)
+        ];
     }
     return [0, 0];
-}
+};
 
 function NavigatorModeBase () {
     NavigatorMode.apply(this, arguments);

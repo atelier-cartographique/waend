@@ -303,29 +303,47 @@ function getWritableSegments (p, lineHeight, start) {
 }
 
 
-function transformCommand (transforms, cmd) {
+function transformCommand (instructions, transforms, cmd) {
+    var tfn, p0, p1, p2;
 
-    var tfn = underscore.compose.apply(underscore, transforms);
-
-    var p0, p1, p2;
+    if (!underscore.isArray(transforms)) {
+        tfn = transforms;
+    }
+    else if (1 === transforms.length) {
+        tfn = transforms[0];
+    }
+    else {
+        tfn = underscore.compose.apply(underscore, transforms);
+    }
     switch (cmd.type) {
         case 'M':
-            return ['moveTo'].concat(tfn([cmd.x, cmd.y]));
+        instructions.push(['moveTo'].concat(tfn([cmd.x, cmd.y])));
+        break;
+
         case 'L':
-            return ['lineTo'].concat(tfn([cmd.x, cmd.y]));
+        instructions.push(['lineTo'].concat(tfn([cmd.x, cmd.y])));
+        break;
+
         case 'C':
-            p0 = tfn([cmd.x1, cmd.y1]);
-            p1 = tfn([cmd.x2, cmd.y2]);
-            p2 = tfn([cmd.x, cmd.y]);
-            return ['bezierCurveTo', p0[0], p0[1], p1[0], p1[1], p2[0], p2[1]];
+        p0 = tfn([cmd.x1, cmd.y1]);
+        p1 = tfn([cmd.x2, cmd.y2]);
+        p2 = tfn([cmd.x, cmd.y]);
+        instructions.push(['bezierCurveTo',
+                            p0[0], p0[1], p1[0], p1[1], p2[0], p2[1]]);
+        break;
+
         case 'Q':
-            p0 = tfn([cmd.x1, cmd.y1]);
-            p1 = tfn([cmd.x, cmd.y]);
-            return ['quadraticCurveTo', p0[0], p0[1], p1[0], p1[1]];
+        p0 = tfn([cmd.x1, cmd.y1]);
+        p1 = tfn([cmd.x, cmd.y]);
+        instructions.push(['quadraticCurveTo',
+                            p0[0], p0[1], p1[0], p1[1]]);
+        break;
+
         case 'Z':
-            return ['closePath'];
+        instructions.push(['closePath']);
     }
 }
+
 
 function drawTextInPolygon (T, polygon, txt, fs) {
     var startSegment = 0,
@@ -350,7 +368,7 @@ function drawTextInPolygon (T, polygon, txt, fs) {
                     p = paths[i];
                     instructions.push(['beginPath']);
                     for (var ii = 0; ii < p.commands.length; ii++) {
-                        instructions.push(transformCommand([tfn], p.commands[ii]));
+                        transformCommand(instructions, [tfn], p.commands[ii]);
                     }
                     instructions.push(['fill']);
                 }
@@ -424,18 +442,6 @@ function drawTextInPolygonAuto (T, polygon, txt) {
         return totalLength * (1 - (Math.log(fs) / 100));
     };
 
-    // var prevLen = segmentsLength(highfs), curLen;
-    // for (var si = highfs - 16; si > basefs; si -= 16) {
-    //     curLen = segmentsLength(si);
-    //     console.log(si, curLen, prevLen);
-    //     if (curLen > prevLen) {
-    //         highfs = si + 16;
-    //         break;
-    //     }
-    //     prevLen = curLen;
-    // }
-
-
     var proceed = function () {
         var baseTextLength = t.getFlatLength(1);
         var predicate = function (pivot) {
@@ -482,7 +488,7 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
         scale = (new Transform()).scale(tsc[0], tsc[1]),
         translator = translate.mapVec2Fn('translate'),
         scalator = scale.mapVec2Fn('scale'),
-        ident = (new Transform()).mapVec2Fn();
+        ident = (new Transform()).mapVec2Fn('identity');
 
 
     for (var lidx = 1; lidx < coordinates.length; lidx++) {
@@ -492,6 +498,7 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
 
         segments.push(seg);
     }
+
 
     var proceed = function () {
         if (segments.length > 0) {
@@ -504,25 +511,26 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
             for (var i = 0; i < paths.length; i++) {
                 p = paths[i];
                 instructions = [];
-                pos = [
-                    p.pos[0] + (ttr[0] / tsc[0]),
-                    p.pos[1] + (ttr[1] / tsc[1])
-                ];
+                // pos = [
+                //     p.pos[0] + (ttr[0] / tsc[0]),
+                //     p.pos[1] + (ttr[1] / tsc[1])
+                // ];
                 angle =  Math.abs(lineAngle(p.segment[0], p.segment[1])) * -1;
-                TT = new Transform();
-                TT.multiply(translate);
-                TT.rotate(angle, pos);
-                TT.multiply(scale);
-                emit('save');
-                emit.apply(self, ['transform'].concat(TT.flatMatrix()));
+
+                TT = T.clone();
+                TT.rotate(angle, p.pos);
+                // emit('save');
+                // emit.apply(self, ['transform'].concat(TT.flatMatrix()));
+
                 instructions.push(['beginPath']);
                 for (var ii = 0; ii < p.commands.length; ii++) {
-                    instructions.push(transformCommand([ident], p.commands[ii]));
+                    transformCommand(instructions, TT.mapVec2Fn(), p.commands[ii]);
+                    // transformCommand(instructions, [ident], p.commands[ii]);
 
                 }
                 instructions.push(['fill']);
                 emit('instructions', instructions);
-                emit('restore');
+                // emit('restore');
             }
         }
     };
