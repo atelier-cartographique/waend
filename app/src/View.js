@@ -108,7 +108,7 @@ View.prototype.setTransform = function () {
 
     var trX = (targetCenter[0] - sourceCenter[0]) * s,
         trY = (targetCenter[1] - sourceCenter[1]) * s,
-        axis = [-targetCenter[0], -targetCenter[1]];
+        axis = [targetCenter[0], targetCenter[1]];
 
     var t = new Transform();
     t.translate(trX , -trY);

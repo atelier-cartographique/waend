@@ -191,9 +191,9 @@ Transform.prototype.scale = function(sx, sy, origin) {
     var scaleMat = new Matrix();
 
     if (undefined !== origin) {
-        mat3.translate(scaleMat.m, scaleMat.m, [-origin[0], -origin[1]]);
-        mat3.scale(scaleMat.m, scaleMat.m, [sx, sy]);
         mat3.translate(scaleMat.m, scaleMat.m, [origin[0], origin[1]]);
+        mat3.scale(scaleMat.m, scaleMat.m, [sx, sy]);
+        mat3.translate(scaleMat.m, scaleMat.m, [-origin[0] , -origin[1]]);
     }
     else
     {
