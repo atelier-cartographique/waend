@@ -102,7 +102,7 @@ Display.prototype.setFinalizer = function(cb, ctx) {
         context: ctx
     };
     return this;
-}
+};
 
 Display.prototype.end = function () {
     if (this._ended) {
