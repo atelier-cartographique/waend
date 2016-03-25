@@ -30,3 +30,7 @@ node_modules
 
 # Ignore .DS-store files from mac osx
 .DS_Store
+
+
+styles/waend.css
+

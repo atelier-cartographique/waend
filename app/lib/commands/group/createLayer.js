@@ -87,7 +87,7 @@ function ensureVisibility (binder, userId, groupId, layerId) {
 }
 
 
-function createLayer (ctx, user, groupId, resolve, reject) {
+function createLayer (ctx, author, userId, groupId, resolve, reject) {
     var binder = ctx.binder,
         shell = ctx.shell,
         terminal = shell.terminal,
@@ -100,16 +100,18 @@ function createLayer (ctx, user, groupId, resolve, reject) {
             desc = form.description.value;
         if((title.length > 0) && (desc.length > 0)) {
             var data = {
-                user_id: user.id,
+                user_id: author.id,
                 properties: {
                     'name': title,
                     'description': desc}
             };
 
-            ctx.binder.setLayer(user.id, groupId, data)
+            ctx.binder.setLayer(userId, groupId, data)
                 .then(function(model){
-                    shell.exec('cc /' + user.id + '/' + groupId + '/' + model.id);
-                    ensureVisibility(binder, user.id, groupId, model.id);
+                    shell.exec('cc /' + userId + '/' + groupId + '/' + model.id);
+                    if (author.id === userId) {
+                        ensureVisibility(binder, userId, groupId, model.id);
+                    }
                     semaphore.signal('create:layer', model);
                     resolve(model);
                 })
@@ -135,13 +137,14 @@ function iCreate (groupName, groupDescription) {
         stdout = self.sys.stdout,
         stdin = self.sys.stdin,
         user = self.shell.getUser(),
+        userId = self.getUser(),
         groupId = self.getGroup();
 
     if (!user) {
         return (Promise.reject('You\'re not logged in.'));
     }
 
-    var creator = _.partial(createLayer, self, user, groupId);
+    var creator = _.partial(createLayer, self, user, userId, groupId);
 
     return (new Promise(creator));
 }

@@ -37,7 +37,7 @@ module.exports = exports = base.RequestHandler.extend({
                 verb: 'post',
                 handler: 'post',
                 url: 'user/:user_id/group/:group_id/layer/',
-                permissions: ['isAuthenticated', 'isUser', 'isGroupOwner']
+                permissions: ['isAuthenticated']
             },
 
             put: {
