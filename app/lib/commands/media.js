@@ -86,8 +86,8 @@ function listMedia () {
                     var imageUrl = MEDIA_URL + '/' + user.id+'/'+ m + '/256';
                     var wrapper = document.createElement('div');
                     var style = [
-                        'width:200px;',
-                        'height:200px;',
+                        'width:140px;',
+                        'height:140px;',
                         'background-position: center center;',
                         'background-size: contain;',
                         'background-repeat: no-repeat;',

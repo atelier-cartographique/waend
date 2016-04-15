@@ -68,8 +68,8 @@ function loginButton(console, button) {
          command: ['media upload']
     },
      'Browse images': {
-         type: 'display',
-         command: ['media pick']
+         type: 'embed',
+         command: ['media list']
     }
  };
 
@@ -97,7 +97,13 @@ function loginButton(console, button) {
      'Select Features': {
          type: 'display',
          command: ['select']
+     },
+
+     'View mode': {
+         type: 'shell',
+         command: ['view']
      }
+
  };
 
 
