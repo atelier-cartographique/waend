@@ -12,46 +12,49 @@ This help is improved from time to time, and you can help us by sending your sug
 
 
 1. [Generalities](#generalities)  
-1.1  [Logic of map publishing](#logic)  
-1.2  [Presentation of Wænd interface](#interface)  
-1.3  [Wænd Structure](#structure)  
-1.4  [Datas & Metadatas](#metadata)  
+	- 1.1 [Logic of map publishing](#logic)  
+  	- 1.2 [Presentation of Wænd interface](#interface)  
+  	- 1.3 [Wænd Structure](#structure)  
+	- 1.4 [Datas & Metadatas](#metadata)  
 
  
 2.  [Attributes & metadatas](#working-metadatas)  
-2.1  [Set attribute (set)](#set)  
-2.2  [Get attributes (get)](#get)  
-2.3  [Edit attribute (edit)](#edit)  
-2.4  [Delete attribute (del)](#del)  
-2.5  [Exemple : customize your profile](#profile)  
-2.6  [Search engine](#lookup) 
+	- 2.1 [Set attribute (set)](#set)  
+	- 2.2 [Get attributes (get)](#get)  
+	- 2.3 [Edit attribute (edit)](#edit)  
+	- 2.4 [Delete attribute (del)](#del)  
+	- 2.5 [Exemple : customize your profile](#profile)  
+	- 2.6 [Search engine](#lookup) 
 
-3.  [Play with features](#feature)   
-3.1  [Style your features](#style-feature)   
-3.2  [Edit feature geometry](#edit_geometry)  
+3. [Maps](#map)  
+	- 3.1 [Set map extent](#extent) 
+
+4.  [Layers](#layer)  
+	- 4.1 [Style at layer level](#style-feature)  
+	- 4.2 [Attach a layer to another map](#attach)  
+	- 4.3 [Detach a layer from a map](#detach)   
+	- 4.4 [Delete a layer](#delete-layer)   
+	- 4.5 [Import Geo-Datas]()  
+		- [Geo-Datas : Working with GeoJSON](#GeoJSON)    
+		- [Geo-Datas : Help with Overpass Turbo](#overpass) 
+
+5.  [Features](#feature)   
+	- 5.1 [Style your features](#style-feature)   
+	- 5.2 [Edit feature geometry](#edit_geometry)  
 
 
-4.  [Play with layers](#layer)  
-4.1  [Style at layer level](#style-feature)  
-4.3  [Attach a layer to another map](#attach)  
-4.4  [Detach a layer from a map](#detach)   
-4.5  [Delete a layer](#delete-layer)   
-
-5. 	[Import Geo-Datas]()  
-5.1  [Geo-Datas : Working with GeoJSON](#GeoJSON)    
-5.2  [Geo-Datas : Help with Overpass Turbo](#overpass) 
 
 6.  [Style tips & tricks](#style-tips)  
-6.1  [HTML color generators ](#tip-colorgenerator)  
-6.2  [Polygon fill color](#tip-fill)  
-6.3  [Play with Composite Operation](#tip-composite) 
+	- 6.1 [HTML color generators ](#tip-colorgenerator)  
+	- 6.2 [Polygon fill color](#tip-fill)  
+	- 6.3 [Play with Composite Operation](#tip-composite) 
 
 7. [Other]()   
-7.1  [Searching maps on Wænd](#search)   
-7.2  [Sharing maps](#share)  
-7.3  [Embedding a map in another web-page](#embed)  
-7.4  [Batch import geo-tagged images](#batch-img)   
-7.5  [Create and import images tiles](#tiles) 
+	- 7.1 [Searching maps on Wænd](#search)   
+	- 7.2 [Sharing maps](#share)  
+	- 7.3 [Embedding a map in another web-page](#embed)  
+	- 7.4 [Batch import geo-tagged images](#batch-img)   
+	- 7.5 [Create and import images tiles](#tiles) 
  
 8.  [Memento : List of common commands](#commands-list) 
 
@@ -261,11 +264,147 @@ All the metadatas are indexed by the internal search engine (except profiles dat
 
 The command to search maps on waend is ```lookup key-word-of-your-choice```
 
+## <a name="maps"></a>3- Maps
 
-## <a name="feature"></a>3- Play with features
+### <a name=""#extent></a>3.1 Set map extent
+
+Setting the map extent will set the extent of the current viewport as the extent for the map.  
+It means that what you see on your screen when you set the map extent will be the arrival zone when you load the map.
 
 
-### <a name="style-feature"></a>3.1 Style your features
+## <a name="layer"></a>4- Play with layer
+
+### <a name="layer-style"></a>4.1 Style at layer level
+
+You can use all the style attribute explained on the feature section at a layer level.  
+
+By doing so your style will apply on *every features* belonging to that layer.  
+You can override the layer style at a feature level.
+
+
+Here is an illustration of what it does :  
+  
+![illustration map-layers](images/exemple-layer-style.png)
+
+This style is applied on the layer "Many sunny parcs".
+They are all green, with -45° rotation, except one, wich has specific style.
+
+
+
+
+
+
+
+### <a name="attach"></a>4.2 attach a layer to a map : ```attach```
+
+If you're the owner of the layer, the command will attach the said layer to a map. It doesn't *move* the layer but will *display* it within this other map.
+
+The argument is made of a valid path to be created.
+
+Let say you are the author of a layerA, and you want to attach it to a mapZ :
+
+```
+attach /userZ_id/mapZ_id/layerA_id
+```
+
+How it works :
+
+```/userZ_id/mapZ_id``` : the context *where* you want to attach the layer.  
+
+```layerA_id``` : the id of the layer you *own* and you want to attach somewhere.
+
+
+NOTE :  
+The attached layer might need to be set to *visible* by the author of the target map. 
+
+### <a name="detach"></a>4.3 detach a layer from a map : ```detach```
+
+The ```detach``` command *undo* what has been done by the ```attach``` command, and works the same way.
+
+To detach layerA from mapZ, do :
+
+```
+detach /userZ_id/mapZ_id/layerA_id
+```
+
+### <a name="delete-layer"></a>4.4 Delete a layer - See ```detach```
+
+A subtlety about *compositions* ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that's created at the same time.  
+
+It does mean that if you're willing to *remove* a layer, at the moment, your best option is to detach it from all maps it's attached to.
+
+###<a name="import"></a>4.5 Import Geo-datas
+
+####<a name="GeoJSON"></a> Working with GeoJSON
+
+While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:
+
+We currently only support GeoJSON format.
+The restrictions so far are :
+
+- no multipolygons
+- no multilines
+- no points
+
+An easy way to create a GeoJSON file from your zone of interest is to use <a href="http://overpass-turbo.eu/" target="_blank">http://overpass-turbo.eu/</a>, it is a powerfull online tool quickly export data from OpenStreetMap.
+
+Another option is to use <a href="http://www.qgis.org/en/site/" target="_blank">Qgis</a>, a free and opensource GIS, that you can use for manipulating any kind of geo-datas.
+
+*Good to know* : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  
+
+####<a name="overpass"></a>Tips with Overpass Turbo
+
+Use the wizard to help you building your query :   
+
+![illustration map-layers](images/overpass-wizard.png)
+
+
+Exemples : 
+
+#####Query for buildings in selection box
+
+	[out:json][timeout:25];
+	// gather results
+	(
+	  // query part for: “building”
+	  way["building"]({{bbox}});
+	  relation["building"]({{bbox}});
+	);
+	// print results
+	out body;
+	>;
+	out skel qt;
+ 	
+#####Query for all roads in selection box
+
+	[out:json][timeout:25];
+	// gather results
+	(
+	  // query part for: “highway”
+	  node["highway"]({{bbox}});
+	  way["highway"]({{bbox}});
+	  relation["highway"]({{bbox}});
+	);
+	// print results
+	out body;
+	>;
+	out skel qt;
+
+
+#####Query for everything in the selection box
+
+ 	// gather results
+ 	(way({{bbox}}););
+ 	// print results
+ 	out body;
+ 	>;
+ 	out skel qt;
+ 	
+
+## <a name="feature"></a>5- Play with features
+
+
+### <a name="style-feature"></a>5.1 Style your features
 
 There is a style widget in waend, but we like to describe all functionalities, so you can get the whole picture of the plateform. 
 
@@ -273,7 +412,7 @@ There is a style widget in waend, but we like to describe all functionalities, s
 *the style widget* 
 
 
-#### 3.1.1- Style hatches
+#### 5.1.1- Style hatches
 
 Used commands : 
 
@@ -323,7 +462,7 @@ Here is an illustration of what it does :
 
 
 
-#### 3.1.2- Style text
+#### 5.1.2- Style text
 
 Used commands : 
 
@@ -360,7 +499,7 @@ Here is an illustration of what it does :
 
 
 	
-#### 3.1.3- Style image
+#### 5.1.3- Style image
 
 
 Used commands : 
@@ -407,7 +546,7 @@ Here is an illustration of what it does :
 
 
 
-### <a name="edit_geometry"></a>3.2 Edit feature geometry
+### <a name="edit_geometry"></a>5.2 Edit feature geometry
 
 To edit feature geometry, we use the commands :  
 ```gg``` to get the geometry of that feature  
@@ -426,132 +565,6 @@ To re-draw a freehand shape, type : ```draw | close | sg```
 
 
 
-
-## <a name="layer"></a>4- Play with layer
-
-### <a name="layer-style"></a>4.1 Style at layer level
-
-You can use all the style attribute explained on the feature section at a layer level.  
-
-By doing so your style will apply on *every features* belonging to that layer.  
-You can override the layer style at a feature level.
-
-
-Here is an illustration of what it does :  
-  
-![illustration map-layers](images/exemple-layer-style.png)
-
-This style is applied on the layer "Many sunny parcs".
-They are all green, with -45° rotation, except one, wich has specific style.
-
-
-
-
-
-
-
-### <a name="attach"></a>4.2 attach a layer to a map : ```attach```
-
-If you're the owner of the layer, the command will attach the said layer to a map. It doesn't *move* the layer but will *display* it within this other map.
-
-The argument is made of a valid path to be created.
-
-Let say you are the author of a layerA, and you want to attach it to a mapZ :
-
-```
-attach /userZ_id/mapZ_id/layerA_id
-```
-
-How it works :
-
-```/userZ_id/mapZ_id``` : the context *where* you want to attach the layer.  
-
-```layerA_id``` : the id of the layer you *own* and you want to attach somewhere.
-
-
-### <a name="detach"></a>4.3 detach a layer from a map : ```detach```
-
-The ```detach``` command *undo* what has been done by the ```attach``` command, and works the same way.
-
-To detach layerA from mapZ, do :
-
-```
-detach /userZ_id/mapZ_id/layerA_id
-```
-
-### <a name="delete-layer"></a>4.4 Delete a layer - See ```detach```
-
-A subtlety about *compositions* ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that's created at the same time.  
-
-It does mean that if you're willing to *remove* a layer, at the moment, your best option is to detach it from all maps it's attached to.
-
-##<a name="import"></a>5- Import Geo-datas
-
-###<a name="GeoJSON"></a>5.1 Working with GeoJSON
-
-While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:
-
-We currently only support GeoJSON format.
-The restrictions so far are :
-
-- no multipolygons
-- no multilines
-- no points
-
-An easy way to create a GeoJSON file from your zone of interest is to use <a href="http://overpass-turbo.eu/" target="_blank">http://overpass-turbo.eu/</a>, it is a powerfull online tool quickly export data from OpenStreetMap.
-
-Another option is to use <a href="http://www.qgis.org/en/site/" target="_blank">Qgis</a>, a free and opensource GIS, that you can use for manipulating any kind of geo-datas.
-
-*Good to know* : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  
-
-###<a name="overpass"></a>5.2 Tips with Overpass Turbo
-
-Use the wizard to help you building your query :   
-
-![illustration map-layers](images/overpass-wizard.png)
-
-
-Exemples : 
-
-#####Query for buildings in selection box
-
-	[out:json][timeout:25];
-	// gather results
-	(
-	  // query part for: “building”
-	  way["building"]({{bbox}});
-	  relation["building"]({{bbox}});
-	);
-	// print results
-	out body;
-	>;
-	out skel qt;
- 	
-#####Query for all roads in selection box
-
-	[out:json][timeout:25];
-	// gather results
-	(
-	  // query part for: “highway”
-	  node["highway"]({{bbox}});
-	  way["highway"]({{bbox}});
-	  relation["highway"]({{bbox}});
-	);
-	// print results
-	out body;
-	>;
-	out skel qt;
-
-
-#####Query for everything in the selection box
-
- 	// gather results
- 	(way({{bbox}}););
- 	// print results
- 	out body;
- 	>;
- 	out skel qt;
- 	
 
 ##<a name="style-tips"></a>6- Style tips & tricks
 

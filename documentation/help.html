@@ -343,39 +343,65 @@ sup {
 <p>This help is improved from time to time, and you can help us by sending your suggestions at contact@atelier-cartographique.be</p>
 
 <ol>
-<li><p><a href="#generalities">Generalities</a><br>
-1.1  <a href="#logic">Logic of map publishing</a><br>
-1.2  <a href="#interface">Presentation of Wænd interface</a><br>
-1.3  <a href="#structure">Wænd Structure</a><br>
-1.4  <a href="#metadata">Datas &amp; Metadatas</a>  </p></li>
-<li><p><a href="#working-metadatas">Attributes &amp; metadatas</a><br>
-2.1  <a href="#set">Set attribute (set)</a><br>
-2.2  <a href="#get">Get attributes (get)</a><br>
-2.3  <a href="#edit">Edit attribute (edit)</a><br>
-2.4  <a href="#del">Delete attribute (del)</a><br>
-2.5  <a href="#profile">Exemple : customize your profile</a><br>
-2.6  <a href="#lookup">Search engine</a> </p></li>
-<li><p><a href="#feature">Play with features</a><br>
-3.1  <a href="#style-feature">Style your features</a><br>
-3.2  <a href="#edit_geometry">Edit feature geometry</a>  </p></li>
-<li><p><a href="#layer">Play with layers</a><br>
-4.1  <a href="#style-feature">Style at layer level</a><br>
-4.3  <a href="#attach">Attach a layer to another map</a><br>
-4.4  <a href="#detach">Detach a layer from a map</a><br>
-4.5  <a href="#delete-layer">Delete a layer</a>   </p></li>
-<li><p><a href="">Import Geo-Datas</a><br>
-5.1  <a href="#GeoJSON">Geo-Datas : Working with GeoJSON</a><br>
-5.2  <a href="#overpass">Geo-Datas : Help with Overpass Turbo</a> </p></li>
-<li><p><a href="#style-tips">Style tips &amp; tricks</a><br>
-6.1  <a href="#tip-colorgenerator">HTML color generators </a><br>
-6.2  <a href="#tip-fill">Polygon fill color</a><br>
-6.3  <a href="#tip-composite">Play with Composite Operation</a> </p></li>
-<li><p><a href="">Other</a><br>
-7.1  <a href="#search">Searching maps on Wænd</a><br>
-7.2  <a href="#share">Sharing maps</a><br>
-7.3  <a href="#embed">Embedding a map in another web-page</a><br>
-7.4  <a href="#batch-img">Batch import geo-tagged images</a><br>
-7.5  <a href="#tiles">Create and import images tiles</a> </p></li>
+<li><p><a href="#generalities">Generalities</a>  </p>
+
+<ul>
+<li>1.1 <a href="#logic">Logic of map publishing</a><br></li>
+<li>1.2 <a href="#interface">Presentation of Wænd interface</a><br></li>
+<li>1.3 <a href="#structure">Wænd Structure</a><br></li>
+<li>1.4 <a href="#metadata">Datas &amp; Metadatas</a><br></li>
+</ul></li>
+<li><p><a href="#working-metadatas">Attributes &amp; metadatas</a>  </p>
+
+<ul>
+<li>2.1 <a href="#set">Set attribute (set)</a><br></li>
+<li>2.2 <a href="#get">Get attributes (get)</a><br></li>
+<li>2.3 <a href="#edit">Edit attribute (edit)</a><br></li>
+<li>2.4 <a href="#del">Delete attribute (del)</a><br></li>
+<li>2.5 <a href="#profile">Exemple : customize your profile</a><br></li>
+<li>2.6 <a href="#lookup">Search engine</a> </li>
+</ul></li>
+<li><p><a href="#map">Maps</a>  </p>
+
+<ul>
+<li>3.1 <a href="#extent">Set map extent</a> </li>
+</ul></li>
+<li><p><a href="#layer">Layers</a>  </p>
+
+<ul>
+<li>4.1 <a href="#style-feature">Style at layer level</a><br></li>
+<li>4.2 <a href="#attach">Attach a layer to another map</a><br></li>
+<li>4.3 <a href="#detach">Detach a layer from a map</a><br></li>
+<li>4.4 <a href="#delete-layer">Delete a layer</a><br></li>
+<li>4.5 <a href="">Import Geo-Datas</a><br>
+
+<ul>
+<li><a href="#GeoJSON">Geo-Datas : Working with GeoJSON</a><br></li>
+<li><a href="#overpass">Geo-Datas : Help with Overpass Turbo</a> </li>
+</ul></li>
+</ul></li>
+<li><p><a href="#feature">Features</a>   </p>
+
+<ul>
+<li>5.1 <a href="#style-feature">Style your features</a><br></li>
+<li>5.2 <a href="#edit_geometry">Edit feature geometry</a><br></li>
+</ul></li>
+<li><p><a href="#style-tips">Style tips &amp; tricks</a>  </p>
+
+<ul>
+<li>6.1 <a href="#tip-colorgenerator">HTML color generators </a><br></li>
+<li>6.2 <a href="#tip-fill">Polygon fill color</a><br></li>
+<li>6.3 <a href="#tip-composite">Play with Composite Operation</a> </li>
+</ul></li>
+<li><p><a href="">Other</a>   </p>
+
+<ul>
+<li>7.1 <a href="#search">Searching maps on Wænd</a><br></li>
+<li>7.2 <a href="#share">Sharing maps</a><br></li>
+<li>7.3 <a href="#embed">Embedding a map in another web-page</a><br></li>
+<li>7.4 <a href="#batch-img">Batch import geo-tagged images</a><br></li>
+<li>7.5 <a href="#tiles">Create and import images tiles</a> </li>
+</ul></li>
 <li><p><a href="#commands-list">Memento : List of common commands</a> </p></li>
 </ol>
 
@@ -530,16 +556,139 @@ del params.text</code></pre></div>
 
 <p>The command to search maps on waend is <code>lookup key-word-of-your-choice</code></p>
 
-<h2 id="toc_16"><a name="feature"></a>3- Play with features</h2>
+<h2 id="toc_16"><a name="maps"></a>3- Maps</h2>
 
-<h3 id="toc_17"><a name="style-feature"></a>3.1 Style your features</h3>
+<h3 id="toc_17"><a name=""#extent></a>3.1 Set map extent</h3>
+
+<p>Setting the map extent will set the extent of the current viewport as the extent for the map.<br>
+It means that what you see on your screen when you set the map extent will be the arrival zone when you load the map.</p>
+
+<h2 id="toc_18"><a name="layer"></a>4- Play with layer</h2>
+
+<h3 id="toc_19"><a name="layer-style"></a>4.1 Style at layer level</h3>
+
+<p>You can use all the style attribute explained on the feature section at a layer level.  </p>
+
+<p>By doing so your style will apply on <em>every features</em> belonging to that layer.<br>
+You can override the layer style at a feature level.</p>
+
+<p>Here is an illustration of what it does :  </p>
+
+<p><img src="images/exemple-layer-style.png" alt="illustration map-layers"></p>
+
+<p>This style is applied on the layer &quot;Many sunny parcs&quot;.
+They are all green, with -45° rotation, except one, wich has specific style.</p>
+
+<h3 id="toc_20"><a name="attach"></a>4.2 attach a layer to a map : <code>attach</code></h3>
+
+<p>If you&#39;re the owner of the layer, the command will attach the said layer to a map. It doesn&#39;t <em>move</em> the layer but will <em>display</em> it within this other map.</p>
+
+<p>The argument is made of a valid path to be created.</p>
+
+<p>Let say you are the author of a layerA, and you want to attach it to a mapZ :</p>
+
+<div><pre><code class="language-none">attach /userZ_id/mapZ_id/layerA_id</code></pre></div>
+
+<p>How it works :</p>
+
+<p><code>/userZ_id/mapZ_id</code> : the context <em>where</em> you want to attach the layer.  </p>
+
+<p><code>layerA_id</code> : the id of the layer you <em>own</em> and you want to attach somewhere.</p>
+
+<p>NOTE :<br>
+The attached layer might need to be set to <em>visible</em> by the author of the target map. </p>
+
+<h3 id="toc_21"><a name="detach"></a>4.3 detach a layer from a map : <code>detach</code></h3>
+
+<p>The <code>detach</code> command <em>undo</em> what has been done by the <code>attach</code> command, and works the same way.</p>
+
+<p>To detach layerA from mapZ, do :</p>
+
+<div><pre><code class="language-none">detach /userZ_id/mapZ_id/layerA_id</code></pre></div>
+
+<h3 id="toc_22"><a name="delete-layer"></a>4.4 Delete a layer - See <code>detach</code></h3>
+
+<p>A subtlety about <em>compositions</em> ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that&#39;s created at the same time.  </p>
+
+<p>It does mean that if you&#39;re willing to <em>remove</em> a layer, at the moment, your best option is to detach it from all maps it&#39;s attached to.</p>
+
+<h3 id="toc_23"><a name="import"></a>4.5 Import Geo-datas</h3>
+
+<h4 id="toc_24"><a name="GeoJSON"></a> Working with GeoJSON</h4>
+
+<p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
+
+<p>We currently only support GeoJSON format.
+The restrictions so far are :</p>
+
+<ul>
+<li>no multipolygons</li>
+<li>no multilines</li>
+<li>no points</li>
+</ul>
+
+<p>An easy way to create a GeoJSON file from your zone of interest is to use <a href="http://overpass-turbo.eu/" target="_blank">http://overpass-turbo.eu/</a>, it is a powerfull online tool quickly export data from OpenStreetMap.</p>
+
+<p>Another option is to use <a href="http://www.qgis.org/en/site/" target="_blank">Qgis</a>, a free and opensource GIS, that you can use for manipulating any kind of geo-datas.</p>
+
+<p><em>Good to know</em> : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  </p>
+
+<h4 id="toc_25"><a name="overpass"></a>Tips with Overpass Turbo</h4>
+
+<p>Use the wizard to help you building your query :   </p>
+
+<p><img src="images/overpass-wizard.png" alt="illustration map-layers"></p>
+
+<p>Exemples : </p>
+
+<h5 id="toc_26">Query for buildings in selection box</h5>
+
+<div><pre><code class="language-none">[out:json][timeout:25];
+// gather results
+(
+  // query part for: “building”
+  way[&quot;building&quot;]({{bbox}});
+  relation[&quot;building&quot;]({{bbox}});
+);
+// print results
+out body;
+&gt;;
+out skel qt;</code></pre></div>
+
+<h5 id="toc_27">Query for all roads in selection box</h5>
+
+<div><pre><code class="language-none">[out:json][timeout:25];
+// gather results
+(
+  // query part for: “highway”
+  node[&quot;highway&quot;]({{bbox}});
+  way[&quot;highway&quot;]({{bbox}});
+  relation[&quot;highway&quot;]({{bbox}});
+);
+// print results
+out body;
+&gt;;
+out skel qt;</code></pre></div>
+
+<h5 id="toc_28">Query for everything in the selection box</h5>
+
+<div><pre><code class="language-none">// gather results
+(way({{bbox}}););
+// print results
+out body;
+&gt;;
+out skel qt;</code></pre></div>
+
+<h2 id="toc_29"><a name="feature"></a>5- Play with features</h2>
+
+<h3 id="toc_30"><a name="style-feature"></a>5.1 Style your features</h3>
 
 <p>There is a style widget in waend, but we like to describe all functionalities, so you can get the whole picture of the plateform. </p>
 
 <p><img src="images/style-widget.png" alt="illustration map-layers"><br>
 <em>the style widget</em> </p>
 
-<h4 id="toc_18">3.1.1- Style hatches</h4>
+<h4 id="toc_31">5.1.1- Style hatches</h4>
 
 <p>Used commands : </p>
 
@@ -574,7 +723,7 @@ set params.step 10</code></pre></div>
 
 <p><img src="images/exemple-hatches-style.png" alt="illustration map-layers"></p>
 
-<h4 id="toc_19">3.1.2- Style text</h4>
+<h4 id="toc_32">5.1.2- Style text</h4>
 
 <p>Used commands : </p>
 
@@ -596,7 +745,7 @@ set style.fillStyle &quot;rgba(255, 127, 0, 1)&quot;  </code></pre></div>
 
 <p><img src="images/exemple-text-style.png" alt="illustration map-layers"></p>
 
-<h4 id="toc_20">3.1.3- Style image</h4>
+<h4 id="toc_33">5.1.3- Style image</h4>
 
 <p>Used commands : </p>
 
@@ -618,7 +767,7 @@ set params.clip false   </code></pre></div>
 
 <p><img src="images/params-image.png" alt="illustration map-layers"></p>
 
-<h3 id="toc_21"><a name="edit_geometry"></a>3.2 Edit feature geometry</h3>
+<h3 id="toc_34"><a name="edit_geometry"></a>5.2 Edit feature geometry</h3>
 
 <p>To edit feature geometry, we use the commands :<br>
 <code>gg</code> to get the geometry of that feature<br>
@@ -634,135 +783,22 @@ set params.clip false   </code></pre></div>
 
 <p>To re-draw a freehand shape, type : <code>draw | close | sg</code></p>
 
-<h2 id="toc_22"><a name="layer"></a>4- Play with layer</h2>
+<h2 id="toc_35"><a name="style-tips"></a>6- Style tips &amp; tricks</h2>
 
-<h3 id="toc_23"><a name="layer-style"></a>4.1 Style at layer level</h3>
-
-<p>You can use all the style attribute explained on the feature section at a layer level.  </p>
-
-<p>By doing so your style will apply on <em>every features</em> belonging to that layer.<br>
-You can override the layer style at a feature level.</p>
-
-<p>Here is an illustration of what it does :  </p>
-
-<p><img src="images/exemple-layer-style.png" alt="illustration map-layers"></p>
-
-<p>This style is applied on the layer &quot;Many sunny parcs&quot;.
-They are all green, with -45° rotation, except one, wich has specific style.</p>
-
-<h3 id="toc_24"><a name="attach"></a>4.2 attach a layer to a map : <code>attach</code></h3>
-
-<p>If you&#39;re the owner of the layer, the command will attach the said layer to a map. It doesn&#39;t <em>move</em> the layer but will <em>display</em> it within this other map.</p>
-
-<p>The argument is made of a valid path to be created.</p>
-
-<p>Let say you are the author of a layerA, and you want to attach it to a mapZ :</p>
-
-<div><pre><code class="language-none">attach /userZ_id/mapZ_id/layerA_id</code></pre></div>
-
-<p>How it works :</p>
-
-<p><code>/userZ_id/mapZ_id</code> : the context <em>where</em> you want to attach the layer.  </p>
-
-<p><code>layerA_id</code> : the id of the layer you <em>own</em> and you want to attach somewhere.</p>
-
-<h3 id="toc_25"><a name="detach"></a>4.3 detach a layer from a map : <code>detach</code></h3>
-
-<p>The <code>detach</code> command <em>undo</em> what has been done by the <code>attach</code> command, and works the same way.</p>
-
-<p>To detach layerA from mapZ, do :</p>
-
-<div><pre><code class="language-none">detach /userZ_id/mapZ_id/layerA_id</code></pre></div>
-
-<h3 id="toc_26"><a name="delete-layer"></a>4.4 Delete a layer - See <code>detach</code></h3>
-
-<p>A subtlety about <em>compositions</em> ---which is what attachments are called internally--- is that when you create a layer in the context of a group/map, its only relationship to this map is the composition that&#39;s created at the same time.  </p>
-
-<p>It does mean that if you&#39;re willing to <em>remove</em> a layer, at the moment, your best option is to detach it from all maps it&#39;s attached to.</p>
-
-<h2 id="toc_27"><a name="import"></a>5- Import Geo-datas</h2>
-
-<h3 id="toc_28"><a name="GeoJSON"></a>5.1 Working with GeoJSON</h3>
-
-<p>While Wænd is not meant to be an online Geographic Information System, you can import data within layers and work with them:</p>
-
-<p>We currently only support GeoJSON format.
-The restrictions so far are :</p>
-
-<ul>
-<li>no multipolygons</li>
-<li>no multilines</li>
-<li>no points</li>
-</ul>
-
-<p>An easy way to create a GeoJSON file from your zone of interest is to use <a href="http://overpass-turbo.eu/" target="_blank">http://overpass-turbo.eu/</a>, it is a powerfull online tool quickly export data from OpenStreetMap.</p>
-
-<p>Another option is to use <a href="http://www.qgis.org/en/site/" target="_blank">Qgis</a>, a free and opensource GIS, that you can use for manipulating any kind of geo-datas.</p>
-
-<p><em>Good to know</em> : Your datas should be in EPGS:4326 - WGS84, and we display them in EPSG:3857.  </p>
-
-<h3 id="toc_29"><a name="overpass"></a>5.2 Tips with Overpass Turbo</h3>
-
-<p>Use the wizard to help you building your query :   </p>
-
-<p><img src="images/overpass-wizard.png" alt="illustration map-layers"></p>
-
-<p>Exemples : </p>
-
-<h5 id="toc_30">Query for buildings in selection box</h5>
-
-<div><pre><code class="language-none">[out:json][timeout:25];
-// gather results
-(
-  // query part for: “building”
-  way[&quot;building&quot;]({{bbox}});
-  relation[&quot;building&quot;]({{bbox}});
-);
-// print results
-out body;
-&gt;;
-out skel qt;</code></pre></div>
-
-<h5 id="toc_31">Query for all roads in selection box</h5>
-
-<div><pre><code class="language-none">[out:json][timeout:25];
-// gather results
-(
-  // query part for: “highway”
-  node[&quot;highway&quot;]({{bbox}});
-  way[&quot;highway&quot;]({{bbox}});
-  relation[&quot;highway&quot;]({{bbox}});
-);
-// print results
-out body;
-&gt;;
-out skel qt;</code></pre></div>
-
-<h5 id="toc_32">Query for everything in the selection box</h5>
-
-<div><pre><code class="language-none">// gather results
-(way({{bbox}}););
-// print results
-out body;
-&gt;;
-out skel qt;</code></pre></div>
-
-<h2 id="toc_33"><a name="style-tips"></a>6- Style tips &amp; tricks</h2>
-
-<h3 id="toc_34"><a name="tip-colorgenerator"></a>6.1 HTML Color generators</h3>
+<h3 id="toc_36"><a name="tip-colorgenerator"></a>6.1 HTML Color generators</h3>
 
 <p>Many colors generators exists online, giving you the HTML value you would need. </p>
 
 <p>Here are two of them: <a href="https://coolors.co/">coolors.co</a> and <a href="http://paletton.com/">paletton.com</a></p>
 
-<h3 id="toc_35"><a name="tip-fill"></a>6.2 polygon fill color</h3>
+<h3 id="toc_37"><a name="tip-fill"></a>6.2 polygon fill color</h3>
 
 <p>Set <code>params.hn</code> key to 1 (One line to this polygon).<br>
 Set <code>style.lineWidth</code> to 3000 (the line will be 3000m wide)</p>
 
 <p>You are done with a filled polygon !</p>
 
-<h3 id="toc_36"><a name="tip-composite"></a>6.3 Play with Composite Operation</h3>
+<h3 id="toc_38"><a name="tip-composite"></a>6.3 Play with Composite Operation</h3>
 
 <p>We use multiply compositing mode by default in layers.<br>
 If you want to change it, please refer to <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">Canvas MDN documentation</a></p>
@@ -771,7 +807,7 @@ If you want to change it, please refer to <a href="https://developer.mozilla.org
 
 <div><pre><code class="language-none">set style.globalCompositeOperation source-over</code></pre></div>
 
-<h3 id="toc_37"><a name="image"></a>6.4 Image at layer level</h3>
+<h3 id="toc_39"><a name="image"></a>6.4 Image at layer level</h3>
 
 <p>If you set an image at the layer level, it will cover <em>all</em> your polygons with this image in that layer.<br>
 The parameters are used like described above, at the layer level.</p>
@@ -780,15 +816,15 @@ The parameters are used like described above, at the layer level.</p>
 
 <p><code>media pick | set params.image</code></p>
 
-<h2 id="toc_38"><a name="share"></a>7- Sharing maps</h2>
+<h2 id="toc_40"><a name="share"></a>7- Sharing maps</h2>
 
-<h3 id="toc_39"><a name="view"></a>7.1 Share map link in &quot;view mode&quot;</h3>
+<h3 id="toc_41"><a name="view"></a>7.1 Share map link in &quot;view mode&quot;</h3>
 
 <p>To see your map published, use the command <code>view</code> or replace <code>map</code> by <code>view</code>in the URL.<br>
 To share a map, you can just send the url containing <code>view</code> of your map.<br>
 eg : <code>http://alpha.waend.com/view/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994</code></p>
 
-<h3 id="toc_40"><a name="embed"></a>7.2 Embedding a map in another web-page</h3>
+<h3 id="toc_42"><a name="embed"></a>7.2 Embedding a map in another web-page</h3>
 
 <p>You can embed maps in web pages using iframes.<br>
 To embed your map in view mode, you have to replace <code>map</code>by <code>view</code> at the begining of the URL.  </p>
@@ -797,7 +833,7 @@ To embed your map in view mode, you have to replace <code>map</code>by <code>vie
 
 <div><pre><code class="language-none">&lt;iframe style=&quot;position: absolute; top: -9999em; visibility: hidden;&quot; onload=&quot;this.style.position=&#39;static&#39;; this.style.visibility=&#39;visible&#39;;&quot; src=&quot;http://alpha.waend.com/map/a3035739-6f38-47a9-a283-5845d6030a68/3bfca7f9-4fe7-44fd-afdd-ffb442df6994?c=view&quot; height=&quot;600px&quot; width=&quot;1000px&quot;&gt;&lt;/iframe&gt;</code></pre></div>
 
-<h3 id="toc_41"><a name="batch-img"></a>7.3 Batch import geo-tagged images</h3>
+<h3 id="toc_43"><a name="batch-img"></a>7.3 Batch import geo-tagged images</h3>
 
 <p>So far, batch import of geotaged images is not supported natively in Wænd. But there is a workaround. Here is a how to, using Qgis :</p>
 
@@ -813,7 +849,7 @@ To embed your map in view mode, you have to replace <code>map</code>by <code>vie
 <li>And voilà ! You can continue to style your images at a layer level, according to your needs.</li>
 </ul>
 
-<h3 id="toc_42"><a name="tiles"></a>7.4 Create and import images tiles</h3>
+<h3 id="toc_44"><a name="tiles"></a>7.4 Create and import images tiles</h3>
 
 <p>Following the logic as described above, you can import tiles when you need a very big and zoomable image. </p>
 
@@ -834,16 +870,16 @@ To embed your map in view mode, you have to replace <code>map</code>by <code>vie
 
 <p>Do not forget to work in EPSG3857 in Qgis and to export your GEOjson in WGS84, otherwise you will get glitches. </p>
 
-<h2 id="toc_43"><a name="commands-details"></a>8- Memento : List of common commands</h2>
+<h2 id="toc_45"><a name="commands-details"></a>8- Memento : List of common commands</h2>
 
-<h5 id="toc_44">General attribute commands :</h5>
+<h5 id="toc_46">General attribute commands :</h5>
 
 <p><code>set</code> : set something to something, often attribute to current context<br>
 <code>get</code> : get current context attributes / metadatas<br>
 <code>edit</code> : open text editor<br>
 <code>del</code> : delete + attribute name to delete  </p>
 
-<h5 id="toc_45">Style commands :</h5>
+<h5 id="toc_47">Style commands :</h5>
 
 <p>Line color :  <code>set style.strokeStyle</code> + any html color value<br>
 Line width :  <code>set style.lineWidth</code> + number (in meter)</p>
@@ -855,12 +891,12 @@ hatches step : <code>set params.step</code> + number (in meter)</p>
 <p>Font size :  <code>set params.fontsize</code> +  number (in meter)<br>
 Font color :  <code>set style.fillStyle</code> + any html color value  </p>
 
-<h5 id="toc_46">Other commands :</h5>
+<h5 id="toc_48">Other commands :</h5>
 
 <p>Search on Wænd : <code>lookup</code> + a word<br>
 Display your map in &quot;view mode&quot; : <code>view</code></p>
 
-<h5 id="toc_47">Good to know :</h5>
+<h5 id="toc_49">Good to know :</h5>
 
 <p>Pipe (|) is allowed to chain commands together.  </p>
 
