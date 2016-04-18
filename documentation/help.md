@@ -106,7 +106,7 @@ There are two surprising aspects you will discover :
 
 
 
-
+- In edit mode, using Shift key + click & drag will draw a zone to zoom in.
 
 ###<a name="structure"></a>1.3 Wænd structure
 
