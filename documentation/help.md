@@ -1,11 +1,12 @@
 #HELP WÆND 
-*Last update : march 18th 2016*  
+*Last update : april 18th 2016*  
 
 **Survival hints**  
 - To create a user account, visit http://alpha.waend.com/register.  
 - To search for existing maps on Waend, use the command ```lookup``` in the command line. Eg : ```lookup carto``` will search for maps containing the word "carto".  
 - To visit a map in view mode, simply type ```view``` in the command line.  
-- (do not forget to press enter to validate)
+- (do not forget to press enter to validate)  
+- To come back in edit mode, make sure the url is http://alpha.waend.com/**map**/xxx, not http://alpha.waend.com/**view**/xxx
 
   
 This help is improved from time to time, and you can help us by sending your suggestions at contact@atelier-cartographique.be
@@ -84,7 +85,7 @@ There are two surprising aspects you will discover :
 
 
 ![illustration map-layers](images/CLI.png)  
-*exemple of command, used to set the description of an element*
+*exemple of command, used to set the name of an element, here a map.*
 
 
 - There is no map background : you will start on a blank page. It’s not a bug, but a choice we’ve made to wide-up the spectrum of what cartography could be. No map background means no influence from us on how a territory should be represented. You can do whatever you want.  
@@ -121,10 +122,9 @@ We call each of them "context" (User context, map context, etc.)
 
 While maps are groups of layers, we also call them "groups".
 
-A features is the most simple map element, it's a shape. It could be a line, a polygon : a parc, a street, an image...
+A features is the most simple map element, it's a shape. It could be a line, a polygon : a parc, a street, an image, a text...
 
-There are no points yet in Wænd, because in most of digital maps points are not represented with a spatial influence, and we think things do.  
-Often, trees are points on maps, but a tree has a circumference, from its trunk and from its branches, so it has a spatial influence. We all have been under the shadow of a tree. So a tree is not only a point on a map, it's a shape with an area and an influence, and we would like to promote this way of thinking about digital maps. 
+There are no points yet in Wænd, because we think that a tree for exemple has a spatial influence, from its trunk and from its branches, its shadow etc.. So a tree can be a shape with an area and an influence, and we would like to promote this way of thinking about digital maps. 
 
 Meanwhile, they are many great things to do about points on digital maps, and we would like to come with a nice proposal, still under development. So, no points for now :)
 
@@ -196,6 +196,7 @@ Eg : If you want a green park, you have will have to set this color infomation t
 Set attribute to current context (user, group, layer or feature).
 
 Use ```set``` to qualify things, to give informations about your maps, etc.
+The format is ```set attribute-name attribute-value```
 
 Multiple words must be surronded by "quotes".
 
@@ -209,7 +210,7 @@ Example :
 
 
 ### <a name="get"></a>2.2 Get attributes : ```get```
-The command ```get``` is very usefull : it displays all attributes from current element.
+The command ```get``` is usefull : it displays all attributes from current element.
 
 You can also specify wich attribute value you want to show. 
  
@@ -268,7 +269,7 @@ The command to search maps on waend is ```lookup key-word-of-your-choice```
 
 ### <a name=""#extent></a>3.1 Set map extent
 
-Setting the map extent will set the extent of the current viewport as the extent for the map.  
+Once you have created a map, you can decide what is the first view of it by setting the map extent. It will take the extent of the current viewport as the extent for the map.  
 It means that what you see on your screen when you set the map extent will be the arrival zone when you load the map.
 
 
@@ -637,13 +638,13 @@ So far, batch import of geotaged images is not supported natively in Wænd. But 
 
 ###<a name="tiles"></a>7.4 Create and import images tiles
 
-Following the logic as described above, you can import tiles when you need a very big and zoomable image. 
+Following the logic described above, you can import tiles when you need a very big and zoomable image. 
 
 Using QGIS, you will need to :  
 
 - work on a project in EPSG:3857 (projection used in Wænd)
 - geo-locate you image / raster 
-- use gridSplitter plugin to split the raster 
+- use gridSplitter plugin to split the raster (or contact us for our experimental spliter plugin for Qgis)
 - create a tile index shapefile from the tiles with image path key checked
 - Export tile index in geoJSON (WGS84 : Wænd datas are stored in this projection)
 - Modify the geoJSON file to replace the images path with Wænd img path (userID/image-name-without-extention)
