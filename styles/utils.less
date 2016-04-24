@@ -78,7 +78,7 @@
 @colorUser:    @yellow;
 @colorWaend:   @red;
 
-@widthMenuLeft : 155px;
+@widthMenuLeft : 180px;
 
 @margin : 12px;
 
@@ -104,6 +104,7 @@
 //                  -1px 1px 0 #fff;
 // }
 
+
 .absolute-fullscreen {
   position: absolute;
   top: 0;
@@ -120,6 +121,7 @@
 .linkwaend {
   text-decoration: none !important;
   font-family: "dauphine_italic", sans-serif;
+  border-bottom: 1px solid transparent;
 
   &:hover{.link-hover}
 }
@@ -132,31 +134,12 @@
 
 
 
-.white-text-shadow {
-    text-shadow: 0 0 1px #fff,
-                 1px 1px #fff,
-                 -1px -1px 0 #fff,
-                 1px -1px 0 #fff,
-                 -1px 1px 0 #fff;
-}
-
-
-.yellow-text-shadow {
-    text-shadow: 0 0 10px gold,
-                 0 0 6px gold,
-                  1px 1px 0px #fff,
-                -1px -1px 0px #fff,
-                 -1px 1px 0px #fff,
-                 1px -1px 0px #fff;
-}
-
-.dark-text-shadow {
-    text-shadow: 0 0 6px #555555,
-                 0 0 6px #555555,
-                  1px 1px 0px #555555,
-                -1px -1px 0px #555555,
-                 -1px 1px 0px #555555,
-                 1px -1px 0px #555555;
+.text-shadow(@shadow-color) {
+    text-shadow: 0 0 1px @shadow-color,
+                 1px 1px @shadow-color,
+                 -1px -1px 0 @shadow-color,
+                 1px -1px 0 @shadow-color,
+                 -1px 1px 0 @shadow-color;
 }
 
 .word-wrap {
@@ -171,6 +154,16 @@
        -moz-hyphens: auto;
         -ms-hyphens: auto;
             hyphens: auto;
+}
+
+
+.dock-buttons {
+  cursor: pointer;
+  font-size: 8pt;
+  text-transform: uppercase;
+  color: black;
+  margin: 0px @margin / 2;
+  display: inline-block;
 }
 
 .button {

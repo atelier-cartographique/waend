@@ -1,0 +1,111 @@
+.wc-buttons {
+    position: absolute;
+    box-sizing: border-box;
+    padding: 12px;
+    width: @widthMenuLeft;
+    height: 100vh;
+    text-shadow: none;
+    border-right: solid 1px #000;
+
+    &.wc-hide {
+        display: none;
+    }
+
+    .wc-inactive {
+            display: none;
+    }
+
+    .wc-active {
+        margin-bottom: @margin;
+
+
+        .wc-buttons-group-title-wrapper {
+            margin-bottom: @margin / 2;
+
+            .wc-buttons-group-title-label {
+                .label;
+            }
+            .wc-buttons-group-title-value a,
+            .wc-buttons-group-title-value a:link,
+            .wc-buttons-group-title-value a:visited,
+            .wc-buttons-group-title-value a:hover{
+                font-size: 12pt;
+                text-decoration: underline;
+                margin-left: @margin / 2;
+                color: #000;
+            }
+
+        }
+
+        .wc-button {
+        cursor: pointer;
+        border-bottom: 1px solid transparent;
+        padding-left: @margin / 2;
+        display: table;
+
+        &:hover {.link-hover;}
+        
+        }
+
+        .wc-button-pager {
+            display:none;
+            position: absolute;
+            left: @widthMenuLeft - 1;
+            cursor: default;
+
+            &.wc-active {
+                display: block;
+                box-sizing: border-box;
+                width: @widthMenuLeft;
+                background: #FFF;
+                border: 1px solid #000;
+                border-left: none;
+                margin-top: -@margin / 2;
+
+                .pager-actions {
+                    padding-top: @margin / 2;
+                    text-align: right;
+
+                    .pager-action-close, .pager-action-dock  {
+                        .dock-buttons;
+                    }
+
+
+                }
+
+                .wc-page {
+                    border-left: 1px solid black;
+                    margin: 0;
+                    padding: @margin / 2;
+                    border-top: @margin / 2 solid #fff;
+                    max-height: 45vh;
+                    overflow-y: auto;       
+                    a {
+                        .linkwaend;
+                        color: #000;
+                    }
+
+                    .wc-line {
+                        margin-bottom: 1px;
+
+                        .group-name,
+                        .layer-name,
+                        .feature-name{
+                          .linkwaend;
+                          border-bottom: 1px solid transparent;
+                          display: table;
+                          font-family: "dauphine_regular", Helvetica, arial, sans-serif;
+                        }
+
+                    }
+                }
+            }
+            &.wc-inactive {
+                display:none;
+            }
+
+
+        }
+    }
+}
+

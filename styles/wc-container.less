@@ -1,0 +1,92 @@
+
+
+.wc-container {
+    position: absolute;
+    height: 30px;
+    bottom: 0;
+    left: @widthMenuLeft + @margin / 2;
+    right: @widthMenuLeft + @margin;
+    // width: 632px;
+
+
+    &.wc-hide {
+        display: none;
+    }
+
+    .wc-input-prompt {
+        font-family: "dauphine_regular";
+        position: absolute;
+        bottom: @margin;
+        // left: 8px;
+        font-size: 8pt;
+        z-index: 3;
+        padding: 5px 3px 2px 3px;
+        background-color: #fefefe;
+    }
+
+    .wc-input{
+        position: absolute;
+        height: 18px;
+        bottom: @margin;
+        left: @margin;
+        border: 0;
+        font-size: 10pt;
+        background-color: #fefefe;
+        width: calc(~"100% - @{margin}");
+        font-family: monospace;
+        margin: 0px;
+        padding: 0px;
+        // text-indent: 8px;
+        z-index: 2;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .wc-input-bottom-line {
+        position: absolute;
+        bottom: @margin - 1px;
+        left: -1px;
+        width: 100%;
+        border: 1px solid #000;
+        border-top: 0px;
+        height: 3px;
+        z-index: 12;
+        // padding: 0 2px;
+    }
+
+    .wc-input.wc-inactive {
+        color:#252525;
+        /*display: none;*/
+    }
+
+    .wc-pending{
+        color: #2B71FF;
+    }
+
+    .wc-error{
+        color: black;
+        font-family: "dauphine_italic";
+        font-size: 8pt;
+        position: absolute;
+        bottom: 0;
+        left: @margin;
+        z-index: 1;
+    }
+
+    //DIRTY WAY TO HIDE ERRORS AFTER 5s...
+
+    .wc-error{ -moz-animation: cssAnimation 0s ease-in 10s forwards; /* Firefox */ -webkit-animation: cssAnimation 0s ease-in 10s forwards; /* Safari and Chrome */ -o-animation: cssAnimation 0s ease-in 10s forwards; /* Opera */ animation: cssAnimation 0s ease-in 10s forwards; -webkit-animation-fill-mode: forwards; animation-fill-mode: forwards; } @keyframes cssAnimation { to { width:0; height:0; overflow:hidden; } } @-webkit-keyframes cssAnimation { to { width:0; height:0; visibility:hidden; } } @-moz-keyframes cssAnimation { to { width:0; height:0; overflow:hidden; } } @-ms-keyframes cssAnimation { to { width:0; height:0; visibility:hidden; } } @-o-keyframes cssAnimation { to { width:0; height:0; visibility:hidden; } }
+
+
+    .wc-command{
+        font-style: italic;
+        text-decoration: none;
+        color: @red;
+    }
+    .wc-command:hover, .wc-command:focus{
+        border-bottom: 1px solid;
+    }
+
+}
