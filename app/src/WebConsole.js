@@ -137,8 +137,9 @@ Dock.prototype.addPage = function (page) {
     collapseBtn.innerHTML = 'collapse';
     addClass(wrapper, 'wc-dock-page');
     addClass(buttons, 'wc-dock-buttons');
-    addClass(closeBtn, 'wc-close icon-close');
     addClass(collapseBtn, 'wc-collapse icon-collapse');
+    addClass(closeBtn, 'wc-close icon-close');
+
 
     var detacher = function () {
         this.detachPage(wrapper);
@@ -160,8 +161,8 @@ Dock.prototype.addPage = function (page) {
     closeBtn.addEventListener('click', _.bind(detacher, this), false);
     collapseBtn.addEventListener('click', collapser, false);
 
-    buttons.appendChild(closeBtn);
     buttons.appendChild(collapseBtn);
+    buttons.appendChild(closeBtn);
     wrapper.appendChild(buttons);
     wrapper.appendChild(page);
     this.container.appendChild(wrapper);
@@ -766,8 +767,8 @@ var WebConsole = Terminal.extend({
             }, false);
             addClass(title, 'wc-page-title');
             title.appendChild(document.createTextNode(cmd));
-            title.appendChild(docker);
             title.appendChild(closer);
+            title.appendChild(docker);
 
             pagesTitle.appendChild(title);
             pager.appendChild(pagesTitle);
