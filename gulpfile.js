@@ -43,6 +43,22 @@ gulp.task('view', function () {
     .pipe(gulp.dest('./bin/'));
 });
 
+gulp.task('embed', function () {
+
+  var b = browserify({
+    entries: './app/src/wembed.js',
+    debug: true
+  });
+
+  return b.bundle()
+      .pipe(source('wembed.js'))
+      .pipe(buffer())
+      .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest('./bin/'));
+});
+
+
 gulp.task('worker', function () {
 
   var b = browserify({

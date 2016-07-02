@@ -33,6 +33,10 @@ module.exports = exports = function(app){
         response.render('view');
     });
 
+    router.get('/embed*', function(request, response){
+        response.render('embed');
+    });
+
     router.get('/map*', function(request, response){
         if (request.isAuthenticated()) {
             response.render('map', {
