@@ -896,7 +896,7 @@ function showLookup (node) {
     wrapperInput.setAttribute('class', 'input-wrapper');
     input.setAttribute('class', 'view-lookup-input');
     input.setAttribute('type', 'text');
-    input.setAttribute('placeholder', 'search');
+    input.setAttribute('placeholder', 'search a map');
     inputBottomLine.setAttribute('class', 'input-bottomLine');
     button.setAttribute('class', 'view-lookup-search icon-lookup');
     results.setAttribute('class', 'view-lookup-results hidden');
@@ -1003,25 +1003,23 @@ function listLayers (context, node) {
         addClass(extra, 'layer-item-extra');
         addClass(desc, 'layer-item-description');
         addClass(actions, 'layer-item-actions');
-        addClass(vis, 'layer-item-action-visible');
-        addClass(ext, 'layer-item-action-extent');
+        addClass(vis, 'layer-item-action-visible visible-layer');
+        addClass(ext, 'layer-item-action-extent icon-setmapextent');
 
         if (isVisible) {
-            addClass(elem, 'visible-yes');
+            addClass(vis, 'visible-yes');
         }
         else {
-            addClass(elem, 'visible-no');
+            addClass(vis, 'visible-no');
         }
 
         label.appendChild(document.createTextNode(getModelName(layer)));
         desc.appendChild(document.createTextNode(layer.get('description' , '---')));
-        vis.appendChild(document.createTextNode('visible'));
-        ext.appendChild(document.createTextNode('zoom to extent'));
 
+        elem.appendChild(actions);
         elem.appendChild(label);
         elem.appendChild(extra);
         extra.appendChild(desc);
-        extra.appendChild(actions);
         actions.appendChild(vis);
         actions.appendChild(ext);
         container.appendChild(elem);
@@ -1035,13 +1033,13 @@ function listLayers (context, node) {
         var toggleVisible = function () {
             if (lister.has(layer.id)) {
                 lister.remove(layer.id);
-                removeClass(elem, 'visible-yes');
-                addClass(elem, 'visible-no');
+                removeClass(vis, 'visible-yes');
+                addClass(vis, 'visible-no');
             }
             else {
                 lister.insert(idx, layer.id);
-                removeClass(elem, 'visible-no');
-                addClass(elem, 'visible-yes');
+                removeClass(vis, 'visible-no');
+                addClass(vis, 'visible-yes');
             }
             semaphore.signal('visibility:change', lister.getList());
         };

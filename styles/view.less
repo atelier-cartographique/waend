@@ -18,10 +18,8 @@
 }
 
 .view-visible-wrapper {
+    background: rgba(255, 255, 255, 0.8);
     position: absolute;
-    width: auto;
-    max-width: 300px;
-    overflow-y: auto;
     bottom: @margin;
     left: @margin;
     max-height: 50%;
@@ -35,10 +33,11 @@
     }
 
     .layer-item {
-        margin-bottom: 8px;
+
         .layer-item-label {
             font-size: 9pt;
             cursor: pointer;
+          display: inline-block;
         }
 
         .layer-item-extra {
@@ -46,7 +45,6 @@
         }
 
         &.unfold {
-            border: 1px solid;
             padding: 12px 12px 12px 0;
             border-left: none;
             background-color: #FFF;
@@ -68,13 +66,10 @@
         }
 
         .layer-item-actions {
-            margin-top: 8px;
+            display: inline-block;
             span {
                 display: inline-block;
-                padding: 3px;
                 cursor: pointer;
-                border: 1px solid;
-                margin-right: 9px;
             }
         }
     }
