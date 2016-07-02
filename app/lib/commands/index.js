@@ -31,6 +31,7 @@ var commandModules = [
     require('./trace'),
     require('./navigate'),
     require('./view'),
+    require('./embed'),
     require('./media'),
     require('./select'),
     require('./close'),
