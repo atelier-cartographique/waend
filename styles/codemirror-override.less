@@ -1,24 +1,35 @@
 .CodeMirror {
-    // .graticule;
-     background: transparent;
+     background: rgba(255, 255, 255, 0.85);
      position: absolute;
      display: block;
      overflow: hidden;
      height: 100%;
      width: 100%;
 
+  .CodeMirror-vscrollbar {
+    display: none !important;
+  }
+
     .CodeMirror-scroll {
+      box-sizing: border-box;
       width: 50%;
       min-width: 500px;
       max-width: 800px;
       background: @lightgrey ;
-      height: calc(~"100vh - 160px");
-      margin: auto;
-      margin-top: 61px;
+      height: 100vh;
+      margin-left: @widthMenuLeft;
       border: 24px solid @lightgrey;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+
+      .CodeMirror-sizer {
+        padding-right: 0px !important;
+        border: 0px;
+      }
     }
 
     .CodeMirror-code {
       text-shadow: none;
     }
 }
+

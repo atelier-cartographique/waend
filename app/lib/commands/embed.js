@@ -788,12 +788,12 @@ function showGroupLegend(node, group) {
         descLabel = document.createElement('span'),
         desc = document.createElement('span');
 
-    wrapper.setAttribute('class', 'view-group-wrapper');
-    titleWrapper.setAttribute('class', 'view-group-title-wrapper');
-    titleLabel.setAttribute('class', 'view-group-label');
-    title.setAttribute('class', 'view-group-title');
-    descLabel.setAttribute('class', 'view-group-label');
-    desc.setAttribute('class', 'view-group-description');
+    wrapper.setAttribute('class', 'embed-group-wrapper');
+    titleWrapper.setAttribute('class', 'embed-group-title-wrapper');
+    titleLabel.setAttribute('class', 'embed-group-label');
+    title.setAttribute('class', 'embed-group-title');
+    descLabel.setAttribute('class', 'embed-group-label');
+    desc.setAttribute('class', 'embed-group-description');
 
     // titleLabel.innerHTML = "name ";
     title.innerHTML = group.get('name', 'Title');
@@ -868,7 +868,6 @@ function waendCredit (node) {
         waendCreditLink = document.createElement('a');
 
     waendCredit.setAttribute('class', 'credit-waend');
-
     waendCreditLink.setAttribute('href', 'http://waend.com');
     waendCreditLink.setAttribute('target', '_blank');
     waendCreditLink.innerHTML = 'wænd.com';
