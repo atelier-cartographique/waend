@@ -12,8 +12,8 @@
 
     .CodeMirror-scroll {
       box-sizing: border-box;
-      width: 50%;
-      min-width: 500px;
+      width: calc(~"50vw - @{widthMenuLeft}");
+      min-width: 400px;
       max-width: 800px;
       background: @lightgrey ;
       height: 100vh;
@@ -21,6 +21,7 @@
       border: 24px solid @lightgrey;
       overflow-x: hidden !important;
       overflow-y: auto !important;
+      cursor: text;
 
       .CodeMirror-sizer {
         padding-right: 0px !important;

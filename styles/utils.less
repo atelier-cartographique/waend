@@ -168,7 +168,7 @@
 
 .button {
   font-family: "dauphine_regular";
-  font-size: 9pt;
+  font-size: 8pt;
   text-transform: uppercase;
   cursor: pointer;
 }
@@ -178,17 +178,17 @@
     .button;
     text-shadow: none;
     text-align: center;
-    padding: 4px 10px 3px 10px;
+    padding: 10px;
     display: block;
     color: #fbfbfb;
-    border-radius: 2px;
-    border: 1px solid #000;
+    //border-radius: 2px;
+    border: 1px solid #dadada;
     background-color: #fff;
-    margin: 6px;
+    margin: @margin / 2 0px;
 
     &:hover {
       cursor: pointer;
-      background-color: transparent;
+      //background-color: transparent;
       background-image: url(svg/btn_hatch_light.svg);
 
     }
@@ -342,7 +342,7 @@ input {
   padding: 12px;
   height: 100%;
   overflow-y: auto;
-  background: @lightgrey;
+  background: #fff;
   font-size: 10pt;
   border-right: 1px solid #000;
 }

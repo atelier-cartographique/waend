@@ -47,9 +47,23 @@ function textEdit (opt_txt) {
         var buttons = document.createElement('div');
         buttons.setAttribute('class', 'edit-buttons push-button');
 
+        var cancelButton = document.createElement('div');
+        cancelButton.setAttribute('class', 'widget-closer icon-close');
+        cancelButton.innerHTML = 'cancel';
+
+        cancelButton.addEventListener('click', function(){
+            display.end();
+            reject('Text editor canceled');
+        }, false);
+
+
+        var widgetTitle = document.createElement('div');
+        widgetTitle.setAttribute('class', 'widget-title ');
+        widgetTitle.innerHTML = 'Text editor';
+
         var saveButton = document.createElement('div');
         saveButton.setAttribute('class', 'edit-validate push-validate');
-        saveButton.innerHTML = 'validate';
+        saveButton.innerHTML = 'validate text';
 
         saveButton.addEventListener('click', function(){
             var doc = cm.getDoc(),
@@ -58,17 +72,9 @@ function textEdit (opt_txt) {
             resolve(txt);
         }, false);
 
-        var cancelButton = document.createElement('div');
-        cancelButton.setAttribute('class', 'edit-cancel push-cancel');
-        cancelButton.innerHTML = 'cancel';
-
-        cancelButton.addEventListener('click', function(){
-            display.end();
-            reject('Canceled');
-        }, false);
-
-        buttons.appendChild(saveButton);
         buttons.appendChild(cancelButton);
+        buttons.appendChild(widgetTitle);
+        buttons.appendChild(saveButton);
         display.node.appendChild(buttons);
     };
 
