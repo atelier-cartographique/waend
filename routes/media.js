@@ -8,7 +8,8 @@
  *
  */
 
-var _ = require('underscore'),
+var logger = require('debug')('routes/media'),
+    _ = require('underscore'),
     mkdirp = require('mkdirp'),
     path = require('path'),
     fs = require('fs'),
@@ -31,7 +32,7 @@ var STEPS =
 var STEPS_SZ = STEPS.length;
 
 function processFile (rootDir, file, done) {
-    console.log('processFile', file);
+    logger('processFile', file);
     var fileDir = path.join(rootDir, file.slug),
         processed = 0;
 
@@ -43,14 +44,14 @@ function processFile (rootDir, file, done) {
     };
 
     var fileConverted = function (step, err, buffer) {
-        console.log('fileConverted', processed);
+        logger('fileConverted', processed);
         processed += 1;
         if (err) { return; }
         fs.writeFile(path.join(fileDir, step + '.png'), buffer, fileWritten);
     };
 
     var fileRed = function (err, data) {
-        console.log('fileRed');
+        logger('fileRed');
         if (err) {
             return done(false);
         }
@@ -67,7 +68,7 @@ function processFile (rootDir, file, done) {
     };
 
     var dirDone = function (err, made) {
-        console.log('dirDone', err);
+        logger('dirDone', err);
         if (err) {
             return done(false);
         }
@@ -79,11 +80,10 @@ function processFile (rootDir, file, done) {
 }
 
 function uploadMedia (request, response) {
-    console.log('uploadMedia');
+    logger('uploadMedia', request.files);
     if (request.files
-        && ('media' in request.files)
-        && (request.files.media.length > 0)) {
-        var medias = request.files.media,
+        && (request.files.length > 0)) {
+        var medias = request.files,
             mediaDir = request.config.mediaDir,
             user = request.user,
             rootDir = path.join(mediaDir, user.id),
@@ -91,7 +91,7 @@ function uploadMedia (request, response) {
             urls = [];
 
             var fileDone = function (url) {
-                console.log('fileDone', url);
+                logger('fileDone', url);
                 filesCount -= 1;
                 urls.push('/media/' + user.id +'/'+ url);
                 if (filesCount === 0) {
@@ -142,7 +142,7 @@ function getMedia (request, response) {
         mediaName = path.basename(request.params.media_name),
         rootDir = path.join(request.config.mediaDir, userDir, mediaName);
 
-        console.log('getMedia', size, step);
+        logger('getMedia', size, step);
         response.sendFile(path.join(rootDir, STEPS[step] + '.png'));
 }
 

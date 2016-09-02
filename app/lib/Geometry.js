@@ -48,7 +48,7 @@ Geometry.prototype.getCoordinates = function () {
 };
 
 Geometry.prototype.getExtent = function () {
-    return (new Extent(turf.extent(this._geometry)));
+    return (new Extent(turf.bbox(this._geometry)));
 };
 
 Geometry.prototype.toGeoJSON = function () {
@@ -121,6 +121,15 @@ Extent.prototype.getArray = function () {
 
 Extent.prototype.getCoordinates = function () {
     return copy(this.extent);
+};
+
+Extent.prototype.getDictionary = function () {
+    return {
+        minX: this.extent[0],
+        minY: this.extent[1],
+        maxX: this.extent[2],
+        maxY: this.extent[3]
+    };
 };
 
 Extent.prototype.clone = function () {

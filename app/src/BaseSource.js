@@ -35,8 +35,8 @@ var BaseSource = O.Object.extend({
         this.index[f.id] = this.features.length - 1;
         if (!skipSpatialIndex) {
             var geom = f.getGeometry(),
-            extent = geom.getExtent().getCoordinates();
-            this.tree.insert(extent.concat(f.id));
+                extent = _.assign({id: f.id}, geom.getExtent().getDictionary());
+            this.tree.insert(extent);
         }
         this.emit('add', f);
     },
@@ -56,10 +56,11 @@ var BaseSource = O.Object.extend({
         this.tree.clear();
         for (var i = 0; i < flen; i++) {
             feature = features[i];
-            extent = feature.getExtent().getCoordinates();
-            items.push(extent.concat([feature.id]));
+            extent = _.assign({id: feature.id},
+                                feature.getExtent().getDictionary());
+            items.push(extent);
         }
-         _ts2 = _.now() - _ts
+        _ts2 = _.now() - _ts;
         this.tree.load(items);
         console.log('buildTree', flen, _ts2, _.now() - (_ts + _ts2));
     },
@@ -76,16 +77,20 @@ var BaseSource = O.Object.extend({
         var features = [], items, i;
         if (opt_extent) {
             if (opt_extent instanceof Geometry.Extent) {
-                items = this.tree.search(opt_extent.extent);
+                items = this.tree.search(opt_extent.getDictionary());
             }
-            else { // we assume [minx, miny, maxx, maxy]
+            else if (_.isArray(opt_extent)) { // we assume [minx, miny, maxx, maxy]
+                items = this.tree.search(
+                    (new Geometry.Extent(opt_extent)).getDictionary());
+            }
+            else { // proper rbush dictionary?
                 items = this.tree.search(opt_extent);
             }
 
             for (i = 0; i < items.length; i++) {
                 var item = items[i];
                 features.push(
-                    this.features[this.index[item[4]]]
+                    this.features[this.index[item.id]]
                 );
             }
         }
