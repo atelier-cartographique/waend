@@ -69,7 +69,7 @@ util.inherits(Point, Geometry);
 function LineString () {
     var data = arguments[0];
     if (_.isArray(data)) {
-        data = turf.linestring(data);
+        data = turf.lineString(data);
     }
     Geometry.call(this, data);
 }
