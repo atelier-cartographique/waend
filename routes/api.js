@@ -10,17 +10,18 @@
 
 
 
-var _ = require('underscore'),
+var logger = require('debug')('routes/api'),
+    _ = require('underscore'),
     handlers = require('./endpoints/');
 
 var root = '/api/v1/';
 
 
 function listHandlers(){
-    console.log('>> listHandlers', handlers.length);
+    logger('>> listHandlers', handlers.length);
     var ret = {};
     _.each(handlers, function(handler){
-        console.log('>> service', handler.modelName);
+        logger('>> service', handler.modelName);
         ret[handler.modelName] = handler.getEndpoints();
     });
 

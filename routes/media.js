@@ -8,7 +8,7 @@
  *
  */
 
-var logger = require('debug')(__filename),
+var logger = require('debug')('routes/media'),
     _ = require('underscore'),
     mkdirp = require('mkdirp'),
     path = require('path'),

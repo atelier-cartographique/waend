@@ -10,7 +10,8 @@
 
 
 
-var _ = require('underscore'),
+var logger = require('debug')('routes/endpoints/user'),
+    _ = require('underscore'),
     base = require('./base'),
     cache = require('../../lib/cache'),
     notifier = require('../../lib/notifier');
@@ -86,8 +87,8 @@ module.exports = exports = base.RequestHandler.extend({
             cache.client()
                 .getGroup(request.params.group_id)
                 .then(function(data){
-                    // console.log('group.get', data);
-                    console.log('group.get [' + request.params.group_id + '] in', _.now() - ts, 'ms');
+                    // logger('group.get', data);
+                    logger('group.get [' + request.params.group_id + '] in', _.now() - ts, 'ms');
                     response.send(data);
                 })
                 .catch(function(err){
@@ -111,7 +112,7 @@ module.exports = exports = base.RequestHandler.extend({
                     }
                     else{
                         var data = _.filter(results, function(g){ return (0 === g.status_flag); });
-                        // console.log('groups.list public', data);
+                        // logger('groups.list public', data);
                         self.paginate(data, request, response);
                     }
                 })

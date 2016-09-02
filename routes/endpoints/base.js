@@ -9,7 +9,8 @@
  */
 
 
-var _ = require('underscore'),
+var logger = require('debug')('routes/endpoint/base'),
+    _ = require('underscore'),
     Promise = require('bluebird');
 
 var store = require('../../lib/cache'),
@@ -96,8 +97,8 @@ module.exports.RequestHandler = object.Object.extend({
             len = result.length,
             pResult = result.slice(offset, offset + pageSize);
 
-        // console.log('base.paginate', offset, offset + page);
-        // console.log(pResult);
+        // logger('base.paginate', offset, offset + page);
+        // logger(pResult);
 
         response.status(200).send({
             page: page,
