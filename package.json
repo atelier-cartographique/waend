@@ -36,7 +36,7 @@
     "sockjs-client": "^1.1.1",
     "solr-client": "^0.6.0",
     "static-favicon": "^1.0.2",
-    "turf": "^2.0.2",
+    "turf": "^3.0.14",
     "underscore": "^1.8.3",
     "underscore.string": "^3.3.4",
     "wellknown": "^0.5.0"

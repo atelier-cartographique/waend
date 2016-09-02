@@ -48,7 +48,7 @@ Geometry.prototype.getCoordinates = function () {
 };
 
 Geometry.prototype.getExtent = function () {
-    return (new Extent(turf.extent(this._geometry)));
+    return (new Extent(turf.bbox(this._geometry)));
 };
 
 Geometry.prototype.toGeoJSON = function () {
