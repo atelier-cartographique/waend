@@ -342,12 +342,13 @@ Tracer.prototype.setupModes = function () {
 Tracer.prototype.createControl = function (pos, idx) {
     var scale = this.transform.getScale()[0],
         chs = CONTROL_HALF_SZ / scale;
-    var item = [
-        pos[0] - chs, pos[1] - chs,
-        pos[0] + chs, pos[1] + chs,
-        idx
-    ];
-    this.controls.insert(item);
+    this.controls.insert({
+        minX: pos[0] - chs,
+        minY: pos[1] - chs,
+        maxX: pos[0] + chs,
+        maxY: pos[1] + chs,
+        index: idx
+    });
 };
 
 Tracer.prototype.clear = function () {
@@ -358,15 +359,17 @@ Tracer.prototype.clear = function () {
 Tracer.prototype.getControls = function (pos) {
     var scale = this.transform.getScale()[0],
         chs = CONTROL_HALF_SZ / scale;
-    var rect = [
-        pos[0] - chs, pos[1] - chs,
-        pos[0] + chs, pos[1] + chs
-    ];
+    var rect = {
+        minX: pos[0] - chs,
+        minY: pos[1] - chs,
+        maxX: pos[0] + chs,
+        maxY: pos[1] + chs
+    };
 
     var controls = this.controls.search(rect),
         indices = [];
     for (var i = 0, li = controls.length; i < li; i++) {
-        indices.push(controls[i][4]);
+        indices.push(controls[i].index);
     }
 
     return indices;

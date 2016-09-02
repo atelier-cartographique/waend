@@ -123,6 +123,15 @@ Extent.prototype.getCoordinates = function () {
     return copy(this.extent);
 };
 
+Extent.prototype.getDictionary = function () {
+    return {
+        minX: this.extent[0],
+        minY: this.extent[1],
+        maxX: this.extent[2],
+        maxY: this.extent[3]
+    };
+};
+
 Extent.prototype.clone = function () {
     return (new Extent(this));
 };
