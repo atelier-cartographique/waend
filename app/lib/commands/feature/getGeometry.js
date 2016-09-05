@@ -1,30 +1,18 @@
-/*
- * app/lib/commands/getGeometry.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
-
-var _ = require('underscore');
+import _ from 'underscore';
 
 function getGeometry () {
-    var self = this,
-        args = _.toArray(arguments),
-        format = args.shift(),
-        sys = self.sys,
-        geom = self.data.getGeometry();
+    const self = this;
+    const args = _.toArray(arguments);
+    const format = args.shift();
+    const sys = self.sys;
+    const geom = self.data.getGeometry();
 
     sys.stdout.write(JSON.stringify(geom.toGeoJSON()));
     return self.end(geom);
 }
 
 
-module.exports = exports = {
+export default {
     name: 'getGeometry',
     command: getGeometry
 };

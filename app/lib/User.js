@@ -1,26 +1,21 @@
-/*
- * app/lib/User.js
- *     
- * 
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
-
-var Context = require('./Context'),
-    Bind = require('./Bind'),
-    listGroups = require('./commands/user/listGroups');
+import Context from './Context';
+import listGroups from './commands/user/listGroups';
 
 
-var User = Context.extend({
-    name: 'user',
-    commands:{
-        'lg': listGroups.command
+class User extends Context {
+    constructor () {
+        super(...arguments);
     }
-});
+
+    get name () {
+        return 'user';
+    }
+    get commands (){
+        return {
+            'lg': listGroups.command
+        };
+    }
+}
 
 
-module.exports = exports = User;
+export default User;

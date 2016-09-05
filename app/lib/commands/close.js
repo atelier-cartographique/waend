@@ -8,20 +8,20 @@
  *
  */
 
-var Geometry = require('../Geometry');
+import Geometry from '../Geometry';
 
 function close (sGeom) {
-    var self = this,
-        env = self.shell.env,
-        binder = self.binder,
-        stdout = self.sys.stdout,
-        stdin = self.sys.stdin,
-        terminal = self.shell.terminal,
-        current = self.current(),
-        uid = current[0],
-        gid = current[1],
-        lid = current[2],
-        geom;
+    const self = this;
+    const env = self.shell.env;
+    const binder = self.binder;
+    const stdout = self.sys.stdout;
+    const stdin = self.sys.stdin;
+    const terminal = self.shell.terminal;
+    const current = self.current();
+    const uid = current[0];
+    const gid = current[1];
+    const lid = current[2];
+    let geom;
 
 
     try { // args
@@ -49,9 +49,9 @@ function close (sGeom) {
     }
 
     if ('LineString' === geom.getType()) {
-        var coords = geom.getCoordinates();
+        const coords = geom.getCoordinates();
         coords.push(coords[0]);
-        var poly = new Geometry.Polygon([coords]);
+        const poly = new Geometry.Polygon([coords]);
         return this.end(poly);
     }
     else{
@@ -62,7 +62,7 @@ function close (sGeom) {
 
 
 
-module.exports = exports = {
+export default {
     name: 'close',
     command: close
 };

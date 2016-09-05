@@ -10,28 +10,27 @@
 
 // 'use strict';
 
-var _ = require('underscore'),
-    Promise = require('bluebird'),
-    Geometry = require('../Geometry'),
-    semaphore = require('../Semaphore'),
-    paper = require('../../vendors/paper'),
-    helpers = require('../helpers');
+import _ from 'underscore';
 
-var makeButton = helpers.makeButton,
-    addClass = helpers.addClass;
-
+import Promise from 'bluebird';
+import Geometry from '../Geometry';
+import semaphore from '../Semaphore';
+import paper from '../../vendors/paper';
+import {makeButton, addClass} from '../helpers';
+import debug from 'debug';
+const logger = debug('waend:command:drawLine');
 
 function setupCanvas (container, view) {
-    var canvas = document.createElement('canvas'),
-        rect = view.getRect();
+    const canvas = document.createElement('canvas');
+    const rect = view.getRect();
 
     // setup canvas properties
     canvas.setAttribute('class', 'tool-draw');
     canvas.style.position = 'absolute';
     canvas.width = rect.width;
     canvas.height = rect.height;
-    canvas.style.top = rect.top + 'px';
-    canvas.style.left = rect.left + 'px';
+    canvas.style.top = `${rect.top}px`;
+    canvas.style.left = `${rect.left}px`;
     canvas.backgroundColor = 'transparent';
 
     //
@@ -39,23 +38,23 @@ function setupCanvas (container, view) {
     paper.setup(canvas);
     paper.view.draw();
 
-    semaphore.on('view:resize', function () {
-        var vrect = view.getRect();
+    semaphore.on('view:resize', () => {
+        const vrect = view.getRect();
         canvas.width = vrect.width;
         canvas.height = vrect.height;
-        canvas.style.top = vrect.top + 'px';
-        canvas.style.left = vrect.left + 'px';
+        canvas.style.top = `${vrect.top}px`;
+        canvas.style.left = `${vrect.left}px`;
     }, this);
 }
 
 function insertLeftPannel (container, closer) {
-    var wrapper = document.createElement('div'),
-        infos = document.createElement('div'),
-        button = makeButton('Cancel', {}, closer);
+    const wrapper = document.createElement('div');
+    const infos = document.createElement('div');
+    const button = makeButton('Cancel', {}, closer);
 
-        infos.innerHTML = 'Click and hold to draw on map';
-        addClass(wrapper, 'widget-block-left');
-        addClass(button, 'push-buttons push-cancel');
+    infos.innerHTML = 'Click and hold to draw on map';
+    addClass(wrapper, 'widget-block-left');
+    addClass(button, 'push-buttons push-cancel');
 
 
     wrapper.appendChild(infos);
@@ -64,21 +63,21 @@ function insertLeftPannel (container, closer) {
 }
 
 function drawLine () {
-    var self = this,
-        shell = self.shell,
-        stdout = shell.stdout,
-        terminal = shell.terminal,
-        map = shell.env.map,
-        display = terminal.display();
+    const self = this;
+    const shell = self.shell;
+    const stdout = shell.stdout;
+    const terminal = shell.terminal;
+    const map = shell.env.map;
+    const display = terminal.display();
 
     setupCanvas(display.node, map.getView());
 
-    var resolver = function (resolve, reject) {
-        var path,
-            points =[],
-            tool = new paper.Tool();
+    const resolver = (resolve, reject) => {
+        let path;
+        const points =[];
+        const tool = new paper.Tool();
 
-        var endPaper = function () {
+        const endPaper = () => {
             tool.off('mousedown', onMouseDown);
             tool.off('mousedrag', onMouseDrag);
             tool.off('mouseup', onMouseUp);
@@ -86,19 +85,19 @@ function drawLine () {
             paper.project.remove();
         };
 
-        var closeOk = function (arg) {
+        const closeOk = arg => {
             endPaper();
             display.end();
             resolve(arg);
         };
-        var closeCancel = function () {
+        const closeCancel = () => {
             endPaper();
             display.end();
             reject('Cancelled');
         };
 
 
-        var onMouseDown = function (event) {
+        var onMouseDown = event => {
             path = new paper.Path({
                 segments: [event.point],
                 strokeColor: 'black',
@@ -106,23 +105,22 @@ function drawLine () {
             });
         };
 
-        var onMouseDrag = function (event) {
+        var onMouseDrag = event => {
             path.add(event.point);
         };
 
-        var onMouseUp = function (event) {
-            var segmentCount = path.segments.length;
-            console.log(path);
-            var polyLineOrGon; // TODO populate
+        var onMouseUp = event => {
+            const segmentCount = path.segments.length;
+            logger(path);
+            let polyLineOrGon; // TODO populate
             if (path.closed) {
-                console.log('errr not implemted');
+                logger('errr not implemted');
             }
             else {
                 var line = new Geometry.LineString([]);
-                var segments = path.segments;
-                for (var i = 0; i < segments.length; i++) {
-                    var s = segments[i],
-                        pixel = [s.point.x, s.point.y];
+                const segments = path.segments;
+
+                for (const s of segments) {
                     line.appendCoordinate(map.getCoordinateFromPixel(pixel));
                 }
             }
@@ -139,7 +137,7 @@ function drawLine () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'draw',
     command: drawLine
 };

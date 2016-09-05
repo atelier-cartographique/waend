@@ -1,37 +1,25 @@
-/*
- * app/lib/Terminal.js
- *     
- * 
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- * 
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
-
-var O = require('../../lib/object').Object,
-    Shell = require('../lib/Shell');
+import {Object as O} from '../../lib/object';
+import Shell from '../lib/Shell';
 
 
-var Terminal = O.extend({
+const Terminal = O.extend({
 
 
     capabilities: {},
 
-    constructor: function () {
+    constructor() {
         this.shell = new Shell(this);
         O.apply(this, arguments);
     },
 
-    getCapabilities: function () {
+    getCapabilities() {
         return Object.keys(this.capabilities);
     },
 
-    start: function () { throw (new Error('Not Implemented')); },
-    makeCommand: function () { throw (new Error('Not Implemented')); },
-    setTitle: function () { throw (new Error('Not Implemented')); }
+    start() { throw (new Error('Not Implemented')); },
+    makeCommand() { throw (new Error('Not Implemented')); },
+    setTitle() { throw (new Error('Not Implemented')); }
 
 });
 
-module.exports = exports = Terminal;
+export default Terminal;

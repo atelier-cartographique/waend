@@ -8,13 +8,9 @@
  *
  */
 
-var helpers = require('../lib/helpers'),
-    slugify = require('underscore.string/slugify');
-
-var getModelName = helpers.getModelName,
-    addClass = helpers.addClass,
-    emptyElement = helpers.emptyElement,
-    setAttributes = helpers.setAttributes;
+import slugify from 'underscore.string/slugify';
+import {getModelName, addClass, emptyElement,
+        setAttributes} from '../lib/helpers';
 
 
 function getDomFragmentFactory (type) {
@@ -26,34 +22,32 @@ function getDomFragmentFactory (type) {
         return JSON.stringify(model.get(key));
     };
 
-    function getDomFragment(key, tagName, attrs) {
-        tagName = tagName || 'div';
-        var self = this,
-            element = document.createElement(tagName);
+    function getDomFragment(key, tagName='div', attrs) {
+        const element = document.createElement(tagName);
 
         if (attrs) {
             setAttributes(element, attrs);
         }
 
-        addClass(element, type + '-' + slugify(key));
+        addClass(element, `${type}-${slugify(key)}`);
 
         element.appendChild(
-            document.createTextNode(getValue(self, key))
+            document.createTextNode(getValue(this, key))
         );
 
-        var updater = function(changedKey, newValue) {
+        const updater = (changedKey, newValue) => {
             if (element && (key === changedKey)) {
                 emptyElement(element);
                 element.appendChild(
-                    document.createTextNode(getValue(self, key))
+                    document.createTextNode(getValue(this, key))
                 );
             }
         };
 
-        var listenerId = self.on('set', updater);
+        this.on('set', updater);
 
-        element.addEventListener('remove', function() {
-            self.offById(listenerId);
+        element.addEventListener('remove', () => {
+            this.removeAllListeners('set');
         }, false);
 
         return element;
@@ -62,8 +56,8 @@ function getDomFragmentFactory (type) {
     return getDomFragment;
 }
 
-module.exports.configurator = function (Model) {
-    var type = Model.prototype.type;
+export function configurator(Model) {
+    const type = Model.prototype.type;
     Model.prototype.getDomFragment = getDomFragmentFactory(type);
     return Model;
-};
+}

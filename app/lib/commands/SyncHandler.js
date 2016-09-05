@@ -8,135 +8,136 @@
  *
  */
 
-var _ = require('underscore'),
-    semaphore = require('../Semaphore'),
-    helpers = require('../helpers');
+import _ from 'underscore';
 
-function SyncHandler (container, context) {
-    this.container = container;
-    this.binder = context.binder;
-    this.shell = context.shell;
-    this.follower = null;
-}
+import semaphore from '../Semaphore';
+import {getModelName} from '../helpers';
 
-SyncHandler.prototype.start = function () {
-    semaphore.on('sync', this.dispatch, this);
-    return this;
-}
-
-SyncHandler.prototype.follow = function (cb, ctx) {
-    this.follower = {
-        callback: cb,
-        context: ctx
-    };
-    return this;
-};
-
-SyncHandler.prototype.dispatch = function (chan, cmd, data) {
-    if ('update' === cmd) {
-        this.onUpdate(chan, data);
-    }
-    else if ('create' === cmd) {
-        this.onCreate(chan, data);
-    }
-    else if ('delete' === cmd) {
-        this.onDelete(chan, data);
-    }
-};
-
-SyncHandler.prototype.onUpdate = function (chan, data) {
-    var container = this.container,
-        binder = this.binder,
-        shell = this.shell,
-        db = binder.db,
-        ctx = chan.type,
-        cid = chan.id,
-        elem = document.createElement('div');
-
-
-    var model = db.get(data.id),
-        comps = model.getPath(),
-        path = 'cc /' + comps.join('/'),
-        modelElem = document.createElement('div');
-
-    if ('user_id' in data) {
-        var userElem = document.createElement('span');
-        elem.appendChild(userElem);
-        binder.getUser(data.user_id)
-            .then(function(user){
-                userElem.innerHTML = helpers.getModelName(user) + ' ';
-            })
-            .catch(function(){
-                elem.removeChild(userElem);
-            });
+class SyncHandler {
+    constructor(container, context) {
+        this.container = container;
+        this.binder = context.binder;
+        this.shell = context.shell;
+        this.follower = null;
     }
 
-    modelElem.appendChild(document.createTextNode(helpers.getModelName(model)));
-    elem.appendChild(
-        document.createTextNode('updated a ' + model.type.toString())
-    );
-    elem.appendChild(modelElem);
-
-    modelElem.addEventListener('click', function(){
-        shell.exec(path);
-    }, false);
-
-    container.insertBefore(elem, container.firstChild);
-
-    if (this.follower) {
-        this.follower.callback.call(this.follower.context, model);
+    start() {
+        semaphore.on('sync', this.dispatch, this);
+        return this;
     }
-}
 
-SyncHandler.prototype.onCreate = function (chan, data) {
-    var container = this.container,
-        binder = this.binder,
-        shell = this.shell,
-        db = binder.db,
-        ctx = chan.type,
-        cid = chan.id,
-        elem = document.createElement('div');
+    follow(cb, ctx) {
+        this.follower = {
+            callback: cb,
+            context: ctx
+        };
+        return this;
+    }
 
-    if ('layer' === ctx) {
-        if (db.has(data.id)) {
-            var model = db.get(data.id),
-                comps = binder.getComps(model.id),
-                path = 'cc /' + comps.join('/'),
-                modelElem = document.createElement('div');
-
-            if ('user_id' in data) {
-                var userElem = document.createElement('span');
-                elem.appendChild(userElem);
-                binder.getUser(data.user_id)
-                    .then(function(user){
-                        userElem.innerHTML = helpers.getModelName(user) + ' ';
-                    })
-                    .catch(function(){
-                        elem.removeChild(userElem);
-                    });
-            }
-
-
-            modelElem.appendChild(document.createTextNode(helpers.getModelName(model)));
-            elem.appendChild(
-                document.createTextNode('created a' + model.type.toString())
-            );
-            elem.appendChild(modelElem);
-
-            modelElem.addEventListener('click', function(){
-                shell.exec(path);
-            }, false);
-
-            container.insertBefore(elem, container.firstChild);
+    dispatch(chan, cmd, data) {
+        if ('update' === cmd) {
+            this.onUpdate(chan, data);
         }
+        else if ('create' === cmd) {
+            this.onCreate(chan, data);
+        }
+        else if ('delete' === cmd) {
+            this.onDelete(chan, data);
+        }
+    }
+
+    onUpdate(chan, data) {
+        const container = this.container;
+        const binder = this.binder;
+        const shell = this.shell;
+        const db = binder.db;
+        const ctx = chan.type;
+        const cid = chan.id;
+        const elem = document.createElement('div');
+        const model = db.get(data.id);
+        const comps = model.getPath();
+        const path = `cc /${comps.join('/')}`;
+        const modelElem = document.createElement('div');
+
+        if ('user_id' in data) {
+            const userElem = document.createElement('span');
+            elem.appendChild(userElem);
+            binder.getUser(data.user_id)
+                .then(user => {
+                    userElem.innerHTML = `${getModelName(user)} `;
+                })
+                .catch(() => {
+                    elem.removeChild(userElem);
+                });
+        }
+
+        modelElem.appendChild(document.createTextNode(getModelName(model)));
+        elem.appendChild(
+            document.createTextNode(`updated a ${model.type.toString()}`)
+        );
+        elem.appendChild(modelElem);
+
+        modelElem.addEventListener('click', () => {
+            shell.exec(path);
+        }, false);
+
+        container.insertBefore(elem, container.firstChild);
+
         if (this.follower) {
             this.follower.callback.call(this.follower.context, model);
         }
     }
+
+    onCreate(chan, data) {
+        const container = this.container;
+        const binder = this.binder;
+        const shell = this.shell;
+        const db = binder.db;
+        const ctx = chan.type;
+        const cid = chan.id;
+        const elem = document.createElement('div');
+
+        if ('layer' === ctx) {
+            if (db.has(data.id)) {
+                var model = db.get(data.id);
+                const comps = binder.getComps(model.id);
+                const path = `cc /${comps.join('/')}`;
+                const modelElem = document.createElement('div');
+
+                if ('user_id' in data) {
+                    const userElem = document.createElement('span');
+                    elem.appendChild(userElem);
+                    binder.getUser(data.user_id)
+                        .then(user => {
+                            userElem.innerHTML = `${getModelName(user)} `;
+                        })
+                        .catch(() => {
+                            elem.removeChild(userElem);
+                        });
+                }
+
+
+                modelElem.appendChild(document.createTextNode(getModelName(model)));
+                elem.appendChild(
+                    document.createTextNode(`created a${model.type.toString()}`)
+                );
+                elem.appendChild(modelElem);
+
+                modelElem.addEventListener('click', () => {
+                    shell.exec(path);
+                }, false);
+
+                container.insertBefore(elem, container.firstChild);
+            }
+            if (this.follower) {
+                this.follower.callback.call(this.follower.context, model);
+            }
+        }
+    }
+
+    onDelete(chan, id) {
+
+    }
 }
 
-SyncHandler.prototype.onDelete = function (chan, id) {
-
-}
-
-module.exports = exports = SyncHandler;
+export default SyncHandler;

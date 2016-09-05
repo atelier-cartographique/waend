@@ -1,50 +1,25 @@
-/*
- * app/lib/Root.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
+import _ from 'underscore';
+import Context from './Context';
+import * as commands from './commands';
 
-'use strict';
-
-var _ = require('underscore'),
-    Context = require('./Context');
-
-function processResult(shell, result) {
-    var stdout = shell.stdout;
-    if(!result){
-        stdout.write('No result found');
-        return this.end();
+class Root extends  Context {
+    constructor () {
+        super(...arguments);
     }
-    else{
-        for(var i = 0; i < result.length; i++){
-            var path = '/' + result.user_id + '/' + result.id;
-            var line = shell.terminal.makeCommand({
-                args: ['cc '+path],
-                text: (result.properties.name | result.id)
-            });
-            stdout.write(line);
+
+    get name () {
+        return 'shell';
+    }
+
+    get commands () {
+        const val = {};
+        for (let k in commands) {
+            const c = commands[k];
+            val[c.name] = c.command;
         }
+        return val;
     }
-};
-
-var Root = Context.extend({
-    name: 'shell',
-
-    commands:{
-
-        search: function (term) {
-            var bind = Bind.get(),
-                terminal = this.shell.terminal;
-
-            return bind.searchGroup(term).then(_.partial(processResult, shell));
-        },
-
-    }
-});
+}
 
 
-module.exports = exports = Root;
+export default Root;

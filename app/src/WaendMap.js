@@ -11,119 +11,122 @@
 // 'use strict';
 
 
-var _ = require('underscore'),
-    proj4 = require('proj4'),
-    region = require('../lib/Region'),
-    Geometry = require('../lib/Geometry'),
-    semaphore = require('../lib/Semaphore'),
-    Renderer = require('./Renderer'),
-    View = require('./View'),
-    Mutex = require('../lib/Mutex');
+import _ from 'underscore';
+
+import proj4 from 'proj4';
+import region from '../lib/Region';
+import Geometry from '../lib/Geometry';
+import semaphore from '../lib/Semaphore';
+import Renderer from './Renderer';
+import View from './View';
+import Mutex from '../lib/Mutex';
+import debug from 'debug';
+const logger = debug('waend:Map');
 
 
 
-function Map (options) {
-    this.projection = proj4(options.projection || 'EPSG:3857');
-    this.renderers = {};
+class Map {
+    constructor(options) {
+        this.projection = proj4(options.projection || 'EPSG:3857');
+        this.renderers = {};
 
-    var viewOptions = _.extend({
-        'map': this,
-        'extent': this.projectedExtent(options.extent || region.get())
-    },_.pick(options, 'root'));
+        const viewOptions = _.extend({
+            'map': this,
+            'extent': this.projectedExtent(options.extent || region.get())
+        },_.pick(options, 'root'));
 
-    this.view = new View(viewOptions);
-    this.listenToWaend();
+        this.view = new View(viewOptions);
+        this.listenToWaend();
+    }
+
+    listenToWaend() {
+        semaphore.on('layer:layer:add', this.waendAddLayer, this);
+        semaphore.on('layer:layer:remove', this.waendRemoveLayer, this);
+        semaphore.on('please:map:render', this.render, this);
+        semaphore.on('region:change', this.waendUpdateExtent, this);
+        semaphore.on('visibility:change', this.setVisibility, this);
+    }
+
+    unlistenToWaend() {
+    }
+
+    projectedExtent(extent) {
+        const bl = this.projection.forward(extent.getBottomLeft().getCoordinates());
+        const tr = this.projection.forward(extent.getTopRight().getCoordinates());
+        const pr = [bl[0], bl[1], tr[0], tr[1]];
+        return new Geometry.Extent(pr);
+    }
+
+    waendUpdateExtent(extent) {
+        this.view.setExtent(this.projectedExtent(extent));
+        this.render();
+    }
+
+    waendUpdateRegion() {
+    }
+
+    setVisibility(layerIds) {
+        _.each(this.renderers, (rdr, id) => {
+            const vs = rdr.isVisible();
+            const ts = _.indexOf(layerIds, id) >= 0;
+            if (ts !== vs) {
+                rdr.setVisibility(ts);
+                rdr.render();
+            }
+        });
+        this.view.reorderLayers(layerIds);
+    }
+
+    render() {
+        let isBackground = false;
+        _.each(this.renderers, rdr => {
+            rdr.render(isBackground);
+            if (rdr.isVisible) {
+                isBackground = false;
+            }
+        });
+    }
+
+    waendAddLayer(layer) {
+        this.view.addLayer(layer);
+        const renderer = new Renderer({
+            'view': this.view,
+            'projection': this.projection,
+            'layer': layer
+        });
+
+        this.renderers[layer.id] = renderer;
+        renderer.render();
+    }
+
+    waendRemoveLayer(layer) {
+        this.renderers[layer.id].stop();
+        delete this.renderers[layer.id];
+        this.view.removeLayer(layer);
+    }
+
+    getCoordinateFromPixel(pixel) {
+        const v = Array(...pixel);
+        const inverse = this.view.transform.inverse();
+        const tv = inverse.mapVec2(v);
+        // logger('map.getCoordinateFromPixel', v, inverse.flatMatrix(), tv);
+        return this.projection.inverse(tv);
+    }
+
+    getPixelFromCoordinate(coord) {
+        const v = Array(...coord);
+        const pv = this.projection.forward(v);
+        const tv = this.view.transform.mapVec2(pv);
+        return tv;
+    }
+
+    getView() {
+        return this.view;
+    }
+
+    getFeatures(extent) {
+        return this.view.getFeatures(extent);
+    }
 }
 
-Map.prototype.listenToWaend = function () {
-    semaphore.on('layer:layer:add', this.waendAddLayer, this);
-    semaphore.on('layer:layer:remove', this.waendRemoveLayer, this);
-    semaphore.on('please:map:render', this.render, this);
-    semaphore.on('region:change', this.waendUpdateExtent, this);
-    semaphore.on('visibility:change', this.setVisibility, this);
-};
-
-Map.prototype.unlistenToWaend = function () {
-};
-
-Map.prototype.projectedExtent = function (extent) {
-    var bl = this.projection.forward(extent.getBottomLeft().getCoordinates()),
-        tr = this.projection.forward(extent.getTopRight().getCoordinates()),
-        pr = [bl[0], bl[1], tr[0], tr[1]];
-    return new Geometry.Extent(pr);
-};
-
-Map.prototype.waendUpdateExtent = function (extent) {
-    this.view.setExtent(this.projectedExtent(extent));
-    this.render();
-};
-
-Map.prototype.waendUpdateRegion = function () {
-};
-
-Map.prototype.setVisibility = function (layerIds) {
-    _.each(this.renderers, function(rdr, id){
-        var vs = rdr.isVisible(),
-            ts = _.indexOf(layerIds, id) >= 0;
-        if (ts !== vs) {
-            rdr.setVisibility(ts);
-            rdr.render();
-        }
-    });
-    this.view.reorderLayers(layerIds);
-};
-
-Map.prototype.render = function () {
-    var isBackground = false;
-    _.each(this.renderers, function(rdr){
-        rdr.render(isBackground);
-        if (rdr.isVisible) {
-            isBackground = false;
-        }
-    });
-};
-
-
-Map.prototype.waendAddLayer = function (layer) {
-    this.view.addLayer(layer);
-    var renderer = new Renderer({
-        'view': this.view,
-        'projection': this.projection,
-        'layer': layer
-    });
-
-    this.renderers[layer.id] = renderer;
-    renderer.render();
-};
-
-Map.prototype.waendRemoveLayer = function (layer) {
-    this.renderers[layer.id].stop();
-    delete this.renderers[layer.id];
-    this.view.removeLayer(layer);
-};
-
-
-Map.prototype.getCoordinateFromPixel = function (pixel) {
-    var v = Array.apply(null, pixel),
-        inverse = this.view.transform.inverse(),
-        tv = inverse.mapVec2(v);
-    // console.log('map.getCoordinateFromPixel', v, inverse.flatMatrix(), tv);
-    return this.projection.inverse(tv);
-};
-
-Map.prototype.getPixelFromCoordinate = function (coord) {
-    var v = Array.apply(null, coord),
-        pv = this.projection.forward(v),
-        tv = this.view.transform.mapVec2(pv);
-    return tv;
-};
-
-Map.prototype.getView = function () {
-    return this.view;
-};
-
-Map.prototype.getFeatures = function (extent) {
-    return this.view.getFeatures(extent);
-};
-
-module.exports = exports = Map;
+export default Map;

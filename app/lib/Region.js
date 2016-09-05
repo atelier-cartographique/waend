@@ -1,21 +1,8 @@
-/*
- * app/lib/Region.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
-
-
-var _ = require('underscore'),
-    semaphore = require('../lib/Semaphore'),
-    Geometry = require('./Geometry'),
-    Projection = require('proj4'),
-    O = require('../../lib/object').Object;
+import _ from 'underscore';
+import semaphore from '../lib/Semaphore';
+import Geometry from './Geometry';
+import Projection from 'proj4';
+import {Object as O} from '../../lib/object';
 
 
 function fequals (a, b, p) {
@@ -23,12 +10,14 @@ function fequals (a, b, p) {
 }
 
 function maxVert () {
-    var Proj3857 = Projection('EPSG:3857');
-    var pt = [0, 0], r, ir;
-    var INC = 0.1;
+    const Proj3857 = Projection('EPSG:3857');
+    let pt = [0, 0];
+    let r;
+    let ir;
+    const INC = 0.1;
 
-    var ret = 90;
-    for (var i = 80; i < 90; i += INC) {
+    let ret = 90;
+    for (let i = 80; i < 90; i += INC) {
         pt = [180, i];
         r = Proj3857.forward(pt);
         ir = Proj3857.inverse(r);
@@ -40,42 +29,42 @@ function maxVert () {
     return ret
 }
 
-var horizMax = 180,
-    vertiMax = maxVert();
+const horizMax = 180;
+const vertiMax = maxVert();
 
-var WORLD_EXTENT = new Geometry.Extent([-horizMax, -vertiMax, horizMax, vertiMax]);
+const WORLD_EXTENT = new Geometry.Extent([-horizMax, -vertiMax, horizMax, vertiMax]);
 
-var Region = O.extend({
-    initialize: function () {
+const Region = O.extend({
+    initialize() {
         this.state = [WORLD_EXTENT.clone()];
         semaphore.on('region:push', this.push, this);
     },
 
-    getWorldExtent: function () {
+    getWorldExtent() {
         return WORLD_EXTENT.clone();
     },
 
-    get: function () {
+    get() {
         return _.last(this.state).clone();
     },
 
-    pop: function () {
-        var extent = this.state.pop();
+    pop() {
+        const extent = this.state.pop();
         this.emitChange(this.get());
         return this.get();
     },
 
-    emitChange: function (extent) {
+    emitChange(extent) {
         semaphore.signal('region:change', extent, this);
     },
 
-    pushExtent: function (extent) {
+    pushExtent(extent) {
         this.state.push(extent.normalize());
         return this.emitChange(extent);
     },
 
-    push: function (geom) {
-        var extent;
+    push(geom) {
+        let extent;
         if (geom instanceof Geometry.Extent) {
             extent = geom.clone();
         }
@@ -93,6 +82,6 @@ var Region = O.extend({
 
 });
 
-var region = new Region();
+const region = new Region();
 
-module.exports = exports = region;
+export default region;

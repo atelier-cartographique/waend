@@ -9,26 +9,26 @@
  */
 
 
-var _ = require('underscore'),
-    Promise = require('bluebird'),
-    semaphore = require('../../Semaphore'),
-    region = require('../../Region'),
-    helpers = require('../../helpers');
+import _ from 'underscore';
 
+import Promise from 'bluebird';
+import semaphore from '../../Semaphore';
+import region from '../../Region';
+import {addClass, setAttributes, makeButton} from '../../helpers';
 
-var addClass = helpers.addClass,
-    setAttributes = helpers.setAttributes,
-    makeButton = helpers.makeButton;
 
 
 function makeButtons(node, okCallback, cancelCallback) {
-    var wrapper = document.createElement('div'),
-        okBtn = makeButton('OK', {
-            'class': 'button grp-button-ok push-validate'
-        }, okCallback),
-        cancelBtn = makeButton('Cancel', {
-            'class': 'button grp-button-cancel push-cancel'
-        }, cancelCallback);
+    const wrapper = document.createElement('div');
+
+    const okBtn = makeButton('OK', {
+        'class': 'button grp-button-ok push-validate'
+    }, okCallback);
+
+    const cancelBtn = makeButton('Cancel', {
+        'class': 'button grp-button-cancel push-cancel'
+    }, cancelCallback);
+
     addClass(wrapper, 'grp-button-wrapper');
     wrapper.appendChild(okBtn);
     wrapper.appendChild(cancelBtn);
@@ -36,10 +36,10 @@ function makeButtons(node, okCallback, cancelCallback) {
 }
 
 function makeForm(node, label) {
-    var form = document.createElement('div'),
-        labelElement = document.createElement('div'),
-        title = document.createElement('input'),
-        desc = document.createElement('textarea');
+    const form = document.createElement('div');
+    const labelElement = document.createElement('div');
+    const title = document.createElement('input');
+    const desc = document.createElement('textarea');
 
 
     setAttributes(title, {
@@ -66,7 +66,7 @@ function makeForm(node, label) {
     node.appendChild(form);
 
     return {
-        title: title,
+        title,
         description: desc
     };
 }
@@ -74,32 +74,32 @@ function makeForm(node, label) {
 
 function ensureVisibility (binder, userId, groupId, layerId) {
     binder.getGroup(userId, groupId)
-          .then(function(group){
+          .then(group => {
               if (group.has('visible')) {
-                  var v = group.get('visible');
+                  const v = group.get('visible');
                   v.push(layerId);
                   group.set('visible', v);
               }
           })
-          .catch(function(err) {
+          .catch(err => {
               console.error('failed to make this layer visible', layerId);
           });
 }
 
 
 function createLayer (ctx, author, userId, groupId, resolve, reject) {
-    var binder = ctx.binder,
-        shell = ctx.shell,
-        terminal = shell.terminal,
-        display = terminal.display();
+    const binder = ctx.binder;
+    const shell = ctx.shell;
+    const terminal = shell.terminal;
+    const display = terminal.display();
 
-    var form = makeForm(display.node, 'Add a new layer');
+    const form = makeForm(display.node, 'Add a new layer');
 
-    var createOK = function () {
-        var title = form.title.value,
-            desc = form.description.value;
+    const createOK = () => {
+        const title = form.title.value;
+        const desc = form.description.value;
         if((title.length > 0) && (desc.length > 0)) {
-            var data = {
+            const data = {
                 user_id: author.id,
                 properties: {
                     'name': title,
@@ -107,8 +107,8 @@ function createLayer (ctx, author, userId, groupId, resolve, reject) {
             };
 
             ctx.binder.setLayer(userId, groupId, data)
-                .then(function(model){
-                    shell.exec('cc /' + userId + '/' + groupId + '/' + model.id);
+                .then(model => {
+                    shell.exec(`cc /${userId}/${groupId}/${model.id}`);
                     if (author.id === userId) {
                         ensureVisibility(binder, userId, groupId, model.id);
                     }
@@ -116,13 +116,13 @@ function createLayer (ctx, author, userId, groupId, resolve, reject) {
                     resolve(model);
                 })
                 .catch(reject)
-                .finally(function(){
+                .finally(() => {
                     display.end();
                 });
         }
     };
 
-    var createCancel = function () {
+    const createCancel = () => {
         reject('Cancel');
         display.end();
     };
@@ -132,25 +132,25 @@ function createLayer (ctx, author, userId, groupId, resolve, reject) {
 
 
 function iCreate (groupName, groupDescription) {
-    var self = this,
-        terminal = self.shell.terminal,
-        stdout = self.sys.stdout,
-        stdin = self.sys.stdin,
-        user = self.shell.getUser(),
-        userId = self.getUser(),
-        groupId = self.getGroup();
+    const self = this;
+    const terminal = self.shell.terminal;
+    const stdout = self.sys.stdout;
+    const stdin = self.sys.stdin;
+    const user = self.shell.getUser();
+    const userId = self.getUser();
+    const groupId = self.getGroup();
 
     if (!user) {
         return (Promise.reject('You\'re not logged in.'));
     }
 
-    var creator = _.partial(createLayer, self, user, userId, groupId);
+    const creator = _.partial(createLayer, self, user, userId, groupId);
 
     return (new Promise(creator));
 }
 
 
-module.exports = exports = {
+export default {
     name: 'mklayer',
     command: iCreate
 };

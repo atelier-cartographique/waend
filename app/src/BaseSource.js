@@ -1,60 +1,53 @@
-/*
- * app/src/BaseSource.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
+import _ from 'underscore';
+import rbush from 'rbush';
+import EventEmitter from 'events';
+import Geometry from '../lib/Geometry';
+import debug from 'debug';
+const logger = debug('waend:BaseSource');
 
 
-var _ = require('underscore'),
-    rbush = require('rbush'),
-    O  = require('../../lib/object'),
-    Geometry = require('../lib/Geometry');
-
-var BaseSource = O.Object.extend({
-    constructor: function () {
+class BaseSource extends EventEmitter {
+    constructor() {
+        super();
         this.tree = rbush();
         this.index = {};
         this.features = [];
-        O.Object.apply(this, arguments);
-    },
+    }
 
-    clear: function () {
+    clear() {
         this.index = {};
         this.features = [];
         this.tree.clear();
-    },
+    }
 
-    addFeature: function (f, skipSpatialIndex) {
+    addFeature(f, skipSpatialIndex) {
         this.features.push(f);
         this.index[f.id] = this.features.length - 1;
         if (!skipSpatialIndex) {
-            var geom = f.getGeometry(),
-                extent = _.assign({id: f.id}, geom.getExtent().getDictionary());
+            const geom = f.getGeometry();
+            const extent = _.assign({id: f.id}, geom.getExtent().getDictionary());
             this.tree.insert(extent);
         }
         this.emit('add', f);
-    },
+    }
 
-    removeFeature: function (id) {
+    removeFeature(id) {
         this.features.splice(this.index[id], 1);
         delete this.index[id];
         this.buildTree();
-    },
+    }
 
-    buildTree: function () {
-        var _ts = _.now(), _ts2;
-        var features = this.features,
-            flen = features.length,
-            items = [],
-            feature, geom, extent;
+    buildTree() {
+        const _ts = _.now();
+        let _ts2;
+        const features = this.features;
+        const flen = features.length;
+        const items = [];
+        let feature;
+        let geom;
+        let extent;
         this.tree.clear();
-        for (var i = 0; i < flen; i++) {
+        for (let i = 0; i < flen; i++) {
             feature = features[i];
             extent = _.assign({id: feature.id},
                                 feature.getExtent().getDictionary());
@@ -62,19 +55,21 @@ var BaseSource = O.Object.extend({
         }
         _ts2 = _.now() - _ts;
         this.tree.load(items);
-        console.log('buildTree', flen, _ts2, _.now() - (_ts + _ts2));
-    },
+        logger('buildTree', flen, _ts2, _.now() - (_ts + _ts2));
+    }
 
-    getLength: function () {
+    getLength() {
         return this.features.length;
-    },
+    }
 
-    getFeature: function (id) {
+    getFeature(id) {
         return this.features[this.index[id]];
-    },
+    }
 
-    getFeatures: function (opt_extent) {
-        var features = [], items, i;
+    getFeatures(opt_extent) {
+        const features = [];
+        let items;
+        let i;
         if (opt_extent) {
             if (opt_extent instanceof Geometry.Extent) {
                 items = this.tree.search(opt_extent.getDictionary());
@@ -88,7 +83,7 @@ var BaseSource = O.Object.extend({
             }
 
             for (i = 0; i < items.length; i++) {
-                var item = items[i];
+                const item = items[i];
                 features.push(
                     this.features[this.index[item.id]]
                 );
@@ -98,9 +93,8 @@ var BaseSource = O.Object.extend({
             return this.features;
         }
         return features;
-    },
-
-});
+    }
+}
 
 
 //
@@ -115,4 +109,4 @@ var BaseSource = O.Object.extend({
 
 
 
-module.exports = exports = BaseSource;
+export default BaseSource;

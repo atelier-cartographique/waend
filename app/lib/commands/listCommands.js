@@ -11,15 +11,14 @@
 
 
 function listCommands () {
-    var commands = this.commands;
-    for(var k in commands){
+    const commands = this.commands;
+    for(const k in commands){
         this.sys.stdout.write(k);
     }
     return this.end();
-};
+}
 
-
-module.exports = exports = {
+export default {
     name: 'lc',
     command: listCommands
 };

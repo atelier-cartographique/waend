@@ -8,19 +8,20 @@
  *
  */
 
-var _ = require('underscore'),
-    region = require('../Region');
+import _ from 'underscore';
+
+import region from '../Region';
 
 
 function bufferRegion (arg) {
-    var extent = region.get();
+    const extent = region.get();
 
-    var newExtent = extent.buffer(parseFloat(arg || 0));
+    const newExtent = extent.buffer(parseFloat(arg || 0));
     region.push(newExtent);
     return this.end(newExtent);
 }
 
-module.exports = exports = {
+export default {
     name: 'zoom',
     command: bufferRegion
 };

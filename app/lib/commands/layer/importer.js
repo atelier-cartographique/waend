@@ -10,15 +10,16 @@
 
 // 'use strict';
 
-var _ = require('underscore'),
-    Promise = require('bluebird'),
-    Geometry = require('../../Geometry');
+import _ from 'underscore';
+
+import Promise from 'bluebird';
+import Geometry from '../../Geometry';
 
 
 
 function setupDropZone (container) {
-    var dropbox = document.createElement('div'),
-        dropboxLabel = document.createElement('div');
+    const dropbox = document.createElement('div');
+    const dropboxLabel = document.createElement('div');
     dropbox.setAttribute('class', 'importer-dropzone');
     dropboxLabel.setAttribute('class', 'importer-dropzone-label');
 
@@ -30,8 +31,8 @@ function setupDropZone (container) {
 }
 
 function setupInput (container) {
-    var input = document.createElement('input'),
-        inputWrapper = document.createElement('div');
+    const input = document.createElement('input');
+    const inputWrapper = document.createElement('div');
     inputWrapper.setAttribute('class', 'importer-input-wrapper');
     input.setAttribute('class', 'importer-input');
     input.setAttribute('type', 'file');
@@ -41,7 +42,7 @@ function setupInput (container) {
 
 
 function setupHints (container) {
-    var hints = document.createElement('div');
+    const hints = document.createElement('div');
     hints.setAttribute('class', 'importer-hints');
     hints.innerHTML = [
         '<span class="hint">Help : <a href="http://alpha.waend.com/documentation/help.html#import" target="_blank">Import Datas</a></span>'
@@ -51,7 +52,7 @@ function setupHints (container) {
 
 
 function setupCancel (container) {
-    var cancel = document.createElement('button');
+    const cancel = document.createElement('button');
     cancel.setAttribute('class', 'importer-cancel push-cancel');
     cancel.innerHTML = 'cancel';
     container.appendChild(cancel);
@@ -60,7 +61,7 @@ function setupCancel (container) {
 
 
 
-var createData = {
+const createData = {
     'binder': null,
     'uid': null,
     'gid': null,
@@ -75,11 +76,11 @@ function setupCreateData (binder, uid, gid, lid) {
 }
 
 function create (feature) {
-    var geom = new Geometry.Geometry(feature);
-    var props = _.omit(feature.properties || {}, 'id');
-    var geomType = geom.getType();
+    const geom = new Geometry.Geometry(feature);
+    const props = _.omit(feature.properties || {}, 'id');
+    const geomType = geom.getType();
     if(('LineString' === geomType) || ('Polygon' === geomType)) {
-        var data = {
+        const data = {
             'user_id': createData.uid,
             'layer_id': createData.lid,
             'properties': props,
@@ -97,7 +98,7 @@ function create (feature) {
 
 function progress (length, index, options, feature) {
     if (!options.progess) {
-        var container = options.container;
+        const container = options.container;
         while (container.firstChild) {
             container.removeChild(container.firstChild);
         }
@@ -111,7 +112,7 @@ function progress (length, index, options, feature) {
         options.progress.counter.setAttribute('class', 'importer-counter');
         options.progress.featureInfo.setAttribute('class', 'importer-feature');
 
-        options.progress.total.innerHTML = length + ' features to import';
+        options.progress.total.innerHTML = `${length} features to import`;
 
         options.progress.appendChild(options.progress.total);
         options.progress.appendChild(options.progress.counter);
@@ -125,11 +126,12 @@ function progress (length, index, options, feature) {
 }
 
 
-var handleFile = function (file, options, resolve, reject) {
-    var reader = new FileReader();
+const handleFile = (file, options, resolve, reject) => {
+    const reader = new FileReader();
 
-    var creator = function (evt) {
-        var geojsonString = evt.target.result, geojson;
+    const creator = evt => {
+        const geojsonString = evt.target.result;
+        let geojson;
         try {
             geojson = JSON.parse(geojsonString);
         }
@@ -140,49 +142,48 @@ var handleFile = function (file, options, resolve, reject) {
             return reject('NoFeatures');
         }
 
-        var features = geojson.features,
-            lastIndex = features.length - 1;
+        const features = geojson.features;
+        const lastIndex = features.length - 1;
 
-        Promise.reduce(features, function(total, item, index, arrayLength){
-                var feature = features[index],
-                    lastOne = index === lastIndex;
-                progress (arrayLength, index, options, feature);
-                return create(feature);
-            }, 0)
-            .then(function(){
+        Promise.reduce(features, (total, item, index, arrayLength) => {
+            const feature = features[index];
+            const lastOne = index === lastIndex;
+            progress (arrayLength, index, options, feature);
+            return create(feature);
+        }, 0)
+            .then(() => {
                 resolve();
             })
             .catch(reject)
-            .finally(function(){
+            .finally(() => {
                 options.display.end();
                 createData.binder.changeParent(createData.lid);
             });
-
     };
     reader.onload = creator;
     reader.readAsText(file);
 };
 
 function resolver (options) {
-    return function (resolve, reject) {
+    return (resolve, reject) => {
 
         // Drag & Drop
-        var dragenter = function (e) {
+        const dragenter = e => {
           e.stopPropagation();
           e.preventDefault();
         };
 
-        var dragover = function (e) {
+        const dragover = e => {
           e.stopPropagation();
           e.preventDefault();
         };
 
-        var drop = function (e) {
+        const drop = e => {
           e.stopPropagation();
           e.preventDefault();
 
-          var dt = e.dataTransfer;
-          var files = dt.files;
+          const dt = e.dataTransfer;
+          const files = dt.files;
 
           handleFile(files[0], options, resolve, reject);
         };
@@ -194,15 +195,15 @@ function resolver (options) {
 
         // Select
 
-        options.input.addEventListener('change', function (e) {
-            (function () {
+        options.input.addEventListener('change', e => {
+            ((() => {
                 handleFile(options.input.files[0], options,
                     resolve, reject);
-            })();
+            }))();
         }, false);
 
         // Cancel
-        options.cancel.addEventListener('click', function () {
+        options.cancel.addEventListener('click', () => {
             options.display.end();
             reject('Cancel');
         }, false);
@@ -211,23 +212,23 @@ function resolver (options) {
 }
 
 function importer () {
-    var self = this,
-        shell = self.shell,
-        stdout = shell.stdout,
-        binder = self.binder,
-        terminal = shell.terminal,
-        map = shell.env.map,
-        current = self.current(),
-        uid = current[0],
-        gid = current[1],
-        lid = current[2],
-        display = terminal.display();
+    const self = this;
+    const shell = self.shell;
+    const stdout = shell.stdout;
+    const binder = self.binder;
+    const terminal = shell.terminal;
+    const map = shell.env.map;
+    const current = self.current();
+    const uid = current[0];
+    const gid = current[1];
+    const lid = current[2];
+    const display = terminal.display();
 
     setupCreateData(binder, uid, gid, lid);
-    var dropbox = setupDropZone(display.node);
-    var input = setupInput(display.node);
-    var cancel = setupCancel(display.node);
-    var options = {
+    const dropbox = setupDropZone(display.node);
+    const input = setupInput(display.node);
+    const cancel = setupCancel(display.node);
+    const options = {
         'dropbox': dropbox,
         'container': display.node,
         'display': display,
@@ -240,7 +241,7 @@ function importer () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'import',
     command: importer
 };

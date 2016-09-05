@@ -1,53 +1,64 @@
-/*
- * app/lib/helpers.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
+import _ from 'underscore';
+import Projection from 'proj4';
+import semaphore from './Semaphore';
+import {get as getBinder} from './Bind';
+import Geometry from './Geometry';
 
-'use strict';
-
-var _ = require('underscore'),
-    Projection = require('proj4'),
-    semaphore = require('./Semaphore'),
-    Bind = require('./Bind'),
-    Geometry = require('./Geometry');
-
-module.exports.getModelName = function (model) {
+export function getModelName(model) {
     if (model.get('name')) {
         return model.get('name');
     }
-    var id = model.id || '00000000';
-    return '•' + id.substr(0, 6);
-};
+    const id = model.id || '00000000';
+    return `•${id.substr(0, 6)}`;
+}
 
-module.exports.copy = function (data) {
+export function copy(data) {
     return JSON.parse(JSON.stringify(data));
-};
+}
 
+export function reducePromise(args, fn, start) {
+
+    const reducer = val => {
+        val = Array.isArray(val) ? val : [val]
+        const length = val.length;
+
+        if (length === 0) {
+            return Promise.resolve(start);
+        }
+
+        return val.reduce(function (promise, curr, index, arr) {
+            return promise.then(function (prev) {
+                if (prev === undefined && length === 1) {
+                    return curr;
+                }
+
+                return fn(prev, curr, index, arr)
+            })
+        }, Promise.resolve(start))
+    }
+
+    return Promise.resolve(args).then(reducer);
+}
 
 // DOM
 
-module.exports.setAttributes = function (elem, attrs) {
-    _.each(attrs, function (val, k) {
+export function setAttributes(elem, attrs) {
+    _.each(attrs, (val, k) => {
         elem.setAttribute(k, val);
     });
     return elem;
-};
+}
 
-module.exports.addClass = function (elem, c) {
-    var ecStr = elem.getAttribute('class');
-    var ec = ecStr ? ecStr.split(' ') : [];
+export function addClass(elem, c) {
+    const ecStr = elem.getAttribute('class');
+    const ec = ecStr ? ecStr.split(' ') : [];
     ec.push(c);
     elem.setAttribute('class', _.uniq(ec).join(' '));
 }
 
-module.exports.toggleClass = function (elem, c) {
-    var ecStr = elem.getAttribute('class');
-    var ec = ecStr ? ecStr.split(' ') : [];
+export function toggleClass(elem, c) {
+    const ecStr = elem.getAttribute('class');
+    const ec = ecStr ? ecStr.split(' ') : [];
     if (_.indexOf(ec, c) < 0) {
         exports.addClass(elem, c);
     }
@@ -56,68 +67,66 @@ module.exports.toggleClass = function (elem, c) {
     }
 }
 
-module.exports.hasClass = function (elem, c) {
-    var ecStr = elem.getAttribute('class');
-    var ec = ecStr ? ecStr.split(' ') : [];
+export function hasClass(elem, c) {
+    const ecStr = elem.getAttribute('class');
+    const ec = ecStr ? ecStr.split(' ') : [];
     return !(_.indexOf(ec, c) < 0)
 }
 
-module.exports.removeClass = function (elem, c) {
-    var ecStr = elem.getAttribute('class');
-    var ec = ecStr ? ecStr.split(' ') : [];
+export function removeClass(elem, c) {
+    const ecStr = elem.getAttribute('class');
+    const ec = ecStr ? ecStr.split(' ') : [];
     elem.setAttribute('class', _.without(ec, c).join(' '));
 }
 
-module.exports.emptyElement = function (elem) {
+export function emptyElement(elem) {
     while (elem.firstChild) {
         exports.removeElement(elem.firstChild);
     }
     return elem;
-};
+}
 
-module.exports.removeElement = function (elem, keepChildren) {
+export function removeElement(elem, keepChildren) {
     if (!keepChildren) {
         exports.emptyElement(elem);
     }
-    var parent = elem.parentNode,
-        evt = document.createEvent('CustomEvent');
+    const parent = elem.parentNode;
+    const evt = document.createEvent('CustomEvent');
     parent.removeChild(elem);
     evt.initCustomEvent('remove', false, false, null);
     elem.dispatchEvent(evt);
     return elem;
-};
+}
 
-module.exports.px = function (val) {
-    val = val || 0;
-    return val.toString() + 'px';
-};
+export function px(val=0) {
+    return `${val.toString()}px`;
+}
 
 // DOM+
 
-module.exports.makeButton = function (label, attrs, callback, ctx) {
-    var button = document.createElement('div'),
-        labelElement = document.createElement('span');
+export function makeButton(label, attrs, callback, ctx) {
+    const button = document.createElement('div');
+    const labelElement = document.createElement('span');
     exports.addClass(labelElement, 'label');
     labelElement.innerHTML = label;
 
     exports.setAttributes(button, attrs);
 
     if (callback) {
-        button.addEventListener('click', function(event){
+        button.addEventListener('click', event => {
             callback.call(ctx, event);
         }, false);
     }
 
     button.appendChild(labelElement);
     return button;
-};
+}
 
-
-module.exports.makeInput = function (options, callback, ctx) {
-    var inputElement = document.createElement('input'),
-        labelElement = document.createElement('label'),
-        wrapper = document.createElement('div'),
-        type = options.type;
+export function makeInput(options, callback, ctx) {
+    const inputElement = document.createElement('input');
+    const labelElement = document.createElement('label');
+    const wrapper = document.createElement('div');
+    const type = options.type;
 
     exports.setAttributes(wrapper, options.attrs || {});
 
@@ -125,8 +134,8 @@ module.exports.makeInput = function (options, callback, ctx) {
     inputElement.setAttribute('type', type);
     inputElement.value = options.value;
     if (callback) {
-        inputElement.addEventListener('change', function(event){
-            var val = inputElement.value;
+        inputElement.addEventListener('change', event => {
+            let val = inputElement.value;
             if ('number' === type) {
                 val = Number(val);
             }
@@ -137,95 +146,92 @@ module.exports.makeInput = function (options, callback, ctx) {
     wrapper.appendChild(labelElement);
     wrapper.appendChild(inputElement);
     return wrapper;
-};
+}
 
-module.exports.eventPreventer = function (elem, events) {
-    _.each(events, function (eventName) {
-        elem.addEventListener(eventName, function(e){
+export function eventPreventer(elem, events) {
+    _.each(events, eventName => {
+        elem.addEventListener(eventName, e => {
             // e.preventDefault();
             e.stopPropagation();
         }, false);
     });
-};
-
+}
 
 // events
 
-module.exports.isKeyCode = function (event, kc) {
-    return (kc === event.which || kc === event.keyCode);
-};
+export function isKeyCode(event, kc) {
+    return kc === event.which || kc === event.keyCode;
+}
 
 // GEOM
 
-module.exports.vecDist = function (v1, v2) {
-    var dx = v2[0] - v1[0],
-        dy = v2[1] - v1[1];
+export function vecDist(v1, v2) {
+    const dx = v2[0] - v1[0];
+    const dy = v2[1] - v1[1];
     return Math.sqrt((dx*dx) + (dy*dy));
-};
+}
 
-module.exports.vecAdd = function (v1, v2, a) {
-    var t = a / vecDist(v1, v2),
-        rx = v1[0] + (v2[0] - v1[0]) * t,
-        ry = v1[1] + (v2[1] - v1[1]) * t;
+export function vecAdd(v1, v2, a) {
+    const t = a / vecDist(v1, v2);
+    const rx = v1[0] + (v2[0] - v1[0]) * t;
+    const ry = v1[1] + (v2[1] - v1[1]) * t;
     return [rx, ry];
-};
+}
 
-module.exports.vecEquals = function (v1, v2, eps) {
-    eps = eps || 0.00000001;
+export function vecEquals(v1, v2, eps=0.00000001) {
     return (exports.vecDist(v1, v2) < eps);
-};
+}
 
-module.exports.transformExtent = function (extent, T) {
-    var min = extent.slice(0,2),
-        max = extent.slice(2);
+export function transformExtent(extent, T) {
+    const min = extent.slice(0,2);
+    const max = extent.slice(2);
     T.mapVec2(min);
     T.mapVec2(max);
     return min.concat(max);
-};
+}
 
 // GEO
 
-var Proj3857 = Projection('EPSG:3857');
+const Proj3857 = Projection('EPSG:3857');
 
-module.exports.projectExtent = function (extent, proj) {
-    proj = proj || Proj3857;
-    var min = proj.forward(extent.slice(0,2)),
-        max = proj.forward(extent.slice(2));
+export function projectExtent(extent, proj=Proj3857) {
+    const min = proj.forward(extent.slice(0,2));
+    const max = proj.forward(extent.slice(2));
     return min.concat(max);
-};
+}
 
-module.exports.unprojectExtent = function (extent, proj) {
-    proj = proj || Proj3857;
-    var min = proj.inverse(extent.slice(0,2)),
-        max = proj.inverse(extent.slice(2));
+export function unprojectExtent(extent, proj=Proj3857) {
+    const min = proj.inverse(extent.slice(0,2));
+    const max = proj.inverse(extent.slice(2));
     return min.concat(max);
-};
+}
 
 
 function addExtent (feature, extent) {
-    var geom = feature.getGeometry();
+    const geom = feature.getGeometry();
     extent.add(geom);
 }
 
-module.exports.layerExtent = function (layer) {
-    var path = layer.getPath(),
-        binder = Bind.get();
+export function layerExtent(layer) {
+    const path = layer.getPath();
+    const binder = getBinder();
 
-    return binder.getFeatures.apply(binder, path)
-        .then(function(features){
-            var extent;
-            for (var i = 0; i < features.length; i++) {
-                var feature = features[i];
-                if (extent) {
-                    addExtent(feature, extent);
-                }
-                else {
-                    extent = new Geometry.Extent(feature.getGeometry());
-                }
+    return binder.getFeatures(...path)
+        .then(features => {
+        let extent;
+
+        for (const feature of features) {
+            if (extent) {
+                addExtent(feature, extent);
             }
-            return extent;
-        })
-        .catch(function(err){
+            else {
+                extent = new Geometry.Extent(feature.getGeometry());
+            }
+        }
+
+        return extent;
+    })
+        .catch(err => {
             console.error('layerExtent', err);
         });
-};
+}

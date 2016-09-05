@@ -8,17 +8,18 @@
  *
  */
 
-var _ = require('underscore'),
-    util = require('util'),
-    region = require('../Region');
+import _ from 'underscore';
+
+import util from 'util';
+import region from '../Region';
 
 
 function setRegion (east, south, west, north) {
-    var self = this,
-        env = self.shell.env,
-        terminal = self.shell.terminal;
+    const self = this;
+    const env = self.shell.env;
+    const terminal = self.shell.terminal;
 
-    var extent = [
+    let extent = [
         parseFloat(west),
         parseFloat(south),
         parseFloat(east),
@@ -37,27 +38,27 @@ function setRegion (east, south, west, north) {
 
 
 function getRegion () {
-    var r = region.get();
+    const r = region.get();
     return this.end(r.getArray());
 }
 
 function popRegion () {
-    var r = region.pop();
+    const r = region.pop();
     return this.end(r.getArray());
 }
 
 function getCenter () {
-    var r = region.get(),
-        center = r.getCenter().getCoordinates();
+    const r = region.get();
+    const center = r.getCenter().getCoordinates();
     this.sys.stdout.write(center[0], ' ', center[1]);
     return this.end(center);
 }
 
 function printRegion (opt_format) {
-    var r = region.get(),
-        NE = r.getTopRight().getCoordinates(),
-        SW = r.getBottomLeft().getCoordinates(),
-        f = '%d %d %d %d';
+    const r = region.get();
+    const NE = r.getTopRight().getCoordinates();
+    const SW = r.getBottomLeft().getCoordinates();
+    const f = '%d %d %d %d';
 
     this.sys.stdout.write(util.format(f, SW[0], SW[1], NE[0], NE[1]));
     return this.end(r.getArray());
@@ -65,7 +66,7 @@ function printRegion (opt_format) {
 
 
 function bufferRegion (arg) {
-    var r = region.get();
+    const r = region.get();
 
     r.buffer(parseFloat(arg) || 0);
     region.push(r);
@@ -73,8 +74,8 @@ function bufferRegion (arg) {
 }
 
 function regionCommand () {
-    var args = _.toArray(arguments),
-        action = args.shift();
+    const args = _.toArray(arguments);
+    const action = args.shift();
 
     if('set' === action){
         return setRegion.apply(this, args);
@@ -97,7 +98,7 @@ function regionCommand () {
     return this.endWithError('not a valid action');
 }
 
-module.exports = exports = {
+export default {
     name: 'region',
     command: regionCommand
 };

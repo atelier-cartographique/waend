@@ -10,17 +10,18 @@
 
 // 'use strict';
 
-var _ = require('underscore'),
-    Geometry = require('../../Geometry');
+import _ from 'underscore';
+
+import Geometry from '../../Geometry';
 
 function setGeometry (geoJSON) {
-    var self = this,
-        feature = self.data,
-        geom;
+    const self = this;
+    const feature = self.data;
+    let geom;
 
     if (geoJSON) {
         try {
-            var data = JSON.parse(geoJSON);
+            const data = JSON.parse(geoJSON);
             geom = new Geometry.Geometry(data);
         }
         catch (err) {
@@ -38,7 +39,7 @@ function setGeometry (geoJSON) {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'setGeometry',
     command: setGeometry
 };

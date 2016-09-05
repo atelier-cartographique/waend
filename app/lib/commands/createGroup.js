@@ -9,26 +9,26 @@
  */
 
 
-var _ = require('underscore'),
-    Promise = require('bluebird'),
-    semaphore = require('../Semaphore'),
-    region = require('../Region'),
-    helpers = require('../helpers');
+import _ from 'underscore';
 
+import Promise from 'bluebird';
+import semaphore from '../Semaphore';
+import region from '../Region';
+import {addClass, setAttributes, makeButton} from '../helpers';
 
-var addClass = helpers.addClass,
-    setAttributes = helpers.setAttributes,
-    makeButton = helpers.makeButton;
 
 
 function makeButtons(node, okCallback, cancelCallback) {
-    var wrapper = document.createElement('div'),
-        okBtn = makeButton('OK', {
-            'class': 'button grp-button-ok push-validate'
-        }, okCallback),
-        cancelBtn = makeButton('Cancel', {
-            'class': 'button grp-button-cancel push-cancel'
-        }, cancelCallback);
+    const wrapper = document.createElement('div');
+
+    const okBtn = makeButton('OK', {
+        'class': 'button grp-button-ok push-validate'
+    }, okCallback);
+
+    const cancelBtn = makeButton('Cancel', {
+        'class': 'button grp-button-cancel push-cancel'
+    }, cancelCallback);
+
     addClass(wrapper, 'grp-button-wrapper');
     wrapper.appendChild(okBtn);
     wrapper.appendChild(cancelBtn);
@@ -36,10 +36,10 @@ function makeButtons(node, okCallback, cancelCallback) {
 }
 
 function makeForm(node, label) {
-    var form = document.createElement('div'),
-        labelElement = document.createElement('div'),
-        title = document.createElement('input'),
-        desc = document.createElement('textarea');
+    const form = document.createElement('div');
+    const labelElement = document.createElement('div');
+    const title = document.createElement('input');
+    const desc = document.createElement('textarea');
 
 
     setAttributes(title, {
@@ -66,7 +66,7 @@ function makeForm(node, label) {
     node.appendChild(form);
 
     return {
-        title: title,
+        title,
         description: desc
     };
 }
@@ -74,18 +74,18 @@ function makeForm(node, label) {
 
 
 function createGroup (ctx, user, resolve, reject) {
-    var binder = ctx.binder,
-        shell = ctx.shell,
-        terminal = shell.terminal,
-        display = terminal.display();
+    const binder = ctx.binder;
+    const shell = ctx.shell;
+    const terminal = shell.terminal;
+    const display = terminal.display();
 
-    var form = makeForm(display.node, 'Add a new map');
+    const form = makeForm(display.node, 'Add a new map');
 
-    var createOK = function () {
-        var title = form.title.value,
-            desc = form.description.value;
+    const createOK = () => {
+        const title = form.title.value;
+        const desc = form.description.value;
         if((title.length > 0) && (desc.length > 0)) {
-            var data = {
+            const data = {
                 user_id: user.id,
                 status_flag: 0,
                 properties: {
@@ -94,18 +94,18 @@ function createGroup (ctx, user, resolve, reject) {
             };
 
             ctx.binder.setGroup(user.id, data)
-                .then(function(model){
+                .then(model => {
                     resolve(model);
-                    shell.exec('cc /' + user.id + '/' + model.id);
+                    shell.exec(`cc /${user.id}/${model.id}`);
                 })
                 .catch(reject)
-                .finally(function(){
+                .finally(() => {
                     display.end();
                 });
         }
     };
 
-    var createCancel = function () {
+    const createCancel = () => {
         reject('Cancel');
         display.end();
     };
@@ -115,23 +115,23 @@ function createGroup (ctx, user, resolve, reject) {
 
 
 function iCreate (groupName, groupDescription) {
-    var self = this,
-        terminal = self.shell.terminal,
-        stdout = self.sys.stdout,
-        stdin = self.sys.stdin,
-        user = self.shell.getUser();
+    const self = this;
+    const terminal = self.shell.terminal;
+    const stdout = self.sys.stdout;
+    const stdin = self.sys.stdin;
+    const user = self.shell.getUser();
 
     if (!user) {
         return (Promise.reject('You\'re not logged in.'));
     }
 
-    var creator = _.partial(createGroup, self, user);
+    const creator = _.partial(createGroup, self, user);
 
     return (new Promise(creator));
 }
 
 
-module.exports = exports = {
+export default {
     name: 'mkgroup',
     command: iCreate
 };

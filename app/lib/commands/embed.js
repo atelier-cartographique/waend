@@ -1,68 +1,44 @@
-/*
- * app/lib/commands/view.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
+import _ from 'underscore';
+import util from 'util';
+import Promise from 'bluebird';
+import Geometry from '../Geometry';
+import Transform from '../Transform';
+import Projection from 'proj4';
+import region from '../Region';
+import semaphore from '../Semaphore';
+import turf from 'turf';
+import config from '../../config';
+import Transport from '../Transport';
+import SyncHandler from './SyncHandler';
+import {projectExtent, unprojectExtent, transformExtent, vecDist, isKeyCode, setAttributes, addClass, removeClass, toggleClass, makeButton, layerExtent, getModelName} from '../helpers';
+import debug from 'debug';
+const logger = debug('waend:command:embed');
 
-'use strict';
-
-var _ = require('underscore'),
-    util = require('util'),
-    Promise = require('bluebird'),
-    Geometry = require('../Geometry'),
-    Transform = require('../Transform'),
-    Projection = require('proj4'),
-    region = require('../Region'),
-    semaphore = require('../Semaphore'),
-    turf = require('turf'),
-    config = require('../../../config'),
-    Transport = require('../Transport'),
-    helpers = require('../helpers'),
-    SyncHandler = require('./SyncHandler');
-
-var API_URL = config.public.apiUrl,
-    MEDIA_URL = config.public.mediaUrl;
-
-var projectExtent = helpers.projectExtent,
-    unprojectExtent = helpers.unprojectExtent,
-    transformExtent = helpers.transformExtent,
-    vecDist = helpers.vecDist,
-    isKeyCode = helpers.isKeyCode,
-    setAttributes = helpers.setAttributes,
-    addClass = helpers.addClass,
-    removeClass = helpers.removeClass,
-    toggleClass = helpers.toggleClass,
-    makeButton = helpers.makeButton,
-    layerExtent = helpers.layerExtent,
-    getModelName = helpers.getModelName;
+const API_URL = config.public.apiUrl;
+const MEDIA_URL = config.public.mediaUrl;
 
 
 function getStep (extent) {
-    var width = extent.getWidth(),
-        height = extent.getHeight(),
-        diag = Math.sqrt((width*width) + (height*height));
+    const width = extent.getWidth();
+    const height = extent.getHeight();
+    const diag = Math.sqrt((width*width) + (height*height));
 
     return (diag / 6);
-
 }
 
 function transformRegion (T, opt_extent) {
-    var extent = opt_extent.extent;
-    var NE = T.mapVec2([extent[2], extent[3]]);
-    var SW = T.mapVec2([extent[0], extent[1]]);
-    var newExtent = [SW[0], SW[1], NE[0], NE[1]];
+    const extent = opt_extent.extent;
+    const NE = T.mapVec2([extent[2], extent[3]]);
+    const SW = T.mapVec2([extent[0], extent[1]]);
+    const newExtent = [SW[0], SW[1], NE[0], NE[1]];
     region.push(newExtent);
 }
 
 function sampleData (data, rate) {
-    var step = Math.floor(data.length * rate),
-        sample = new Array(Math.ceil(data.length / step));
+    const step = Math.floor(data.length * rate);
+    const sample = new Array(Math.ceil(data.length / step));
 
-    for (var i = 0; i < data.length; i += step) {
+    for (let i = 0; i < data.length; i += step) {
         sample.push(data[i]);
     }
     return sample;
@@ -72,7 +48,7 @@ function compareSample (a, b) {
     if (a.length !== b.length) {
         return false;
     }
-    for (var i = 0; i < a.length; i++) {
+    for (let i = 0; i < a.length; i++) {
         if (a[i] !== b[i]) {
             return false;
         }
@@ -80,359 +56,351 @@ function compareSample (a, b) {
     return true;
 }
 
-function NavigatorMode (nav) {
-    this.navigator = nav;
-}
-
-NavigatorMode.prototype.getName = function () {
-    return this.modeName;
-};
-
-
-NavigatorMode.prototype.keypress = function (event) {
-    if (isKeyCode(event, 105)) { // i
-        this.navigator.zoomIn();
+class NavigatorMode {
+    constructor(nav) {
+        this.navigator = nav;
     }
-    else if (isKeyCode(event, 111)) { // o
-        this.navigator.zoomOut();
-    }
-};
 
+    getName() {
+        return this.modeName;
+    }
 
-NavigatorMode.prototype.keyup = function (event) {
-    if (isKeyCode(event, 27)) { // escape
-        this.navigator.end();
+    keypress(event) {
+        if (isKeyCode(event, 105)) { // i
+            this.navigator.zoomIn();
+        }
+        else if (isKeyCode(event, 111)) { // o
+            this.navigator.zoomOut();
+        }
     }
-    else if (isKeyCode(event, 38)) {
-        this.navigator.south();
-    }
-    else if (isKeyCode(event, 40)) {
-        this.navigator.north();
-    }
-    else if (isKeyCode(event, 37)) {
-        this.navigator.east();
-    }
-    else if (isKeyCode(event, 39)) {
-        this.navigator.west();
-    }
-};
 
+    keyup(event) {
+        if (isKeyCode(event, 27)) { // escape
+            this.navigator.end();
+        }
+        else if (isKeyCode(event, 38)) {
+            this.navigator.south();
+        }
+        else if (isKeyCode(event, 40)) {
+            this.navigator.north();
+        }
+        else if (isKeyCode(event, 37)) {
+            this.navigator.east();
+        }
+        else if (isKeyCode(event, 39)) {
+            this.navigator.west();
+        }
+    }
 
-NavigatorMode.prototype.getMouseEventPos = function (ev) {
-    if (ev instanceof MouseEvent) {
-        var target = ev.target,
-            trect = target.getBoundingClientRect();
+    getMouseEventPos(ev) {
+        if (ev instanceof MouseEvent) {
+            const target = ev.target;
+            const trect = target.getBoundingClientRect();
             return [
                 ev.clientX - trect.left,
                 ev.clientY - trect.top
             ];
-    }
-    return [0, 0];
-}
-
-
-NavigatorMode.prototype.getTouchEventPos = function (ev, id) {
-    if (ev instanceof TouchEvent) {
-        var touch = _.find(ev.changedTouches, function(t){
-            return t.identifier === id;
-        });
-        if (touch) {
-            var target = ev.target,
-                trect = target.getBoundingClientRect();
-            return [
-                touch.clientX - trect.left,
-                touch.clientY - trect.top
-            ];
         }
+        return [0, 0];
     }
-    return [0, 0];
-}
 
-
-function NavigatorModeBase () {
-    NavigatorMode.apply(this, arguments);
-    this.modeName = 'ModeBase';
-
-    semaphore.on('region:change', function () {
-        if (this.isActive) {
-            this.navigator.draw();
-        }
-    }, this);
-}
-util.inherits(NavigatorModeBase, NavigatorMode);
-
-NavigatorModeBase.prototype.enter = function () {
-    this.navigator.draw();
-    this.isActive = true;
-    this.previewImageData = null;
-    var prepare = _.bind(this.preparePreview, this);
-    this.prepPreviewId = setInterval(prepare, 100);
-};
-
-NavigatorModeBase.prototype.exit = function () {
-    this.navigator.clear();
-    this.isActive = false;
-    clearInterval(this.prepPreviewId);
-    this.prepPreviewId = null;
-};
-
-NavigatorModeBase.prototype.preparePreview = function () {
-    if (this.isMoving || this.isWheeling || this.isPreparingPreview) {
-        return;
-    }
-    var now = _.now(),
-        firstRun = !this.previewImageData,
-        lastRunAt,
-        nextRunIn,
-        next;
-    if (!firstRun) {
-        lastRunAt = this.previewImageData.lastRunAt;
-        nextRunIn = this.previewImageData.nextRunIn;
-        next = lastRunAt + nextRunIn;
-
-        if ((next - now) > 0) {
-            return;
-        }
-    }
-    this.isPreparingPreview = true;
-    var ts = _.now();
-    var view = this.navigator.view,
-        rect = view.getRect(),
-        canvas = document.createElement('canvas'),
-        images = [],
-        ctx, data, alpha, idata;
-
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-    ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, rect.width, rect.height);
-    this.previewImageData = ctx.getImageData(0, 0, rect.width, rect.height);
-    data = this.previewImageData.data;
-
-    this.navigator.map.getView()
-        .forEachImage(function(imageData){
-            images.push(imageData);
-        });
-
-    for (var i = 0; i < data.length; i += 4) {
-        for (var j = 0; j < images.length; j++) {
-            idata = images[j].data;
-            alpha = idata[i + 3] / 255;
-            var r = i,
-                g = i + 1,
-                b = i + 2;
-            if (alpha > 0) {
-                data[r] = (data[r] * (1 - alpha)) + (idata[r] * alpha);
-                data[g] = (data[g] * (1 - alpha)) + (idata[g] * alpha);
-                data[b] = (data[b] * (1 - alpha)) + (idata[b] * alpha);
+    getTouchEventPos(ev, id) {
+        if (ev instanceof TouchEvent) {
+            const touch = _.find(ev.changedTouches, t => t.identifier === id);
+            if (touch) {
+                const target = ev.target;
+                const trect = target.getBoundingClientRect();
+                return [
+                    touch.clientX - trect.left,
+                    touch.clientY - trect.top
+                ];
             }
         }
+        return [0, 0];
     }
-    var sample = sampleData(data, 0.1);
-    this.previewImageData.nextRunIn = 200;
-    if (firstRun) {
-        this.previewSample = sample;
+}
+
+class NavigatorModeBase {
+    constructor() {
+        NavigatorMode.apply(this, arguments);
+        this.modeName = 'ModeBase';
+
+        semaphore.on('region:change', function () {
+            if (this.isActive) {
+                this.navigator.draw();
+            }
+        }, this);
     }
-    else {
-        if(compareSample(this.previewSample, sample)) {
-            this.previewImageData.nextRunIn = nextRunIn * 2;
+
+    enter() {
+        this.navigator.draw();
+        this.isActive = true;
+        this.previewImageData = null;
+        const prepare = _.bind(this.preparePreview, this);
+        this.prepPreviewId = setInterval(prepare, 100);
+    }
+
+    exit() {
+        this.navigator.clear();
+        this.isActive = false;
+        clearInterval(this.prepPreviewId);
+        this.prepPreviewId = null;
+    }
+
+    preparePreview() {
+        if (this.isMoving || this.isWheeling || this.isPreparingPreview) {
+            return;
         }
-    }
-    ctx.putImageData(this.previewImageData, 0, 0);
-    this.previewCanvas = canvas;
-    this.previewImageData.lastRunAt = _.now();
-    this.previewSample = sample;
-    this.isPreparingPreview = false;
-    console.log('NavigatorModeBase.preparePreview END', _.now() - ts);
-};
+        const now = _.now();
+        const firstRun = !this.previewImageData;
+        let lastRunAt;
+        let nextRunIn;
+        let next;
+        if (!firstRun) {
+            lastRunAt = this.previewImageData.lastRunAt;
+            nextRunIn = this.previewImageData.nextRunIn;
+            next = lastRunAt + nextRunIn;
 
-NavigatorModeBase.prototype.wheel = function (event) {
-    var toId = this.wheelToId;
-    this.wheelDeltas = this.wheelDeltas || [];
-    var extent = region.get(),
-        newExtent = new Geometry.Extent(extent);
+            if ((next - now) > 0) {
+                return;
+            }
+        }
+        this.isPreparingPreview = true;
+        const ts = _.now();
+        const view = this.navigator.view;
+        const rect = view.getRect();
+        const canvas = document.createElement('canvas');
+        const images = [];
+        let ctx;
+        let data;
+        let alpha;
+        let idata;
 
-    this.wheelDeltas.push(event.deltaY);
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, rect.width, rect.height);
+        this.previewImageData = ctx.getImageData(0, 0, rect.width, rect.height);
+        data = this.previewImageData.data;
 
-    // replays deltas
-    for (var i = 0; i < this.wheelDeltas.length; i++) {
-        var delta = this.wheelDeltas[i],
-            val = getStep(newExtent);
-        if (delta < 0) {
-            newExtent.buffer(-val);
+        this.navigator.map.getView()
+            .forEachImage(imageData => {
+                images.push(imageData);
+            });
+
+        for (let i = 0; i < data.length; i += 4) {
+            for (let j = 0; j < images.length; j++) {
+                idata = images[j].data;
+                alpha = idata[i + 3] / 255;
+                const r = i;
+                const g = i + 1;
+                const b = i + 2;
+                if (alpha > 0) {
+                    data[r] = (data[r] * (1 - alpha)) + (idata[r] * alpha);
+                    data[g] = (data[g] * (1 - alpha)) + (idata[g] * alpha);
+                    data[b] = (data[b] * (1 - alpha)) + (idata[b] * alpha);
+                }
+            }
+        }
+        const sample = sampleData(data, 0.1);
+        this.previewImageData.nextRunIn = 200;
+        if (firstRun) {
+            this.previewSample = sample;
         }
         else {
-            newExtent.buffer(val);
+            if(compareSample(this.previewSample, sample)) {
+                this.previewImageData.nextRunIn = nextRunIn * 2;
+            }
         }
+        ctx.putImageData(this.previewImageData, 0, 0);
+        this.previewCanvas = canvas;
+        this.previewImageData.lastRunAt = _.now();
+        this.previewSample = sample;
+        this.isPreparingPreview = false;
+        logger('NavigatorModeBase.preparePreview END', _.now() - ts);
     }
 
-    if (this.isWheeling && this.previewImageData) {
-        var ts = _.now();
-        console.log('wheel draw');
-        var ctx = this.navigator.context,
-            rect = this.navigator.view.getRect(),
-            geoCenter = newExtent.getCenter().getCoordinates(),
-            center = this.navigator.map.getPixelFromCoordinate(geoCenter),
-            canvasCenter = [rect.width / 2, rect.height /2],
-            t1a = extent.getTopLeft().getCoordinates(),
-            t1b = newExtent.getTopLeft().getCoordinates(),
-            t2a = extent.getBottomRight().getCoordinates(),
-            t2b = newExtent.getBottomRight().getCoordinates(),
-            d0 = vecDist(t1a, t2a),
-            d1 = vecDist(t1b, t2b),
-            scale = d0 / d1,
-            tr = new Transform();
+    wheel(event) {
+        const toId = this.wheelToId;
+        this.wheelDeltas = this.wheelDeltas || [];
+        const extent = region.get();
+        const newExtent = new Geometry.Extent(extent);
 
-        tr.scale(scale, scale, canvasCenter);
-        console.log('wheel.draw init took', _.now() - ts);
-        // var tl = tr.mapVec2([0,0]);
-        ts = _.now();
-        ctx.save();
-        ctx.fillStyle = 'white';
-        ctx.strokeStyle = 'blue';
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.setTransform.apply(ctx, tr.flatMatrix());
-        // ctx.strokeRect(tl[0], tl[1],
-        //                 rect.width * scale, rect.height * scale);
-        ctx.drawImage(this.previewCanvas,
-                        0, 0,
-                        rect.width, rect.height);
-        ctx.restore();
-        console.log('wheel.draw drawImage took', _.now() - ts);
-    }
+        this.wheelDeltas.push(event.deltaY);
 
-    this.isWheeling  = true;
-    var that = this;
+        // replays deltas
+        for (const delta of this.wheelDeltas) {
+            if (delta < 0) {
+                newExtent.buffer(-val);
+            }
+            else {
+                newExtent.buffer(val);
+            }
+        }
 
-    if (toId) {
-        clearTimeout(toId);
-    }
+        if (this.isWheeling && this.previewImageData) {
+            let ts = _.now();
+            logger('wheel draw');
+            const ctx = this.navigator.context;
+            const rect = this.navigator.view.getRect();
+            const geoCenter = newExtent.getCenter().getCoordinates();
+            const center = this.navigator.map.getPixelFromCoordinate(geoCenter);
+            const canvasCenter = [rect.width / 2, rect.height /2];
+            const t1a = extent.getTopLeft().getCoordinates();
+            const t1b = newExtent.getTopLeft().getCoordinates();
+            const t2a = extent.getBottomRight().getCoordinates();
+            const t2b = newExtent.getBottomRight().getCoordinates();
+            const d0 = vecDist(t1a, t2a);
+            const d1 = vecDist(t1b, t2b);
+            const scale = d0 / d1;
+            const tr = new Transform();
 
-    this.wheelToId = setTimeout(function () {
-        console.log('wheel completed');
-        region.push(newExtent);
-        that.isWheeling= false;
-        that.wheelDeltas = [];
-        that.previewImageData = null;
-    }, 300);
-};
-
-
-NavigatorModeBase.prototype.mousedown = function (event) {
-    this.startPoint = this.getMouseEventPos(event);
-    this.isStarted = true;
-};
-
-
-NavigatorModeBase.prototype.mousemove = function (event) {
-    if (this.isStarted) {
-        var sp = this.startPoint,
-            hp = this.getMouseEventPos(event),
-            extent = new Geometry.Extent(sp.concat(hp)),
-            ctx = this.navigator.context,
-            view = this.navigator.view,
-            rect = view.getRect();
-        extent.normalize();
-        var tl = extent.getBottomLeft().getCoordinates();
-        if (this.isMoving && this.previewImageData) {
+            tr.scale(scale, scale, canvasCenter);
+            logger('wheel.draw init took', _.now() - ts);
+            // var tl = tr.mapVec2([0,0]);
+            ts = _.now();
             ctx.save();
             ctx.fillStyle = 'white';
             ctx.strokeStyle = 'blue';
             ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-            ctx.putImageData(this.previewImageData,
-                                hp[0] - sp[0],
-                                hp[1] - sp[1]);
+            ctx.setTransform(...tr.flatMatrix());
+            // ctx.strokeRect(tl[0], tl[1],
+            //                 rect.width * scale, rect.height * scale);
+            ctx.drawImage(this.previewCanvas,
+                            0, 0,
+                            rect.width, rect.height);
             ctx.restore();
-        }
-        if (!this.isMoving) {
-            this.isMoving = true;
-
+            logger('wheel.draw drawImage took', _.now() - ts);
         }
 
+        this.isWheeling  = true;
+        const that = this;
+
+        if (toId) {
+            clearTimeout(toId);
+        }
+
+        this.wheelToId = setTimeout(() => {
+            logger('wheel completed');
+            region.push(newExtent);
+            that.isWheeling= false;
+            that.wheelDeltas = [];
+            that.previewImageData = null;
+        }, 300);
     }
-};
 
-NavigatorModeBase.prototype.mouseup = function (event) {
-    if (this.isStarted) {
-        var endPoint = this.getMouseEventPos(event),
-            startPoint = this.startPoint,
-            dist = vecDist(startPoint, endPoint),
-            map = this.navigator.map,
-            extent = new Geometry.Extent(startPoint.concat(endPoint)),
-            ctx = this.navigator.context;
-        extent.normalize();
-        var tl = extent.getBottomLeft().getCoordinates();
-
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-        if (dist > 4) {
-            var startCoordinates = map.getCoordinateFromPixel(startPoint),
-                endCoordinates = map.getCoordinateFromPixel(endPoint);
-            var T = new Transform(),
-                extent = region.get();
-
-            T.translate(startCoordinates[0] - endCoordinates[0],
-                        startCoordinates[1] - endCoordinates[1]);
-            transformRegion(T, extent);
-        }
-        else {
-            this.navigator.centerOn(startPoint);
-        }
-        this.isStarted = false;
-        this.isMoving = false;
-        this.previewImageData = null;
+    mousedown(event) {
+        this.startPoint = this.getMouseEventPos(event);
+        this.isStarted = true;
     }
-};
 
+    mousemove(event) {
+        if (this.isStarted) {
+            const sp = this.startPoint;
+            const hp = this.getMouseEventPos(event);
+            const extent = new Geometry.Extent(sp.concat(hp));
+            const ctx = this.navigator.context;
+            const view = this.navigator.view;
+            const rect = view.getRect();
+            extent.normalize();
+            const tl = extent.getBottomLeft().getCoordinates();
+            if (this.isMoving && this.previewImageData) {
+                ctx.save();
+                ctx.fillStyle = 'white';
+                ctx.strokeStyle = 'blue';
+                ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                ctx.putImageData(this.previewImageData,
+                                    hp[0] - sp[0],
+                                    hp[1] - sp[1]);
+                ctx.restore();
+            }
+            if (!this.isMoving) {
+                this.isMoving = true;
 
-NavigatorModeBase.prototype.touchstart = function (event) {
-    this.touches = _.reduce(event.changedTouches, function(memo, touch){
-        memo[touch.identifier] = this.getTouchEventPos(event, touch.identifier);
-        return memo;
-    }, {}, this);
-
-    var tKeys = _.keys(this.touches),
-        isZooming = 2 === tKeys.length,
-        isPanning = 1 === tKeys.length;
-
-    this.touchZooming = isZooming;
-    this.touchPanning = isPanning;
-    this.touchStartTS = _.now();
-};
-
-NavigatorModeBase.prototype.touchmove = function (event) {
-    var touches = _.reduce(event.changedTouches,
-    function(memo, touch){
-        memo[touch.identifier] = this.getTouchEventPos(event, touch.identifier);
-        return memo;
-    }, {}, this);
-    var keys = _.keys(touches);
-    if (this.touchPanning && (2 === keys.length)) {
-        var ts = _.now();
-        if ((ts - this.touchStartTS) < 1000) {
-            this.touchPanning = false;
-            this.touchZooming = true;
-            _.defaults(this.touches, touches);
-
-        }
-        else {
-            this.touchend(event);
-            this.touchstart(event);
-            return;
+            }
         }
     }
-    if (this.isMoving && this.previewImageData) {
-        if (this.touchPanning) {
-                var touch = event.changedTouches[0],
-                    sp = this.touches[touch.identifier],
-                    hp = this.getTouchEventPos(event, touch.identifier),
-                    extent = new Geometry.Extent(sp.concat(hp)),
-                    ctx = this.navigator.context,
-                    view = this.navigator.view,
-                    rect = view.getRect();
+
+    mouseup(event) {
+        if (this.isStarted) {
+            const endPoint = this.getMouseEventPos(event);
+            const startPoint = this.startPoint;
+            const dist = vecDist(startPoint, endPoint);
+            const map = this.navigator.map;
+            var extent = new Geometry.Extent(startPoint.concat(endPoint));
+            const ctx = this.navigator.context;
+            extent.normalize();
+            const tl = extent.getBottomLeft().getCoordinates();
+
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+            if (dist > 4) {
+                const startCoordinates = map.getCoordinateFromPixel(startPoint);
+                const endCoordinates = map.getCoordinateFromPixel(endPoint);
+                const T = new Transform();
+                const extent = region.get();
+
+                T.translate(startCoordinates[0] - endCoordinates[0],
+                            startCoordinates[1] - endCoordinates[1]);
+                transformRegion(T, extent);
+            }
+            else {
+                this.navigator.centerOn(startPoint);
+            }
+            this.isStarted = false;
+            this.isMoving = false;
+            this.previewImageData = null;
+        }
+    }
+
+    touchstart(event) {
+        this.touches = _.reduce(event.changedTouches, function(memo, touch){
+            memo[touch.identifier] = this.getTouchEventPos(event, touch.identifier);
+            return memo;
+        }, {}, this);
+
+        const tKeys = _.keys(this.touches);
+        const isZooming = 2 === tKeys.length;
+        const isPanning = 1 === tKeys.length;
+
+        this.touchZooming = isZooming;
+        this.touchPanning = isPanning;
+        this.touchStartTS = _.now();
+    }
+
+    touchmove(event) {
+        const touches = _.reduce(event.changedTouches,
+        function(memo, touch){
+            memo[touch.identifier] = this.getTouchEventPos(event, touch.identifier);
+            return memo;
+        }, {}, this);
+        const keys = _.keys(touches);
+        if (this.touchPanning && (2 === keys.length)) {
+            const ts = _.now();
+            if ((ts - this.touchStartTS) < 1000) {
+                this.touchPanning = false;
+                this.touchZooming = true;
+                _.defaults(this.touches, touches);
+
+            }
+            else {
+                this.touchend(event);
+                this.touchstart(event);
+                return;
+            }
+        }
+        if (this.isMoving && this.previewImageData) {
+            if (this.touchPanning) {
+                const touch = event.changedTouches[0];
+                const sp = this.touches[touch.identifier];
+                const hp = this.getTouchEventPos(event, touch.identifier);
+                const extent = new Geometry.Extent(sp.concat(hp));
+                var ctx = this.navigator.context;
+                const view = this.navigator.view;
+                var rect = view.getRect();
                 extent.normalize();
-                var tl = extent.getBottomLeft().getCoordinates();
+                const tl = extent.getBottomLeft().getCoordinates();
 
                 ctx.save();
                 ctx.fillStyle = 'white';
@@ -441,25 +409,23 @@ NavigatorModeBase.prototype.touchmove = function (event) {
                                     hp[0] - sp[0],
                                     hp[1] - sp[1]);
                 ctx.restore();
-
-        }
-        else if (this.touchZooming) {
-
+            }
+            else if (this.touchZooming) {
                 if (2 !== keys.length) {
                     return;
                 }
 
-                var ctx = this.navigator.context,
-                    rect = this.navigator.view.getRect(),
-                    center = [rect.width / 2, rect.height /2],
-                    t1a = this.touches[keys[0]],
-                    t1b = touches[keys[0]],
-                    t2a = this.touches[keys[1]],
-                    t2b = touches[keys[1]],
-                    d0 = vecDist(t1a, t2a),
-                    d1 = vecDist(t1b, t2b),
-                    scale = d1 / d0,
-                    tr = new Transform();
+                const ctx = this.navigator.context;
+                const rect = this.navigator.view.getRect();
+                const center = [rect.width / 2, rect.height /2];
+                const t1a = this.touches[keys[0]];
+                const t1b = touches[keys[0]];
+                const t2a = this.touches[keys[1]];
+                const t2b = touches[keys[1]];
+                const d0 = vecDist(t1a, t2a);
+                const d1 = vecDist(t1b, t2b);
+                const scale = d1 / d0;
+                const tr = new Transform();
 
                 tr.scale(scale, scale, center);
 
@@ -467,326 +433,326 @@ NavigatorModeBase.prototype.touchmove = function (event) {
                 ctx.fillStyle = 'white';
                 ctx.strokeStyle = 'blue';
                 ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                ctx.setTransform.apply(ctx, tr.flatMatrix());
+                ctx.setTransform(...tr.flatMatrix());
                 ctx.strokeRect(0, 0, rect.width, rect.height);
                 ctx.drawImage(this.previewCanvas, 0, 0, rect.width, rect.height);
                 ctx.restore();
                 this.zoomTouches = touches;
+            }
+        }
+
+        if (!this.isMoving) {
+            this.isMoving = true;
         }
     }
 
-    if (!this.isMoving) {
-        this.isMoving = true;
-    }
-};
-
-NavigatorModeBase.prototype.touchend = function (event) {
-    if (this.touchPanning) {
-        var touches = event.changedTouches,
-            touch = touches[0],
-            endPoint = this.getTouchEventPos(event, touch.identifier),
-            startPoint = this.touches[touch.identifier],
-            dist = vecDist(startPoint, endPoint),
-            map = this.navigator.map,
-            extent = new Geometry.Extent(startPoint.concat(endPoint));
-        extent.normalize();
-        var tl = extent.getBottomLeft().getCoordinates();
+    touchend(event) {
+        if (this.touchPanning) {
+            var touches = event.changedTouches;
+            const touch = touches[0];
+            const endPoint = this.getTouchEventPos(event, touch.identifier);
+            const startPoint = this.touches[touch.identifier];
+            const dist = vecDist(startPoint, endPoint);
+            const map = this.navigator.map;
+            var extent = new Geometry.Extent(startPoint.concat(endPoint));
+            extent.normalize();
+            const tl = extent.getBottomLeft().getCoordinates();
 
 
-        if (dist > 4) {
-            var startCoordinates = map.getCoordinateFromPixel(startPoint),
-                endCoordinates = map.getCoordinateFromPixel(endPoint);
+            if (dist > 4) {
+                const startCoordinates = map.getCoordinateFromPixel(startPoint);
+                const endCoordinates = map.getCoordinateFromPixel(endPoint);
+                const T = new Transform();
+                const extent = region.get();
 
-            var T = new Transform(),
-                extent = region.get();
-
-            T.translate(startCoordinates[0] - endCoordinates[0],
-                        startCoordinates[1] - endCoordinates[1]);
-            transformRegion(T, extent);
+                T.translate(startCoordinates[0] - endCoordinates[0],
+                            startCoordinates[1] - endCoordinates[1]);
+                transformRegion(T, extent);
+            }
+            else {
+                this.navigator.centerOn(startPoint);
+            }
         }
-        else {
-            this.navigator.centerOn(startPoint);
+        else if (this.touchZooming) {
+            const touches = this.zoomTouches;
+            const keys = _.keys(touches);
+            const extent = region.get();
+            const center = extent.getCenter().getCoordinates();
+            const t1a = this.touches[keys[0]];
+            const t1b = touches[keys[0]];
+            const t2a = this.touches[keys[1]];
+            const t2b = touches[keys[1]];
+            const d0 = vecDist(t1a, t1b);
+            const d1 = vecDist(t2a, t2b);
+            const scale = d1 / d0;
+            const tr = new Transform();
+
+            tr.scale(scale, scale, center);
+            transformRegion(tr, extent);
         }
+        const ctx = this.navigator.context;
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        this.touchPanning = false;
+        this.touchZooming = false;
+        this.isMoving = false;
+        this.previewImageData = null;
     }
-    else if (this.touchZooming) {
-        var touches = this.zoomTouches,
-            keys = _.keys(touches);
+}
 
-        var extent = region.get(),
-            center = extent.getCenter().getCoordinates(),
-            t1a = this.touches[keys[0]],
-            t1b = touches[keys[0]],
-            t2a = this.touches[keys[1]],
-            t2b = touches[keys[1]],
-            d0 = vecDist(t1a, t1b),
-            d1 = vecDist(t2a, t2b),
-            scale = d1 / d0,
-            tr = new Transform();
+util.inherits(NavigatorModeBase, NavigatorMode);
 
-        tr.scale(scale, scale, center);
-        transformRegion(tr, extent);
-
-    }
-    var ctx = this.navigator.context;
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    this.touchPanning = false;
-    this.touchZooming = false;
-    this.isMoving = false;
-    this.previewImageData = null;
-};
-
-var NAVIGATOR_MODES = [
+const NAVIGATOR_MODES = [
     NavigatorModeBase,
 ];
 
 
-function Navigator (options) {
-    this.options = options;
-    this.map = options.map;
-    this.view = options.map.getView();
-    this.setupModes();
-    this.setupCanvas();
-    // this.setupButtons();
+class Navigator {
+    constructor(options) {
+        this.options = options;
+        this.map = options.map;
+        this.view = options.map.getView();
+        this.setupModes();
+        this.setupCanvas();
+        // this.setupButtons();
 
-    var view = options.map.getView();
+        const view = options.map.getView();
 
-    Object.defineProperty(this, 'transform', {
-        get: function () {
-            return view.transform.clone();
-        }
-    });
+        Object.defineProperty(this, 'transform', {
+            get() {
+                return view.transform.clone();
+            }
+        });
 
-    semaphore.on('view:resize', function (view) {
-        if (this.canvas) {
-            var rect = view.getRect();
-            this.canvas.width = rect.width;
-            this.canvas.height = rect.height;
-            this.canvas.style.top = rect.top + 'px';
-            this.canvas.style.left = rect.left + 'px';
-            this.draw();
-        }
-    }, this);
-}
+        semaphore.on('view:resize', function (view) {
+            if (this.canvas) {
+                const rect = view.getRect();
+                this.canvas.width = rect.width;
+                this.canvas.height = rect.height;
+                this.canvas.style.top = `${rect.top}px`;
+                this.canvas.style.left = `${rect.left}px`;
+                this.draw();
+            }
+        }, this);
+    }
+
+    setupButtons() {
+        const container = this.options.container;
+        const buttonBlock = document.createElement('div');
+
+        buttonBlock.setAttribute('class', 'navigate-buttons');
+
+        const zoomIn = makeButton('', {
+            'class': 'navigate-button navigate-zoom-in',
+            'title': '[i]'
+            }, this.zoomIn, this);
+
+        const zoomOut = makeButton('', {
+            'class': 'navigate-button navigate-zoom-out',
+            'title': '[o]'
+        }, this.zoomOut, this);
+
+        const west = makeButton('', {
+            'class': 'navigate-button navigate-west'
+        }, this.west, this);
+
+        const east = makeButton('', {
+            'class': 'navigate-button navigate-east'
+        }, this.east, this);
+
+        const north = makeButton('', {
+            'class': 'navigate-button navigate-north'
+        }, this.north, this);
+
+        const south = makeButton('', {
+            'class': 'navigate-button navigate-south'
+        }, this.south, this);
 
 
-Navigator.prototype.setupButtons = function () {
-    var container = this.options.container,
-        buttonBlock = document.createElement('div');
+        buttonBlock.appendChild(zoomIn);
+        buttonBlock.appendChild(zoomOut);
+        buttonBlock.appendChild(north);
+        buttonBlock.appendChild(east);
+        buttonBlock.appendChild(south);
+        buttonBlock.appendChild(west);
 
-    buttonBlock.setAttribute('class', 'navigate-buttons');
+        container.appendChild(buttonBlock);
+    }
 
-    var zoomIn = makeButton('', {
-        'class': 'navigate-button navigate-zoom-in',
-        'title': '[i]'
-        }, this.zoomIn, this);
+    setupCanvas() {
+        const container = this.options.container;
+        const rect = this.view.getRect();
 
-    var zoomOut = makeButton('', {
-        'class': 'navigate-button navigate-zoom-out',
-        'title': '[o]'
-    }, this.zoomOut, this);
+        this.canvas = document.createElement('canvas');
+        this.canvas.width = rect.width;
+        this.canvas.height = rect.height;
+        this.canvas.backgroundColor = 'transparent';
+        this.canvas.style.position = 'absolute';
+        this.canvas.style.willChange = 'transform';
+        this.canvas.style.transform = 'translateZ(0)';
+        this.canvas.style.top = '0';
+        this.canvas.style.left = '0';
 
-    var west = makeButton('', {
-        'class': 'navigate-button navigate-west'
-    }, this.west, this);
+        container.appendChild(this.canvas);
+        this.canvas.setAttribute('tabindex', -1);
+        // this.canvas.focus();
+        this.context = this.canvas.getContext('2d');
 
-    var east = makeButton('', {
-        'class': 'navigate-button navigate-east'
-    }, this.east, this);
+        const dispatcher = _.bind(this.dispatcher, this);
 
-    var north = makeButton('', {
-        'class': 'navigate-button navigate-north'
-    }, this.north, this);
-
-    var south = makeButton('', {
-        'class': 'navigate-button navigate-south'
-    }, this.south, this);
-
-
-    buttonBlock.appendChild(zoomIn);
-    buttonBlock.appendChild(zoomOut);
-    buttonBlock.appendChild(north);
-    buttonBlock.appendChild(east);
-    buttonBlock.appendChild(south);
-    buttonBlock.appendChild(west);
-
-    container.appendChild(buttonBlock);
-};
-
-Navigator.prototype.setupCanvas = function () {
-    var container = this.options.container,
-        rect = this.view.getRect();
-
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = rect.width;
-    this.canvas.height = rect.height;
-    this.canvas.backgroundColor = 'transparent';
-    this.canvas.style.position = 'absolute';
-    this.canvas.style.willChange = 'transform';
-    this.canvas.style.transform = 'translateZ(0)';
-    this.canvas.style.top = '0';
-    this.canvas.style.left = '0';
-
-    container.appendChild(this.canvas);
-    this.canvas.setAttribute('tabindex', -1);
-    // this.canvas.focus();
-    this.context = this.canvas.getContext('2d');
-
-    var dispatcher = _.bind(this.dispatcher, this),
-        events = [
+        const events = [
             'click', 'dblclick',
             'mousedown', 'mousemove', 'mouseup',
             'keypress', 'keydown', 'keyup',
             'wheel',
             'touchstart', 'touchend', 'touchcancel', 'touchmove'
             ];
-    for (var i = 0; i < events.length; i++) {
-        this.canvas.addEventListener(events[i], dispatcher, false);
-    }
-};
 
-Navigator.prototype.setupModes = function () {
-    for (var i = 0; i < NAVIGATOR_MODES.length; i++) {
-        this.createMode(NAVIGATOR_MODES[i]);
-    }
-};
-
-Navigator.prototype.clear = function () {
-    var rect = this.canvas.getBoundingClientRect();
-    this.context.clearRect(0, 0, rect.width, rect.height);
-};
-
-Navigator.prototype.start = function (ender) {
-    this.ender = ender;
-    this.setMode('ModeBase');
-};
-
-Navigator.prototype.end = function () {
-    this.ender();
-};
-
-
-Navigator.prototype.draw = function (selected) {
-    this.clear();
-    return this;
-};
-
-Navigator.prototype.createMode = function (proto) {
-    if (!this.modes) {
-        this.modes = {};
-    }
-
-    var mode = new proto(this),
-        modeName = mode.getName();
-
-    this.modes[modeName] = mode;
-    return this;
-};
-
-Navigator.prototype.setMode = function (modeName) {
-    if (this.currentMode) {
-        var oldMode = this.getMode();
-        if (oldMode.exit) {
-            oldMode.exit();
+        for (let i = 0; i < events.length; i++) {
+            this.canvas.addEventListener(events[i], dispatcher, false);
         }
     }
-    this.currentMode = modeName;
-    if (this.modeButtons) {
-        for (var mb in this.modeButtons) {
-            this.modeButtons[mb].setAttribute('class', 'trace-button');
+
+    setupModes() {
+        for (let i = 0; i < NAVIGATOR_MODES.length; i++) {
+            this.createMode(NAVIGATOR_MODES[i]);
         }
-        this.modeButtons[modeName].setAttribute('class', 'trace-button active');
     }
-    var mode = this.getMode();
-    if (mode.enter) {
-        mode.enter();
+
+    clear() {
+        const rect = this.canvas.getBoundingClientRect();
+        this.context.clearRect(0, 0, rect.width, rect.height);
     }
-    return this;
-};
 
-
-Navigator.prototype.getMode = function () {
-    return this.modes[this.currentMode];
-};
-
-Navigator.prototype.dispatcher = function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-    var type = event.type,
-        mode = this.getMode();
-    console.log(type);
-    if (type in mode) {
-        mode[type](event);
+    start(ender) {
+        this.ender = ender;
+        this.setMode('ModeBase');
     }
-};
 
-Navigator.prototype.zoomIn = function () {
-    var extent = region.get(),
-        val = getStep(extent);
-    region.push(extent.buffer(-val));
-};
+    end() {
+        this.ender();
+    }
 
-Navigator.prototype.zoomOut = function () {
-    var extent = region.get(),
-        val = getStep(extent);
-    region.push(extent.buffer(val));
-};
+    draw(selected) {
+        this.clear();
+        return this;
+    }
 
+    createMode(proto) {
+        if (!this.modes) {
+            this.modes = {};
+        }
 
-Navigator.prototype.north = function () {
-    var T = new Transform(),
-        extent = region.get(),
-        val = getStep(extent);
+        const mode = new proto(this);
+        const modeName = mode.getName();
 
-    T.translate(0, -val);
-    transformRegion(T, extent);
-};
+        this.modes[modeName] = mode;
+        return this;
+    }
 
-Navigator.prototype.south = function () {
-    var T = new Transform(),
-        extent = region.get(),
-        val = getStep(extent);
+    setMode(modeName) {
+        if (this.currentMode) {
+            const oldMode = this.getMode();
+            if (oldMode.exit) {
+                oldMode.exit();
+            }
+        }
+        this.currentMode = modeName;
+        if (this.modeButtons) {
+            for (const mb in this.modeButtons) {
+                this.modeButtons[mb].setAttribute('class', 'trace-button');
+            }
+            this.modeButtons[modeName].setAttribute('class', 'trace-button active');
+        }
+        const mode = this.getMode();
+        if (mode.enter) {
+            mode.enter();
+        }
+        return this;
+    }
 
-    T.translate(0, val);
-    transformRegion(T, extent);
-};
+    getMode() {
+        return this.modes[this.currentMode];
+    }
 
-Navigator.prototype.east = function () {
-    var T = new Transform(),
-        extent = region.get(),
-        val = getStep(extent);
+    dispatcher(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const type = event.type;
+        const mode = this.getMode();
+        logger(type);
+        if (type in mode) {
+            mode[type](event);
+        }
+    }
 
-    T.translate(-val, 0);
-    transformRegion(T, extent);
-};
+    zoomIn() {
+        const extent = region.get();
+        const val = getStep(extent);
+        region.push(extent.buffer(-val));
+    }
 
-Navigator.prototype.west = function () {
-    var T = new Transform(),
-        extent = region.get(),
-        val = getStep(extent);
+    zoomOut() {
+        const extent = region.get();
+        const val = getStep(extent);
+        region.push(extent.buffer(val));
+    }
 
-    T.translate(val, 0);
-    transformRegion(T, extent);
-};
+    north() {
+        const T = new Transform();
+        const extent = region.get();
+        const val = getStep(extent);
 
-Navigator.prototype.centerOn = function (pix) {
-    var coords = this.map.getCoordinateFromPixel(pix),
-        T = new Transform(),
-        extent = region.get(),
-        center = extent.getCenter().getCoordinates();
+        T.translate(0, -val);
+        transformRegion(T, extent);
+    }
 
-    T.translate(coords[0] - center[0], coords[1] - center[1]);
-    transformRegion(T, extent);
-};
+    south() {
+        const T = new Transform();
+        const extent = region.get();
+        const val = getStep(extent);
+
+        T.translate(0, val);
+        transformRegion(T, extent);
+    }
+
+    east() {
+        const T = new Transform();
+        const extent = region.get();
+        const val = getStep(extent);
+
+        T.translate(-val, 0);
+        transformRegion(T, extent);
+    }
+
+    west() {
+        const T = new Transform();
+        const extent = region.get();
+        const val = getStep(extent);
+
+        T.translate(val, 0);
+        transformRegion(T, extent);
+    }
+
+    centerOn(pix) {
+        const coords = this.map.getCoordinateFromPixel(pix);
+        const T = new Transform();
+        const extent = region.get();
+        const center = extent.getCenter().getCoordinates();
+
+        T.translate(coords[0] - center[0], coords[1] - center[1]);
+        transformRegion(T, extent);
+    }
+}
 
 
 
 function showGroupLegend(node, group) {
-    var wrapper = document.createElement('div'),
-        titleWrapper = document.createElement('div'),
-        titleLabel = document.createElement('span'),
-        title = document.createElement('span'),
-        descLabel = document.createElement('span'),
-        desc = document.createElement('span');
+    const wrapper = document.createElement('div');
+    const titleWrapper = document.createElement('div');
+    const titleLabel = document.createElement('span');
+    const title = document.createElement('span');
+    const descLabel = document.createElement('span');
+    const desc = document.createElement('span');
 
     wrapper.setAttribute('class', 'embed-group-wrapper');
     titleWrapper.setAttribute('class', 'embed-group-title-wrapper');
@@ -811,11 +777,11 @@ function showGroupLegend(node, group) {
 
 
 function notifier(context, node) {
-    var wrapper = document.createElement('div'),
-        title = document.createElement('div'),
-        container = document.createElement('div'),
-        follow = document.createElement('span'),
-        sync = new SyncHandler(container, context);
+    const wrapper = document.createElement('div');
+    const title = document.createElement('div');
+    const container = document.createElement('div');
+    const follow = document.createElement('span');
+    const sync = new SyncHandler(container, context);
 
     setAttributes(wrapper, {
         'class': 'view-notify'
@@ -831,13 +797,13 @@ function notifier(context, node) {
 
     title.innerHTML = 'notifications ';
     follow.innerHTML = ' follow';
-    var doFollow = false;
+    let doFollow = false;
     function follower (model) {
         if (!doFollow) {
             return;
         }
         if ('feature' === model.type) {
-            var geom = model.getGeometry();
+            const geom = model.getGeometry();
             region.push(geom);
         }
     }
@@ -846,7 +812,7 @@ function notifier(context, node) {
         'class': 'view-notification-follow button button-state'
     });
 
-    follow.addEventListener('click', function(){
+    follow.addEventListener('click', () => {
         toggleClass(follow, 'state-yes');
         doFollow = !doFollow;
     }, false);
@@ -864,8 +830,8 @@ function notifier(context, node) {
 
 
 function waendCredit (node) {
-    var waendCredit = document.createElement('div'),
-        waendCreditLink = document.createElement('a');
+    const waendCredit = document.createElement('div');
+    const waendCreditLink = document.createElement('a');
 
     waendCredit.setAttribute('class', 'credit-waend');
     waendCreditLink.setAttribute('href', 'http://waend.com');
@@ -878,26 +844,26 @@ function waendCredit (node) {
 
 
 function embed () {
-    var self = this,
-        shell = self.shell,
-        stdout = shell.stdout,
-        terminal = shell.terminal,
-        binder = self.binder,
-        map = shell.env.map,
-        display = terminal.display({fullscreen: true}),
-        userId = self.getUser(),
-        groupId = self.getGroup();
+    const self = this;
+    const shell = self.shell;
+    const stdout = shell.stdout;
+    const terminal = shell.terminal;
+    const binder = self.binder;
+    const map = shell.env.map;
+    const display = terminal.display({fullscreen: true});
+    const userId = self.getUser();
+    const groupId = self.getGroup();
 
-    var options = {
+    const options = {
         'container': display.node,
         'map': map
     };
 
-    var nav = new Navigator(options);
+    const nav = new Navigator(options);
 
-    var resolver = function (resolve, reject) {
+    const resolver = (resolve, reject) => {
 
-        var ender = function (extent) {
+        const ender = extent => {
             display.end();
             resolve(extent);
         };
@@ -905,10 +871,10 @@ function embed () {
         nav.start(ender);
 
         binder.getGroup(userId, groupId)
-            .then(function(group){
+            .then(group => {
                 showGroupLegend(display.node, group);
             })
-            .catch(function(err){
+            .catch(err => {
                 console.error('getgroup', err);
             });
 
@@ -921,7 +887,7 @@ function embed () {
 
 
 
-module.exports = exports = {
+export default {
     name: 'embed',
     command: embed
 };

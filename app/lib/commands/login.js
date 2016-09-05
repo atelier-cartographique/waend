@@ -9,50 +9,45 @@
  */
 
 
-var querystring = require('querystring'),
-    Transport = require('../Transport'),
-    Promise = require('bluebird'),
-    config = require('../../../config');
+import querystring from 'querystring';
+
+import Transport from '../Transport';
+import config from '../../config';
 
 function login (username, password) {
-    var self = this,
-        transport = new Transport(),
-        shell = self.shell,
-        stdout = self.sys.stdout,
-        stdin = self.sys.stdin,
-        terminal = shell.terminal,
-        binder = self.binder;
+    const transport = new Transport();
+    const shell = this.shell;
+    const stdout = this.sys.stdout;
+    const stdin = this.sys.stdin;
+    const terminal = shell.terminal;
+    const binder = this.binder;
 
 
-    var remoteLogin = function (username, password) {
-        return transport.post(config.public.loginUrl, {
-            'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
-            'body': querystring.stringify({
-                'username': username,
-                'password': password
-            })
-        }).then(function(){
-            return binder.getMe()
-                .then(function(user){
-                    // shell.user = user;
-                    shell.loginUser(user);
-                    var cmd1 = terminal.makeCommand({
-                        'args': [
-                            'cc /' + user.id,
-                            'get'],
-                        'text': 'my public infos'
-                    });
-                    var cmd2 = terminal.makeCommand({
-                        'args': [
-                            'cc /' + user.id,
-                            'lg'],
-                        'text': 'my maps'
-                    });
-                    stdout.write('Logged in - Go to ', cmd1, ' or ', cmd2);
-                    return user;
+    const remoteLogin = (username, password) => transport.post(config.public.loginUrl, {
+        'headers': {'Content-Type': 'application/x-www-form-urlencoded'},
+        'body': querystring.stringify({
+            'username': username,
+            'password': password
+        })
+    }).then(() => binder.getMe()
+        .then(user => {
+            // shell.user = user;
+            shell.loginUser(user);
+            const cmd1 = terminal.makeCommand({
+                'args': [
+                    `cc /${user.id}`,
+                    'get'],
+                'text': 'my public infos'
             });
-        });
-    };
+            const cmd2 = terminal.makeCommand({
+                'args': [
+                    `cc /${user.id}`,
+                    'lg'],
+                'text': 'my maps'
+            });
+            stdout.write('Logged in - Go to ', cmd1, ' or ', cmd2);
+            return user;
+    }));
 
     if (username && password) {
         return remoteLogin(username, password);
@@ -60,22 +55,20 @@ function login (username, password) {
     else if (username) {
         stdout.write('password:');
         terminal.input(stdin);
-        return stdin.read().then(function(pwd){
-            return remoteLogin(username, pwd);
-        });
+        return stdin.read().then(pwd => remoteLogin(username, pwd));
     }
     else {
 
-        var resolver = function (resolve, reject) {
+        const resolver = (resolve, reject) => {
             stdout.write('e-mail:');
             terminal.input(stdin);
             stdin.read()
-                .then(function(username){
+                .then(username => {
                     stdout.write('password:');
                     terminal.input(stdin);
                     document.getElementById("command-line").type="password";
                     stdin.read()
-                        .then(function(pwd){
+                        .then(pwd => {
                         remoteLogin(username, pwd)
                             .then(resolve)
                             .catch(reject);
@@ -87,7 +80,7 @@ function login (username, password) {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'login',
     command: login
 };

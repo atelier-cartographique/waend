@@ -9,35 +9,35 @@
  */
 
 
-var _ = require('underscore'),
-    querystring = require('querystring'),
-    O = require('../../lib/object').Object,
-    Promise = require("bluebird");
-
+import _ from 'underscore';
+import querystring from 'querystring';
+import EventEmitter from 'events';
+import debug from 'debug';
+const logger = debug('waend:Transport');
 
 
 
 function transportXHR () {
-    return function (options) {
-        var xhr = new XMLHttpRequest();
+    return options => {
+        const xhr = new XMLHttpRequest();
 
-        var headers = _.omit(options.headers || {}, 'Connection', 'Content-Length');
+        const headers = _.omit(options.headers || {}, 'Connection', 'Content-Length');
 
-        var listeners = options.listeners || {};
+        const listeners = options.listeners || {};
 
         function mkLisetner (emitter, eventName, cb, ctx) {
-            emitter.addEventListener(eventName, function(evt){
-                console.log('XHR event', eventName);
+            emitter.addEventListener(eventName, evt => {
+                logger('XHR event', eventName);
                 cb.apply(ctx, [evt, xhr]);
             }, false);
         }
 
-        for(var listener in listeners){
-            var lili = listeners[listener];
+        for(const listener in listeners){
+            const lili = listeners[listener];
             if('upload' === listener) {
                 if ('upload' in xhr) {
-                    for (ulistener in lili) {
-                        console.log('XHR.upload set event handler', ulistener);
+                    for (let ulistener in lili) {
+                        logger('XHR.upload set event handler', ulistener);
                         var cb = lili[ulistener].callback;
                         var ctx = lili[ulistener].context;
                         mkLisetner(xhr.upload, ulistener, cb, ctx);
@@ -45,30 +45,30 @@ function transportXHR () {
                 }
             }
             else {
-                console.log('XHR set event handler', listener);
+                logger('XHR set event handler', listener);
                 var cb = lili.callback;
                 var ctx = lili.context;
                 mkLisetner(xhr, listener, cb, ctx);
                 // xhr.addEventListener(listener, function(evt){
-                //     console.log('XHR event', listener);
+                //     logger('XHR event', listener);
                 //     cb.apply(ctx, [evt, xhr]);
                 // }, false);
             }
         }
 
-        var url = options.url;
+        let url = options.url;
         if('params' in options){
-            url += '?'+querystring.stringify(options.params);
+            url += `?${querystring.stringify(options.params)}`;
         }
         xhr.open(options.verb, url, true);
 
-        for(var header in headers) {
+        for(const header in headers) {
             if(!!(headers[header])) {
                 try{
                     xhr.setRequestHeader(header, headers[header]);
                 }
                 catch(err){
-                    console.log('transportXHR setHeader', err);
+                    logger('transportXHR setHeader', err);
                 }
             }
         }
@@ -82,26 +82,26 @@ function transportXHR () {
     };
 }
 
-var httpCookie;
+let httpCookie;
 
 function transportHTTP () {
-    var http = require('http'),
-        url = require('url');
-    return function (options) {
+    const http = require('http');
+    const url = require('url');
+    return options => {
 
-        var handleResponse = function(res) {
-            var data = '';
+        const handleResponse = res => {
+            let data = '';
             res.setEncoding('utf8');
             if('set-cookie' in res.headers){
                 httpCookie = res.headers['set-cookie'];
             }
-            res.on('data', function (chunk) {
+            res.on('data', chunk => {
                 data += chunk;
             });
-            res.on('end', function(){
-                var cbSuccess = options.listeners.load.callback,
-                    cbError = options.listeners.error.callback,
-                    ctx = options.listeners.load.context;
+            res.on('end', () => {
+                const cbSuccess = options.listeners.load.callback;
+                const cbError = options.listeners.error.callback;
+                const ctx = options.listeners.load.context;
                 if(res.statusCode >= 400){
                     cbError.apply(ctx, [null, {statusText:new Error(data)}]);
                 }
@@ -112,17 +112,17 @@ function transportHTTP () {
         };
 
 
-        var purl = url.parse(options.url);
-        var path = purl.path;
+        const purl = url.parse(options.url);
+        let path = purl.path;
         if('params' in options){
-            path += '?'+querystring.stringify(options.params);
+            path += `?${querystring.stringify(options.params)}`;
         }
 
-        var headers = options.headers || {};
+        const headers = options.headers || {};
         if(httpCookie){
             headers['Cookie'] = httpCookie;
         }
-        var reqOptions = {
+        const reqOptions = {
             'method': options.verb,
             'hostname': purl.hostname,
             'port': purl.port || 80,
@@ -130,12 +130,12 @@ function transportHTTP () {
             'headers': headers
         };
 
-        ////console.log('reqOptions', reqOptions);
+        ////logger('reqOptions', reqOptions);
 
-        var req = http.request(reqOptions, handleResponse);
-        req.on('error', function(err) {
-            var cb = options.listeners.error.callback,
-                ctx = options.listeners.error.context;
+        const req = http.request(reqOptions, handleResponse);
+        req.on('error', err => {
+            const cb = options.listeners.error.callback;
+            const ctx = options.listeners.error.context;
             cb.apply(ctx, [null, {statusText:err}]);
         });
         if(options.body){
@@ -145,27 +145,28 @@ function transportHTTP () {
     };
 }
 
-var Transport = O.extend({
+class Transport extends EventEmitter {
 
-    initialize: function () {
+    constructor () {
+        super();
         try{
-            var www = window;
+            const www = window;
             this.transport = transportXHR();
         }
         catch(err){
             this.transport = transportHTTP();
         }
-    },
+    }
 
-    get: function(url, getOptions) {
-        var transport = this.transport;
+    get(url, getOptions) {
+        const transport = this.transport;
         getOptions = getOptions || {};
 
-        var resolver = function (resolve, reject) {
-            var errorhandler = function (evt, xhr) {
+        const resolver = (resolve, reject) => {
+            const errorhandler = (evt, xhr) => {
                 reject(xhr.statusText);
             };
-            var successHandler = function (evt, xhr) {
+            const successHandler = (evt, xhr) => {
                 if(xhr.status >= 400){
                     return reject(xhr.statusText);
                 }
@@ -177,7 +178,7 @@ var Transport = O.extend({
                 }
             };
 
-            var options = {
+            const options = {
                 'listeners': {
                     'error' : {callback:errorhandler, context:undefined},
                     'abort' : {callback:errorhandler, context:undefined},
@@ -194,18 +195,18 @@ var Transport = O.extend({
         };
 
         return new Promise(resolver);
-    },
+    }
 
-    _write: function(verb, url, postOptions) {
-        var transport = this.transport;
+    _write(verb, url, postOptions) {
+        const transport = this.transport;
         postOptions = postOptions || {};
 
-        var resolver = function (resolve, reject) {
-            var errorhandler = function (evt, xhr) {
+        const resolver = (resolve, reject) => {
+            const errorhandler = (evt, xhr) => {
                 reject(xhr.statusText);
             };
 
-            var successHandler = function (evt, xhr) {
+            const successHandler = (evt, xhr) => {
                 if(xhr.status >= 400){
                     return reject(xhr.statusText);
                 }
@@ -217,7 +218,7 @@ var Transport = O.extend({
                 }
             };
 
-            var progressHandler = function (evt) {
+            const progressHandler = evt => {
                 if(_.isFunction(postOptions.progress)){
                     postOptions.progress(
                         evt.lengthComputable,
@@ -227,7 +228,7 @@ var Transport = O.extend({
                 }
             };
 
-            var body;
+            let body;
             if(postOptions.headers
                 && ('Content-Type' in postOptions.headers)){
                 body = postOptions.body;
@@ -235,14 +236,14 @@ var Transport = O.extend({
             else{
                 body = ('toJSON' in postOptions.body) ? postOptions.body.toJSON() : JSON.stringify(postOptions.body);
             }
-            //console.log(body);
-            var headers = _.defaults(_.extend({}, postOptions.headers), {
+            //logger(body);
+            const headers = _.defaults(_.extend({}, postOptions.headers), {
                 'Content-Type': 'application/json; charset="utf-8"',
                 'Content-Length': body.length
             });
 
 
-            var options = {
+            const options = {
                 'listeners': {
                     'error' : {callback:errorhandler, context:undefined},
                     'abort' : {callback:errorhandler, context:undefined},
@@ -263,25 +264,25 @@ var Transport = O.extend({
         };
 
         return new Promise(resolver);
-    },
+    }
 
-    post: function(url, options) {
+    post(url, options) {
         return this._write('POST', url, options);
-    },
+    }
 
-    put: function(url, options) {
+    put(url, options) {
         return this._write('PUT', url, options);
-    },
+    }
 
-    del: function(url, delOptions) {
-        var transport = this.transport;
+    del(url, delOptions) {
+        const transport = this.transport;
         delOptions = delOptions || {};
 
-        var resolver = function (resolve, reject) {
-            var errorhandler = function (evt, xhr) {
+        const resolver = (resolve, reject) => {
+            const errorhandler = (evt, xhr) => {
                 reject(xhr.statusText);
             };
-            var successHandler = function (evt, xhr) {
+            const successHandler = (evt, xhr) => {
                 if(xhr.status >= 400){
                     return reject(xhr.statusText);
                 }
@@ -293,7 +294,7 @@ var Transport = O.extend({
                 }
             };
 
-            var options = {
+            const options = {
                 'listeners': {
                     'error' : {callback:errorhandler, context:undefined},
                     'abort' : {callback:errorhandler, context:undefined},
@@ -311,8 +312,8 @@ var Transport = O.extend({
 
         return new Promise(resolver);
     }
-});
+}
 
 
 
-module.exports = exports = Transport;
+export default Transport;

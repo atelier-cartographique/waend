@@ -10,18 +10,19 @@
 
 // 'use strict';
 
-var _ = require('underscore'),
-    Promise = require('bluebird'),
-    CodeMirror = require('codemirror');
+import _ from 'underscore';
+
+import Promise from 'bluebird';
+import CodeMirror from 'codemirror';
 
 
 function textEdit (opt_txt) {
-    var self = this,
-        shell = self.shell,
-        stdout = shell.stdout,
-        terminal = shell.terminal,
-        map = shell.env.map,
-        display = terminal.display();
+    const self = this;
+    const shell = self.shell;
+    const stdout = shell.stdout;
+    const terminal = shell.terminal;
+    const map = shell.env.map;
+    const display = terminal.display();
 
     if (!opt_txt && shell.env.DELIVERED) {
         if (_.isString(shell.env.DELIVERED)) {
@@ -37,37 +38,37 @@ function textEdit (opt_txt) {
         }
     }
 
-    var resolver = function (resolve, reject) {
-        var cm = CodeMirror(display.node, {
+    const resolver = (resolve, reject) => {
+        const cm = CodeMirror(display.node, {
             'value': opt_txt || '',
             'autofocus': true,
             'lineWrapping': true
         });
 
-        var buttons = document.createElement('div');
+        const buttons = document.createElement('div');
         buttons.setAttribute('class', 'edit-buttons push-button');
 
-        var cancelButton = document.createElement('div');
+        const cancelButton = document.createElement('div');
         cancelButton.setAttribute('class', 'widget-closer icon-close');
         cancelButton.innerHTML = 'cancel';
 
-        cancelButton.addEventListener('click', function(){
+        cancelButton.addEventListener('click', () => {
             display.end();
             reject('Text editor canceled');
         }, false);
 
 
-        var widgetTitle = document.createElement('div');
+        const widgetTitle = document.createElement('div');
         widgetTitle.setAttribute('class', 'widget-title ');
         widgetTitle.innerHTML = 'Text editor';
 
-        var saveButton = document.createElement('div');
+        const saveButton = document.createElement('div');
         saveButton.setAttribute('class', 'edit-validate push-validate');
         saveButton.innerHTML = 'validate text';
 
-        saveButton.addEventListener('click', function(){
-            var doc = cm.getDoc(),
-                txt = doc.getValue();
+        saveButton.addEventListener('click', () => {
+            const doc = cm.getDoc();
+            const txt = doc.getValue();
             display.end();
             resolve(txt);
         }, false);
@@ -82,7 +83,7 @@ function textEdit (opt_txt) {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'edit',
     command: textEdit
 };

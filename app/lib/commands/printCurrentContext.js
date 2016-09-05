@@ -8,20 +8,20 @@
  *
  */
 
-var db = require('../Bind').get().db;
+const db = require('../Bind').get().db;
 
 function pcc () {
-    var shell = this.shell,
-        terminal = shell.terminal,
-        current = this.current(),
-        stdout = this.sys.stdout,
-        crt = [];
+    const shell = this.shell;
+    const terminal = shell.terminal;
+    const current = this.current();
+    const stdout = this.sys.stdout;
+    const crt = [];
 
-    for(var i=0; i < current.length; i++){
-        var m = db.get(current[i]);
-        var s = current.slice(0, i+1);
-        var cmd = terminal.makeCommand({
-            args:['cc /'+s.join('/')],
+    for(let i=0; i < current.length; i++){
+        const m = db.get(current[i]);
+        const s = current.slice(0, i+1);
+        const cmd = terminal.makeCommand({
+            args:[`cc /${s.join('/')}`],
             text: (m.get('name') || current[i])
         });
         crt.push('/');
@@ -34,10 +34,9 @@ function pcc () {
         stdout.write('/');
     }
     return this.end();
-};
+}
 
-
-module.exports = exports = {
+export default {
     name: 'pcc',
     command: pcc
 };

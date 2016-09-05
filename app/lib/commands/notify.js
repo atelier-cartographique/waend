@@ -8,17 +8,17 @@
  *
  */
 
-var SyncHandler = require('./SyncHandler');
+import SyncHandler from './SyncHandler';
 
 function notify () {
-    var self = this,
-        shell = self.shell,
-        stdout = self.sys.stdout,
-        terminal = shell.terminal,
-        container = document.createElement('div'),
-        sync = new SyncHandler(container, self);
+    const self = this;
+    const shell = self.shell;
+    const stdout = self.sys.stdout;
+    const terminal = shell.terminal;
+    const container = document.createElement('div');
+    const sync = new SyncHandler(container, self);
 
-    var wc = terminal.makeCommand({
+    const wc = terminal.makeCommand({
         fragment: container,
         text: 'notifications'
     });
@@ -26,10 +26,9 @@ function notify () {
     stdout.write(wc);
     sync.start();
     return self.end();
-};
+}
 
-
-module.exports = exports = {
+export default {
     name: 'notify',
     command: notify
 };

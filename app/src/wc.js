@@ -10,16 +10,16 @@
 
 
 
-var WebConsole = require('./WebConsole');
+import WebConsole from './WebConsole';
 
 
 function init () {
-    var root = document.querySelector('#wc');
-    var wc = new WebConsole(root);
+    const root = document.querySelector('#wc');
+    const wc = new WebConsole(root);
     wc.start();
 }
 
-document.onreadystatechange = function () {
+document.onreadystatechange = () => {
     if (document.readyState == "interactive") {
         init();
     }

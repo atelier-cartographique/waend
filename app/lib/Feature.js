@@ -1,31 +1,27 @@
-/*
- * app/lib/Feature.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
-
-var Context = require('./Context'),
-    Bind = require('./Bind'),
-    getGeometry = require('./commands/feature/getGeometry'),
-    setGeometry = require('./commands/feature/setGeometry'),
-    styleWidget = require('./commands/feature/styleWidget');
+import Context from './Context';
+import getGeometry from './commands/feature/getGeometry';
+import setGeometry from './commands/feature/setGeometry';
+import styleWidget from './commands/feature/styleWidget';
 
 
 
-var Feature = Context.extend({
-    name: 'group',
-    commands:{
-        'gg' : getGeometry.command,
-        'sg' : setGeometry.command,
-        'sf': styleWidget.command
+class Feature extends Context {
+    constructor () {
+        super(...arguments);
     }
-});
+    
+    get name () {
+        return 'group';
+    }
+
+    get commands () {
+        return {
+            'gg' : getGeometry.command,
+            'sg' : setGeometry.command,
+            'sf': styleWidget.command
+        };
+    }
+}
 
 
-module.exports = exports = Feature;
+export default Feature;

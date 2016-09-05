@@ -12,20 +12,20 @@
 // var Promise = require('bluebird'),
 //     region = require('../Region');
 
-var Geometry = require('../../Geometry');
+import Geometry from '../../Geometry';
 
 function createFeature (sGeom) {
-    var self = this,
-        env = self.shell.env,
-        binder = self.binder,
-        stdout = self.sys.stdout,
-        stdin = self.sys.stdin,
-        terminal = self.shell.terminal,
-        current = self.current(),
-        uid = current[0],
-        gid = current[1],
-        lid = current[2],
-        geom;
+    const self = this;
+    const env = self.shell.env;
+    const binder = self.binder;
+    const stdout = self.sys.stdout;
+    const stdin = self.sys.stdin;
+    const terminal = self.shell.terminal;
+    const current = self.current();
+    const uid = current[0];
+    const gid = current[1];
+    const lid = current[2];
+    let geom;
 
 
     try { // args
@@ -47,7 +47,7 @@ function createFeature (sGeom) {
 
     }
 
-    var data = {
+    const data = {
         'user_id': uid,
         'layer_id': lid,
         'properties': {},
@@ -55,9 +55,9 @@ function createFeature (sGeom) {
     };
 
     return binder.setFeature(uid, gid, lid, data)
-        .then(function(model){
-            var cmd = terminal.makeCommand({
-                args: ['cc /'+uid+'/'+gid+'/'+lid+'/'+model.id],
+        .then(model => {
+            const cmd = terminal.makeCommand({
+                args: [`cc /${uid}/${gid}/${lid}/${model.id}`],
                 text: model.id
             });
             stdout.write('created feature ', cmd);
@@ -67,7 +67,7 @@ function createFeature (sGeom) {
 
 
 
-module.exports = exports = {
+export default {
     name: 'create',
     command: createFeature
 };

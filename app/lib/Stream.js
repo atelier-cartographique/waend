@@ -9,51 +9,50 @@
  */
 
 
-var O = require('../../lib/object').Object,
-    Promise = require("bluebird"),
-    _ = require('underscore');
+import {Object as O} from '../../lib/object';
 
-'use strict';
+import Promise from "bluebird";
+import _ from 'underscore';
 
-var Stream = O.extend({
+const Stream = O.extend({
     
-    initialize: function (noAutoOpen) {
+    initialize(noAutoOpen) {
         this._entries = [];
         this._open = !(!!noAutoOpen);
     },
 
-    open: function () {
+    open() {
         this._open = true;
     },
 
-    close: function () {
+    close() {
         this._open = false;
     },
 
-    isOpened: function () {
+    isOpened() {
         return !!this._open;
     },
 
-    write: function () {
+    write() {
         if(this.isOpened()){
-            var data = _.toArray(arguments);
+            const data = _.toArray(arguments);
             this._entries.push(data);
-            var args = ['data'].concat(data);
-            this.emit.apply(this, args);
+            const args = ['data'].concat(data);
+            this.emit(...args);
         }
     },
 
-    read: function () {
+    read() {
         if(this.isOpened){
-            var entry = this._entries.shift();
+            const entry = this._entries.shift();
             if (entry) {
                 return Promise.resolve(entry);
             }
             else {
-                var self = this;
-                var resolver = function (resolve, reject) {
-                    self.once('data', function(){
-                        var entry = self._entries.shift();
+                const self = this;
+                const resolver = (resolve, reject) => {
+                    self.once('data', () => {
+                        const entry = self._entries.shift();
                         resolve.apply(self, entry);
                     });
                 };
@@ -63,17 +62,17 @@ var Stream = O.extend({
         // return Promise.reject('stream is closed');
     },
 
-    readSync: function () {
+    readSync() {
         if(this.isOpened()){
             return this._entries.shift();
         }
     },
 
-    dump: function () {
-        var entries = this._entries;
+    dump() {
+        const entries = this._entries;
         this._entries = [];
         return entries;
     }
 });
 
-module.exports = exports = Stream;
+export default Stream;

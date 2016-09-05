@@ -10,41 +10,42 @@
 
 
 
-var config = require('../../config'),
-    Bind = require('../lib/Bind'),
-    Sync = require('../lib/Sync'),
-    semaphore = require('../lib/Semaphore'),
-    WebConsole = require('./WebConsole'),
-    LayerProvider = require('./LayerProvider'),
-    SourceProvider = require('./SourceProvider'),
-    WMap = require('./WaendMap'),
-    ModelConfig = require('./ModelConfig');
+import config from '../config';
+
+import Bind from '../lib/Bind';
+import Sync from '../lib/Sync';
+import semaphore from '../lib/Semaphore';
+import WebConsole from './WebConsole';
+import LayerProvider from './LayerProvider';
+import SourceProvider from './SourceProvider';
+import WMap from './WaendMap';
+import ModelConfig from './ModelConfig';
 
 Bind.configureModels(ModelConfig.configurator);
 
 function init () {
-    var elementWC = document.querySelector('#wc'),
-        elementMap = document.querySelector('#map'),
-        wc = new WebConsole(elementWC, elementMap),
-        layer = new LayerProvider(),
-        source = new SourceProvider(),
-        wmap = new WMap({'root': elementMap});
+    const elementWC = document.querySelector('#wc');
+    const elementMap = document.querySelector('#map');
+    const wc = new WebConsole(elementWC, elementMap);
+    const layer = new LayerProvider();
+    const source = new SourceProvider();
+    const wmap = new WMap({'root': elementMap});
 
     Sync.configure(config.notify);
 
-    var pager = document.createElement('div');
+    const pager = document.createElement('div');
 
     wc.shell.env.map = wmap;
     wc.start();
     wc.hide();
-    semaphore.on('shell:change:context', function(ctxIndex){
+    semaphore.on('shell:change:context', ctxIndex => {
         if (ctxIndex > 1) {
             wc.shell.exec('view');
         }
     });
 }
 
-document.onreadystatechange = function () {
+document.onreadystatechange = () => {
     if (document.readyState === "interactive") {
         init();
     }

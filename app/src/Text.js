@@ -8,113 +8,244 @@
  *
  */
 
-var _ = require('underscore'),
-    Font = require('./Font');
+import _ from 'underscore';
+
+import Font from './Font';
 
 
 
-function TextCursor (txt) {
-    this.text = txt;
-    this.p =  0;
-    this.i =  0;
+class TextCursor {
+    constructor(txt) {
+        this.text = txt;
+        this.p =  0;
+        this.i =  0;
+    }
+
+    next() {
+        const par = this.text.paragraphs[this.p];
+
+        if (this.i >= par.length) {
+            this.p = this.p + 1;
+            this.i = 0;
+            if (this.p >= this.text.paragraphs.length) {
+                this.p = 0;
+                return TextCursor.END_TEXT;
+            }
+            return TextCursor.END_PARAGRAPH;
+        }
+        const c = par[this.i];
+        this.i += 1;
+        return c;
+    }
+
+    rewind() {
+        let par = this.text.paragraphs[this.p];
+        const i = this.i - 1;
+
+        if (i < 0) {
+            this.p -= 1;
+            if (this.p < 0) {
+                this.p = 0;
+                this.i = 0;
+                return this;
+            }
+            par = this.text.paragraphs[this.p];
+            this.i = par.length - 1;
+            return this;
+        }
+
+        this.i = i;
+        return this;
+    }
 }
 
 TextCursor.END_PARAGRAPH = -1;
 TextCursor.END_TEXT = -2;
 
-TextCursor.prototype.next = function () {
-    var par = this.text.paragraphs[this.p];
+class Text {
+    constructor(str, fontName) {
+        this._string = str.toString();
+        this.paragraphs = this._string.split('\n');
 
-    if (this.i >= par.length) {
-        this.p = this.p + 1;
-        this.i = 0;
-        if (this.p >= this.text.paragraphs.length) {
-            this.p = 0;
-            return TextCursor.END_TEXT;
+        // font loading
+        this._pendings = [];
+        if (!fontName || _.isString(fontName)) {
+            fontName = fontName || 'default';
+            Font.select(fontName, function (f) {
+                this.font = f;
+                this.ready = true;
+
+                for (const pending of this._pendings) {
+                    fn.call(ctx, this);
+                }
+
+                this._pendings = [];
+            }, this);
         }
-        return TextCursor.END_PARAGRAPH;
-    }
-    var c = par[this.i];
-    this.i += 1;
-    return c;
-};
-
-TextCursor.prototype.rewind = function () {
-    var par = this.text.paragraphs[this.p];
-    var i = this.i - 1;
-
-    if (i < 0) {
-        this.p -= 1;
-        if (this.p < 0) {
-            this.p = 0;
-            this.i = 0;
-            return this;
+        else {
+            this.font = fontName;
         }
-        par = this.text.paragraphs[this.p];
-        this.i = par.length - 1;
-        return this;
     }
 
-    this.i = i;
-    return this;
-};
+    cursor() {
+        return (new TextCursor(this));
+    }
 
+    whenReady(fn, ctx) {
+        if(!this.ready) {
+            this._pendings.push([fn, ctx]);
+        }
+        else {
+            fn.call(ctx, this);
+        }
+    }
 
-function Text (str, fontName) {
-    this._string = str.toString();
-    this.paragraphs = this._string.split('\n');
+    getFont() {
+        return this.font;
+    }
 
-    // font loading
-    this._pendings = [];
-    if (!fontName || _.isString(fontName)) {
-        fontName = fontName || 'default';
-        Font.select(fontName, function (f) {
-            this.font = f;
-            this.ready = true;
-            for (var i = 0; i < this._pendings.length; i++) {
-                var pending = this._pendings[i],
-                    fn = pending[0],
-                    ctx = pending[1];
-                fn.call(ctx, this);
+    getFlatLength(fontSize) {
+        const glyphs = this.font.stringToGlyphs(this._string);
+        const scale =  fontSize / this.font.unitsPerEm;
+        let len = 0;
+
+        for (let i = 0, gl = glyphs.length; i < gl; i++) {
+            len += glyphs[i].advanceWidth * scale;
+        }
+
+        return len;
+    }
+
+    // font size & horizontal segments
+    // a hyper basic text composer
+    draw(fontsz, segments, cursor, mergeSegments) {
+        if (!this.font) {
+            console.warn('Text.prototype.draw NoFont');
+            return [null, []];
+        }
+
+        let csIdx = 0;
+        let cs = segments[csIdx];
+        let curPos = cs[0];
+        let endPos = cs[1];
+        let nextPos;
+        const scale =  fontsz / this.font.unitsPerEm;
+        let sa;
+        const paths = [];
+        let currentPath;
+
+        while (true) {
+            const character = cursor.next();
+            if (TextCursor.END_TEXT === character) {
+                return [null, paths];
             }
-            this._pendings = [];
-        }, this);
+            else if (TextCursor.END_PARAGRAPH === character) {
+                csIdx++;
+                if(csIdx >= segments.length) {
+                    return [cursor, paths];
+                }
+                continue;
+            }
+            else {
+                const glyphs = this.font.stringToGlyphs(character);
+                let accAdvance = 0;
+                let glyph;
+                let gi;
+
+                for (gi = 0; gi < glyphs.length; gi++) {
+                    glyph = glyphs[gi];
+                    accAdvance += glyph.advanceWidth * scale;
+                }
+
+                if (accAdvance < vecDist(curPos, endPos)) {
+                    for (gi = 0; gi < glyphs.length; gi++) {
+                        glyph = glyphs[gi];
+                        const advance = glyph.advanceWidth * scale;
+                        currentPath = getPath.apply(glyph, [curPos[0], curPos[1], fontsz]);
+                        nextPos = vecAdd(curPos, endPos, accAdvance);
+                        currentPath.segment = cs;
+                        currentPath.pos = curPos;
+                        currentPath.nextPos = nextPos;
+                        paths.push(currentPath);
+                        curPos = nextPos;
+                    }
+                }
+                else {
+                    csIdx++;
+                    cursor.rewind();
+                    if(csIdx >= segments.length) {
+                        return [cursor, paths];
+                    }
+                    if (mergeSegments) {
+                        cs = [curPos, segments[csIdx][1]];
+                    }
+                    else {
+                        cs = segments[csIdx];
+                    }
+                    curPos = cs[0];
+                    endPos = cs[1];
+                }
+            }
+        }
+
+        throw (new Error('Return Undefined From Text Draw'));
     }
-    else {
-        this.font = fontName;
+
+    drawOnCanvas(ctx, startPos, sz) {
+        // this.font.draw(ctx, this._string, startPos[0], startPos[1], sz);
+        const fullPath = new Font.Path();
+        this.font.forEachGlyph(
+            this._string, startPos[0], startPos[1], sz, {},
+            (glyph, gX, gY, gFontSize) => {
+                const glyphPath = glyph.getPath(gX, gY, gFontSize);
+                fullPath.extend(glyphPath);
+            });
+        fullPath.fill = ctx.fillStyle;
+        fullPath.stroke = undefined;
+        fullPath.draw(ctx);
+    }
+
+    getRect(startPos, sz) {
+        let xMin = Infinity;
+        let xMax = - Infinity;
+        let yMin = Infinity;
+        let yMax = - Infinity;
+
+        const uem = this.font.unitsPerEm;
+        const viz = (glyph, gX, gY, gFontSize) => {
+            const scale = 1 / uem * gFontSize;
+            const ms = glyph.getMetrics();
+
+            xMin = Math.min(xMin, gX + (ms.xMin * scale));
+            xMax = Math.max(xMax, gX + (ms.xMax * scale));
+            yMin = Math.min(yMin, gY - (ms.yMax * scale));
+            yMax = Math.max(yMax, gY + (ms.yMin * scale));
+        };
+
+        this.font.forEachGlyph(
+            this._string, startPos[0], startPos[1], sz, {}, viz
+        );
+
+        return [xMin, yMin, xMax, yMax];
     }
 }
-
-Text.prototype.cursor = function () {
-    return (new TextCursor(this));
-};
-
-Text.prototype.whenReady = function (fn, ctx) {
-    if(!this.ready) {
-        this._pendings.push([fn, ctx]);
-    }
-    else {
-        fn.call(ctx, this);
-    }
-};
-
-Text.prototype.getFont = function () {
-    return this.font;
-};
 
 /*
 opentype.js getPath flips Ys, it's fair. but as long as we flip the viewport to
 accomodate with a weird OL3 behaviour, ther's no point to flip glyphs.
 */
 function getPath (x, y, fontSize) {
-    var scale, p, commands, cmd;
+    let scale;
+    let p;
+    let commands;
+    let cmd;
     x = x !== undefined ? x : 0;
     y = y !== undefined ? y : 0;
     fontSize = fontSize !== undefined ? fontSize : 72;
     scale = 1 / this.path.unitsPerEm * fontSize;
     p = new Font.Path();
     commands = this.path.commands;
-    for (var i = 0; i < commands.length; i += 1) {
+    for (let i = 0; i < commands.length; i += 1) {
         cmd = commands[i];
         if (cmd.type === 'M') {
             p.moveTo(x + (cmd.x * scale), y + (cmd.y * scale));
@@ -136,141 +267,18 @@ function getPath (x, y, fontSize) {
 
 
 function vecDist (v1, v2) {
-    var dx = v2[0] - v1[0],
-        dy = v2[1] - v1[1];
+    const dx = v2[0] - v1[0];
+    const dy = v2[1] - v1[1];
     return Math.sqrt((dx*dx) + (dy*dy));
 }
 
 function vecAdd (v1, v2, a) {
-    var t = a / vecDist(v1, v2),
-        rx = v1[0] + (v2[0] - v1[0]) * t,
-        ry = v1[1] + (v2[1] - v1[1]) * t;
+    const t = a / vecDist(v1, v2);
+    const rx = v1[0] + (v2[0] - v1[0]) * t;
+    const ry = v1[1] + (v2[1] - v1[1]) * t;
     return [rx, ry];
 }
 
-
-Text.prototype.getFlatLength = function (fontSize) {
-    var glyphs = this.font.stringToGlyphs(this._string),
-        scale =  fontSize / this.font.unitsPerEm,
-        len = 0;
-
-    for (var i = 0, gl = glyphs.length; i < gl; i++) {
-        len += glyphs[i].advanceWidth * scale;
-    }
-
-    return len;
-};
-
-// font size & horizontal segments
-// a hyper basic text composer
-Text.prototype.draw = function (fontsz, segments, cursor, mergeSegments) {
-
-    if (!this.font) {
-        console.warn('Text.prototype.draw NoFont');
-        return [null, []];
-    }
-
-    var csIdx = 0, cs = segments[csIdx],
-        curPos = cs[0],
-        endPos = cs[1],
-        nextPos,
-        scale =  fontsz / this.font.unitsPerEm, sa,
-        paths = [],
-        currentPath;
-
-    while (true) {
-        var character = cursor.next();
-        if (TextCursor.END_TEXT === character) {
-            return [null, paths];
-        }
-        else if (TextCursor.END_PARAGRAPH === character) {
-            csIdx++;
-            if(csIdx >= segments.length) {
-                return [cursor, paths];
-            }
-            continue;
-        }
-        else {
-            var glyphs = this.font.stringToGlyphs(character),
-                accAdvance = 0,
-                glyph, gi;
-
-            for (gi = 0; gi < glyphs.length; gi++) {
-                glyph = glyphs[gi];
-                accAdvance += glyph.advanceWidth * scale;
-            }
-
-            if (accAdvance < vecDist(curPos, endPos)) {
-                for (gi = 0; gi < glyphs.length; gi++) {
-                    glyph = glyphs[gi];
-                    var advance = glyph.advanceWidth * scale;
-                    currentPath = getPath.apply(glyph, [curPos[0], curPos[1], fontsz]);
-                    nextPos = vecAdd(curPos, endPos, accAdvance);
-                    currentPath.segment = cs;
-                    currentPath.pos = curPos;
-                    currentPath.nextPos = nextPos;
-                    paths.push(currentPath);
-                    curPos = nextPos;
-                }
-            }
-            else {
-                csIdx++;
-                cursor.rewind();
-                if(csIdx >= segments.length) {
-                    return [cursor, paths];
-                }
-                if (mergeSegments) {
-                    cs = [curPos, segments[csIdx][1]];
-                }
-                else {
-                    cs = segments[csIdx];
-                }
-                curPos = cs[0];
-                endPos = cs[1];
-            }
-        }
-    }
-
-    throw (new Error('Return Undefined From Text Draw'));
-};
-
-Text.prototype.drawOnCanvas = function (ctx, startPos, sz) {
-    // this.font.draw(ctx, this._string, startPos[0], startPos[1], sz);
-    var fullPath = new Font.Path();
-    this.font.forEachGlyph(
-        this._string, startPos[0], startPos[1], sz, {},
-        function(glyph, gX, gY, gFontSize) {
-            var glyphPath = glyph.getPath(gX, gY, gFontSize);
-            fullPath.extend(glyphPath);
-        });
-    fullPath.fill = ctx.fillStyle;
-    fullPath.stroke = undefined;
-    fullPath.draw(ctx);
-};
-
-Text.prototype.getRect = function (startPos, sz) {
-    var xMin = Infinity,
-        xMax = - Infinity,
-        yMin = Infinity,
-        yMax = - Infinity;
-
-    var uem = this.font.unitsPerEm;
-    var viz = function (glyph, gX, gY, gFontSize) {
-        var scale = 1 / uem * gFontSize,
-            ms = glyph.getMetrics();
-
-        xMin = Math.min(xMin, gX + (ms.xMin * scale));
-        xMax = Math.max(xMax, gX + (ms.xMax * scale));
-        yMin = Math.min(yMin, gY - (ms.yMax * scale));
-        yMax = Math.max(yMax, gY + (ms.yMin * scale));
-    };
-
-    this.font.forEachGlyph(
-        this._string, startPos[0], startPos[1], sz, {}, viz
-    );
-
-    return [xMin, yMin, xMax, yMax];
-};
 
 /*
 
@@ -317,4 +325,4 @@ Glyph.prototype.drawMetrics = function(ctx, x, y, fontSize) {
 
 */
 
-module.exports = exports = Text;
+export default Text;

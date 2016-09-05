@@ -9,28 +9,30 @@
  */
 
 
-var _ = require('underscore'),
-    Sockjs = require('sockjs-client'),
-    semaphore = require('./Semaphore');
+import _ from 'underscore';
 
-var pendings = [],
-    sock;
+import Sockjs from 'sockjs-client';
+import semaphore from './Semaphore';
+import debug from 'debug';
+const logger = debug('waend:Sync');
+
+const pendings = [];
+let sock;
 
 function sockOpen () {
-    console.log('sync opened', pendings.length);
-    for (var i = 0; i < pendings.length; i++) {
-        var msg = JSON.stringify(pendings[i]);
+    logger('sync opened', pendings.length);
+    for (let i = 0; i < pendings.length; i++) {
+        const msg = JSON.stringify(pendings[i]);
         sock.send(msg);
     }
 }
 
 function sockMessage (evt) {
-    var data = evt.data || '[]';
+    const data = evt.data || '[]';
     try {
-        var args = JSON.parse(data);
+        const args = JSON.parse(data);
         if (_.isArray(args) && (args.length > 1)) {
-            semaphore.signal.apply(semaphore,
-                                   ['sync'].concat(args));
+            semaphore.signal(...['sync'].concat(args));
         }
     }
     catch (err) {
@@ -39,27 +41,26 @@ function sockMessage (evt) {
 }
 
 function sockClose (exp) {
-    console.log('sync closed', exp);
+    logger('sync closed', exp);
 }
 
 
 
-module.exports.configure = function (config) {
+export function configure(config) {
     sock = new Sockjs(config.url);
 
     sock.onopen = sockOpen;
     sock.onclose = sockClose;
     sock.onmessage = sockMessage;
-};
-
+}
 
 /**
  * send raw data to the nofify end point
  * @method send
  * @return {bool} true if data has been sent, false if delayed or failed
  */
-module.exports.send = function () {
-    var args = _.toArray(arguments);
+export function send() {
+    const args = _.toArray(arguments);
     if (!sock || (sock.readyState !== Sockjs.OPEN)) {
         pendings.push(args);
     }
@@ -73,8 +74,7 @@ module.exports.send = function () {
         }
     }
     return false;
-};
-
+}
 
 /**
  * subscribe to a channel
@@ -82,6 +82,6 @@ module.exports.send = function () {
  * @param  {string}  type A channel name, which is usually a context name
  * @param  {string}  id   context id
  */
-module.exports.subscribe = function (type, id) {
+export function subscribe(type, id) {
     exports.send('sub', type, id);
 }

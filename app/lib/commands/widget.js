@@ -8,33 +8,34 @@
  *
  */
 
-var _ = require('underscore'),
-    Promise = require('bluebird');
+import _ from 'underscore';
 
-var widgets = {
+import Promise from 'bluebird';
+
+const widgets = {
     'ValueSelect': require('./widgets/ValueSelect')
 };
 
 
 function displayWidget () {
-    var self = this,
-        args = _.toArray(arguments),
-        name = args.shift(),
-        shell = this.shell,
-        terminal = shell.terminal,
-        display = terminal.display(),
-        config = {},
-        Widget;
+    const self = this;
+    const args = _.toArray(arguments);
+    const name = args.shift();
+    const shell = this.shell;
+    const terminal = shell.terminal;
+    const display = terminal.display();
+    const config = {};
+    let Widget;
 
-    var resolver = function (resolve, reject) {
+    const resolver = (resolve, reject) => {
         try{
             Widget = widgets[name];
-            for (var i = 0; i < args.length; i += 2) {
-                var k = args[i],
-                    v = JSON.parse(args[i + 1]);
+            for (let i = 0; i < args.length; i += 2) {
+                const k = args[i];
+                const v = JSON.parse(args[i + 1]);
                 config[k] = v;
             }
-            var wdgt = new Widget(config);
+            const wdgt = new Widget(config);
             display.node.appendChild(wdgt.getNode());
         }
         catch (err) {
@@ -47,7 +48,7 @@ function displayWidget () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'widget',
     command: displayWidget
-}
+};

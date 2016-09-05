@@ -8,22 +8,23 @@
  *
  */
 
-var _ = require('underscore'),
-    config = require('../../../config'),
-    Transport = require('../Transport');
+import _ from 'underscore';
 
-var MEDIA_URL = config.public.mediaUrl;
+import config from '../../config';
+import Transport from '../Transport';
+
+const MEDIA_URL = config.public.mediaUrl;
 
 
 // from https://github.com/ebidel/filer.js/blob/master/src/filer.js#L137
-  /**
-   * Creates and returns a blob from a data URL (either base64 encoded or not).
-   *
-   * @param {string} dataURL The data URL to convert.
-   * @return {Blob} A blob representing the array buffer data.
-   */
+/**
+ * Creates and returns a blob from a data URL (either base64 encoded or not).
+ *
+ * @param {string} dataURL The data URL to convert.
+ * @return {Blob} A blob representing the array buffer data.
+ */
 function dataURLToBlob (dataURL) {
-    var BASE64_MARKER = ';base64,';
+    const BASE64_MARKER = ';base64,';
     if (dataURL.indexOf(BASE64_MARKER) == -1) {
       var parts = dataURL.split(',');
       var contentType = parts[0].split(':')[1];
@@ -35,27 +36,30 @@ function dataURLToBlob (dataURL) {
     var parts = dataURL.split(BASE64_MARKER);
     var contentType = parts[0].split(':')[1];
     var raw = window.atob(parts[1]);
-    var rawLength = raw.length;
+    const rawLength = raw.length;
 
-    var uInt8Array = new Uint8Array(rawLength);
+    const uInt8Array = new Uint8Array(rawLength);
 
-    for (var i = 0; i < rawLength; ++i) {
+    for (let i = 0; i < rawLength; ++i) {
       uInt8Array[i] = raw.charCodeAt(i);
     }
 
     return new Blob([uInt8Array], {type: contentType});
-};
+}
 
 
 function capture () {
-    var shell = this.shell,
-        env = shell.env,
-        map = env.map,
-        view = map.getView(),
-        rect = view.getRect(),
-        canvas = document.createElement('canvas'),
-        images = [],
-        ctx, data, alpha, idata;
+    const shell = this.shell;
+    const env = shell.env;
+    const map = env.map;
+    const view = map.getView();
+    const rect = view.getRect();
+    const canvas = document.createElement('canvas');
+    const images = [];
+    let ctx;
+    let data;
+    let alpha;
+    let idata;
 
 
     canvas.width = rect.width;
@@ -63,15 +67,15 @@ function capture () {
     ctx = canvas.getContext('2d');
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, rect.width, rect.height);
-    var previewImageData = ctx.getImageData(0, 0, rect.width, rect.height);
+    const previewImageData = ctx.getImageData(0, 0, rect.width, rect.height);
     data = previewImageData.data;
 
-    view.forEachImage(function(imageData){
+    view.forEachImage(imageData => {
         images.push(imageData);
     });
 
-    for (var i = 0; i < data.length; i += 4) {
-        for (var j = 0; j < images.length; j++) {
+    for (let i = 0; i < data.length; i += 4) {
+        for (let j = 0; j < images.length; j++) {
             idata = images[j].data;
             alpha = idata[i + 3] / 255,
                 r = i,
@@ -86,12 +90,12 @@ function capture () {
     }
     ctx.putImageData(previewImageData, 0, 0);
 
-    var imgBlob = dataURLToBlob(canvas.toDataURL());
+    const imgBlob = dataURLToBlob(canvas.toDataURL());
 
-    var formData = new FormData(),
-        transport = new Transport();
+    const formData = new FormData();
+    const transport = new Transport();
 
-    formData.append('media', imgBlob, 'map_capture-'+ _.now() + '.png');
+    formData.append('media', imgBlob, `map_capture-${_.now()}.png`);
 
     return transport.post(MEDIA_URL, {
         'headers' : {
@@ -99,10 +103,9 @@ function capture () {
         },
         'body': formData
     });
-
 }
 
-module.exports = exports = {
+export default {
     name: 'capture',
     command: capture
 };

@@ -8,12 +8,12 @@
  *
  */
 
-var _ = require('underscore');
+import _ from 'underscore';
 
 function delKey (obj, pathStr) {
-    var path = pathStr.split('.'),
-        key;
-    for(var i = 0, len = path.length - 1; i < len; i++){
+    const path = pathStr.split('.');
+    let key;
+    for(let i = 0, len = path.length - 1; i < len; i++){
         key = path.shift();
         obj = obj[key];
     }
@@ -23,7 +23,7 @@ function delKey (obj, pathStr) {
 
 
 function delAttr (key) {
-    var data = this.data.getData();
+    const data = this.data.getData();
     try {
         delKey(data, key);
     }
@@ -34,7 +34,7 @@ function delAttr (key) {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'del',
     command: delAttr
 };

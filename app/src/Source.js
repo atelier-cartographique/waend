@@ -1,28 +1,18 @@
-/*
- * app/src/Source.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
+import _ from 'underscore';
+import Geometry from '../lib/Geometry';
+import {get as getBinder} from '../lib/Bind';
+import BaseSource from './BaseSource';
+import debug from 'debug';
+const logger = debug('waend:Source');
 
 
-var _ = require('underscore'),
-    Geometry = require('../lib/Geometry'),
-    Bind = require('../lib/Bind'),
-    BaseSource = require('./BaseSource');
-
-
-var binder = Bind.get();
+const binder = getBinder();
 
 
 
-var Source = BaseSource.extend({
-    initialize: function (uid, gid, layer) {
+class Source extends BaseSource{
+    constructor (uid, gid, layer) {
+        super();
         this.uid = uid;
         this.gid = gid;
         this.id = layer.id;
@@ -31,49 +21,48 @@ var Source = BaseSource.extend({
         // listen to the layer to update features if some are created
         layer.on('change', this.update, this);
         layer.on('set', function (key) {
-            var prefix = _.first(key.split('.'));
+            const prefix = _.first(key.split('.'));
             if (('style' === prefix) || ('params' === prefix)) {
                 this.emit('update');
             }
         }, this);
-    },
+    }
 
 
-    update : function () {
-        var self = this;
-        var emitUpdate = function () {
-            var feat = this;
-            self.emit('update:feature', feat);
+    update() {
+        const emitUpdate = function () {
+            const feat = this;
+            this.emit('update:feature', feat);
         };
 
-        binder.getFeatures(self.uid, self.gid, self.layer.id)
-            .then(function(features){
-                var ts = _.now();
-                self.clear();
-                for (var i = 0; i < features.length; i++) {
-                    var feature = features[i];
-                    self.addFeature(feature, true);
-                    feature.on('set set:data', emitUpdate);
-                }
-                self.buildTree();
-                console.log('END SOURCE UPDATE', features.length, _.now() - ts);
-                self.emit('update');
-            })
-            .catch(function(err){
+        binder.getFeatures(this.uid, this.gid, this.layer.id)
+            .then(features => {
+            const ts = _.now();
+            this.clear();
+
+            for (const feature of features) {
+                this.addFeature(feature, true);
+                feature.on('set set:data', emitUpdate);
+            }
+
+            this.buildTree();
+            logger('END SOURCE UPDATE', features.length, _.now() - ts);
+            this.emit('update');
+        })
+            .catch(err => {
                 console.error('Source.update', err);
             });
-    },
+    }
 
-    toJSON : function (features) {
-        features = features || this.getFeatures();
-        var a = new Array(features.length),
-            layerData = this.layer.getData(),
-            layerStyle = layerData.style || {},
-            layerParams = layerData.params || {};
+    toJSON(features=this.getFeatures()) {
+        const a = new Array(features.length);
+        const layerData = this.layer.getData();
+        const layerStyle = layerData.style || {};
+        const layerParams = layerData.params || {};
 
-        for (var i = 0; i < features.length; i++) {
-            var f = JSON.parse(features[i].toJSON()),
-                props = f.properties;
+        for (let i = 0; i < features.length; i++) {
+            const f = JSON.parse(features[i].toJSON());
+            const props = f.properties;
             if ('style' in props) {
                 _.defaults(props.style, layerStyle);
             }
@@ -91,10 +80,9 @@ var Source = BaseSource.extend({
 
 
         return a;
-
     }
 
-});
+}
 
 
 //
@@ -109,4 +97,4 @@ var Source = BaseSource.extend({
 
 
 
-module.exports = exports = Source;
+export default Source;

@@ -9,16 +9,15 @@
  */
 
 
-var _ = require('underscore'),
-    O = require('../../lib/object').Object,
-    Geometry = require('./Geometry'),
-    Promise = require('bluebird');
+import _ from 'underscore';
+import EventEmitter from 'events';
+import Geometry from './Geometry';
 
-var binder;
+let binder;
 
 function pathKey (obj, path, def) {
     path = path.split('.');
-    for(var i = 0, len = path.length; i < len; i++){
+    for(let i = 0, len = path.length; i < len; i++){
         if (!obj || (typeof obj !== 'object')) {
             return def;
         }
@@ -31,51 +30,51 @@ function pathKey (obj, path, def) {
 }
 
 
-var Model = O.extend({
-    constructor: function(data) {
+export class Model extends EventEmitter {
+    constructor(data) {
+        super();
         this.data = data;
-        this.id = data.id; // read-only: TODO objectpropertize accordingly
-        O.apply(this, [data]);
+        Object.defineProperty(this, 'id', {value: data.id});
 
         // delay binder loading, ugly but still better than having
         // a refernce to it on each model.
         if(!binder) {
-            var Bind = require('./Bind');
+            const Bind = require('./Bind');
             binder = Bind.get();
         }
-    },
+    }
 
-    getPath: function () {
+    getPath() {
         return binder.getComps(this.id);
-    },
+    }
 
-    isNew: function () {
+    isNew() {
         return !('id' in this.data);
-    },
+    }
 
-    has: function (prop) {
+    has(prop) {
         return (prop in this.data.properties);
-    },
+    }
 
-    get: function (key, def) {
+    get(key, def) {
         return pathKey(this.data.properties, key, def);
-    },
+    }
 
-    getData: function () {
+    getData() {
         return JSON.parse(JSON.stringify(this.data.properties));
-    },
+    }
 
-    set: function (key, val) {
-        var keys = key.split('.');
-        var props = this.data.properties;
+    set(key, val) {
+        const keys = key.split('.');
+        const props = this.data.properties;
         if (1 === keys.length) {
             props[key] = val;
         }
         else {
-            var kl = keys.length,
-                currentDict = props,
-                k;
-            for (var i = 0; i < kl; i++) {
+            const kl = keys.length;
+            let currentDict = props;
+            let k;
+            for (let i = 0; i < kl; i++) {
                 k = keys[i];
                 if ((i + 1) === kl) {
                     currentDict[k] = val;
@@ -93,32 +92,32 @@ var Model = O.extend({
         }
         this.emit('set', key, val);
         return binder.update(this);
-    },
+    }
 
-    setData: function (data) {
+    setData(data) {
         this.data.properties = data;
         this.emit('set:data', data);
         return binder.update(this);
-    },
+    }
 
-    toJSON: function () {
+    toJSON() {
         return JSON.stringify(this.data);
-    },
+    }
 
-    _updateData: function (data, silent) {
-        var props = this.data.properties,
-            newProps = data.properties,
-            changedProps = [],
-            changedAttrs = [],
-            changedKeys = _.difference(_.keys(props), _.keys(newProps)).concat(_.difference(_.keys(newProps), _.keys(props)));
+    _updateData(data, silent) {
+        const props = this.data.properties;
+        const newProps = data.properties;
+        const changedProps = [];
+        const changedAttrs = [];
+        const changedKeys = _.difference(_.keys(props), _.keys(newProps)).concat(_.difference(_.keys(newProps), _.keys(props)));
 
-        _.each(props, function(v, k) {
+        _.each(props, (v, k) => {
             if (!_.isEqual(v, newProps[k])) {
                 changedProps.push(k);
             }
         });
 
-        _.each(this.data, function(v, k) {
+        _.each(this.data, (v, k) => {
             if ('properties' !== k) {
                 if (!_.isEqual(v, data[k])) {
                     changedAttrs.push(k);
@@ -139,37 +138,38 @@ var Model = O.extend({
         }
     }
 
-});
+}
 
-module.exports.Model = Model;
+
+export default Model;
+
 // models
 
-module.exports.User = Model.extend({
-    type: 'user',
-});
+export class User extends Model {
+    get type () { return 'user'; }
+}
 
-module.exports.Group = Model.extend({
-    type: 'group',
-});
+export class Group extends Model {
+    get type () { return 'group'; }
+}
 
-module.exports.Layer = Model.extend({
-    type: 'layer',
+export class Layer  extends Model {
+    get type () { return 'layer'; }
 
-    getGroup: function() {
-        var path = this.getPath();
-        return binder.getGroup.apply(binder, path);
-    },
+    getGroup () {
+        const path = this.getPath();
+        return binder.getGroup(...path);
+    }
 
-    isVisible: function () {
-        that = this;
-        var resolver = function (yes, no) {
+    isVisible () {
+        const resolver = (yes, no) => {
             that.getGroup()
-                .then(function (group) {
-                    var visibleList = group.get('params.visible', null);
+                .then(group => {
+                    const visibleList = group.get('params.visible', null);
                     if (null === visible) {
                         return yes();
                     }
-                    if (_.indexOf(visibleList, that.id) < 0) {
+                    if (_.indexOf(visibleList, this.id) < 0) {
                         return no();
                     }
                     yes();
@@ -177,34 +177,34 @@ module.exports.Layer = Model.extend({
                 .catch(no);
         };
         return (new Promise(resolver));
-    },
+    }
 
-    setVisible: function (visible) {
-
-    },
-
-    groupIndex: function () {
-
-    },
-
-    setGroupIndex: function (idx) {
+    setVisible(visible) {
 
     }
 
-});
+    groupIndex() {
 
-module.exports.Feature = Model.extend({
-    type: 'feature',
+    }
 
-    getGeometry: function () {
+    setGroupIndex(idx) {
+
+    }
+
+}
+
+export class Feature extends Model {
+    get type () { return 'feature'; }
+
+    getGeometry () {
         return (new Geometry.Geometry(this.data.geom));
-    },
+    }
 
-    getExtent: function () {
+    getExtent () {
         return (new Geometry.Geometry(this.data.geom)).getExtent();
-    },
+    }
 
-    setGeometry: function(geom) {
+    setGeometry (geom) {
         if (geom instanceof Geometry.Geometry) {
             this.data.geom = geom.toGeoJSON();
         }
@@ -214,4 +214,11 @@ module.exports.Feature = Model.extend({
         this.emit('set', 'geom', this.getGeometry());
         return binder.update(this);
     }
-});
+}
+
+export function configure (configurator) {
+    configurator(User);
+    configurator(Group);
+    configurator(Layer);
+    configurator(Feature);
+}

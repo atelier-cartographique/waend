@@ -8,48 +8,75 @@
  *
  */
 
+import listCommands from './listCommands';
+import login from './login';
+import logout from './logout';
+import echo from './echo';
+import read from './read';
+import changeContext from './changeContext';
+import printCurrentContext from './printCurrentContext';
+import setAttribute from './setAttribute';
+import getAttribute from './getAttribute';
+import delAttribute from './delAttribute';
+import create from './create';
+import createGroup from './createGroup';
+import region from './region';
+import zoom from './zoom';
+import pan from './pan';
+import filter from './filter';
+import drawLine from './drawLine';
+import trace from './trace';
+import navigate from './navigate';
+import view from './view';
+import embed from './embed';
+import media from './media';
+import select from './select';
+import close from './close';
+import textEdit from './textEdit';
+import help from './help';
+import lookup from './lookup';
+import delFeature from './delFeature';
+import attach from './attach';
+import detach from './detach';
+import widget from './widget';
+import wSet from './wSet';
+import notify from './notify';
+import capture from './capture';
 
 
-var commandModules = [
-    require('./listCommands'),
-    require('./login'),
-    require('./logout'),
-    require('./echo'),
-    require('./read'),
-    require('./changeContext'),
-    require('./printCurrentContext'),
-    require('./setAttribute'),
-    require('./getAttribute'),
-    require('./delAttribute'),
-    require('./create'),
-    require('./createGroup'),
-    require('./region'),
-    require('./zoom'),
-    require('./pan'),
-    require('./filter'),
-    require('./drawLine'),
-    require('./trace'),
-    require('./navigate'),
-    require('./view'),
-    require('./embed'),
-    require('./media'),
-    require('./select'),
-    require('./close'),
-    require('./textEdit'),
-    require('./help'),
-    require('./lookup'),
-    require('./delFeature'),
-    require('./attach'),
-    require('./detach'),
-    require('./widget'),
-    require('./wSet'),
-    require('./notify'),
-    require('./capture'),
-    ];
-
-
-for (var idx = 0 ; idx < commandModules.length; idx++) {
-    var command = commandModules[idx];
-
-    module.exports[command.name] = command.command;
-}
+export {
+    listCommands,
+    login,
+    logout,
+    echo,
+    read,
+    changeContext,
+    printCurrentContext,
+    setAttribute,
+    getAttribute,
+    delAttribute,
+    create,
+    createGroup,
+    region,
+    zoom,
+    pan,
+    filter,
+    drawLine,
+    trace,
+    navigate,
+    view,
+    embed,
+    media,
+    select,
+    close,
+    textEdit,
+    help,
+    lookup,
+    delFeature,
+    attach,
+    detach,
+    widget,
+    wSet,
+    notify,
+    capture
+};

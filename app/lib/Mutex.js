@@ -1,42 +1,31 @@
-/*
- * app/lib/Mutex.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
+import _ from 'underscore';
+import EventEmitter from 'events';
+import debug from 'debug';
+const logger = debug('waend:Mutex');
 
-'use strict';
+const MutexOptions = ['queueLength'];
 
+class Mutex extends EventEmitter {
+    get queueLength () {
+        return 128;
+    }
 
-var _ = require('underscore'),
-    Promise = require('bluebird'),
-    O = require('../../lib/object').Object;
-
-
-var MutexOptions = ['queueLength'];
-
-var Mutex = O.extend({
-    queueLength: 128,
-
-    initialize: function (options) {
+    initialize(options) {
         _.extend(this, _.pick(options, MutexOptions) || {});
 
         this._queue = 0;
         this.setMaxListeners(this.queueLength);
-    },
+    }
 
-    get: function () {
+    get() {
 
-        console.log('mutex.get', this._queue);
-        var self = this;
-        var unlock = function (fn, ctx) {
-            console.log('mutex.unlock', self._queue);
+        logger('mutex.get', this._queue);
+        const self = this;
+        const unlock = (fn, ctx) => {
+            logger('mutex.unlock', self._queue);
             self._queue -= 1;
             self.emit('unlock', self._queue);
-            var defered = function(){
+            const defered = () => {
                 if (_.isFunction(fn)) {
                     fn.call(ctx);
                 }
@@ -45,15 +34,15 @@ var Mutex = O.extend({
         };
 
         if (self._queue > 0) {
-            var resolver = function (resolve, reject) {
+            const resolver = (resolve, reject) => {
                 if (self._queue >= self.queueLength) {
                     return reject('QueueLengthExceeded');
                 }
-                var index = self._queue;
+                const index = self._queue;
                 self._queue += 1;
-                console.log('mutex.queue', self._queue);
-                var listId;
-                var listener = function(q) {
+                logger('mutex.queue', self._queue);
+                let listId;
+                const listener = q => {
                     if (q <= index) {
                         self.offById(listId);
                         resolve(unlock);
@@ -67,6 +56,6 @@ var Mutex = O.extend({
         return Promise.resolve(unlock);
     }
 
-});
+}
 
-module.exports = exports = Mutex;
+export default Mutex;

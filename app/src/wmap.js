@@ -10,34 +10,38 @@
 
 
 
-var config = require('../../config'),
-    Bind = require('../lib/Bind'),
-    Sync = require('../lib/Sync'),
-    semaphore = require('../lib/Semaphore'),
-    WebConsole = require('./WebConsole'),
-    LayerProvider = require('./LayerProvider'),
-    SourceProvider = require('./SourceProvider'),
-    WMap = require('./WaendMap'),
-    ModelConfig = require('./ModelConfig');
+import config from '../config';
+import debug from 'debug';
+import {get as getBinder} from '../lib/Bind';
+import {configure as configureSync} from '../lib/Sync';
+import semaphore from '../lib/Semaphore';
+import WebConsole from './WebConsole';
+import LayerProvider from './LayerProvider';
+import SourceProvider from './SourceProvider';
+import WMap from './WaendMap';
+import {configure as configureModels} from '../lib/Model';
+import {configurator} from './ModelConfig';
 
-Bind.configureModels(ModelConfig.configurator);
+
+debug.save('waend:*');
+configureModels(configurator);
 
 
 function init () {
-    var elementWC = document.querySelector('#wc'),
-        elementMap = document.querySelector('#map'),
-        wc = new WebConsole(elementWC, elementMap),
-        layer = new LayerProvider(),
-        source = new SourceProvider(),
-        wmap = new WMap({'root': elementMap});
+    const elementWC = document.querySelector('#wc');
+    const elementMap = document.querySelector('#map');
+    const wc = new WebConsole(elementWC, elementMap);
+    const layer = new LayerProvider();
+    const source = new SourceProvider();
+    const wmap = new WMap({'root': elementMap});
 
     wc.shell.env.map = wmap; // there might be a better way, but we want this result.
     wc.start();
 
     if (window.waendUser) {
-        Bind.get()
+        getBinder()
             .getMe()
-            .then(function(user){
+            .then(user => {
                 wc.shell.loginUser(user);
             });
     }
@@ -45,10 +49,10 @@ function init () {
         semaphore.signal('shell:change:context', 0, []);
     }
 
-    Sync.configure(config.notify);
+    configureSync(config.notify);
 }
 
-document.onreadystatechange = function () {
+document.onreadystatechange = () => {
     if (document.readyState === "interactive") {
         init();
     }

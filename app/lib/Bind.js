@@ -1,38 +1,21 @@
-/*
- * app/lib/Bind.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
-
-var _ = require('underscore'),
-    O = require('../../lib/object').Object,
-    Transport = require('./Transport'),
-    Model = require('./Model'),
-    config = require('../../config'),
-    region = require('./Region'),
-    Geometry = require('./Geometry'),
-    Sync = require('./Sync'),
-    semaphore = require('./Semaphore'),
-    Promise = require('bluebird');
+import _ from 'underscore';
+import EventEmitter from 'events';
+import Transport from './Transport';
+import config from '../config';
+import region from './Region';
+import Geometry from './Geometry';
+import {subscribe} from './Sync';
+import semaphore from './Semaphore';
+import {User, Group, Layer, Feature} from './Model';
+import debug from 'debug';
+const logger = debug('waend:Bind');
 
 
-
-var API_URL = config.public.apiUrl;
-
-var User = Model.User,
-    Group = Model.Group,
-    Layer = Model.Layer,
-    Feature = Model.Feature;
+const API_URL = config.public.apiUrl;
 
 /**
  * A Record in Database
- * 
+ *
  * @param {object} model  A model
  * @param {Array}  comps  Paths components
  * @param {string} parent Parent Id
@@ -51,38 +34,40 @@ function Record (model, comps, parent) {
     Object.freeze(this);
 }
 
-var DB = O.extend({
-    _db : {},
-
-    initialize: function(t) {
+const db_store = {};
+class DB extends EventEmitter {
+    constructor (t) {
+        super();
         this.transport = t;
-    },
+    }
 
-    makePath: function (comps) {
-        var cl = comps.length;
+    get _db () {return db_store;}
+
+    makePath (comps) {
+        const cl = comps.length;
         if (1 === cl) {
-            return '/user/' + comps[0];
+            return `/user/${comps[0]}`;
         }
         else if (2 === cl) {
-            return '/user/' + comps[0] + '/group/' + comps[1];
+            return `/user/${comps[0]}/group/${comps[1]}`;
         }
         else if (3 === cl) {
-            return '/user/' + comps[0] + '/group/' + comps[1] + '/layer/' + comps[2];
+            return `/user/${comps[0]}/group/${comps[1]}/layer/${comps[2]}`;
         }
         else if (4 === cl) {
-            return '/user/' + comps[0] + '/group/' + comps[1] + '/layer/' + comps[2] + '/feature/' + comps[3];
+            return `/user/${comps[0]}/group/${comps[1]}/layer/${comps[2]}/feature/${comps[3]}`;
         }
         throw (new Error('wrong number of comps'));
-    },
+    }
 
-    getParent: function (comps) {
+    getParent (comps) {
         return _.last(comps, 2)[0];
-    },
+    }
 
-    record: function (comps, model) {
-        var rec;
+    record (comps, model) {
+        let rec;
         if (model.id in this._db) {
-            var oldRec = this._db[model.id];
+            const oldRec = this._db[model.id];
             oldRec.model._updateData(model.data);
             rec = new Record(oldRec.model, oldRec.comps, this.getParent(comps));
         }
@@ -91,59 +76,58 @@ var DB = O.extend({
         }
         this._db[model.id] = rec;
         return rec;
-    },
+    }
 
-    update: function (model) {
-        var self = this,
-            db = this._db,
-            record = db[model.id],
-            path = this.makePath(record.comps);
+    update (model) {
+        const self = this;
+        const db = this._db;
+        const record = db[model.id];
+        const path = this.makePath(record.comps);
 
-        var resolver = function (resolve, reject) {
+        const resolver = (resolve, reject) => {
             self.transport
                 .put(API_URL + path, {'body': model })
-                    .then(function(){
+                    .then(() => {
                         db[model.id] = new Record(model, record.comps, record.parent);
                         resolve(model);
                     })
                     .catch(reject);
         };
         return (new Promise(resolver));
-    },
+    }
 
-
-    has: function (id) {
+    has (id) {
         return (id in this._db);
-    },
+    }
 
-    get: function (id) {
+    get (id) {
         return this._db[id].model;
-    },
+    }
 
-    del: function (id) {
+    del (id) {
         delete this._db[id];
-    },
+    }
 
-    getComps: function (id) {
+    getComps (id) {
         return _.clone(this._db[id].comps);
-    },
+    }
 
-    lookupKey: function (prefix) {
-        var pat = new RegExp('^'+prefix+'.*');
-        var result = [];
+    lookupKey (prefix) {
+        const pat = new RegExp(`^${prefix}.*`);
+        const result = [];
         _.each(this._db, function(val, key){
             if(key.match(pat)){
                 result.push(this.get(key));
             }
         }, this);
         return result;
-    },
+    }
 
-    lookup: function (predicate) {
-        var result = _.pluck(_.filter(this._db, predicate, this), 'model');
+    lookup (predicate) {
+        const result = _.pluck(_.filter(this._db, predicate, this), 'model');
         return result;
     }
-});
+}
 
 
 function objectifyResponse (response) {
@@ -159,17 +143,19 @@ function objectifyResponse (response) {
     return response;
 }
 
-var Bind = O.extend({
+class Bind extends EventEmitter {
 
-    initialize: function (options) {
+    constructor (options) {
+        super();
         this.transport = new Transport();
         this.db = new DB(this.transport);
         this.featurePages = {};
+        this._groupCache = {};
 
         semaphore.on('sync', function(chan, cmd, data){
             if ('update' === cmd) {
                 if (this.db.has(data.id)) {
-                    var model = this.db.get(data.id);
+                    const model = this.db.get(data.id);
                     model._updateData(data);
                 }
             }
@@ -177,12 +163,12 @@ var Bind = O.extend({
                 var ctx = chan.type;
                 if ('layer' === ctx) {
                     if (!this.db.has(data.id)) {
-                        var layerId = chan.id,
-                            feature = new Feature(data),
-                            comps = this.getComps(layerId);
+                        var layerId = chan.id;
+                        const feature = new Feature(data);
+                        const comps = this.getComps(layerId);
                         comps.push(feature.id);
-                        var rec = this.db.record(comps, feature);
-                        // console.log('comps', comps, rec);
+                        const rec = this.db.record(comps, feature);
+                        // logger('comps', comps, rec);
                         this.changeParent(layerId);
                     }
                 }
@@ -190,7 +176,7 @@ var Bind = O.extend({
             else if ('delete' === cmd) {
                 var ctx = chan.type;
                 if ('layer' === ctx) {
-                    var fid = data;
+                    const fid = data;
                     if (this.db.has(fid)) {
                         var layerId = chan.id;
                         this.db.del(fid);
@@ -199,105 +185,102 @@ var Bind = O.extend({
                 }
             }
         }, this);
-    },
+    }
 
-    update: function (model) {
+    update (model) {
         return this.db.update(model);
-    },
+    }
 
-    changeParent: function (parentId) {
+    changeParent (parentId) {
         if(this.db.has(parentId)){
-            var parent = this.db.get(parentId);
-            // console.log('binder.changeParent', parent.id);
+            const parent = this.db.get(parentId);
+            // logger('binder.changeParent', parent.id);
             parent.emit('change');
         }
-    },
+    }
 
-    getMe: function () {
-        var db = this.db,
-            binder = this;
-        var pr = function (response) {
-            var u = new User(objectifyResponse(response));
+    getMe () {
+        const db = this.db;
+        const binder = this;
+        const pr = response => {
+            const u = new User(objectifyResponse(response));
             db.record([u.id], u);
             return u;
         };
 
-        var url = API_URL+'/auth';
+        const url = `${API_URL}/auth`;
         return this.transport.get(url, {parse: pr});
-    },
+    }
 
-    getComps: function (id) {
+    getComps (id) {
         return this.db.getComps(id);
-    },
+    }
 
-    getUser: function (userId) {
-        var db = this.db,
-            path = '/user/'+userId,
-            binder = this;
+    getUser (userId) {
+        const db = this.db;
+        const path = `/user/${userId}`;
+        const binder = this;
 
         if(db.has(userId)){
             return Promise.resolve(db.get(userId));
         }
-        var pr = function (response) {
-            var u = new User(objectifyResponse(response));
+        const pr = response => {
+            const u = new User(objectifyResponse(response));
             db.record([userId], u);
             return u;
         };
-        var url = API_URL+path;
+        const url = API_URL+path;
         return this.transport.get(url, {parse: pr});
-    },
+    }
 
-    getGroup: function (userId, groupId) {
-        var db = this.db,
-            binder = this,
-            path = '/user/'+userId+'/group/'+groupId;
+    getGroup (userId, groupId) {
+        const db = this.db;
+        const binder = this;
+        const path = `/user/${userId}/group/${groupId}`;
         if(db.has(groupId)){
             return Promise.resolve(db.get(groupId));
         }
-        var pr = function (response) {
-            var groupData = objectifyResponse(response),
-                g = new Group(_.omit(groupData.group, 'layers')),
-                layers = groupData.group.layers;
+        const pr = response => {
+            const groupData = objectifyResponse(response);
+            const g = new Group(_.omit(groupData.group, 'layers'));
+            const layers = groupData.group.layers;
 
             db.record([userId, groupId], g);
 
-            for (var i = 0; i < layers.length; i++) {
-                var layer = layers[i],
-                    l = new Layer(_.omit(layer, 'features')),
-                    features = layer.features;
-
+            for (const layer of layers) {
+                const l = new Layer(_.omit(layer, 'features'));
                 db.record([userId, groupId, layer.id], l);
 
-                for (var j = 0; j < features.length; j++) {
-                    var feature = features[j],
-                        f = new Feature(feature);
-
+                for (const feature of layer.features) {
+                    const f = new Feature(feature);
                     db.record([userId, groupId, layer.id, feature.id], f);
                 }
-                Sync.subscribe('layer', layer.id);
+
+                subscribe('layer', layer.id);
             }
+
             semaphore.signal('stop:loader');
-            Sync.subscribe('group', groupId);
+            subscribe('group', groupId);
             return g;
         };
-        var url = API_URL+path;
+        const url = API_URL+path;
         semaphore.signal('start:loader', 'downloading map data');
         return this.transport.get(url, {parse: pr});
-    },
+    }
 
-    _groupCache: {},
-    getGroups: function (userId) {
-        var db = this.db,
-            binder = this,
-            path = '/user/'+userId+'/group/',
-            gc = this._groupCache;
 
-        var pr = function (response) {
-            var data = objectifyResponse(response);
+    getGroups (userId) {
+        const db = this.db;
+        const binder = this;
+        const path = `/user/${userId}/group/`;
+        const gc = this._groupCache;
 
-            var ret = [];
-            for(var i = 0; i < data.results.length; i++){
-                var groupData = data.results[i];
+        const pr = response => {
+            const data = objectifyResponse(response);
+
+            const ret = [];
+
+            for (const groupData of data.results) {
                 if(db.has(groupData.id)){
                     ret.push(db.get(groupData.id));
                 }
@@ -305,129 +288,124 @@ var Bind = O.extend({
                     ret.push(gc[groupData.id]);
                 }
                 else {
-                    var g = new Group(groupData);
+                    const g = new Group(groupData);
                     // we do not record here, it would prevent deep loading a group
                     // db.record(path+g.id, g);
                     gc[groupData.id] = g;
                     ret.push(g);
                 }
             }
+
             return ret;
         };
-        var url = API_URL + path;
+        const url = API_URL + path;
         return this.transport.get(url, {parse: pr});
-    },
+    }
 
-    getLayer: function (userId, groupId, layerId) {
-        var db = this.db,
-            binder = this,
-            path = '/user/'+userId+'/group/'+groupId+'/layer/'+layerId;
+    getLayer (userId, groupId, layerId) {
+        const db = this.db;
+        const binder = this;
+        const path = `/user/${userId}/group/${groupId}/layer/${layerId}`;
         if(db.has(layerId)){
             return Promise.resolve(db.get(layerId));
         }
-        var pr = function (response) {
-            var l = new Layer(objectifyResponse(response));
+        const pr = response => {
+            const l = new Layer(objectifyResponse(response));
             db.record([userId, groupId, layerId], l);
             return l;
         };
-        var url = API_URL + path;
+        const url = API_URL + path;
         return this.transport.get(url, {parse: pr});
-    },
+    }
 
-    getLayers: function (userId, groupId) {
-        return Promise.resolve(this.db.lookup(function(rec, key){
-            return (rec.parent === groupId);
-        }));
+    getLayers (userId, groupId) {
+        return Promise.resolve(this.db.lookup((rec, key) => rec.parent === groupId));
+    }
 
-    },
-
-    getFeature: function (userId, groupId, layerId, featureId) {
-        var db = this.db,
-            binder = this,
-            path = '/user/'+userId+'/group/'+groupId+'/layer/'+layerId+'/feature/'+featureId;
+    getFeature (userId, groupId, layerId, featureId) {
+        const db = this.db;
+        const binder = this;
+        const path = `/user/${userId}/group/${groupId}/layer/${layerId}/feature/${featureId}`;
         if(db.has(featureId)){
             return Promise.resolve(db.get(featureId));
         }
-        var pr = function (response) {
-            var f = new Feature(objectifyResponse(response));
+        const pr = response => {
+            const f = new Feature(objectifyResponse(response));
             db.record([userId, groupId, layerId, featureId], f);
             return f;
         };
-        var url = API_URL + path;
+        const url = API_URL + path;
         return this.transport.get(url, {parse: pr});
-    },
+    }
 
-    delFeature: function (userId, groupId, layerId, featureId) {
-        var feature = this.db.get(featureId),
-            geom = feature.getGeometry(),
-            path = '/user/' + userId +
-                   '/group/' + groupId +
-                   '/layer/' + layerId +
-                   '/feature.'+ geom.getType() +'/' + featureId,
-            url = API_URL + path,
-            db = this.db,
-            self = this;
+    delFeature (userId, groupId, layerId, featureId) {
+        const feature = this.db.get(featureId);
+        const geom = feature.getGeometry();
 
-        var pr = function () {
+        const path = `/user/${userId}/group/${groupId}/layer/${layerId}/feature.${geom.getType()}/${featureId}`;
+
+        const url = API_URL + path;
+        const db = this.db;
+        const self = this;
+
+        const pr = () => {
             db.del(featureId);
             self.changeParent(layerId);
         };
 
         return this.transport.del(url, {parse: pr});
-    },
+    }
 
-    getFeatures: function (userId, groupId, layerId, page) {
-        return Promise.resolve(this.db.lookup(function(rec, key){
-            return (rec.parent === layerId);
-        }));
-    },
+    getFeatures (userId, groupId, layerId, page) {
+        return Promise.resolve(this.db.lookup((rec, key) => rec.parent === layerId));
+    }
 
 
-    setGroup: function (userId, data) {
-        var db = this.db,
-            binder = this,
-            path = '/user/'+userId+'/group/';
+    setGroup (userId, data) {
+        const db = this.db;
+        const binder = this;
+        const path = `/user/${userId}/group/`;
 
-        var pr = function (response) {
-            var g = new Group(objectifyResponse(response));
+        const pr = response => {
+            const g = new Group(objectifyResponse(response));
             db.record([userId, g.id], g);
             binder.changeParent(userId);
             return g;
         };
 
-        var url = API_URL+path;
+        const url = API_URL+path;
         return this.transport.post(url, {
             parse: pr,
             body: data
         });
-    },
+    }
 
-    setLayer: function (userId, groupId, data) {
-        var db = this.db,
-            binder = this,
-            path = '/user/'+userId+'/group/'+groupId+'/layer/';
+    setLayer (userId, groupId, data) {
+        const db = this.db;
+        const binder = this;
+        const path = `/user/${userId}/group/${groupId}/layer/`;
 
-        var pr = function (response) {
-            var g = new Layer(objectifyResponse(response));
+        const pr = response => {
+            const g = new Layer(objectifyResponse(response));
             db.record([userId, groupId, g.id], g);
             binder.changeParent(groupId);
             return g;
         };
 
-        var url = API_URL+path;
+        const url = API_URL+path;
         return this.transport.post(url, {
             parse: pr,
             body: data
         });
-    },
+    }
 
-    setFeature: function (userId, groupId, layerId, data, batch) {
-        var db = this.db,
-            binder = this,
-            path = '/user/'+userId+'/group/'+groupId+'/layer/'+layerId+ '/feature/';
+    setFeature (userId, groupId, layerId, data, batch) {
+        const db = this.db;
+        const binder = this;
+        const path = `/user/${userId}/group/${groupId}/layer/${layerId}/feature/`;
 
-        var pr = function (response) {
-            var f = new Feature(objectifyResponse(response));
+        const pr = response => {
+            const f = new Feature(objectifyResponse(response));
             db.record([userId, groupId, layerId, f.id], f);
             if (!batch) {
                 binder.changeParent(layerId);
@@ -435,71 +413,58 @@ var Bind = O.extend({
             return f;
         };
 
-        var url = API_URL+path;
+        const url = API_URL+path;
         return this.transport.post(url, {
             parse: pr,
             body: data
         });
-    },
+    }
 
 
-    attachLayerToGroup: function (guid, groupId, layerId) {
-        var db = this.db,
-            binder = this,
-            path = '/user/'+guid+'/group/'+groupId+'/attach/',
-            data = {
-                'layer_id': layerId,
-                'group_id': groupId
-            };
+    attachLayerToGroup (guid, groupId, layerId) {
+        const db = this.db;
+        const binder = this;
+        const path = `/user/${guid}/group/${groupId}/attach/`;
 
-        var url = API_URL+path;
+        const data = {
+            'layer_id': layerId,
+            'group_id': groupId
+        };
+
+        const url = API_URL+path;
         return this.transport.post(url, {
             'body': data
         });
-    },
+    }
 
-    detachLayerFromGroup: function (userId, groupId, layerId) {
-        var path = '/user/' + userId +
-                   '/group/' + groupId +
-                   '/detach/' + layerId,
-            url = API_URL + path,
-            db = this.db,
-            self = this;
-
-        var pr = function () {
-            self.changeParent(groupId);
+    detachLayerFromGroup (userId, groupId, layerId) {
+        const path = `/user/${userId}/group/${groupId}/detach/${layerId}`;
+        const url = API_URL + path;
+        const db = this.db;
+        const pr = () => {
+            this.changeParent(groupId);
         };
-
         return this.transport.del(url, {parse: pr});
-    },
+    }
 
-    matchKeyAsync: function (prefix) {
-        var res = this.db.lookupKey(prefix);
+    matchKeyAsync (prefix) {
+        const res = this.db.lookupKey(prefix);
         if(res.length > 0){
             return Promise.resolve(res);
         }
         return Promise.reject('No Match');
-    },
-
-    matchKey: function (prefix) {
-        return this.db.lookupKey(prefix);
     }
 
-});
+    matchKey (prefix) {
+        return this.db.lookupKey(prefix);
+    }
+}
 
-var bindInstance = null;
+let bindInstance = null;
 
-module.exports.get = function () {
+export function get() {
     if(!bindInstance){
         bindInstance = new Bind();
     }
     return bindInstance;
-};
-
-
-module.exports.configureModels = function (configurator) {
-    User = configurator(User);
-    Group = configurator(Group);
-    Layer = configurator(Layer);
-    Feature = configurator(Feature);
-};
+}

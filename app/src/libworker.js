@@ -8,8 +8,10 @@
  *
  */
 
+import debug from 'debug';
+const logger = debug('waend:libworker');
 
-var workerContext = self;
+const workerContext = self;
 
 //< OL3 helpers
 workerContext.window = {
@@ -17,35 +19,37 @@ workerContext.window = {
 };
 workerContext.window.document = {
     'implementation':{
-        'createDocument': function () { return true; }
+        'createDocument'() { return true; }
     }
 };
 workerContext.document = workerContext.window.document;
 workerContext.Image = function Image() {};
+
 //> END OF OL3 helpers
 
-var underscore = require('underscore'),
-    Geometry = require('../lib/Geometry'),
-    Transform = require('../lib/Transform'),
-    BaseSource = require('./BaseSource'),
-    Text = require('./Text'),
-    Projection = require('proj4'),
-    Turf = require('turf');
+import underscore from 'underscore';
 
-var Proj3857 = Projection('EPSG:3857');
+import Geometry from '../lib/Geometry';
+import Transform from '../lib/Transform';
+import BaseSource from './BaseSource';
+import Text from './Text';
+import Projection from 'proj4';
+import Turf from 'turf';
 
-var polygonProject = function (coordinates) {
-    for (var i = 0; i < coordinates.length; i++) {
-        var ringLength = coordinates[i].length;
-        for (var ii = 0; ii < ringLength; ii++) {
+const Proj3857 = Projection('EPSG:3857');
+
+const polygonProject = coordinates => {
+    for (let i = 0; i < coordinates.length; i++) {
+        const ringLength = coordinates[i].length;
+        for (let ii = 0; ii < ringLength; ii++) {
             coordinates[i][ii] = Proj3857.forward(coordinates[i][ii]);
         }
     }
     return coordinates;
 };
 
-var lineProject = function (coordinates) {
-    for (var i = 0; i < coordinates.length; i++) {
+const lineProject = coordinates => {
+    for (let i = 0; i < coordinates.length; i++) {
         coordinates[i] = Proj3857.forward(coordinates[i]);
     }
     return coordinates;
@@ -58,10 +62,10 @@ function floorVec2 (v) {
     return v;
 }
 
-var polygonTransform = function (T, coordinates) {
-    for (var i = 0; i < coordinates.length; i++) {
-        var ringLength = coordinates[i].length;
-        for (var ii = 0; ii < ringLength; ii++) {
+const polygonTransform = (T, coordinates) => {
+    for (let i = 0; i < coordinates.length; i++) {
+        const ringLength = coordinates[i].length;
+        for (let ii = 0; ii < ringLength; ii++) {
             coordinates[i][ii] = T.mapVec2(coordinates[i][ii]);
             // coordinates[i][ii] = floorVec2(T.mapVec2(coordinates[i][ii]));
         }
@@ -69,18 +73,18 @@ var polygonTransform = function (T, coordinates) {
     return coordinates;
 };
 
-var lineTransform = function (T, coordinates) {
-    for (var i = 0; i < coordinates.length; i++) {
+const lineTransform = (T, coordinates) => {
+    for (let i = 0; i < coordinates.length; i++) {
         coordinates[i] = T.mapVec2(coordinates[i]);
         // coordinates[i] = floorVec2(T.mapVec2(coordinates[i]));
     }
     return coordinates;
 };
 
-var polygonFloor = function (coordinates) {
-    for (var i = 0; i < coordinates.length; i++) {
-        var ringLength = coordinates[i].length;
-        for (var ii = 0; ii < ringLength; ii++) {
+const polygonFloor = coordinates => {
+    for (let i = 0; i < coordinates.length; i++) {
+        const ringLength = coordinates[i].length;
+        for (let ii = 0; ii < ringLength; ii++) {
             coordinates[i][ii] = floorVec2(coordinates[i][ii]);
             // coordinates[i][ii] = floorVec2(T.mapVec2(coordinates[i][ii]));
         }
@@ -88,33 +92,35 @@ var polygonFloor = function (coordinates) {
     return coordinates;
 };
 
-var lineFloor = function (coordinates) {
-    for (var i = 0; i < coordinates.length; i++) {
+const lineFloor = coordinates => {
+    for (let i = 0; i < coordinates.length; i++) {
         coordinates[i] = floorVec2(coordinates[i]);
         // coordinates[i] = floorVec2(T.mapVec2(coordinates[i]));
     }
     return coordinates;
 };
 
-var dataSource;
-var renderId;
+let dataSource;
+let renderId;
 
-function GeomItem (data) {
-    underscore.extend(this, data);
+class GeomItem {
+    constructor(data) {
+        underscore.extend(this, data);
+    }
+
+    getGeometry() {
+        return (new Geometry.Geometry(this.geom));
+    }
+
+    getExtent() {
+        return (new Geometry.Geometry(this.geom)).getExtent();
+    }
 }
-
-GeomItem.prototype.getGeometry = function () {
-    return (new Geometry.Geometry(this.geom));
-};
-
-GeomItem.prototype.getExtent = function () {
-    return (new Geometry.Geometry(this.geom)).getExtent();
-};
 
 function initData (data) {
     dataSource = new BaseSource();
-    for (var i = 0; i < data.length; i++) {
-        var item = new GeomItem(data[i]);
+    for (let i = 0; i < data.length; i++) {
+        const item = new GeomItem(data[i]);
         dataSource.addFeature(item, true);
     }
     dataSource.buildTree();
@@ -123,37 +129,37 @@ function initData (data) {
 function updateData (featureData) {
     featureData = underscore.isArray(featureData) ?
                   featureData : [featureData];
-    for (var i = 0; i < featureData.length; i++) {
-        var feature = new GeomItem(featureData[i]);
+    for (let i = 0; i < featureData.length; i++) {
+        const feature = new GeomItem(featureData[i]);
         dataSource.removeFeature(feature.id);
         dataSource.addFeature(feature);
     }
 }
 
 function updateView (startedWith, opt_extent, opt_matrix) {
-    var features = dataSource.getFeatures(opt_extent);
+    const features = dataSource.getFeatures(opt_extent);
     if ('startFrame' in workerContext.waend) {
         workerContext.waend.startFrame(startedWith, opt_extent, opt_matrix, features);
     }
-    var T = new Transform(opt_matrix);
-    var rf = function (feature) {
-        var geom = feature.getGeometry(),
-            geomType = geom.getType().toLowerCase(),
-            props = feature.properties,
-            coordinates = geom.getCoordinates();
+    const T = new Transform(opt_matrix);
+    const rf = feature => {
+        const geom = feature.getGeometry();
+        const geomType = geom.getType().toLowerCase();
+        const props = feature.properties;
+        const coordinates = geom.getCoordinates();
         if (geomType && (geomType in workerContext.waend)) {
             // var rid = args[0];
-            // console.log('worker', renderId, rid, name);
+            // logger('worker', renderId, rid, name);
             workerContext.waend[geomType].call(workerContext, coordinates, props, opt_matrix);
         }
     };
 
 
-    var renderBatch = function (start, stop) {
+    const renderBatch = (start, stop) => {
         if (renderId !== startedWith) {
             return;
         }
-        for (var j = start; j < stop; j++) {
+        for (let j = start; j < stop; j++) {
             if (features[j]) {
                 rf(features[j]);
             }
@@ -163,10 +169,10 @@ function updateView (startedWith, opt_extent, opt_matrix) {
         }
     };
 
-    var batchLength = 512;
+    const batchLength = 512;
     if (renderId === startedWith) {
-        for (var i = 0; i < features.length; i += batchLength) {
-            var stop = Math.min(features.length, i + batchLength);
+        for (let i = 0; i < features.length; i += batchLength) {
+            const stop = Math.min(features.length, i + batchLength);
             if (!features[i] || !features[stop - 1]) {
                 break;
             }
@@ -177,27 +183,27 @@ function updateView (startedWith, opt_extent, opt_matrix) {
 
 
 function messageHandler (event) {
-    var data = event.data,
-        name = data.name,
-        args = data.args || [];
+    const data = event.data;
+    const name = data.name;
+    const args = data.args || [];
     if ('worker:render_id' === name) {
         renderId = args[0];
-        console.log('worker:render_id', renderId);
+        logger('worker:render_id', renderId);
         workerContext.postMessage(['worker:render_id', renderId]);
     }
     else if ('init:data' === name) {
         initData(args[0]);
-        console.log('init:data', dataSource.getLength());
+        logger('init:data', dataSource.getLength());
         workerContext.postMessage(['data:init']);
     }
     else if ('update:view' === name) {
         renderId = args[0];
-        var localRenderId = renderId;
+        const localRenderId = renderId;
         // updateView(renderId, args[1], args[2]);
         underscore.defer(updateView, localRenderId, args[1], args[2]);
     }
     else if ('update:data' === name) {
-        var featureData = args[0];
+        const featureData = args[0];
         updateData(featureData);
         workerContext.postMessage(['data:update']);
     }
@@ -206,14 +212,14 @@ function messageHandler (event) {
 workerContext.addEventListener('message', messageHandler, false);
 
 function emit () {
-    var args = [];
+    const args = [];
 
     if(0 === arguments.length) {
         return;
     }
     args.push(renderId);
     // args.push(arguments[0]);
-    for (var i = 0; i < arguments.length; i++) {
+    for (let i = 0; i < arguments.length; i++) {
         args.push(arguments[i]);
     }
     workerContext.postMessage(args);
@@ -239,13 +245,13 @@ function lineIntersect(apx, apy, avx, avy, bpx, bpy, bvx, bvy, asVector,
         bvx -= bpx;
         bvy -= bpy;
     }
-    var cross = avx * bvy - avy * bvx;
+    const cross = avx * bvy - avy * bvx;
     // Avoid divisions by 0, and errors when getting too close to 0
     if (!isZero(cross)) {
-        var dx = apx - bpx,
-            dy = apy - bpy,
-            ta = (bvx * dy - bvy * dx) / cross,
-            tb = (avx * dy - avy * dx) / cross;
+        const dx = apx - bpx;
+        const dy = apy - bpy;
+        const ta = (bvx * dy - bvy * dx) / cross;
+        const tb = (avx * dy - avy * dx) / cross;
         // Check the ranges of t parameters if the line is not allowed
         // to extend beyond the definition points.
         if (isInfinite || 0 <= ta && ta <= 1 && 0 <= tb && tb <= 1)
@@ -258,10 +264,17 @@ function coordinatesLefter(a, b) {
 }
 
 function findIntersectSegment (coordinates, apx, apy, avx, avy) {
-    var ret = [], ring, bpx, bpy, bvx, bvy, cv, r;
-    for (var i = 0; i < coordinates.length; i++) {
+    const ret = [];
+    let ring;
+    let bpx;
+    let bpy;
+    let bvx;
+    let bvy;
+    let cv;
+    let r;
+    for (let i = 0; i < coordinates.length; i++) {
         ring = coordinates[i];
-        for (var vi = 1; vi < ring.length; vi++) {
+        for (let vi = 1; vi < ring.length; vi++) {
             bpx = ring[vi-1][0];
             bpy = ring[vi-1][1];
             bvx = ring[vi][0] - bpx;
@@ -277,25 +290,25 @@ function findIntersectSegment (coordinates, apx, apy, avx, avy) {
 }
 
 function getWritableSegments (p, lineHeight, start) {
-    var coordinates = p.getCoordinates(),
-        extent = p.getExtent(),
-        height = extent.getHeight(),
-        width = extent.getWidth(),
-        bottomLeft = extent.getBottomLeft().getCoordinates(),
-        topRight = extent.getTopRight().getCoordinates(),
-        left = bottomLeft[0],
-        right = topRight[0],
-        top = topRight[1],
-        segments = [];
+    const coordinates = p.getCoordinates();
+    const extent = p.getExtent();
+    const height = extent.getHeight();
+    const width = extent.getWidth();
+    const bottomLeft = extent.getBottomLeft().getCoordinates();
+    const topRight = extent.getTopRight().getCoordinates();
+    const left = bottomLeft[0];
+    const right = topRight[0];
+    const top = topRight[1];
+    const segments = [];
 
     start = (start || 0) + 1;
-    var offset = start * lineHeight;
+    const offset = start * lineHeight;
     if(offset > height) {
         return null;
     }
-    var intersections = findIntersectSegment(coordinates,
+    const intersections = findIntersectSegment(coordinates,
         left, top - offset, width, 0);
-    for (var i = 1; i < intersections.length; i+=2) {
+    for (let i = 1; i < intersections.length; i+=2) {
         segments.push([intersections[i-1], intersections[i]]);
     }
 
@@ -304,7 +317,10 @@ function getWritableSegments (p, lineHeight, start) {
 
 
 function transformCommand (instructions, transforms, cmd) {
-    var tfn, p0, p1, p2;
+    let tfn;
+    let p0;
+    let p1;
+    let p2;
 
     if (!underscore.isArray(transforms)) {
         tfn = transforms;
@@ -313,7 +329,7 @@ function transformCommand (instructions, transforms, cmd) {
         tfn = transforms[0];
     }
     else {
-        tfn = underscore.compose.apply(underscore, transforms);
+        tfn = underscore.compose(...transforms);
     }
     switch (cmd.type) {
         case 'M':
@@ -346,15 +362,18 @@ function transformCommand (instructions, transforms, cmd) {
 
 
 function drawTextInPolygon (T, polygon, txt, fs) {
-    var startSegment = 0,
-        segments = getWritableSegments(polygon, fs * 1.2, startSegment),
-        t = (txt instanceof Text) ? txt : (new Text(txt)),
-        result, cursor = t.cursor(),
-        paths, p, cmd,
-        tfn = T.mapVec2Fn(),
-        instructions = [];
+    let startSegment = 0;
+    let segments = getWritableSegments(polygon, fs * 1.2, startSegment);
+    const t = (txt instanceof Text) ? txt : (new Text(txt));
+    let result;
+    let cursor = t.cursor();
+    let paths;
+    let p;
+    let cmd;
+    const tfn = T.mapVec2Fn();
+    const instructions = [];
 
-    var proceed = function () {
+    const proceed = () => {
         while (segments) {
             if( !cursor) {
                 break;
@@ -364,10 +383,10 @@ function drawTextInPolygon (T, polygon, txt, fs) {
                 cursor = result[0];
                 paths = result[1];
 
-                for (var i = 0; i < paths.length; i++) {
+                for (let i = 0; i < paths.length; i++) {
                     p = paths[i];
                     instructions.push(['beginPath']);
-                    for (var ii = 0; ii < p.commands.length; ii++) {
+                    for (let ii = 0; ii < p.commands.length; ii++) {
                         transformCommand(instructions, [tfn], p.commands[ii]);
                     }
                     instructions.push(['fill']);
@@ -384,8 +403,8 @@ function drawTextInPolygon (T, polygon, txt, fs) {
 }
 
 function vecDist (v1, v2) {
-    var dx = v2[0] - v1[0],
-        dy = v2[1] - v1[1];
+    const dx = v2[0] - v1[0];
+    const dy = v2[1] - v1[1];
     return Math.sqrt((dx*dx) + (dy*dy));
 }
 
@@ -404,8 +423,8 @@ function vecDist (v1, v2) {
  *
  */
 function binarySearch(min, max, predicate, context){
-    var interval = max - min;
-    var pivot = min + (Math.floor(interval/2));
+    const interval = max - min;
+    const pivot = min + (Math.floor(interval/2));
 
     if (max === min) {
         return pivot;
@@ -424,15 +443,16 @@ function binarySearch(min, max, predicate, context){
 }
 
 function drawTextInPolygonAuto (T, polygon, txt) {
-    var basefs = 1, highfs = 1000000,
-        t = (txt instanceof Text) ? txt : (new Text(txt));
+    const basefs = 1;
+    const highfs = 1000000;
+    const t = (txt instanceof Text) ? txt : (new Text(txt));
 
-    var segmentsLength = function (fs) {
-        var start = 0,
-            segments = getWritableSegments(polygon, fs * 1.2, start),
-            totalLength = 0;
+    const segmentsLength = fs => {
+        let start = 0;
+        let segments = getWritableSegments(polygon, fs * 1.2, start);
+        let totalLength = 0;
         while (segments) {
-            for (var i = 0, sl = segments.length; i < sl; i++) {
+            for (let i = 0, sl = segments.length; i < sl; i++) {
                 totalLength += vecDist(segments[i][0], segments[i][1]);
                 // totalLength += Math.abs(segments[i][1][0] - segments[i][0][0]);
             }
@@ -442,16 +462,16 @@ function drawTextInPolygonAuto (T, polygon, txt) {
         return totalLength * (1 - (Math.log(fs) / 100));
     };
 
-    var proceed = function () {
-        var baseTextLength = t.getFlatLength(1);
-        var predicate = function (pivot) {
-            var sl = segmentsLength(pivot),
-                tl = baseTextLength * pivot;
+    const proceed = () => {
+        const baseTextLength = t.getFlatLength(1);
+        const predicate = pivot => {
+            const sl = segmentsLength(pivot);
+            const tl = baseTextLength * pivot;
 
             return Math.floor(tl - sl);
         };
 
-        var fs = binarySearch(basefs, highfs, predicate);
+        const fs = binarySearch(basefs, highfs, predicate);
         drawTextInPolygon(T, polygon, t, fs);
     };
 
@@ -461,9 +481,9 @@ function drawTextInPolygonAuto (T, polygon, txt) {
 
 
 function lineAngle (start, end) {
-    var d = [end[0] - start[0], end[1] - start[1]],
-        theta = Math.atan2(-d[1], d[0]) * 360.0 / 6.2831853071795,
-        theta_normalized = theta < 0 ? theta + 360 : theta;
+    const d = [end[0] - start[0], end[1] - start[1]];
+    const theta = Math.atan2(-d[1], d[0]) * 360.0 / 6.2831853071795;
+    const theta_normalized = theta < 0 ? theta + 360 : theta;
     if(theta_normalized > 360){
         return 0;
     }
@@ -473,42 +493,47 @@ function lineAngle (start, end) {
 
 
 function drawTextOnLine (T, coordinates, txt, fsz) {
-    var fs = fsz || 100,
-        startSegment = 0,
-        t = new Text(txt),
-        result, cursor = t.cursor(),
-        tfn = T.mapVec2Fn(),
-        instructions = [],
-        segments = [],
-        tsc = T.getScale(),
-        ttr = T.getTranslate(),
-        TI = T.inverse(),
-        tsi = TI.getScale(),
-        translate = (new Transform()).translate(ttr[0] / tsc[0], ttr[1] / tsc[1]),
-        scale = (new Transform()).scale(tsc[0], tsc[1]),
-        translator = translate.mapVec2Fn('translate'),
-        scalator = scale.mapVec2Fn('scale'),
-        ident = (new Transform()).mapVec2Fn('identity');
+    const fs = fsz || 100;
+    const startSegment = 0;
+    const t = new Text(txt);
+    let result;
+    let cursor = t.cursor();
+    const tfn = T.mapVec2Fn();
+    let instructions = [];
+    const segments = [];
+    const tsc = T.getScale();
+    const ttr = T.getTranslate();
+    const TI = T.inverse();
+    const tsi = TI.getScale();
+    const translate = (new Transform()).translate(ttr[0] / tsc[0], ttr[1] / tsc[1]);
+    const scale = (new Transform()).scale(tsc[0], tsc[1]);
+    const translator = translate.mapVec2Fn('translate');
+    const scalator = scale.mapVec2Fn('scale');
+    const ident = (new Transform()).mapVec2Fn('identity');
 
 
-    for (var lidx = 1; lidx < coordinates.length; lidx++) {
-        var start = coordinates[lidx - 1],
-            end = coordinates[lidx],
-            seg = [start, end];
+    for (let lidx = 1; lidx < coordinates.length; lidx++) {
+        const start = coordinates[lidx - 1];
+        const end = coordinates[lidx];
+        const seg = [start, end];
 
         segments.push(seg);
     }
 
 
-    var proceed = function () {
+    const proceed = () => {
         if (segments.length > 0) {
-            var result = t.draw(fs, segments, cursor, true),
-                paths = result[1],
-                TT, rotator, angle, p, pos;
+            const result = t.draw(fs, segments, cursor, true);
+            const paths = result[1];
+            let TT;
+            let rotator;
+            let angle;
+            let p;
+            let pos;
 
             cursor = result[0];
 
-            for (var i = 0; i < paths.length; i++) {
+            for (let i = 0; i < paths.length; i++) {
                 p = paths[i];
                 instructions = [];
                 // pos = [
@@ -523,7 +548,7 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
                 // emit.apply(self, ['transform'].concat(TT.flatMatrix()));
 
                 instructions.push(['beginPath']);
-                for (var ii = 0; ii < p.commands.length; ii++) {
+                for (let ii = 0; ii < p.commands.length; ii++) {
                     transformCommand(instructions, TT.mapVec2Fn(), p.commands[ii]);
                     // transformCommand(instructions, [ident], p.commands[ii]);
 
@@ -540,7 +565,7 @@ function drawTextOnLine (T, coordinates, txt, fsz) {
 
 function pathKey (obj, path, def) {
     path = path.split('.');
-    for(var i = 0, len = path.length; i < len; i++){
+    for(let i = 0, len = path.length; i < len; i++){
         if (!obj || (typeof obj !== 'object')) {
             return def;
         }
@@ -553,7 +578,7 @@ function pathKey (obj, path, def) {
 }
 
 function getProperty (props, key, def) {
-    var val = pathKey(props, key, def);
+    const val = pathKey(props, key, def);
     if (val
         && underscore.isString(val)
         && (val.length > 1)
@@ -564,20 +589,21 @@ function getProperty (props, key, def) {
 }
 
 function processStyle (props, T) {
-    var scale = T.getScale()[0];
+    const scale = T.getScale()[0];
     emit('save');
     if ('style' in props) {
-        var style = props.style, val;
-        for (var k in style) {
-            val = getProperty(props, 'style.' + k, null);
+        const style = props.style;
+        let val;
+        for (const k in style) {
+            val = getProperty(props, `style.${k}`, null);
             if (val) {
                 if (underscore.isNumber(val)) {
-                    var tv = val * scale;
+                    const tv = val * scale;
                     emit('set', k, tv);
                 }
                 else if ('dashLine' === k) {
-                    var tv0 = val[0] * scale,
-                        tv1 = val[1] * scale;
+                    const tv0 = val[0] * scale;
+                    const tv1 = val[1] * scale;
                     emit('set', 'dashLine', [tv0, tv1]);
                 }
                 else {

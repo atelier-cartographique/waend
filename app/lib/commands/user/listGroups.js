@@ -8,37 +8,29 @@
  *
  */
 
-
-var Promise = require("bluebird"),
-    helpers = require('../../helpers');
-
-var getModelName = helpers.getModelName,
-    addClass = helpers.addClass,
-    emptyElement = helpers.emptyElement;
+import {getModelName, addClass, emptyElement} from '../../helpers';
 
 function listGroups () {
-    var self = this,
-        userId = self.data.id,
-        shell = self.shell,
-        stdout = self.sys.stdout,
-        binder = self.binder,
-        terminal = self.shell.terminal;
+    const self = this;
+    const userId = self.data.id;
+    const shell = self.shell;
+    const stdout = self.sys.stdout;
+    const binder = self.binder;
+    const terminal = self.shell.terminal;
 
-    var makeOutput = function (group) {
-        return terminal.makeCommand({
-            fragment: group.getDomFragment('name'),
-            text: getModelName(group),
-            args: [
-                'cc /' + userId + '/' + group.id,
-                'get'
-            ]
-        });
-    };
+    const makeOutput = group => terminal.makeCommand({
+        fragment: group.getDomFragment('name'),
+        text: getModelName(group),
+        args: [
+            `cc /${userId}/${group.id}`,
+            'get'
+        ]
+    });
 
-    var res = function(resolve, reject){
+    const res = (resolve, reject) => {
         binder.getGroups(userId)
-            .then(function(groups){
-                for(var i = 0; i < groups.length; i++){
+            .then(groups => {
+                for(let i = 0; i < groups.length; i++){
                     stdout.write(
                         makeOutput(groups[i])
                     );
@@ -46,12 +38,11 @@ function listGroups () {
                 resolve();
             })
             .catch(reject);
-    }
+    };
     return (new Promise(res));
-};
+}
 
-
-module.exports = exports = {
+export default {
     name: 'listGroups',
     command: listGroups
 };

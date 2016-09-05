@@ -10,19 +10,16 @@
 
 // 'use strict';
 
-var _ = require('underscore'),
-    helpers = require('../../helpers'),
-    Promise = require('bluebird');
+import _ from 'underscore';
 
-var makeInput = helpers.makeInput,
-    addClass = helpers.addClass,
-    getModelName = helpers.getModelName;
+import Promise from 'bluebird';
+import {makeInput, addClass, getModelName} from '../../helpers';
 
 
 
 function getFeatureStyle (layer, feature, style, def) {
-    var layerStyle = layer.get('style', {}),
-        featureStyle = _.defaults(feature.get('style', {}), layerStyle);
+    const layerStyle = layer.get('style', {});
+    const featureStyle = _.defaults(feature.get('style', {}), layerStyle);
 
     if (style in featureStyle) {
         return featureStyle[style];
@@ -31,8 +28,8 @@ function getFeatureStyle (layer, feature, style, def) {
 }
 
 function getFeatureParams (layer, feature, param, def) {
-    var layerParams = layer.get('params', {}),
-        featureParams = _.defaults(feature.get('params', {}), layerParams);
+    const layerParams = layer.get('params', {});
+    const featureParams = _.defaults(feature.get('params', {}), layerParams);
 
     if (param in featureParams) {
         return featureParams[param];
@@ -41,9 +38,9 @@ function getFeatureParams (layer, feature, param, def) {
 }
 
 function getFeatureProp (layer, feature, prop, def) {
-    var parts = prop.split('.'),
-        prefix = parts.shift(),
-        k = parts.join('.');
+    const parts = prop.split('.');
+    const prefix = parts.shift();
+    const k = parts.join('.');
 
     if ('params' === prefix) {
         return getFeatureParams(layer, feature, k, def);
@@ -54,9 +51,9 @@ function getFeatureProp (layer, feature, prop, def) {
 
 
 function imageStyleClip (layer, feature) {
-    var inputElement = document.createElement('input'),
-        labelElement = document.createElement('label'),
-        wrapper = document.createElement('div');
+    const inputElement = document.createElement('input');
+    const labelElement = document.createElement('label');
+    const wrapper = document.createElement('div');
 
     addClass(wrapper, 'stylewidget-element');
 
@@ -64,7 +61,7 @@ function imageStyleClip (layer, feature) {
     inputElement.setAttribute('type', 'checkbox');
     inputElement.value = 'yes/no';
 
-    inputElement.addEventListener('change', function(event){
+    inputElement.addEventListener('change', event => {
         feature.set('params.clip', !!inputElement.checked);
     }, false);
 
@@ -79,13 +76,14 @@ function imageStyleClip (layer, feature) {
 }
 
 function imageStyleAdjust (layer, feature) {
-    var labelElement = document.createElement('label'),
-        wrapper = document.createElement('div'),
-        options = [
-            ['none', 'adjust to shape'],
-            ['fit', 'fit in shape'],
-            ['cover', 'cover shape']
-        ];
+    const labelElement = document.createElement('label');
+    const wrapper = document.createElement('div');
+
+    const options = [
+        ['none', 'adjust to shape'],
+        ['fit', 'fit in shape'],
+        ['cover', 'cover shape']
+    ];
 
     addClass(wrapper, 'stylewidget-element');
 
@@ -93,11 +91,11 @@ function imageStyleAdjust (layer, feature) {
     addClass(wrapper, 'stylewidget-element');
     wrapper.appendChild(labelElement);
 
-    _.each(options, function(option){
-        var radio = document.createElement('input'),
-            radioWrapper= document.createElement('div'),
-            optionValue = option[0],
-            optionLabel = option[1];
+    _.each(options, option => {
+        const radio = document.createElement('input');
+        const radioWrapper= document.createElement('div');
+        const optionValue = option[0];
+        const optionLabel = option[1];
 
         radio.setAttribute('type', 'radio');
         radio.setAttribute('name', 'imageAdjust');
@@ -108,7 +106,7 @@ function imageStyleAdjust (layer, feature) {
         radioWrapper.appendChild(radio);
         radioWrapper.appendChild(document.createTextNode(optionLabel));
         wrapper.appendChild(radioWrapper);
-        radio.addEventListener('change', function(event){
+        radio.addEventListener('change', event => {
             feature.set('params.adjust', optionValue);
         }, false);
     });
@@ -117,13 +115,13 @@ function imageStyleAdjust (layer, feature) {
 }
 
 function textContent (layer, feature) {
-    var textArea = document.createElement('textarea'),
-        labelElement = document.createElement('div'),
-        wrapper = document.createElement('div'),
-        content = getFeatureProp(layer, feature, 'params.text', '');
+    const textArea = document.createElement('textarea');
+    const labelElement = document.createElement('div');
+    const wrapper = document.createElement('div');
+    const content = getFeatureProp(layer, feature, 'params.text', '');
 
     labelElement.innerHTML = 'content';
-    textArea.addEventListener('keyup', function(event){
+    textArea.addEventListener('keyup', event => {
         feature.set('params.text', textArea.value);
     }, false);
 
@@ -136,51 +134,51 @@ function textContent (layer, feature) {
 }
 
 function image (ctx) {
-    var container = ctx.container,
-        layer = ctx.layer,
-        feature = ctx.feature,
-        inputs = [];
+    const container = ctx.container;
+    const layer = ctx.layer;
+    const feature = ctx.feature;
+    const inputs = [];
 
-    var params = [
+    const params = [
         imageStyleClip,
         imageStyleAdjust
     ];
 
-    _.each(params, function(p){
+    _.each(params, p => {
         container.appendChild(p(layer, feature));
     });
 }
 
 function text (ctx) {
-    var container = ctx.container,
-        feature = ctx.feature,
-        layer = ctx.layer,
-        inputs = [];
+    const container = ctx.container;
+    const feature = ctx.feature;
+    const layer = ctx.layer;
+    const inputs = [];
 
-    var params = [
+    const params = [
         ['text size (meters)', 'number', 'params.fontsize'],
         ['text color', 'color', 'style.fillStyle'],
         textContent,
     ];
 
     function genCB (prop) {
-        return function (val) {
+        return val => {
             feature.set(prop, val);
         };
     }
 
-    _.each(params, function(p){
+    _.each(params, p => {
         if (_.isFunction(p)) {
             container.appendChild(p(layer, feature));
         }
         else {
-            var label = p[0],
-                type = p[1],
-                prop = p[2];
+            const label = p[0];
+            const type = p[1];
+            const prop = p[2];
 
-            var input = makeInput({
-                label: label,
-                type: type,
+            const input = makeInput({
+                label,
+                type,
                 value: getFeatureProp(layer, feature, prop, null)
             }, genCB(prop));
             addClass(input, 'stylewidget-element');
@@ -190,12 +188,12 @@ function text (ctx) {
 }
 
 function polygon (ctx) {
-    var container = ctx.container,
-        feature = ctx.feature,
-        layer = ctx.layer,
-        inputs = [];
+    const container = ctx.container;
+    const feature = ctx.feature;
+    const layer = ctx.layer;
+    const inputs = [];
 
-    var params = [
+    const params = [
         ['line color', 'color', 'style.strokeStyle'],
         ['line width (meters)', 'number', 'style.lineWidth'],
         ['hatches number', 'number', 'params.hn'],
@@ -204,23 +202,23 @@ function polygon (ctx) {
     ];
 
     function genCB (prop) {
-        return function (val) {
+        return val => {
             feature.set(prop, val);
         };
     }
 
-    _.each(params, function(p){
+    _.each(params, p => {
         if (_.isFunction(p)) {
             container.appendChild(p(layer, feature));
         }
         else {
-            var label = p[0],
-                type = p[1],
-                prop = p[2];
+            const label = p[0];
+            const type = p[1];
+            const prop = p[2];
 
-            var input = makeInput({
-                label: label,
-                type: type,
+            const input = makeInput({
+                label,
+                type,
                 value: getFeatureProp(layer, feature, prop, null)
             }, genCB(prop));
             addClass(input, 'stylewidget-element');
@@ -230,34 +228,34 @@ function polygon (ctx) {
 }
 
 function line (ctx) {
-    var container = ctx.container,
-        feature = ctx.feature,
-        layer = ctx.layer,
-        inputs = [];
+    const container = ctx.container;
+    const feature = ctx.feature;
+    const layer = ctx.layer;
+    const inputs = [];
 
-    var params = [
+    const params = [
         ['stroke color', 'color', 'style.strokeStyle'],
         ['line width', 'number', 'style.lineWidth'],
     ];
 
     function genCB (prop) {
-        return function (val) {
+        return val => {
             feature.set(prop, val);
         };
     }
 
-    _.each(params, function(p){
+    _.each(params, p => {
         if (_.isFunction(p)) {
             container.appendChild(p(layer, feature));
         }
         else {
-            var label = p[0],
-                type = p[1],
-                prop = p[2];
+            const label = p[0];
+            const type = p[1];
+            const prop = p[2];
 
-            var input = makeInput({
-                label: label,
-                type: type,
+            const input = makeInput({
+                label,
+                type,
                 value: getFeatureProp(layer, feature, prop, null)
             }, genCB(prop));
             addClass(input, 'stylewidget-element');
@@ -267,8 +265,8 @@ function line (ctx) {
 }
 
 function typeSelector (options) {
-    var feature = options.feature,
-        layer = options.layer;
+    const feature = options.feature;
+    const layer = options.layer;
     if (getFeatureProp(layer, feature, 'params.image', false)) {
         return image(options);
     }
@@ -276,7 +274,7 @@ function typeSelector (options) {
         return text(options);
     }
     else {
-        var geomType = feature.getGeometry().getType();
+        const geomType = feature.getGeometry().getType();
         if ('Polygon' === geomType) {
             return polygon(options);
         }
@@ -287,12 +285,12 @@ function typeSelector (options) {
 }
 
 function prepareContainer (layer, feature) {
-    var styleWidgetWrapper = document.createElement('div'),
-        styleWidgetHeader = document.createElement('div'),
-        styleWidgetHeaderLayer = document.createElement('div'),
-        styleWidgetHeaderFeature = document.createElement('div'),
-        styleWidgetHeaderLayerLabel = document.createElement('label'),
-        styleWidgetHeaderFeatureLabel = document.createElement('label');
+    const styleWidgetWrapper = document.createElement('div');
+    const styleWidgetHeader = document.createElement('div');
+    const styleWidgetHeaderLayer = document.createElement('div');
+    const styleWidgetHeaderFeature = document.createElement('div');
+    const styleWidgetHeaderLayerLabel = document.createElement('label');
+    const styleWidgetHeaderFeatureLabel = document.createElement('label');
 
 
 
@@ -308,7 +306,7 @@ function prepareContainer (layer, feature) {
     styleWidgetHeaderLayer.appendChild(layer.getDomFragment('name'));
     styleWidgetHeaderFeature.appendChild(styleWidgetHeaderFeatureLabel);
     styleWidgetHeaderFeature.appendChild(feature.getDomFragment('name'));
-    
+
 
     styleWidgetHeader.appendChild(styleWidgetHeaderLayer);
     styleWidgetHeader.appendChild(styleWidgetHeaderFeature);
@@ -319,33 +317,34 @@ function prepareContainer (layer, feature) {
 
 
 function styleWidget (opt_txt) {
-    var self = this,
-        env = self.shell.env,
-        binder = self.binder,
-        stdout = self.sys.stdout,
-        stdin = self.sys.stdin,
-        terminal = self.shell.terminal,
-        current = self.current(),
-        uid = current[0],
-        gid = current[1],
-        lid = current[2],
-        fid = current[3];
-        // display = terminal.display();
+    const self = this;
+    // display = terminal.display();
+
+    const env = self.shell.env;
+    const binder = self.binder;
+    const stdout = self.sys.stdout;
+    const stdin = self.sys.stdin;
+    const terminal = self.shell.terminal;
+    const current = self.current();
+    const uid = current[0];
+    const gid = current[1];
+    const lid = current[2];
+    const fid = current[3];
 
 
-    var resolver = function (resolve, reject) {
+    const resolver = (resolve, reject) => {
 
         binder.getLayer(uid, gid, lid)
-            .then(function(layer){
+            .then(layer => {
                 binder.getFeature(uid, gid, lid, fid)
-                .then(function(feature){
-                    var styleWidgetWrapper = prepareContainer(layer, feature);
+                .then(feature => {
+                    const styleWidgetWrapper = prepareContainer(layer, feature);
                     typeSelector({
                         container: styleWidgetWrapper,
-                        layer: layer,
-                        feature: feature
+                        layer,
+                        feature
                     });
-                    var com = terminal.makeCommand({
+                    const com = terminal.makeCommand({
                                 fragment: styleWidgetWrapper,
                                 text: 'style' //dummy text to prevent troubles..
                             });
@@ -362,7 +361,7 @@ function styleWidget (opt_txt) {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'styler',
     command: styleWidget
 };

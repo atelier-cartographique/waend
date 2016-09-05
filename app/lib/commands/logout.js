@@ -9,21 +9,22 @@
  */
 
 
-var Transport = require('../Transport'),
-    Promise = require('bluebird'),
-    config = require('../../../config');
+import Transport from '../Transport';
+
+import Promise from 'bluebird';
+import config from '../../config';
 
 function logout () {
-    var self = this,
-        transport = new Transport(),
-        shell = self.shell;
+    const self = this;
+    const transport = new Transport();
+    const shell = self.shell;
 
 
-    var resolver = function (resolve, reject) {
+    const resolver = (resolve, reject) => {
         transport.post(config.public.logoutUrl, {
             body: {}
         })
-            .then(function(){
+            .then(() => {
                 shell.logoutUser();
                 resolve();
             })
@@ -34,7 +35,7 @@ function logout () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'logout',
     command: logout
 };

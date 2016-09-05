@@ -8,28 +8,29 @@
  *
  */
 
-var _ = require('underscore'),
-    Promise = require('bluebird'),
-    config = require('../../../config'),
-    Transport = require('../Transport');
+import _ from 'underscore';
 
-var API_URL = config.public.apiUrl;
+import Promise from 'bluebird';
+import config from '../../config';
+import Transport from '../Transport';
+
+const API_URL = config.public.apiUrl;
 
 
 function lookup (term) {
     if (!term) {
         return this.endWithError('this command expect a term to lookup argument');
     }
-    var self = this,
-        stdout = self.sys.stdout,
-        shell = self.shell,
-        terminal = shell.terminal;
+    const self = this;
+    const stdout = self.sys.stdout;
+    const shell = self.shell;
+    const terminal = shell.terminal;
 
-    var resolver = function (resolve, reject) {
-        var transport = new Transport();
-        var success = function (data) {
+    const resolver = (resolve, reject) => {
+        const transport = new Transport();
+        const success = data => {
             if('results' in data) {
-                var groups = {};
+                const groups = {};
                 for (var i = 0; i < data.results.length; i++) {
                     var result = data.results[i];
                     if (!(result.id in groups)) {
@@ -42,23 +43,21 @@ function lookup (term) {
                         groups[result.id].score += 1;
                     }
                 }
-                var og = _.values(groups);
-                og.sort(function(a, b){
-                    return b.score - a.score;
-                });
+                const og = _.values(groups);
+                og.sort((a, b) => b.score - a.score);
                 for (var i = 0; i < og.length; i++) {
-                    var result = og[i].model,
-                        score = og[i].score,
-                        props = result.properties,
-                        name = props.name || result.id,
-                        ctxPath = '/' + result.user_id + '/' + result.id;
+                    const result = og[i].model;
+                    const score = og[i].score;
+                    const props = result.properties;
+                    const name = props.name || result.id;
+                    const ctxPath = `/${result.user_id}/${result.id}`;
 
-                    var cmd0 = terminal.makeCommand({
+                    const cmd0 = terminal.makeCommand({
                         'args' : [
-                            'cc ' + ctxPath,
+                            `cc ${ctxPath}`,
                             'get'
                         ],
-                        'text' : name + ' ('+score+')'
+                        'text' : `${name} (${score})`
                     });
                     stdout.write(cmd0);
                 }
@@ -68,11 +67,11 @@ function lookup (term) {
                 reject(new Error('NothingFound'));
             }
         };
-        var error = function (err) {
+        const error = err => {
             reject(err);
         };
         transport
-            .get(API_URL + '/group/' + term)
+            .get(`${API_URL}/group/${term}`)
             .then(success)
             .catch(error);
     };
@@ -81,7 +80,7 @@ function lookup (term) {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'lookup',
     command: lookup
 };

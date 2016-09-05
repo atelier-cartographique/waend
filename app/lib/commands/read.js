@@ -9,27 +9,26 @@
  */
 
 
-var Promise = require("bluebird");
+import Promise from "bluebird";
 
 function read () {
-    var self = this,
-        shell = self.shell,
-        stdin = self.sys.stdin,
-        stdout = self.sys.stdout;
-    var res = function(resolve, reject){
+    const self = this;
+    const shell = self.shell;
+    const stdin = self.sys.stdin;
+    const stdout = self.sys.stdout;
+    const res = (resolve, reject) => {
         shell.terminal.input(stdin);
         stdin.read()
-            .then(function(line){
+            .then(line => {
                 stdout.write(line);
                 resolve();
             })
             .catch(reject);
-    }
+    };
     return (new Promise(res));
-};
+}
 
-
-module.exports = exports = {
+export default {
     name: 'read',
     command: read
 };

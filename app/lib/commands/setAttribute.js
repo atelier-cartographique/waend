@@ -8,14 +8,14 @@
  *
  */
 
-var _ = require('underscore');
+import _ from 'underscore';
 
 function setAttr () {
     if(arguments.length === 0){return self.end();}
-    var args = _.toArray(arguments),
-        key = args.shift(),
-        env = this.shell.env,
-        data;
+    const args = _.toArray(arguments);
+    const key = args.shift();
+    const env = this.shell.env;
+    let data;
 
     if (!key) {
         throw (new Error('No Key'));
@@ -26,7 +26,7 @@ function setAttr () {
             return this.data.set(key, env.DELIVERED);
         }
         try {
-            var delivered = env.DELIVERED.toJSON();
+            const delivered = env.DELIVERED.toJSON();
             return this.data.set(key, delivered);
         }
         catch (err) {
@@ -53,9 +53,9 @@ function setAttr () {
         }
     }
     // finally we consider each argument to be an array item
-    data = _.map(args, function(v){
+    data = _.map(args, v => {
         try {
-            var ldata = JSON.parse(v.toString());
+            const ldata = JSON.parse(v.toString());
             return ldata;
         }
         catch (err) {
@@ -66,7 +66,7 @@ function setAttr () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'set',
     command: setAttr
 };

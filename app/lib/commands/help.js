@@ -8,48 +8,49 @@
  *
  */
 
-var _ = require('underscore'),
-    Promise = require('bluebird');
+import _ from 'underscore';
+
+import Promise from 'bluebird';
 
 function help () {
-    var self = this,
-        shell = self.shell,
-        stdout = shell.stdout,
-        terminal = shell.terminal,
-        map = shell.env.map,
-        display = terminal.display();
+    const self = this;
+    const shell = self.shell;
+    const stdout = shell.stdout;
+    const terminal = shell.terminal;
+    const map = shell.env.map;
+    const display = terminal.display();
 
 
-    var closer = function (reject) {
+    const closer = reject => {
 
-        var helpFrameWrapper = document.createElement('div');
+        const helpFrameWrapper = document.createElement('div');
         helpFrameWrapper.setAttribute('class', 'help-wrapper');
         display.node.appendChild(helpFrameWrapper);
 
-        var helpFrame = document.createElement('iframe');
+        const helpFrame = document.createElement('iframe');
         helpFrame.setAttribute('src', '/documentation/help.html');
         helpFrameWrapper.appendChild(helpFrame);
 
-        var buttons = document.createElement('div');
+        const buttons = document.createElement('div');
         buttons.setAttribute('class', 'help-buttons');
 
 
-        var closeButton = document.createElement('div');
+        const closeButton = document.createElement('div');
         closeButton.setAttribute('class', 'help-close');
         closeButton.innerHTML = 'Close';
 
-        closeButton.addEventListener('click', function(){
+        closeButton.addEventListener('click', () => {
             display.end();
             reject('Canceled');
         }, false);
 
-        var newWindowCloseButton = document.createElement('a');
+        const newWindowCloseButton = document.createElement('a');
         newWindowCloseButton.setAttribute('class', 'help-open-new-window');
         newWindowCloseButton.setAttribute('href', '/documentation/help.html');
         newWindowCloseButton.setAttribute('target', 'blank');
         newWindowCloseButton.innerHTML = 'Open in new window';
 
-        newWindowCloseButton.addEventListener('click', function(){
+        newWindowCloseButton.addEventListener('click', () => {
             display.end();
             reject('Canceled');
         }, false);
@@ -63,7 +64,7 @@ function help () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'help',
     command: help
 };

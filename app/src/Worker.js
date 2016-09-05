@@ -1,80 +1,70 @@
-/*
- * app/src/Worker.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
+import _ from 'underscore';
+import config from '../config';
+import EventEmitter from 'events';
+import debug from 'debug';
+const logger = debug('waend:Worker');
 
-'use strict';
+const BIN_URL = config.public.binUrl;
 
+class WWorker extends EventEmitter {
 
-var _ = require('underscore'),
-    config = require('../../config'),
-    O = require('../../lib/object').Object;
-
-var BIN_URL = config.public.binUrl;
-
-var WWorker = O.extend({
-
-    initialize: function (fn, locals) {
+    constructor (fn, locals) {
+        super();
         this.fn = fn;
         this.locals = locals;
-    },
+    }
 
-    wrapBody: function () {
-        var body = [
-            'importScripts("' + BIN_URL + '/libworker.js");'
-            ];
-        for (var k in this.locals) {
+    wrapBody() {
+        let body = [
+            `importScripts("${BIN_URL}/libworker.js");`
+        ];
+        for (const k in this.locals) {
             try{
-                body.push( 'workerContext.waend["' + k + '"] = ' + this.locals[k].toString() +';');
+                body.push( `workerContext.waend["${k}"] = ${this.locals[k].toString()};`);
             }
             catch (err) {
-                console.log('could not load local in worker', k, err);
+                logger('could not load local in worker', k, err);
             }
         }
 
         body = body.concat([
-            '('+ this.fn.toString() + ')(waend);'
+            `(${this.fn.toString()})(waend);`
         ]);
 
         return body.join('\n');
-    },
+    }
 
-    post: function () {
-        var args = _.toArray(arguments),
-            name = args.shift();
-        // console.log('POST', name);
+    post() {
+        const args = _.toArray(arguments);
+        const name = args.shift();
+        // logger('POST', name);
         this.w.postMessage({
             'name': name,
             'args': args
         });
-    },
+    }
 
     // postBuffers: function () {
     //     var args = _.toArray(arguments),
     //         name = args.shift();
-    //     // console.log('POST', name);
+    //     // logger('POST', name);
     //     this.w.postMessage({
     //         'name': name
     //     }, args);
     // },
 
-    start: function() {
-        var body = this.wrapBody();
+    start() {
+        const body = this.wrapBody();
 
     // http://stackoverflow.com/questions/10343913/how-to-create-a-web-worker-from-a-string#10372280
-        var URL = window.URL || window.webkitURL;
-        var blob;
+        const URL = window.URL || window.webkitURL;
+        let blob;
 
         try {
             blob = new Blob([body], {type: 'application/javascript'});
         }
         catch (err) { // Backwards-compatibility
-            var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+            const BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
             blob = new BlobBuilder();
             blob.append(body);
             blob = blob.getBlob();
@@ -84,27 +74,25 @@ var WWorker = O.extend({
         this.w.addEventListener('message', this.onMessageHandler(), false);
         this.w.addEventListener('error', this.onErrorHandler(), false);
         this.w.postMessage({});
-    },
+    }
 
-    stop: function () {
+    stop() {
         this.w.terminate();
-    },
+    }
 
-    onMessageHandler: function () {
-        var self = this;
-        var handler = function (event) {
-            self.emit.apply(self, event.data);
+    onMessageHandler() {
+        const handler = event => {
+            this.emit(...event.data);
         };
         return handler;
-    },
+    }
 
-    onErrorHandler: function () {
-        var self = this;
-        var handler = function (event) {
+    onErrorHandler() {
+        const handler = event => {
             console.error(event);
         };
         return handler;
     }
-});
+}
 
-module.exports = exports = WWorker;
+export default WWorker;

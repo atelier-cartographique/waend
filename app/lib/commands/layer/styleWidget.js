@@ -10,25 +10,22 @@
 
 // 'use strict';
 
-var _ = require('underscore'),
-    helpers = require('../../helpers'),
-    Promise = require('bluebird');
+import _ from 'underscore';
 
-var makeInput = helpers.makeInput,
-    addClass = helpers.addClass,
-    getModelName = helpers.getModelName;
+import Promise from 'bluebird';
+import {makeInput, addClass, getModelName} from '../../helpers';
 
 
 function imageStyleClip (layer) {
-    var inputElement = document.createElement('input'),
-        labelElement = document.createElement('label'),
-        wrapper = document.createElement('div');
+    const inputElement = document.createElement('input');
+    const labelElement = document.createElement('label');
+    const wrapper = document.createElement('div');
 
     labelElement.innerHTML = 'image clip : Yes/No';
     inputElement.setAttribute('type', 'checkbox');
     inputElement.value = 'yes/no';
 
-    inputElement.addEventListener('change', function(event){
+    inputElement.addEventListener('change', event => {
         layer.set('params.clip', !!inputElement.checked);
     }, false);
 
@@ -42,23 +39,24 @@ function imageStyleClip (layer) {
 }
 
 function imageStyleAdjust (layer) {
-    var labelElement = document.createElement('label'),
-        wrapper = document.createElement('div'),
-        options = [
-            ['none', 'adjust to shape'],
-            ['fit', 'fit in shape'],
-            ['cover', 'cover shape']
-        ];
+    const labelElement = document.createElement('label');
+    const wrapper = document.createElement('div');
+
+    const options = [
+        ['none', 'adjust to shape'],
+        ['fit', 'fit in shape'],
+        ['cover', 'cover shape']
+    ];
 
     labelElement.innerHTML = 'image proportions';
     addClass(wrapper, 'stylewidget-element');
     wrapper.appendChild(labelElement);
 
-    _.each(options, function(option){
-        var radio = document.createElement('input'),
-            radioWrapper= document.createElement('div'),
-            optionValue = option[0],
-            optionLabel = option[1];
+    _.each(options, option => {
+        const radio = document.createElement('input');
+        const radioWrapper= document.createElement('div');
+        const optionValue = option[0];
+        const optionLabel = option[1];
 
         radio.setAttribute('type', 'radio');
         radio.setAttribute('name', 'imageAdjust');
@@ -69,7 +67,7 @@ function imageStyleAdjust (layer) {
         radioWrapper.appendChild(radio);
         radioWrapper.appendChild(document.createTextNode(optionLabel));
         wrapper.appendChild(radioWrapper);
-        radio.addEventListener('change', function(event){
+        radio.addEventListener('change', event => {
             layer.set('params.adjust', optionValue);
         }, false);
     });
@@ -79,18 +77,18 @@ function imageStyleAdjust (layer) {
 
 
 function layerCompositing (layer) {
-    var labelElement = document.createElement('label'),
-        wrapper = document.createElement('div'),
-        options = ['source-over', 'multiply'];
+    const labelElement = document.createElement('label');
+    const wrapper = document.createElement('div');
+    const options = ['source-over', 'multiply'];
 
 
     labelElement.innerHTML = 'layer compositing';
     addClass(wrapper, 'stylewidget-element');
     wrapper.appendChild(labelElement);
 
-    _.each(options, function(option){
-        var radio = document.createElement('input'),
-            radioWrapper= document.createElement('div');
+    _.each(options, option => {
+        const radio = document.createElement('input');
+        const radioWrapper= document.createElement('div');
         radio.setAttribute('type', 'radio');
         radio.setAttribute('name', 'compositing');
         radio.setAttribute('value', option);
@@ -100,7 +98,7 @@ function layerCompositing (layer) {
         radioWrapper.appendChild(radio);
         radioWrapper.appendChild(document.createTextNode(option));
         wrapper.appendChild(radioWrapper);
-        radio.addEventListener('change', function(event){
+        radio.addEventListener('change', event => {
             layer.set('style.globalCompositeOperation', option);
         }, false);
     });
@@ -110,12 +108,12 @@ function layerCompositing (layer) {
 
 
 function styler (ctx) {
-    var container = ctx.container,
-        layer = ctx.layer,
-        inputs = [];
+    const container = ctx.container;
+    const layer = ctx.layer;
+    const inputs = [];
 
 
-    var params = [
+    const params = [
         ['line color', 'color', 'style.strokeStyle'],
         ['line width (meters)', 'number', 'style.lineWidth'],
         ['hatches number', 'number', 'params.hn'],
@@ -128,24 +126,22 @@ function styler (ctx) {
         layerCompositing
     ];
 
-    var genCB = function (prop) {
-        return function (val) {
-            layer.set(prop, val);
-        };
+    const genCB = prop => val => {
+        layer.set(prop, val);
     };
 
-    _.each(params, function(p){
+    _.each(params, p => {
         if (_.isFunction(p)) {
             container.appendChild(p(layer));
         }
         else {
-            var label = p[0],
-                type = p[1],
-                prop = p[2];
+            const label = p[0];
+            const type = p[1];
+            const prop = p[2];
 
-            var input = makeInput({
-                label: label,
-                type: type,
+            const input = makeInput({
+                label,
+                type,
                 value: layer.get(prop)
             }, genCB(prop));
             addClass(input, 'stylewidget-element');
@@ -156,10 +152,10 @@ function styler (ctx) {
 }
 
 function prepareContainer (layer) {
-    var styleWidgetWrapper = document.createElement('div'),
-        styleWidgetHeader = document.createElement('div'),
-        styleWidgetHeaderLayer = document.createElement('div'),
-        styleWidgetHeaderLayerLabel = document.createElement('label');
+    const styleWidgetWrapper = document.createElement('div');
+    const styleWidgetHeader = document.createElement('div');
+    const styleWidgetHeaderLayer = document.createElement('div');
+    const styleWidgetHeaderLayerLabel = document.createElement('label');
 
 
     addClass(styleWidgetWrapper, 'stylewidget-wrapper');
@@ -180,31 +176,32 @@ function prepareContainer (layer) {
 
 
 function styleWidget (opt_txt) {
-    var self = this,
-        env = self.shell.env,
-        binder = self.binder,
-        stdout = self.sys.stdout,
-        stdin = self.sys.stdin,
-        terminal = self.shell.terminal,
-        current = self.current(),
-        uid = current[0],
-        gid = current[1],
-        lid = current[2];
-        // display = terminal.display();
+    const self = this;
+    // display = terminal.display();
+
+    const env = self.shell.env;
+    const binder = self.binder;
+    const stdout = self.sys.stdout;
+    const stdin = self.sys.stdin;
+    const terminal = self.shell.terminal;
+    const current = self.current();
+    const uid = current[0];
+    const gid = current[1];
+    const lid = current[2];
 
 
 
 
-    var resolver = function (resolve, reject) {
+    const resolver = (resolve, reject) => {
 
         binder.getLayer(uid, gid, lid)
-            .then(function(layer){
-                var styleWidgetWrapper = prepareContainer(layer);
+            .then(layer => {
+                const styleWidgetWrapper = prepareContainer(layer);
                 styler({
                     container: styleWidgetWrapper,
-                    layer: layer
+                    layer
                 });
-                var com = terminal.makeCommand({
+                const com = terminal.makeCommand({
                             fragment: styleWidgetWrapper,
                             text: 'style' //dummy text to prevent troubles..
                         });
@@ -231,7 +228,7 @@ function styleWidget (opt_txt) {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'styler',
     command: styleWidget
 };

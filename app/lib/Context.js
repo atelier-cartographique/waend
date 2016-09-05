@@ -9,31 +9,32 @@
  */
 
 
-var _ = require('underscore'),
-    ospath = require('path'),
-    Promise = require("bluebird"),
-    O = require('../../lib/object').Object,
-    Bind = require('./Bind'),
-    commands = require('./commands');
+import _ from 'underscore';
+
+import ospath from 'path';
+import EventEmitter from 'events';
+import {get as getBinder} from './Bind';
+import debug from 'debug';
+const logger = debug('waend:Context');
 
 
-var Context = O.extend({
+class Context extends EventEmitter {
 
-
-    commands: {},
-
-    constructor: function (options) {
+    constructor(options) {
+        super();
         this.shell = options.shell;
         this.data = options.data;
         this.parent = options.parent;
         this._current = this._computeCurrent();
-        O.apply(this, arguments);
-        _.defaults(this.commands, commands);
-        this.binder = Bind.get();
-    },
+        this.binder = getBinder();
+    }
 
-    _computeCurrent: function (ctx, memo) {
-        //console.log('context.current', ctx, memo);
+    get commands () {
+        return {};
+    }
+
+    _computeCurrent (ctx, memo) {
+        //logger('context.current', ctx, memo);
         if(!ctx){
             ctx = this;
             memo = [];
@@ -45,78 +46,78 @@ var Context = O.extend({
             memo.push(ctx.data.id);
         }
         return memo;
-    },
+    }
 
     /**
      *  this function executes a command in the scope of this context
      */
-    exec: function () {
-        var args =  _.toArray(arguments),
-            sys = args.shift(),
-            cmd = args.shift();
+    exec () {
+        const args =  _.toArray(arguments);
+        const sys = args.shift();
+        const cmd = args.shift();
 
         if(!(cmd in this.commands)){
             if (this.parent) {
-                return this.parent.exec.apply(this.parent, arguments);
+                return this.parent.exec(...arguments);
             }
-            throw (new Error("command not found: "+cmd));
+            throw (new Error(`command not found: ${cmd}`));
         }
 
         this.sys = sys;
 
-        var ret = this.commands[cmd].apply(this, args);
+        const ret = this.commands[cmd].apply(this, args);
         return ret;
-    },
+    }
 
-    current: function () {
+    current () {
         return this._current;
-    },
+    }
 
-    getUser: function () {
-        var cur = this.current();
+    getUser () {
+        const cur = this.current();
         if (cur.length > 0) {
             return cur[0];
         }
         return null;
-    },
+    }
 
-    getGroup: function () {
-        var cur = this.current();
+    getGroup () {
+        const cur = this.current();
         if (cur.length > 1) {
             return cur[1];
         }
         return null;
-    },
+    }
 
-    getLayer: function () {
-        var cur = this.current();
+    getLayer () {
+        const cur = this.current();
         if (cur.length > 2) {
             return cur[2];
         }
         return null;
-    },
+    }
 
-    getFeature: function () {
-        var cur = this.current();
+    getFeature () {
+        const cur = this.current();
         if (cur.length > 3) {
             return cur[3];
         }
         return null;
-    },
+    }
 
 
-    end: function (ret) {
+    end (ret) {
         if (_.isFunction(ret)) { // we assume fn(resolve, reject)
             return (new Promise(ret));
         }
         return Promise.resolve(ret);
-    },
+    }
 
-    endWithError: function (err) {
+    endWithError (err) {
         return Promise.reject(err);
     }
 
-});
+}
 
 
-module.exports = exports = Context;
+export default Context;

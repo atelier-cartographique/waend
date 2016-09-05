@@ -10,23 +10,23 @@
 
 // 'use strict';
 
-var Promise = require('bluebird');
+import Promise from 'bluebird';
 
 function delFeature (id) {
-    var binder = this.binder,
-        shell = this.shell,
-        self = this,
-        uid = this.getUser(),
-        gid = this.getGroup(),
-        lid = this.getLayer(),
-        fid = this.getFeature() || id,
-        inFeature = !!(this.getFeature()); 
+    const binder = this.binder;
+    const shell = this.shell;
+    const self = this;
+    const uid = this.getUser();
+    const gid = this.getGroup();
+    const lid = this.getLayer();
+    const fid = this.getFeature() || id;
+    const inFeature = !!(this.getFeature());
 
-    var resolver = function (resolve, reject) {
+    const resolver = (resolve, reject) => {
         binder.delFeature(uid, gid, lid, fid)
-            .then(function () {
+            .then(() => {
                 shell.historyPushContext([uid, gid, lid])
-                    .then(function(){
+                    .then(() => {
                         resolve(0);
                     })
                     .catch(reject);
@@ -47,7 +47,7 @@ function delFeature (id) {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'del_feature',
     command: delFeature
 };

@@ -8,30 +8,21 @@
  *
  */
 
-var _ = require('underscore'),
-    Promise = require('bluebird'),
-    helpers = require('../helpers');
+import _ from 'underscore';
 
-var addClass = helpers.addClass,
-    removeClass = helpers.removeClass,
-    emptyElement = helpers.emptyElement,
-    removeElement = helpers.removeElement,
-    hasClass = helpers.hasClass,
-    toggleClass = helpers.toggleClass,
-    px = helpers.px,
-    makeButton = helpers.makeButton;
+import { addClass, removeClass, emptyElement, removeElement, hasClass, toggleClass, px, makeButton } from '../helpers';
 
 
-var widgets = {
+const widgets = {
     'ValueSelect': require('./widgets/ValueSelect')
 };
 
 function makeWidgetForm (widget, ok, cancel) {
-    var form = document.createElement('div'),
-        buttonWrapper = document.createElement('div'),
-        widgetWrapper = document.createElement('div'),
-        buttonOk = makeButton('Ok', {}, ok),
-        buttonCancel = makeButton('Cancel', {}, cancel);
+    const form = document.createElement('div');
+    const buttonWrapper = document.createElement('div');
+    const widgetWrapper = document.createElement('div');
+    const buttonOk = makeButton('Ok', {}, ok);
+    const buttonCancel = makeButton('Cancel', {}, cancel);
 
     addClass(form, 'widget-form');
     addClass(buttonWrapper, 'widget-buttons');
@@ -51,45 +42,45 @@ function makeWidgetForm (widget, ok, cancel) {
 
 
 function wSet () {
-    var self = this,
-        args = _.toArray(arguments),
-        name = args.shift(),
-        key = args.shift(),
-        data = this.data;
-        oldValue = data.get(key);
-        shell = this.shell,
-        terminal = shell.terminal;
+    const self = this;
+    const args = _.toArray(arguments);
+    const name = args.shift();
+    const key = args.shift();
+    const data = this.data;
+    oldValue = data.get(key);
+    shell = this.shell,
+    terminal = shell.terminal;
 
-    var resolver = function (resolve, reject) {
-        var display = terminal.display();
+    const resolver = (resolve, reject) => {
+        const display = terminal.display();
         try{
-            var Widget = widgets[name],
-                config = {};
-            for (var i = 0; i < args.length; i += 2) {
-                var k = args[i],
-                    v = JSON.parse(args[i + 1]);
+            const Widget = widgets[name];
+            const config = {};
+            for (let i = 0; i < args.length; i += 2) {
+                const k = args[i];
+                const v = JSON.parse(args[i + 1]);
                 config[k] = v;
             }
 
-            var widget = new Widget(config)
-                retVal = oldValue;
+            const widget = new Widget(config);
+            retVal = oldValue;
 
-            var ok = function () {
+            const ok = () => {
                 display.end();
                 resolve(data.get(key));
             };
 
-            var cancel = function () {
+            const cancel = () => {
                 display.end();
                 data.set(key, oldValue);
                 resolve(data.get(key));
             };
 
-            widget.on('value', function(v) {
+            widget.on('value', v => {
                 data.set(key, v);
             });
 
-            var form = makeWidgetForm(widget, ok, cancel);
+            const form = makeWidgetForm(widget, ok, cancel);
             display.node.appendChild(form);
         }
         catch (err) {
@@ -102,7 +93,7 @@ function wSet () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'wset',
     command: wSet
-}
+};

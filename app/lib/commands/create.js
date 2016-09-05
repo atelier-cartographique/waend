@@ -9,17 +9,18 @@
  */
 
 
-var Promise = require('bluebird'),
-    semaphore = require('../Semaphore'),
-    region = require('../Region');
+import Promise from 'bluebird';
+
+import semaphore from '../Semaphore';
+import region from '../Region';
 
 
 function createGroup (uid, ctx, resolve, reject) {
-    var binder = ctx.binder,
-        stdout = ctx.sys.stdout,
-        stdin = ctx.sys.stdin,
-        shell = ctx.shell,
-        terminal = shell.terminal;
+    const binder = ctx.binder;
+    const stdout = ctx.sys.stdout;
+    const stdin = ctx.sys.stdin;
+    const shell = ctx.shell;
+    const terminal = shell.terminal;
 
     stdout.write('select a status');
     stdout.write('1 : public');
@@ -27,30 +28,30 @@ function createGroup (uid, ctx, resolve, reject) {
 
     terminal.input(stdin);
     stdin.read()
-        .then(function(input){
-            var pp = parseInt(input);
+        .then(input => {
+            const pp = parseInt(input);
             if(!pp || pp > 2){
                 return reject('Not a valid value');
             }
             stdout.write('enter a name');
             shell.terminal.input(stdin);
             stdin.read()
-                .then(function(name){
+                .then(name => {
 
                     stdout.write('enter a description');
                     terminal.input(stdin);
                     stdin.read()
-                        .then(function(desc){
-                            var data = {
+                        .then(desc => {
+                            const data = {
                                 user_id: uid,
                                 status_flag: (pp - 1),
                                 properties: {'name':name,'description':desc}
                             };
 
                             ctx.binder.setGroup(uid, data)
-                                .then(function(model){
-                                    var cmd = terminal.makeCommand({
-                                        args: ['cc /'+uid+'/'+model.id,'get'],
+                                .then(model => {
+                                    const cmd = terminal.makeCommand({
+                                        args: [`cc /${uid}/${model.id}`,'get'],
                                         text: (model.get('name') || model.id)
                                     });
                                     stdout.write('created map : ', cmd);
@@ -66,29 +67,29 @@ function createGroup (uid, ctx, resolve, reject) {
 
 
 function createLayer (uid, gid, ctx, resolve, reject) {
-    var binder = ctx.binder,
-        stdout = ctx.sys.stdout,
-        stdin = ctx.sys.stdin,
-        terminal = ctx.shell.terminal;
+    const binder = ctx.binder;
+    const stdout = ctx.sys.stdout;
+    const stdin = ctx.sys.stdin;
+    const terminal = ctx.shell.terminal;
 
     stdout.write('enter a name');
     terminal.input(stdin);
     stdin.read()
-        .then(function(name){
+        .then(name => {
 
             stdout.write('enter a description');
             terminal.input(stdin);
             stdin.read()
-                .then(function(desc){
-                    var data = {
+                .then(desc => {
+                    const data = {
                         user_id: uid,
                         properties: {'name':name,'description':desc}
                     };
 
                     binder.setLayer(uid, gid, data)
-                        .then(function(model){
-                            var cmd = terminal.makeCommand({
-                                args: ['cc /'+uid+'/'+gid+'/'+model.id,'get'],
+                        .then(model => {
+                            const cmd = terminal.makeCommand({
+                                args: [`cc /${uid}/${gid}/${model.id}`,'get'],
                                 text: (model.get('name') || model.id)
                             });
                             semaphore.signal('create:layer', model);
@@ -132,38 +133,38 @@ function createLayer (uid, gid, ctx, resolve, reject) {
 // }
 
 function createFeature (uid, gid, lid, ctx, resolve, reject) {
-    var binder = ctx.binder,
-        stdout = ctx.sys.stdout,
-        stdin = ctx.sys.stdin,
-        terminal = ctx.shell.terminal,
-        extent = region.get(),
-        center = extent.getCenter();
+    const binder = ctx.binder;
+    const stdout = ctx.sys.stdout;
+    const stdin = ctx.sys.stdin;
+    const terminal = ctx.shell.terminal;
+    const extent = region.get();
+    const center = extent.getCenter();
 
-        var data = {
-            user_id: uid,
-            layer_id: lid,
-            properties: {},
-            geom: JSON.parse(center.format())
-        };
+    const data = {
+        user_id: uid,
+        layer_id: lid,
+        properties: {},
+        geom: JSON.parse(center.format())
+    };
 
-        return binder.setFeature(uid, gid, lid, data)
-            .then(function(model){
-                var cmd = terminal.makeCommand({
-                    args: ['cc /'+uid+'/'+gid+'/'+lid+'/'+model.id],
-                    text: model.id
-                });
-                stdout.write('created feature ', cmd);
-                resolve(model);
-            })
-            .catch(reject);
+    return binder.setFeature(uid, gid, lid, data)
+        .then(model => {
+            const cmd = terminal.makeCommand({
+                args: [`cc /${uid}/${gid}/${lid}/${model.id}`],
+                text: model.id
+            });
+            stdout.write('created feature ', cmd);
+            resolve(model);
+        })
+        .catch(reject);
 }
 
 function iCreate () {
-    var self = this,
-        terminal = self.shell.terminal,
-        stdout = self.sys.stdout,
-        stdin = self.sys.stdin,
-        current = self.current();
+    const self = this;
+    const terminal = self.shell.terminal;
+    const stdout = self.sys.stdout;
+    const stdin = self.sys.stdin;
+    const current = self.current();
 
     stdout.write('To confirm, type the number of your choice in the console');
     stdout.write('To cancel, type anything else');
@@ -183,12 +184,12 @@ function iCreate () {
         stdout.write('3 : create a feature in current layer');
     }
 
-    var cType = 0;
+    let cType = 0;
 
-    var resolver = function (resolve, reject) {
+    const resolver = (resolve, reject) => {
         terminal.input(stdin);
         stdin.read()
-            .then(function(input){
+            .then(input => {
                 cType = parseInt(input);
                 if(!cType){
                     return reject('Invalid Value');
@@ -215,7 +216,7 @@ function iCreate () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'ic',
     command: iCreate
 };

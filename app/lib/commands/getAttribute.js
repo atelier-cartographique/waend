@@ -1,36 +1,20 @@
-/*
- * app/lib/commands/getAttribute.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
-
-var _ = require('underscore'),
-    helpers = require('../helpers');
-
-var addClass = helpers.addClass,
-    emptyElement = helpers.emptyElement;
+import _ from 'underscore';
+import {addClass, emptyElement} from '../helpers';
 
 
 function getAttr () {
-    var self = this,
-        shell = self.shell,
-        stdout = shell.stdout,
-        terminal = shell.terminal,
-        args = _.toArray(arguments),
-        key = args.shift(),
-        sys = self.sys,
-        result;
+    const self = this;
+    const shell = self.shell;
+    const stdout = shell.stdout;
+    const terminal = shell.terminal;
+    const args = _.toArray(arguments);
+    const key = args.shift();
+    const sys = self.sys;
 
-    var makeOutput = function (k, model) {
-        var wrapper = document.createElement('div'),
-            key = document.createElement('div'),
-            value = model.getDomFragment(k);
+    const makeOutput = (k, model) => {
+        const wrapper = document.createElement('div');
+        const key = document.createElement('div');
+        const value = model.getDomFragment(k);
 
         addClass(key, 'key-value');
 
@@ -48,10 +32,10 @@ function getAttr () {
         });
     };
 
-    var result = key ? self.data.get(key) : self.data.getData(),
-        keys = key ? [key] : _.keys(self.data.getData());
+    const result = key ? self.data.get(key) : self.data.getData();
+    const keys = key ? [key] : _.keys(self.data.getData());
 
-    _.each(keys, function(key){
+    _.each(keys, key => {
         stdout.write(makeOutput(key, self.data));
     });
 
@@ -59,7 +43,7 @@ function getAttr () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'get',
     command: getAttr
 };

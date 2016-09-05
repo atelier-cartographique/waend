@@ -9,39 +9,35 @@
  */
 
 
-var Promise = require("bluebird"),
-helpers = require('../../helpers');
+import {getModelName} from '../../helpers';
 
-var getModelName = helpers.getModelName;
 
 function listFeatures () {
-    var self = this,
-        current = self.current(),
-        userId = current[0],
-        groupId = current[1],
-        layerId = current[2],
-        shell = self.shell,
-        stdout = self.sys.stdout,
-        binder = self.binder,
-        terminal = shell.terminal;
+    const self = this;
+    const current = self.current();
+    const userId = current[0];
+    const groupId = current[1];
+    const layerId = current[2];
+    const shell = self.shell;
+    const stdout = self.sys.stdout;
+    const binder = self.binder;
+    const terminal = shell.terminal;
 
-    var makeOutput = function (feature) {
-        return terminal.makeCommand({
-            fragment: feature.getDomFragment('name'),
-            text: getModelName(feature),
-            args: [
-                'cc /' + userId + '/' + groupId + '/' + layerId + '/' +feature.id,
-                'gg | region set',
-                'get'
-            ]
-        });
-    };
+    const makeOutput = feature => terminal.makeCommand({
+        fragment: feature.getDomFragment('name'),
+        text: getModelName(feature),
+        args: [
+            `cc /${userId}/${groupId}/${layerId}/${feature.id}`,
+            'gg | region set',
+            'get'
+        ]
+    });
 
 
-    var res = function(resolve, reject){
+    const res = (resolve, reject) => {
         binder.getFeatures(userId, groupId, layerId)
-            .then(function(features){
-                for(var i = 0; i < features.length; i++){
+            .then(features => {
+                for(let i = 0; i < features.length; i++){
                     stdout.write(
                         makeOutput(features[i])
                     );
@@ -49,12 +45,11 @@ function listFeatures () {
                 resolve();
             })
             .catch(reject);
-    }
+    };
     return (new Promise(res));
-};
+}
 
-
-module.exports = exports = {
+export default {
     name: 'listFeatures',
     command: listFeatures
 };

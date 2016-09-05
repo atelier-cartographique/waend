@@ -1,28 +1,15 @@
-/*
- * app/lib/Semaphore.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
+import _ from 'underscore';
+import {Object as O} from '../../lib/object';
 
 
-var _ = require('underscore'),
-    O = require('../../lib/object').Object;
+const Semaphore = O.extend({
 
-
-var Semaphore = O.extend({
-
-    signal: function () {
-        var args = _.toArray(arguments);
-        this.emit.apply(this, args);
+    signal() {
+        const args = _.toArray(arguments);
+        this.emit(...args);
     }
     
 });
 
-var semaphore = new Semaphore();
-module.exports = exports = semaphore;
+const semaphore = new Semaphore();
+export default semaphore;

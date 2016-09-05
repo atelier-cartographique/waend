@@ -9,60 +9,57 @@
  */
 
 
-var _ = require('underscore'),
-    Promise = require("bluebird"),
-    helpers = require('../../helpers'),
-    region = require('../../Region');
+import _ from 'underscore';
 
-var getModelName = helpers.getModelName,
-    layerExtent = helpers.layerExtent;
+import region from '../../Region';
+import {getModelName, layerExtent} from '../../helpers';
 
 
 function listLayers () {
-    var self = this,
-        current = self.current(),
-        userId = current[0],
-        groupId = current[1],
-        shell = self.shell,
-        stdout = self.sys.stdout,
-        binder = self.binder,
-        terminal = shell.terminal;
+    const self = this;
+    const current = self.current();
+    const userId = current[0];
+    const groupId = current[1];
+    const shell = self.shell;
+    const stdout = self.sys.stdout;
+    const binder = self.binder;
+    const terminal = shell.terminal;
 
-    var makeOutput = function (layer) {
-        var fragment = document.createElement('div'),
-            zoomer = document.createElement('div'),
-            label = layer.getDomFragment('name');
+    const makeOutput = layer => {
+        const fragment = document.createElement('div');
+        const zoomer = document.createElement('div');
+        const label = layer.getDomFragment('name');
 
         zoomer.setAttribute('class', 'll-zoomer icon-setmapextent');
         zoomer.innerHTML = '';
-        zoomer.addEventListener('click', function () {
+        zoomer.addEventListener('click', () => {
             layerExtent(layer)
                 .then(_.bind(region.push, region))
-                .catch(function(err){console.error(err)});
+                .catch(err => {console.error(err)});
         }, false);
 
-        label.addEventListener('click', function () {
-            terminal.runCommand('cc /' + userId + '/' + groupId + '/' + layer.id);
+        label.addEventListener('click', () => {
+            terminal.runCommand(`cc /${userId}/${groupId}/${layer.id}`);
         }, false);
 
         fragment.appendChild(zoomer);
         fragment.appendChild(label);
         return terminal.makeCommand({
-            fragment: fragment,
+            fragment,
             text: getModelName(layer)
         });
     };
 
 
-    var res = function(resolve, reject){
+    const res = (resolve, reject) => {
         binder.getLayers(userId, groupId)
-            .then(function(layers){
-                for(var i = 0; i < layers.length; i++){
+            .then(layers => {
+                for(let i = 0; i < layers.length; i++){
                     stdout.write(
                         makeOutput(layers[i])
                     );
                 }
-                resolve(_.map(layers, function(l){return l.id;}));
+                resolve(_.map(layers, l => l.id));
             })
             .catch(reject);
     };
@@ -70,7 +67,7 @@ function listLayers () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'listLayers',
     command: listLayers
 };

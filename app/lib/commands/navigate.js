@@ -10,42 +10,43 @@
 
 // 'use strict';
 
-var _ = require('underscore'),
-    util = require('util'),
-    Promise = require('bluebird'),
-    Geometry = require('../Geometry'),
-    Transform = require('../Transform'),
-    Projection = require('proj4'),
-    region = require('../Region'),
-    semaphore = require('../Semaphore'),
-    turf = require('turf');
+import _ from 'underscore';
+
+import util from 'util';
+import Promise from 'bluebird';
+import Geometry from '../Geometry';
+import Transform from '../Transform';
+import Projection from 'proj4';
+import region from '../Region';
+import semaphore from '../Semaphore';
+import turf from 'turf';
 
 
-var Proj3857 = Projection('EPSG:3857');
+const Proj3857 = Projection('EPSG:3857');
 
 function projectExtent (extent) {
-    var min = Proj3857.forward(extent.slice(0,2)),
-        max = Proj3857.forward(extent.slice(2));
+    const min = Proj3857.forward(extent.slice(0,2));
+    const max = Proj3857.forward(extent.slice(2));
     return min.concat(max);
 }
 
 function unprojectExtent (extent) {
-    var min = Proj3857.inverse(extent.slice(0,2)),
-        max = Proj3857.inverse(extent.slice(2));
+    const min = Proj3857.inverse(extent.slice(0,2));
+    const max = Proj3857.inverse(extent.slice(2));
     return min.concat(max);
 }
 
 function transformExtent (extent, T) {
-    var min = extent.slice(0,2),
-        max = extent.slice(2);
+    const min = extent.slice(0,2);
+    const max = extent.slice(2);
     T.mapVec2(min);
     T.mapVec2(max);
     return min.concat(max);
 }
 
 function vecDist (v1, v2) {
-    var dx = v2[0] - v1[0],
-        dy = v2[1] - v1[1];
+    const dx = v2[0] - v1[0];
+    const dy = v2[1] - v1[1];
     return Math.sqrt((dx*dx) + (dy*dy));
 }
 
@@ -55,34 +56,33 @@ function isKeyCode (event, kc) {
 }
 
 function getStep (extent) {
-    var width = extent.getWidth(),
-        height = extent.getHeight(),
-        diag = Math.sqrt((width*width) + (height*height));
+    const width = extent.getWidth();
+    const height = extent.getHeight();
+    const diag = Math.sqrt((width*width) + (height*height));
 
     return (diag / 10);
-
 }
 
 function transformRegion (T, opt_extent) {
-    var extent = opt_extent.extent;
-    var NE = T.mapVec2([extent[2], extent[3]]);
-    var SW = T.mapVec2([extent[0], extent[1]]);
-    var newExtent = [SW[0], SW[1], NE[0], NE[1]];
+    const extent = opt_extent.extent;
+    const NE = T.mapVec2([extent[2], extent[3]]);
+    const SW = T.mapVec2([extent[0], extent[1]]);
+    const newExtent = [SW[0], SW[1], NE[0], NE[1]];
     region.push(newExtent);
 }
 
 function makeButton (label, attrs, callback, ctx) {
-    var button = document.createElement('div'),
-        labelElement = document.createElement('span');
+    const button = document.createElement('div');
+    const labelElement = document.createElement('span');
     labelElement.setAttribute('class', 'label');
     labelElement.innerHTML = label;
 
-    _.each(attrs, function (val, k) {
+    _.each(attrs, (val, k) => {
         button.setAttribute(k, val);
     });
 
     if (callback) {
-        button.addEventListener('click', function(event){
+        button.addEventListener('click', event => {
             callback.call(ctx, event);
         }, false);
     }
@@ -92,516 +92,515 @@ function makeButton (label, attrs, callback, ctx) {
 }
 
 
-function NavigatorMode (nav) {
-    this.navigator = nav;
-}
-
-NavigatorMode.prototype.getName = function () {
-    return this.modeName;
-};
-
-
-NavigatorMode.prototype.keypress = function (event) {
-    if (isKeyCode(event, 105)) { // i
-        this.navigator.zoomIn();
+class NavigatorMode {
+    constructor(nav) {
+        this.navigator = nav;
     }
-    else if (isKeyCode(event, 111)) { // o
-        this.navigator.zoomOut();
+
+    getName() {
+        return this.modeName;
     }
-};
 
-
-NavigatorMode.prototype.keyup = function (event) {
-    if (isKeyCode(event, 27)) { // escape
-        this.navigator.end();
-    }
-    else if (isKeyCode(event, 38)) {
-        this.navigator.south();
-    }
-    else if (isKeyCode(event, 40)) {
-        this.navigator.north();
-    }
-    else if (isKeyCode(event, 37)) {
-        this.navigator.east();
-    }
-    else if (isKeyCode(event, 39)) {
-        this.navigator.west();
-    }
-};
-
-
-function NavigatorModeBase () {
-    NavigatorMode.apply(this, arguments);
-    this.modeName = 'ModeBase';
-
-    semaphore.on('region:change', function () {
-        if (this.isActive) {
-            this.navigator.draw();
-        }
-    }, this);
-}
-util.inherits(NavigatorModeBase, NavigatorMode);
-
-NavigatorModeBase.prototype.enter = function () {
-    this.navigator.draw();
-    this.isActive = true;
-};
-
-NavigatorModeBase.prototype.exit = function () {
-    this.navigator.clear();
-    this.isActive = true;
-};
-
-
-
-NavigatorModeBase.prototype.wheel = function (event) {
-    if (Math.abs(event.deltaY) > 2) {
-        if (event.deltaY < 0) {
+    keypress(event) {
+        if (isKeyCode(event, 105)) { // i
             this.navigator.zoomIn();
         }
-        else {
+        else if (isKeyCode(event, 111)) { // o
             this.navigator.zoomOut();
         }
     }
-};
 
+    keyup(event) {
+        if (isKeyCode(event, 27)) { // escape
+            this.navigator.end();
+        }
+        else if (isKeyCode(event, 38)) {
+            this.navigator.south();
+        }
+        else if (isKeyCode(event, 40)) {
+            this.navigator.north();
+        }
+        else if (isKeyCode(event, 37)) {
+            this.navigator.east();
+        }
+        else if (isKeyCode(event, 39)) {
+            this.navigator.west();
+        }
+    }
+}
 
-NavigatorModeBase.prototype.mousedown = function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.startPoint = [event.clientX, event.clientY];
-    this.isStarted = true;
-    if (!this.select) {
-        this.select = document.createElement('div');
-        this.select.setAttribute('class', 'navigate-select');
-        this.select.style.position = 'absolute';
-        this.select.style.pointerEvents = 'none';
-        this.select.style.display = 'none';
-        this.navigator.options.container.appendChild(this.select);
+class NavigatorModeBase {
+    constructor() {
+        NavigatorMode.apply(this, arguments);
+        this.modeName = 'ModeBase';
+
+        semaphore.on('region:change', function () {
+            if (this.isActive) {
+                this.navigator.draw();
+            }
+        }, this);
     }
 
-};
+    enter() {
+        this.navigator.draw();
+        this.isActive = true;
+    }
 
+    exit() {
+        this.navigator.clear();
+        this.isActive = true;
+    }
 
-NavigatorModeBase.prototype.mousemove = function (event) {
-    if (this.isStarted) {
-        var sp = this.startPoint,
-            hp = [event.clientX, event.clientY],
-            extent = new Geometry.Extent(sp.concat(hp));
-        extent.normalize();
-        var tl = extent.getBottomLeft().getCoordinates();
-        this.select.style.left = tl[0] + 'px';
-        this.select.style.top = tl[1] + 'px';
-        this.select.style.width = extent.getWidth() + 'px';
-        this.select.style.height = extent.getHeight() + 'px';
+    wheel(event) {
+        if (Math.abs(event.deltaY) > 2) {
+            if (event.deltaY < 0) {
+                this.navigator.zoomIn();
+            }
+            else {
+                this.navigator.zoomOut();
+            }
+        }
+    }
 
-        if (!this.isMoving) {
-            this.isMoving = true;
-            this.select.style.display = 'block';
+    mousedown(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.startPoint = [event.clientX, event.clientY];
+        this.isStarted = true;
+        if (!this.select) {
+            this.select = document.createElement('div');
+            this.select.setAttribute('class', 'navigate-select');
+            this.select.style.position = 'absolute';
+            this.select.style.pointerEvents = 'none';
+            this.select.style.display = 'none';
+            this.navigator.options.container.appendChild(this.select);
         }
 
     }
-};
 
-NavigatorModeBase.prototype.mouseup = function (event) {
-    if (this.isStarted) {
-        var endPoint = [event.clientX, event.clientY],
-            startPoint = this.startPoint,
-            dist = vecDist(startPoint, endPoint);
+    mousemove(event) {
+        if (this.isStarted) {
+            const sp = this.startPoint;
+            const hp = [event.clientX, event.clientY];
+            const extent = new Geometry.Extent(sp.concat(hp));
+            extent.normalize();
+            const tl = extent.getBottomLeft().getCoordinates();
+            this.select.style.left = `${tl[0]}px`;
+            this.select.style.top = `${tl[1]}px`;
+            this.select.style.width = `${extent.getWidth()}px`;
+            this.select.style.height = `${extent.getHeight()}px`;
 
-        if (dist > 2) {
-            var TI = this.navigator.transform.inverse(),
-                extent = unprojectExtent(transformExtent(startPoint.concat(endPoint), TI));
-
-            region.push(extent);
+            if (!this.isMoving) {
+                this.isMoving = true;
+                this.select.style.display = 'block';
+            }
         }
-        else {
-            this.navigator.centerOn(startPoint);
-        }
-        this.isStarted = false;
-        this.isMoving = false;
-        this.select.style.display = 'none';
     }
-};
+
+    mouseup(event) {
+        if (this.isStarted) {
+            const endPoint = [event.clientX, event.clientY];
+            const startPoint = this.startPoint;
+            const dist = vecDist(startPoint, endPoint);
+
+            if (dist > 2) {
+                const TI = this.navigator.transform.inverse();
+                const extent = unprojectExtent(transformExtent(startPoint.concat(endPoint), TI));
+
+                region.push(extent);
+            }
+            else {
+                this.navigator.centerOn(startPoint);
+            }
+            this.isStarted = false;
+            this.isMoving = false;
+            this.select.style.display = 'none';
+        }
+    }
+}
+
+util.inherits(NavigatorModeBase, NavigatorMode);
 
 
-var NAVIGATOR_MODES = [
+const NAVIGATOR_MODES = [
     NavigatorModeBase,
 ];
 
 
-function Navigator (options) {
-    this.options = options;
-    this.setupModes();
-    this.setupCanvas();
-    this.setupButtons();
-    this.map = options.map;
+class Navigator {
+    constructor(options) {
+        this.options = options;
+        this.setupModes();
+        this.setupCanvas();
+        this.setupButtons();
+        this.map = options.map;
 
-    var view = options.map.getView();
+        const view = options.map.getView();
 
-    Object.defineProperty(this, 'transform', {
-        get: function () {
-            return view.transform.clone();
-        }
-    });
-}
+        Object.defineProperty(this, 'transform', {
+            get() {
+                return view.transform.clone();
+            }
+        });
+    }
+
+    setupButtons() {
+        const container = this.options.container;
+        const buttonBlock = document.createElement('div');
+
+        buttonBlock.setAttribute('class', 'navigate-buttons');
+
+        const zoomIn = makeButton('+', {
+            'class': 'navigate-button navigate-zoom-in',
+            'title': '[i]'
+            }, this.zoomIn, this);
+
+        const zoomOut = makeButton('-', {
+            'class': 'navigate-button navigate-zoom-out',
+            'title': '[o]'
+        }, this.zoomOut, this);
+
+        const west = makeButton('↦', {
+            'class': 'navigate-button navigate-west'
+        }, this.west, this);
+
+        const east = makeButton('↤', {
+            'class': 'navigate-button navigate-east'
+        }, this.east, this);
+
+        const north = makeButton('↧', {
+            'class': 'navigate-button navigate-north'
+        }, this.north, this);
+
+        const south = makeButton('↥', {
+            'class': 'navigate-button navigate-south'
+        }, this.south, this);
+
+        const exit = makeButton('exit', {
+            'class': 'navigate-button navigate-exit',
+            'title': 'escape'
+        }, this.end, this);
 
 
-Navigator.prototype.setupButtons = function () {
-    var container = this.options.container,
-        buttonBlock = document.createElement('div');
+        buttonBlock.appendChild(zoomIn);
+        buttonBlock.appendChild(zoomOut);
+        buttonBlock.appendChild(north);
+        buttonBlock.appendChild(east);
+        buttonBlock.appendChild(south);
+        buttonBlock.appendChild(west);
+        buttonBlock.appendChild(exit);
 
-    buttonBlock.setAttribute('class', 'navigate-buttons');
+        container.appendChild(buttonBlock);
+    }
 
-    var zoomIn = makeButton('+', {
-        'class': 'navigate-button navigate-zoom-in',
-        'title': '[i]'
-        }, this.zoomIn, this);
-
-    var zoomOut = makeButton('-', {
-        'class': 'navigate-button navigate-zoom-out',
-        'title': '[o]'
-    }, this.zoomOut, this);
-
-    var west = makeButton('↦', {
-        'class': 'navigate-button navigate-west'
-    }, this.west, this);
-
-    var east = makeButton('↤', {
-        'class': 'navigate-button navigate-east'
-    }, this.east, this);
-
-    var north = makeButton('↧', {
-        'class': 'navigate-button navigate-north'
-    }, this.north, this);
-
-    var south = makeButton('↥', {
-        'class': 'navigate-button navigate-south'
-    }, this.south, this);
-
-    var exit = makeButton('exit', {
-        'class': 'navigate-button navigate-exit',
-        'title': 'escape'
-    }, this.end, this);
-
-
-    buttonBlock.appendChild(zoomIn);
-    buttonBlock.appendChild(zoomOut);
-    buttonBlock.appendChild(north);
-    buttonBlock.appendChild(east);
-    buttonBlock.appendChild(south);
-    buttonBlock.appendChild(west);
-    buttonBlock.appendChild(exit);
-
-    container.appendChild(buttonBlock);
-};
-
-Navigator.prototype.setupCanvas = function () {
-    var container = this.options.container;
+    setupCanvas() {
+        const container = this.options.container;
         rect = container.getBoundingClientRect();
 
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = rect.width;
-    this.canvas.height = rect.height;
-    this.canvas.backgroundColor = 'transparent';
-    this.canvas.style.position = 'absolute';
-    this.canvas.style.top = '0';
-    this.canvas.style.left = '0';
+        this.canvas = document.createElement('canvas');
+        this.canvas.width = rect.width;
+        this.canvas.height = rect.height;
+        this.canvas.backgroundColor = 'transparent';
+        this.canvas.style.position = 'absolute';
+        this.canvas.style.top = '0';
+        this.canvas.style.left = '0';
 
-    container.appendChild(this.canvas);
-    this.canvas.setAttribute('tabindex', -1);
-    this.canvas.focus();
-    this.context = this.canvas.getContext('2d');
+        container.appendChild(this.canvas);
+        this.canvas.setAttribute('tabindex', -1);
+        this.canvas.focus();
+        this.context = this.canvas.getContext('2d');
 
-    var dispatcher = _.bind(this.dispatcher, this),
-        events = [
+        const dispatcher = _.bind(this.dispatcher, this);
+
+        const events = [
             'click', 'dblclick',
             'mousedown', 'mousemove', 'mouseup',
             'keypress', 'keydown', 'keyup',
             'wheel'
             ];
-    for (var i = 0; i < events.length; i++) {
-        this.canvas.addEventListener(events[i], dispatcher, false);
-    }
-};
 
-Navigator.prototype.setupModes = function () {
-    for (var i = 0; i < NAVIGATOR_MODES.length; i++) {
-        this.createMode(NAVIGATOR_MODES[i]);
-    }
-};
-
-Navigator.prototype.clear = function () {
-    var rect = this.canvas.getBoundingClientRect();
-    this.context.clearRect(0, 0, rect.width, rect.height);
-};
-
-Navigator.prototype.start = function (ender) {
-    this.ender = ender;
-    this.setMode('ModeBase');
-};
-
-Navigator.prototype.end = function () {
-    this.ender();
-};
-
-Navigator.prototype.drawRegion = function () {
-    var ctx = this.context,
-        rect = this.canvas.getBoundingClientRect(),
-        extent = region.get(),
-        bl = extent.getBottomLeft().getCoordinates(),
-        tr = extent.getTopRight().getCoordinates(),
-        centerLatLong = extent.getCenter().getCoordinates(),
-        center;
-
-    bl = Proj3857.forward(bl);
-    tr = Proj3857.forward(tr);
-    center = Proj3857.forward(centerLatLong);
-    this.transform.mapVec2(bl);
-    this.transform.mapVec2(tr);
-    this.transform.mapVec2(center);
-
-    ctx.save();
-    ctx.setLineDash([4, 16]);
-    ctx.strokeStyle = '#337AFF';
-    ctx.fillStyle = '#888';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(bl[0], bl[1]);
-    ctx.lineTo(bl[0], tr[1]);
-    ctx.lineTo(tr[0], tr[1]);
-    ctx.lineTo(tr[0], bl[1]);
-    ctx.lineTo(bl[0], bl[1]);
-    // ctx.lineTo(-2, rect.height + 2);
-    // ctx.lineTo(rect.width + 2, rect.height + 2);
-    // ctx.lineTo(rect.width + 2, -2);
-    // ctx.lineTo(-2, -2);
-    // ctx.lineTo(-2, rect.height + 2);
-    ctx.stroke();
-    // ctx.fill();
-    ctx.restore();
-
-    ctx.save();
-    ctx.strokeStyle = '#337AFF';
-    ctx.fillStyle = '#337AFF';
-    ctx.lineWidth = 2;
-    ctx.font = '16px monospace';
-    ctx.beginPath();
-    ctx.moveTo(center[0], -2);
-    ctx.lineTo(center[0], rect.height + 2);
-    ctx.stroke();
-    ctx.moveTo(-2, center[1]);
-    ctx.lineTo(rect.width + 2, center[1]);
-    ctx.stroke();
-    ctx.fillText(Geometry.toDMS(centerLatLong), 4 , center[1] - 4);
-    ctx.save();
-};
-
-Navigator.prototype.drawScale = function () {
-    var ctx = this.context,
-        rect = this.canvas.getBoundingClientRect(),
-        extent = region.get(),
-        bl = extent.getBottomLeft().getCoordinates(),
-        tr = extent.getTopRight().getCoordinates(),
-        centerLatLong = extent.getCenter().getCoordinates(),
-        center;
-
-    bl = Proj3857.forward(bl);
-    tr = Proj3857.forward(tr);
-    center = Proj3857.forward(centerLatLong);
-    this.transform.mapVec2(bl);
-    this.transform.mapVec2(tr);
-    this.transform.mapVec2(center);
-
-    var left = 13,
-        right = 74,
-        top = rect.height - 17,
-	thickness = 6,
-        bottom = top + thickness,
-	length = right - left,
-	hw = ((length - 1) / 2) + left,
-        leftVec = this.map.getCoordinateFromPixel([left, top]),
-        rightVec = this.map.getCoordinateFromPixel([right, top]),
-        dist = turf.distance(turf.point(leftVec), turf.point(rightVec), 'kilometers') * 100000; // centimeters
-
-    var formatNumber = function (n) {
-        if (Math.floor(n) === n) {
-            return n;
-        }
-        return n.toFixed(2);
-    };
-
-    var labelRight, labelCenter;
-    if (dist < 100) {
-        labelRight = formatNumber(dist) + ' cm';
-        labelCenter = formatNumber(dist/2) + ' cm';
-    }
-    else if (dist < 100000) {
-        labelRight = formatNumber(dist / 100) + ' m';
-        labelCenter = formatNumber((dist/2)/100) + ' m';
-    }
-    else {
-        labelRight = formatNumber(dist / 100000) + ' km';
-        labelCenter = formatNumber((dist/2) / 100000) + ' km';
-    }
-
-    ctx.save();
-    ctx.fillStyle = 'black';
-    ctx.font = '11px sansguiltmb';
-    ctx.textAlign = 'left';
-    // ctx.fillText('0', left, top - 8);
-    // ctx.fillText(labelCenter, hw, top - 4);
-    ctx.fillText(labelRight, right + 5, top + thickness);
-    ctx.restore();
-
-    ctx.save();
-    ctx.fillStyle = 'black';
-    ctx.beginPath();
-    ctx.fillRect(left, top, right - left, thickness);
-    ctx.restore();
-
-    ctx.save();
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.fillRect(left + 1, top + 1, (length / 2) - 1, (thickness / 2) - 1);
-    ctx.fillRect(hw + 1, top + (thickness / 2), (length / 2) - 1, (thickness / 2) - 1);
-    ctx.restore();
-};
-
-Navigator.prototype.draw = function (selected) {
-    this.clear();
-    this.drawRegion();
-    this.drawScale();
-    return this;
-};
-
-Navigator.prototype.createMode = function (proto) {
-    if (!this.modes) {
-        this.modes = {};
-    }
-
-    var mode = new proto(this),
-        modeName = mode.getName();
-
-    this.modes[modeName] = mode;
-    return this;
-};
-
-Navigator.prototype.setMode = function (modeName) {
-    if (this.currentMode) {
-        var oldMode = this.getMode();
-        if (oldMode.exit) {
-            oldMode.exit();
+        for (let i = 0; i < events.length; i++) {
+            this.canvas.addEventListener(events[i], dispatcher, false);
         }
     }
-    this.currentMode = modeName;
-    if (this.modeButtons) {
-        for (var mb in this.modeButtons) {
-            this.modeButtons[mb].setAttribute('class', 'trace-button');
+
+    setupModes() {
+        for (let i = 0; i < NAVIGATOR_MODES.length; i++) {
+            this.createMode(NAVIGATOR_MODES[i]);
         }
-        this.modeButtons[modeName].setAttribute('class', 'trace-button active');
     }
-    var mode = this.getMode();
-    if (mode.enter) {
-        mode.enter();
+
+    clear() {
+        const rect = this.canvas.getBoundingClientRect();
+        this.context.clearRect(0, 0, rect.width, rect.height);
     }
-    return this;
-};
 
-
-Navigator.prototype.getMode = function () {
-    return this.modes[this.currentMode];
-};
-
-Navigator.prototype.dispatcher = function (event) {
-    var type = event.type,
-        mode = this.getMode();
-
-    if (type in mode) {
-        mode[type](event);
+    start(ender) {
+        this.ender = ender;
+        this.setMode('ModeBase');
     }
-};
 
-Navigator.prototype.zoomIn = function () {
-    var extent = region.get(),
-        val = getStep(extent);
-    region.push(extent.buffer(-val));
-};
+    end() {
+        this.ender();
+    }
 
-Navigator.prototype.zoomOut = function () {
-    var extent = region.get(),
-        val = getStep(extent);
-    region.push(extent.buffer(val));
-};
+    drawRegion() {
+        const ctx = this.context;
+        const rect = this.canvas.getBoundingClientRect();
+        const extent = region.get();
+        let bl = extent.getBottomLeft().getCoordinates();
+        let tr = extent.getTopRight().getCoordinates();
+        const centerLatLong = extent.getCenter().getCoordinates();
+        let center;
 
+        bl = Proj3857.forward(bl);
+        tr = Proj3857.forward(tr);
+        center = Proj3857.forward(centerLatLong);
+        this.transform.mapVec2(bl);
+        this.transform.mapVec2(tr);
+        this.transform.mapVec2(center);
 
-Navigator.prototype.north = function () {
-    var T = new Transform(),
-        extent = region.get(),
-        val = getStep(extent);
+        ctx.save();
+        ctx.setLineDash([4, 16]);
+        ctx.strokeStyle = '#337AFF';
+        ctx.fillStyle = '#888';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(bl[0], bl[1]);
+        ctx.lineTo(bl[0], tr[1]);
+        ctx.lineTo(tr[0], tr[1]);
+        ctx.lineTo(tr[0], bl[1]);
+        ctx.lineTo(bl[0], bl[1]);
+        // ctx.lineTo(-2, rect.height + 2);
+        // ctx.lineTo(rect.width + 2, rect.height + 2);
+        // ctx.lineTo(rect.width + 2, -2);
+        // ctx.lineTo(-2, -2);
+        // ctx.lineTo(-2, rect.height + 2);
+        ctx.stroke();
+        // ctx.fill();
+        ctx.restore();
 
-    T.translate(0, -val);
-    transformRegion(T, extent);
-};
+        ctx.save();
+        ctx.strokeStyle = '#337AFF';
+        ctx.fillStyle = '#337AFF';
+        ctx.lineWidth = 2;
+        ctx.font = '16px monospace';
+        ctx.beginPath();
+        ctx.moveTo(center[0], -2);
+        ctx.lineTo(center[0], rect.height + 2);
+        ctx.stroke();
+        ctx.moveTo(-2, center[1]);
+        ctx.lineTo(rect.width + 2, center[1]);
+        ctx.stroke();
+        ctx.fillText(Geometry.toDMS(centerLatLong), 4 , center[1] - 4);
+        ctx.save();
+    }
 
-Navigator.prototype.south = function () {
-    var T = new Transform(),
-        extent = region.get(),
-        val = getStep(extent);
+    drawScale() {
+        const ctx = this.context;
+        const rect = this.canvas.getBoundingClientRect();
+        const extent = region.get();
+        let bl = extent.getBottomLeft().getCoordinates();
+        let tr = extent.getTopRight().getCoordinates();
+        const centerLatLong = extent.getCenter().getCoordinates();
+        let center;
 
-    T.translate(0, val);
-    transformRegion(T, extent);
-};
+        bl = Proj3857.forward(bl);
+        tr = Proj3857.forward(tr);
+        center = Proj3857.forward(centerLatLong);
+        this.transform.mapVec2(bl);
+        this.transform.mapVec2(tr);
+        this.transform.mapVec2(center);
 
-Navigator.prototype.east = function () {
-    var T = new Transform(),
-        extent = region.get(),
-        val = getStep(extent);
+        const left = 13; // centimeters
+        const right = 74;
+        const top = rect.height - 17;
+        const thickness = 6;
+        const bottom = top + thickness;
+        const length = right - left;
+        const hw = ((length - 1) / 2) + left;
+        const leftVec = this.map.getCoordinateFromPixel([left, top]);
+        const rightVec = this.map.getCoordinateFromPixel([right, top]);
+        const dist = turf.distance(turf.point(leftVec), turf.point(rightVec), 'kilometers') * 100000;
 
-    T.translate(-val, 0);
-    transformRegion(T, extent);
-};
+        const formatNumber = n => {
+            if (Math.floor(n) === n) {
+                return n;
+            }
+            return n.toFixed(2);
+        };
 
-Navigator.prototype.west = function () {
-    var T = new Transform(),
-        extent = region.get(),
-        val = getStep(extent);
+        let labelRight;
+        let labelCenter;
+        if (dist < 100) {
+            labelRight = `${formatNumber(dist)} cm`;
+            labelCenter = `${formatNumber(dist/2)} cm`;
+        }
+        else if (dist < 100000) {
+            labelRight = `${formatNumber(dist / 100)} m`;
+            labelCenter = `${formatNumber((dist/2)/100)} m`;
+        }
+        else {
+            labelRight = `${formatNumber(dist / 100000)} km`;
+            labelCenter = `${formatNumber((dist/2) / 100000)} km`;
+        }
 
-    T.translate(val, 0);
-    transformRegion(T, extent);
-};
+        ctx.save();
+        ctx.fillStyle = 'black';
+        ctx.font = '11px sansguiltmb';
+        ctx.textAlign = 'left';
+        // ctx.fillText('0', left, top - 8);
+        // ctx.fillText(labelCenter, hw, top - 4);
+        ctx.fillText(labelRight, right + 5, top + thickness);
+        ctx.restore();
 
-Navigator.prototype.centerOn = function (pix) {
-    var coords = this.map.getCoordinateFromPixel(pix),
-        T = new Transform(),
-        extent = region.get(),
-        center = extent.getCenter().getCoordinates();
+        ctx.save();
+        ctx.fillStyle = 'black';
+        ctx.beginPath();
+        ctx.fillRect(left, top, right - left, thickness);
+        ctx.restore();
 
-    T.translate(coords[0] - center[0], coords[1] - center[1]);
-    transformRegion(T, extent);
-};
+        ctx.save();
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.fillRect(left + 1, top + 1, (length / 2) - 1, (thickness / 2) - 1);
+        ctx.fillRect(hw + 1, top + (thickness / 2), (length / 2) - 1, (thickness / 2) - 1);
+        ctx.restore();
+    }
+
+    draw(selected) {
+        this.clear();
+        this.drawRegion();
+        this.drawScale();
+        return this;
+    }
+
+    createMode(proto) {
+        if (!this.modes) {
+            this.modes = {};
+        }
+
+        const mode = new proto(this);
+        const modeName = mode.getName();
+
+        this.modes[modeName] = mode;
+        return this;
+    }
+
+    setMode(modeName) {
+        if (this.currentMode) {
+            const oldMode = this.getMode();
+            if (oldMode.exit) {
+                oldMode.exit();
+            }
+        }
+        this.currentMode = modeName;
+        if (this.modeButtons) {
+            for (const mb in this.modeButtons) {
+                this.modeButtons[mb].setAttribute('class', 'trace-button');
+            }
+            this.modeButtons[modeName].setAttribute('class', 'trace-button active');
+        }
+        const mode = this.getMode();
+        if (mode.enter) {
+            mode.enter();
+        }
+        return this;
+    }
+
+    getMode() {
+        return this.modes[this.currentMode];
+    }
+
+    dispatcher(event) {
+        const type = event.type;
+        const mode = this.getMode();
+
+        if (type in mode) {
+            mode[type](event);
+        }
+    }
+
+    zoomIn() {
+        const extent = region.get();
+        const val = getStep(extent);
+        region.push(extent.buffer(-val));
+    }
+
+    zoomOut() {
+        const extent = region.get();
+        const val = getStep(extent);
+        region.push(extent.buffer(val));
+    }
+
+    north() {
+        const T = new Transform();
+        const extent = region.get();
+        const val = getStep(extent);
+
+        T.translate(0, -val);
+        transformRegion(T, extent);
+    }
+
+    south() {
+        const T = new Transform();
+        const extent = region.get();
+        const val = getStep(extent);
+
+        T.translate(0, val);
+        transformRegion(T, extent);
+    }
+
+    east() {
+        const T = new Transform();
+        const extent = region.get();
+        const val = getStep(extent);
+
+        T.translate(-val, 0);
+        transformRegion(T, extent);
+    }
+
+    west() {
+        const T = new Transform();
+        const extent = region.get();
+        const val = getStep(extent);
+
+        T.translate(val, 0);
+        transformRegion(T, extent);
+    }
+
+    centerOn(pix) {
+        const coords = this.map.getCoordinateFromPixel(pix);
+        const T = new Transform();
+        const extent = region.get();
+        const center = extent.getCenter().getCoordinates();
+
+        T.translate(coords[0] - center[0], coords[1] - center[1]);
+        transformRegion(T, extent);
+    }
+}
 
 
 
 
 function navigate () {
-    var self = this,
-        shell = self.shell,
-        stdout = shell.stdout,
-        terminal = shell.terminal,
-        map = shell.env.map,
-        display = terminal.display();
+    const self = this;
+    const shell = self.shell;
+    const stdout = shell.stdout;
+    const terminal = shell.terminal;
+    const map = shell.env.map;
+    const display = terminal.display();
 
-    var options = {
+    const options = {
         'container': display.node,
         'map': map
     };
 
-    var nav = new Navigator(options);
+    const nav = new Navigator(options);
 
-    var resolver = function (resolve, reject) {
+    const resolver = (resolve, reject) => {
 
-        var ender = function (extent) {
+        const ender = extent => {
             display.end();
             resolve(extent);
         };
@@ -613,7 +612,7 @@ function navigate () {
 }
 
 
-module.exports = exports = {
+export default {
     name: 'navigate',
     command: navigate
 };

@@ -1,32 +1,29 @@
-/*
- * app/lib/Layer.js
- *
- *
- * Copyright (C) 2015  Pierre Marchand <pierremarc07@gmail.com>
- *
- * License in LICENSE file at the root of the repository.
- *
- */
-
-'use strict';
-
-var Context = require('./Context'),
-    listFeatures = require('./commands/layer/listFeatures'),
-    createFeature = require('./commands/layer/createFeature'),
-    importer = require('./commands/layer/importer'),
-    styler = require('./commands/layer/styleWidget');
+import Context from './Context';
+import listFeatures from './commands/layer/listFeatures';
+import createFeature from './commands/layer/createFeature';
+import importer from './commands/layer/importer';
+import styler from './commands/layer/styleWidget';
 
 
 
-var Layer = Context.extend({
-    name: 'group',
-    commands:{
-        'lf': listFeatures.command,
-        'create': createFeature.command,
-        'import': importer.command,
-        'sl': styler.command
+class Layer extends Context {
+    constructor () {
+        super(...arguments);
     }
-});
+
+    get name () {
+        return 'group';
+    }
+
+    get commands () {
+        return {
+            'lf': listFeatures.command,
+            'create': createFeature.command,
+            'import': importer.command,
+            'sl': styler.command
+        };
+    }
+}
 
 
-module.exports = exports = Layer;
+export default Layer;
