@@ -19,36 +19,36 @@ class Source extends BaseSource{
         this.layer = layer;
 
         // listen to the layer to update features if some are created
-        layer.on('change', this.update, this);
-        layer.on('set', function (key) {
+        layer.on('change', () => this.update());
+        layer.on('set', (key) => {
             const prefix = _.first(key.split('.'));
             if (('style' === prefix) || ('params' === prefix)) {
                 this.emit('update');
             }
-        }, this);
+        });
     }
 
 
-    update() {
-        const emitUpdate = function () {
-            const feat = this;
-            this.emit('update:feature', feat);
-        };
-
+    update () {
         binder.getFeatures(this.uid, this.gid, this.layer.id)
             .then(features => {
-            const ts = _.now();
-            this.clear();
+                const ts = _.now();
+                this.clear();
+                const emitUpdate = f => {
+                    return (() => {
+                        this.emit('update:feature', f);
+                    });
+                };
+                for (const feature of features) {
+                    this.addFeature(feature, true);
+                    feature.on('set', emitUpdate(feature));
+                    feature.on('set:data', emitUpdate(feature));
+                }
 
-            for (const feature of features) {
-                this.addFeature(feature, true);
-                feature.on('set set:data', emitUpdate);
-            }
-
-            this.buildTree();
-            logger('END SOURCE UPDATE', features.length, _.now() - ts);
-            this.emit('update');
-        })
+                this.buildTree();
+                logger('END SOURCE UPDATE', features.length, _.now() - ts);
+                this.emit('update');
+            })
             .catch(err => {
                 console.error('Source.update', err);
             });

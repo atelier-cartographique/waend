@@ -37,7 +37,7 @@ const WORLD_EXTENT = new Geometry.Extent([-horizMax, -vertiMax, horizMax, vertiM
 const Region = O.extend({
     initialize() {
         this.state = [WORLD_EXTENT.clone()];
-        semaphore.on('region:push', this.push, this);
+        semaphore.on('region:push', this.push.bind(this));
     },
 
     getWorldExtent() {

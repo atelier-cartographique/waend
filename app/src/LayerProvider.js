@@ -10,7 +10,7 @@ const LayerProvider = O.extend({
 
     initialize() {
         this.layers = [];
-        semaphore.on('source:change', this.update, this);
+        semaphore.on('source:change', this.update.bind(this));
     },
 
     clearLayers() {

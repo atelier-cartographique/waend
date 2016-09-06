@@ -32,7 +32,8 @@ function sockMessage (evt) {
     try {
         const args = JSON.parse(data);
         if (_.isArray(args) && (args.length > 1)) {
-            semaphore.signal(...['sync'].concat(args));
+            const syncArgs = ['sync'].concat(args);
+            semaphore.signal(...syncArgs);
         }
     }
     catch (err) {

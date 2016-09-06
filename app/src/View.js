@@ -41,7 +41,7 @@ class View {
         });
 
         window.addEventListener('resize', _.bind(this.resize, this));
-        semaphore.on('map:resize', this.resize, this);
+        semaphore.on('map:resize', this.resize.bind(this));
 
     }
 
@@ -256,6 +256,7 @@ class View {
         const rect = this.getRect();
 
         for (const source of this.contexts) {
+            const img = source.getImageData(0, 0, rect.width, rect.height);
             // context.putImageData(img, 0, 0);
             fn.call(ctx, img);
         }

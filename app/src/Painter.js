@@ -138,7 +138,7 @@ class Painter {
 
         this.transform = view.transform.clone();
         this.view = view;
-        semaphore.on('view:change', this.resetTransform, this);
+        semaphore.on('view:change', this.resetTransform.bind(this));
         this.stateInc = 0;
         this.imagesLoading = [];
         this.clear();

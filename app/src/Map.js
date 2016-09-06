@@ -22,10 +22,10 @@ class Map {
         this.renderer_ = new Renderer(this.viewport_, this);
 
         // listen to layer setup changes
-        semaphore.on('layer:layer:add', this.waendAddLayer, this);
-        semaphore.on('layer:layer:remove', this.waendRemoveLayer, this);
+        semaphore.on('layer:layer:add', this.waendAddLayer.bind(this));
+        semaphore.on('layer:layer:remove', this.waendRemoveLayer.bind(this));
 
-        semaphore.on('please:map:render', this.render, this);
+        semaphore.on('please:map:render', this.render.bind(this));
 
         // this.updateQueue = new Queue();
         this.updateMutex = new Mutex();
@@ -51,7 +51,7 @@ class Map {
 
     listenToWaend() {
         this.onChangeViewKey = this.on('moveend', this.waendUpdateRegion, this);
-        this.onChangeRegionKey = semaphore.on('region:change', this.waendUpdateExtent, this);
+        this.onChangeRegionKey = semaphore.on('region:change', this.waendUpdateExtent.bind(this));
     }
 
     unlistenToWaend() {

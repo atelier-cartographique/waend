@@ -13,6 +13,8 @@ import Promise from 'bluebird';
 
 import semaphore from '../Semaphore';
 import region from '../Region';
+import debug from 'debug';
+const logger = debug('waend:command:create');
 
 
 function createGroup (uid, ctx, resolve, reject) {

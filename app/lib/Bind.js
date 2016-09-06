@@ -152,7 +152,7 @@ class Bind extends EventEmitter {
         this.featurePages = {};
         this._groupCache = {};
 
-        semaphore.on('sync', function(chan, cmd, data){
+        semaphore.on('sync', (chan, cmd, data) => {
             if ('update' === cmd) {
                 if (this.db.has(data.id)) {
                     const model = this.db.get(data.id);
@@ -184,7 +184,7 @@ class Bind extends EventEmitter {
                     }
                 }
             }
-        }, this);
+        });
     }
 
     update (model) {
@@ -194,7 +194,7 @@ class Bind extends EventEmitter {
     changeParent (parentId) {
         if(this.db.has(parentId)){
             const parent = this.db.get(parentId);
-            // logger('binder.changeParent', parent.id);
+            logger('binder.changeParent', parent.id);
             parent.emit('change');
         }
     }

@@ -658,9 +658,9 @@ class WebConsole extends Terminal {
 
         this.forwardMouseEvents();
 
-        semaphore.on('terminal:run', this.runCommand, this);
-        semaphore.on('start:loader', this.startLoader, this);
-        semaphore.on('stop:loader', this.stopLoader, this);
+        semaphore.on('terminal:run', this.runCommand.bind(this));
+        semaphore.on('start:loader', this.startLoader.bind(this));
+        semaphore.on('stop:loader', this.stopLoader.bind(this));
     }
 
     internalCommand (str) {

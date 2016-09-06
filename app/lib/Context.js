@@ -14,6 +14,7 @@ import _ from 'underscore';
 import ospath from 'path';
 import EventEmitter from 'events';
 import {get as getBinder} from './Bind';
+import * as commands from './commands';
 import debug from 'debug';
 const logger = debug('waend:Context');
 
@@ -29,8 +30,13 @@ class Context extends EventEmitter {
         this.binder = getBinder();
     }
 
-    get commands () {
-        return {};
+    get baseCommands () {
+        const val = {};
+        for (let k in commands) {
+            const c = commands[k];
+            val[c.name] = c.command;
+        }
+        return val;
     }
 
     _computeCurrent (ctx, memo) {
@@ -55,18 +61,23 @@ class Context extends EventEmitter {
         const args =  _.toArray(arguments);
         const sys = args.shift();
         const cmd = args.shift();
+        let method = null;
 
-        if(!(cmd in this.commands)){
-            if (this.parent) {
-                return this.parent.exec(...arguments);
-            }
-            throw (new Error(`command not found: ${cmd}`));
+        if (cmd in this.commands) {
+            method = this.commands[cmd];
+        }
+        else if (cmd in this.baseCommands) {
+            method = this.baseCommands[cmd];
         }
 
-        this.sys = sys;
-
-        const ret = this.commands[cmd].apply(this, args);
-        return ret;
+        if (method) {
+            this.sys = sys;
+            return method.call(this, ...args);
+        }
+        else if (this.parent) {
+            return this.parent.exec(...arguments);
+        }
+        throw (new Error(`command not found: ${cmd}`));
     }
 
     current () {

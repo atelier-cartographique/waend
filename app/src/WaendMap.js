@@ -40,11 +40,11 @@ class Map {
     }
 
     listenToWaend() {
-        semaphore.on('layer:layer:add', this.waendAddLayer, this);
-        semaphore.on('layer:layer:remove', this.waendRemoveLayer, this);
-        semaphore.on('please:map:render', this.render, this);
-        semaphore.on('region:change', this.waendUpdateExtent, this);
-        semaphore.on('visibility:change', this.setVisibility, this);
+        semaphore.on('layer:layer:add', this.waendAddLayer.bind(this));
+        semaphore.on('layer:layer:remove', this.waendRemoveLayer.bind(this));
+        semaphore.on('please:map:render', this.render.bind(this));
+        semaphore.on('region:change', this.waendUpdateExtent.bind(this));
+        semaphore.on('visibility:change', this.setVisibility.bind(this));
     }
 
     unlistenToWaend() {

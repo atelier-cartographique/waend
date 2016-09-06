@@ -26,7 +26,7 @@ class CanvasRenderer {
         this.painter = new Painter(this.view, this.layer.id);
         this.initWorker();
         this.features = {};
-        semaphore.on('map:update', this.render, this);
+        semaphore.on('map:update', this.render.bind(this));
     }
 
     setVisibility(v) {
@@ -72,8 +72,10 @@ class CanvasRenderer {
             // const geom = feature.getGeometry();
             // const extent = geom.getExtent();
             worker.once('data:update', () => {
+                logger('updatating feature');
                 this.render();
             });
+            logger('posting updated feature');
             worker.post('update:data', this.layer.toJSON([feature]));
         });
 

@@ -121,6 +121,7 @@ function drawLine () {
                 const segments = path.segments;
 
                 for (const s of segments) {
+                    const pixel = [s.point.x, s.point.y];
                     line.appendCoordinate(map.getCoordinateFromPixel(pixel));
                 }
             }

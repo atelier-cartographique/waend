@@ -11,12 +11,12 @@
 // 'use strict';
 
 import _ from 'underscore';
-
-import util from 'util';
 import rbush from 'rbush';
 import Projection from 'proj4';
 import Geometry from '../Geometry';
 import semaphore from '../Semaphore';
+import debug from 'debug';
+const logger = debug('waend:command/trace');
 
 const Proj3857 = Projection('EPSG:3857');
 
@@ -135,9 +135,9 @@ class TracerMode {
     }
 }
 
-class TracerModeNewPoint {
+class TracerModeNewPoint extends TracerMode{
     constructor() {
-        TracerMode.apply(this, arguments);
+        super(...arguments);
         this.modeName = 'NewPoint';
         Object.defineProperty(this, 'inverse', {
             get() {
@@ -177,11 +177,10 @@ class TracerModeNewPoint {
     }
 }
 
-util.inherits(TracerModeNewPoint, TracerMode);
 
-class TracerModeEditPoint {
+class TracerModeEditPoint extends TracerMode {
     constructor() {
-        TracerMode.apply(this, arguments);
+        super(...arguments);
         this.modeName = 'EditPoint';
         Object.defineProperty(this, 'inverse', {
             get() {
@@ -223,8 +222,6 @@ class TracerModeEditPoint {
         this.tracer.draw();
     }
 }
-
-util.inherits(TracerModeEditPoint, TracerMode);
 
 
 const TRACER_MODES = [

@@ -1,5 +1,4 @@
 import _ from 'underscore';
-import util from 'util';
 import Promise from 'bluebird';
 import Geometry from '../Geometry';
 import Transform from '../Transform';
@@ -120,11 +119,10 @@ class NavigatorMode {
     }
 }
 
-class NavigatorModeBase {
+class NavigatorModeBase extends NavigatorMode {
     constructor() {
-        NavigatorMode.apply(this, arguments);
+        super(...arguments);
         this.modeName = 'ModeBase';
-
         semaphore.on('region:change', function () {
             if (this.isActive) {
                 this.navigator.draw();
@@ -222,8 +220,8 @@ class NavigatorModeBase {
     }
 
     wheel(event) {
-        const toId = this.wheelToId;
         this.wheelDeltas = this.wheelDeltas || [];
+        const toId = this.wheelToId;
         const extent = region.get();
         const newExtent = new Geometry.Extent(extent);
 
@@ -231,6 +229,7 @@ class NavigatorModeBase {
 
         // replays deltas
         for (const delta of this.wheelDeltas) {
+            const val = getStep(newExtent);
             if (delta < 0) {
                 newExtent.buffer(-val);
             }
@@ -499,7 +498,6 @@ class NavigatorModeBase {
     }
 }
 
-util.inherits(NavigatorModeBase, NavigatorMode);
 
 const NAVIGATOR_MODES = [
     NavigatorModeBase,

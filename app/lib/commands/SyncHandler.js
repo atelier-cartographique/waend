@@ -22,7 +22,7 @@ class SyncHandler {
     }
 
     start() {
-        semaphore.on('sync', this.dispatch, this);
+        semaphore.on('sync', this.dispatch.bind(this));
         return this;
     }
 

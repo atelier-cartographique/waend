@@ -11,6 +11,7 @@ import {get as getBinder} from './Bind';
 import Stream from './Stream';
 import region from './Region';
 import semaphore from './Semaphore';
+import {reducePromise} from './helpers';
 import debug from 'debug';
 const logger = debug('waend:Shell');
 
@@ -139,7 +140,7 @@ class Shell extends EventEmitter {
         this.env = {};
         this.terminal = terminal;
 
-        semaphore.on('please:shell:context', this.switchContext, this);
+        semaphore.on('please:shell:context', this.switchContext.bind(this));
         if (typeof window !== 'undefined') {
             this.initHistory();
         }
@@ -315,7 +316,7 @@ class Shell extends EventEmitter {
             // });
         };
 
-        return Promise.reduce(cls, (total, item, index) => {
+        return reducePromise(cls, (total, item, index) => {
             this.env.DELIVERED = total;
             const cl = cls[index].trim();
             const toks = this.commandLineTokens(cl);

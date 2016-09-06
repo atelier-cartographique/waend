@@ -1,15 +1,18 @@
 import _ from 'underscore';
-import {Object as O} from '../../lib/object';
+import EventEmitter from 'events';
 
 
-const Semaphore = O.extend({
-
-    signal() {
-        const args = _.toArray(arguments);
-        this.emit(...args);
+class Semaphore extends EventEmitter {
+    constructor () {
+        super();
+        this.setMaxListeners(256);
     }
-    
-});
+
+    signal () {
+        this.emit(...arguments);
+    }
+
+}
 
 const semaphore = new Semaphore();
 export default semaphore;

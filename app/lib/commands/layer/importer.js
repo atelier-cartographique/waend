@@ -14,6 +14,7 @@ import _ from 'underscore';
 
 import Promise from 'bluebird';
 import Geometry from '../../Geometry';
+import {reducePromise} from '../../helpers';
 
 
 
@@ -145,7 +146,7 @@ const handleFile = (file, options, resolve, reject) => {
         const features = geojson.features;
         const lastIndex = features.length - 1;
 
-        Promise.reduce(features, (total, item, index, arrayLength) => {
+        reducePromise(features, (total, item, index, arrayLength) => {
             const feature = features[index];
             const lastOne = index === lastIndex;
             progress (arrayLength, index, options, feature);
