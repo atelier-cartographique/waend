@@ -19,7 +19,7 @@ body {
 }
 
 .header {
-    position: fixed;
+    position: ;
     z-index: 1000;
     width: 100%;
     height: 100px;
@@ -75,10 +75,6 @@ nav li {
     margin-top: 20px;
 }
 
-section {
-    height: 120vh;
-}
-
 h4 {
     font-size: 1.6em;
     text-align: left;
@@ -111,7 +107,7 @@ em {
 }
 
 .carte {
-    width: 100%;
+    max-width: 800px;
     margin-top: 150px;
 }
 
@@ -156,7 +152,7 @@ footer {
     top: 0;
     height: 80px;
     z-index: 1;
-    background: rgba(255, 255, 255, 1);
+    background: transparent;
 }
 
 
@@ -167,7 +163,7 @@ footer {
     top: -80px;
     min-width: 50%;
     min-height: 50%;
-    width: auto;
+    width: 100%;
     height: auto;
     z-index: -100;
     opacity: 0.35;
