@@ -128,7 +128,17 @@ footer {
     /*background: white;*/
 }
 
+footer .support {
+    margin-top: 20px;
+}
 
+footer .support .logo {
+    height: 100px;
+}
+
+footer .support .logo img{
+    height: 100px;
+}
 /* scrollbar */
 
 ::-webkit-scrollbar {
