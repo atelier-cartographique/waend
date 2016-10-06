@@ -122,13 +122,13 @@ NavigatorMode.prototype.getMouseEventPos = function (ev) {
     if (ev instanceof MouseEvent) {
         var target = ev.target,
             trect = target.getBoundingClientRect();
-            return [
-                ev.clientX - trect.left,
-                ev.clientY - trect.top
-            ];
+        return [
+            ev.clientX - trect.left,
+            ev.clientY - trect.top
+        ];
     }
     return [0, 0];
-}
+};
 
 
 NavigatorMode.prototype.getTouchEventPos = function (ev, id) {
@@ -146,7 +146,7 @@ NavigatorMode.prototype.getTouchEventPos = function (ev, id) {
         }
     }
     return [0, 0];
-}
+};
 
 
 function NavigatorModeBase () {
@@ -578,7 +578,7 @@ Navigator.prototype.setupButtons = function () {
     var zoomIn = makeButton('', {
         'class': 'navigate-button navigate-zoom-in',
         'title': '[i]'
-        }, this.zoomIn, this);
+    }, this.zoomIn, this);
 
     var zoomOut = makeButton('', {
         'class': 'navigate-button navigate-zoom-out',
@@ -638,7 +638,7 @@ Navigator.prototype.setupCanvas = function () {
             'keypress', 'keydown', 'keyup',
             'wheel',
             'touchstart', 'touchend', 'touchcancel', 'touchmove'
-            ];
+        ];
     for (var i = 0; i < events.length; i++) {
         this.canvas.addEventListener(events[i], dispatcher, false);
     }
@@ -901,7 +901,7 @@ function showLookup (node) {
     button.setAttribute('class', 'view-lookup-search icon-lookup');
     results.setAttribute('class', 'view-lookup-results hidden');
 
-    button.innerHTML = "";
+    button.innerHTML = '';
 
     wrapperInput.appendChild(input);
     wrapperInput.appendChild(inputBottomLine);
@@ -923,7 +923,7 @@ function showLookup (node) {
             input.value = '';
             lookupTerm(term, lookupResults(results));
         }
-    }
+    };
     button.addEventListener('click', lookup, false);
     input.addEventListener('keyup', triggerOnEnter, false);
 }
@@ -1047,7 +1047,7 @@ function listLayers (context, node) {
         var toExtent = function () {
             layerExtent(layer)
                 .then(_.bind(region.push, region))
-                .catch(function(err){console.error(err)});
+                .catch(function(err){console.error(err);});
         };
 
         vis.addEventListener('click', toggleVisible, false);
@@ -1079,18 +1079,33 @@ function listLayers (context, node) {
     wrapper.appendChild(list);
     node.appendChild(wrapper);
 
-    var vl = data.get('visible'),
-        visibleLayers = new Lister(vl),
-        fv = !vl;
+    var mapVisibleLayers = data.get('visible'),
+        visibleLayers = new Lister(mapVisibleLayers);
+
 
     binder.getLayers(userId, groupId)
         .then(function(layers){
-            for(var i = 0; i < layers.length; i++){
-                var layer = layers[i];
-                if (fv) {
-                    visibleLayers.insert(i, layer.id);
+            var i;
+            if (!!mapVisibleLayers) {
+                for (i = 0; i < mapVisibleLayers.length; i++) {
+                    var layerIdx = _.findIndex(layers, function (lyr) {
+                        return mapVisibleLayers[i] === lyr.id;
+                    });
+                    var layer = layers[layerIdx];
+                    listItem(layer, list, i, visibleLayers);
+                    layers.splice(layerIdx, 1);
                 }
-                listItem(layer, list, i, visibleLayers);
+            }
+            for (i = 0; i < layers.length; i++){
+                var layer = layers[i];
+                if (!mapVisibleLayers) {
+                    visibleLayers.insert(i, layer.id);
+                    listItem(layer, list, i, visibleLayers);
+                }
+                else {
+                    listItem(layer, list,
+                             i + mapVisibleLayers.length, visibleLayers);
+                }
             }
         })
         .catch(function(err){
