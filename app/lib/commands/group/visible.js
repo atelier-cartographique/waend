@@ -10,13 +10,20 @@
 
 
 var _ = require('underscore'),
-    Promise = require("bluebird"),
-    semaphore = require('../../Semaphore');
+    Promise = require('bluebird'),
+    semaphore = require('../../Semaphore'),
+    helpers = require('../../helpers');
+
+var emptyElement = helpers.emptyElement;
 
 function Lister (l) {
+    this.update(l);
+}
+
+Lister.prototype.update = function (l) {
     l = l || [];
     this._list = JSON.parse(JSON.stringify(l));
-}
+};
 
 Lister.prototype.index = function (x) {
     return _.indexOf(this._list, x);
@@ -50,27 +57,20 @@ Lister.prototype.swap = function (i0, i1) {
     list[i1] = tmp;
 };
 
-Lister.prototype.up = function (x) {
-    var idx = this.index(x),
-        newIdx = idx + 1;
-    if (idx < 0) {
+Lister.prototype.down = function (idx) {
+    var newIdx = idx + 1;
+    if (newIdx >= this._list.length) {
         return;
     }
-    if (newIdx >= this._list.length) {
-        var list =  new Array(this._list.length);
-        list[0] = this.at(this._list.length - 1);
-        for (var i = 0; i < (this._list.length - 2); i++) {
-            list[i+1] = this.at(i);
-        }
-        this._list = list;
-    }
-    else {
-        this.swap(idx, newIdx);
-    }
+    this.swap(idx, newIdx);
 };
 
-Lister.prototype.down = function (x) {
-    // TODO
+Lister.prototype.up = function (idx) {
+    var newIdx = idx - 1;
+    if (newIdx < 0) {
+        return;
+    }
+    this.swap(idx, newIdx);
 };
 
 Lister.prototype.getList = function () {
@@ -80,20 +80,37 @@ Lister.prototype.getList = function () {
 function listItem (layer, container, idx, lister) {
     var isVisible = lister.has(layer.id),
         elem = document.createElement('div'),
-        label = document.createElement('span');
+        label = document.createElement('span'),
+        elemUp = document.createElement('span'),
+        elemDown = document.createElement('span');
 
     elem.setAttribute('class', 'visible-layer visible-' + (
         isVisible ? 'yes' : 'no'
     ));
-    label.setAttribute('class', 'visible-layer-label');
 
+    label.setAttribute('class', 'visible-layer-label');
     label.innerHTML = layer.get('name', layer.id);
+    elemUp.innerHTML = ' ↑ ';
+    elemDown.innerHTML = ' ↓ ';
+
 
     elem.appendChild(label);
+    if (isVisible) {
+        elem.appendChild(elemUp);
+        elem.appendChild(elemDown);
+        elemUp.addEventListener('click', function () {
+            lister.up(idx);
+            semaphore.signal('visibility:change', lister.getList());
+        }, false);
+        elemDown.addEventListener('click', function () {
+            lister.down(idx);
+            semaphore.signal('visibility:change', lister.getList());
+        }, false);
+    }
     container.appendChild(elem);
 
     var toggle = function () {
-        if (lister.has(layer.id)) {
+        if (isVisible) {
             lister.remove(layer.id);
             elem.setAttribute('class', 'visible-layer visible-no');
         }
@@ -104,8 +121,41 @@ function listItem (layer, container, idx, lister) {
         semaphore.signal('visibility:change', lister.getList());
     };
 
-    elem.addEventListener('click', toggle, false);
+
+    label.addEventListener('click', toggle, false);
 }
+
+
+function listUpdater (baseLayers, container, visibleLayers) {
+    return function (mapVisibleLayers) {
+        visibleLayers.update(mapVisibleLayers);
+        emptyElement(container);
+        var layers = _.clone(baseLayers);
+        var i;
+        if (!!mapVisibleLayers) {
+            for (i = 0; i < mapVisibleLayers.length; i++) {
+                var layerIdx = _.findIndex(layers, function (lyr) {
+                    return mapVisibleLayers[i] === lyr.id;
+                });
+                var layer = layers[layerIdx];
+                listItem(layer, container, i, visibleLayers);
+                layers.splice(layerIdx, 1);
+            }
+        }
+        for (i = 0; i < layers.length; i++){
+            var layer = layers[i];
+            if (!mapVisibleLayers) {
+                visibleLayers.insert(i, layer.id);
+                listItem(layer, container, i, visibleLayers);
+            }
+            else {
+                listItem(layer, container,
+                    i + mapVisibleLayers.length, visibleLayers);
+            }
+        }
+    };
+};
+
 
 function visible () {
     var self = this,
@@ -135,11 +185,11 @@ function visible () {
     wrapper.appendChild(cancelButton);
     display.node.appendChild(wrapper);
 
-    var res = function(resolve, reject){
+    var mapVisibleLayers = data.get('visible');
+    var visibleLayers = new Lister(mapVisibleLayers);
 
-        var vl = data.get('visible'),
-            visibleLayers = new Lister(vl),
-            fv = !vl;
+
+    var res = function(resolve, reject){
 
         var submit = function () {
             var vList = visibleLayers.getList();
@@ -154,20 +204,20 @@ function visible () {
             resolve(vList);
         };
 
-        binder.getLayers(userId, groupId)
-            .then(function(layers){
-                for(var i = 0; i < layers.length; i++){
-                    var layer = layers[i];
-                    if (fv) {
-                        visibleLayers.insert(i, layer.id);
-                    }
-                    listItem(layer, list, i, visibleLayers);
-                }
-            })
-            .catch(close);
 
         submitButton.addEventListener('click', submit, false);
         cancelButton.addEventListener('click', close, false);
+
+        binder.getLayers(userId, groupId)
+            .then(function (layers) {
+                var updater = listUpdater(layers, list, visibleLayers);
+                updater(mapVisibleLayers);
+                semaphore.on('visibility:change', function (mvl) {
+                    updater(mvl);
+                });
+            })
+            .catch(close);
+
     };
     return (new Promise(res));
 }
