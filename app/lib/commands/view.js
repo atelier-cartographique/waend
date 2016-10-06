@@ -780,13 +780,14 @@ Navigator.prototype.centerOn = function (pix) {
 
 
 
-function showGroupLegend(node, group) {
+function showGroupLegend(node, user, group) {
     var wrapper = document.createElement('div'),
         titleWrapper = document.createElement('div'),
         titleLabel = document.createElement('span'),
         title = document.createElement('span'),
         descLabel = document.createElement('span'),
-        desc = document.createElement('span');
+        desc = document.createElement('span'),
+        author = document.createElement('div');
 
     wrapper.setAttribute('class', 'view-group-wrapper');
     titleWrapper.setAttribute('class', 'view-group-title-wrapper');
@@ -794,17 +795,20 @@ function showGroupLegend(node, group) {
     title.setAttribute('class', 'view-group-title');
     descLabel.setAttribute('class', 'view-group-label');
     desc.setAttribute('class', 'view-group-description');
+    author.setAttribute('class', 'view-group-author');
 
     // titleLabel.innerHTML = "name ";
     title.innerHTML = group.get('name', 'Title');
     // descLabel.innerHTML = "description — ";
     desc.innerHTML = group.get('description', 'Description');
+    author.innerHTML = user.get('name');
 
 
     // titleWrapper.appendChild(titleLabel);
     titleWrapper.appendChild(title);
     // wrapper.appendChild(descLabel);
     wrapper.appendChild(titleWrapper);
+    wrapper.appendChild(author);
     wrapper.appendChild(desc);
     node.appendChild(wrapper);
 }
@@ -1196,13 +1200,19 @@ function view () {
         nav.start(ender);
 
         showLookup(display.node);
-        binder.getGroup(userId, groupId)
-            .then(function(group){
-                showGroupLegend(display.node, group);
+        binder.getUser(userId)
+            .then(function (user) {
+                binder.getGroup(userId, groupId)
+                    .then(function(group){
+                        showGroupLegend(display.node, user, group);
+                    })
+                    .catch(function(err){
+                        console.error('getgroup', err);
+                    });
             })
-            .catch(function(err){
-                console.error('getgroup', err);
-            });
+            .catch(function (err) {
+                console.error('getuser', err);
+            })
 
         listLayers(self, display.node);
         notifier(self, display.node);
