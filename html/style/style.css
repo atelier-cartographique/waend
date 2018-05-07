@@ -668,7 +668,7 @@ p,
 }
 .header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 1rem;
   height: 3.5em;
@@ -678,7 +678,10 @@ p,
 .header a {
   display: block;
 }
-.header a:last-child {
+.header .hearder--leftblock {
+  display: flex;
+}
+.header .hearder--leftblock a:last-child {
   margin-left: 0.5rem;
 }
 .main {
