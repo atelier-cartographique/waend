@@ -1,0 +1,56 @@
+.header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: @margin;
+    height: 3.5em;
+    max-width: 40em;
+    margin: auto;
+
+        a {display:block;}
+        a:last-child {margin-left: @margin / 2;}
+}
+
+
+
+.main {
+    padding: @margin;
+    max-width: 40em;
+    margin: auto;
+}
+
+.calendar {
+    .collection--item {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #000;
+        padding-bottom: @margin;
+
+        &:last-child {border: 0px;}
+
+        div {flex: 1;}
+        .item-infos {margin-left: @margin;}
+    }
+}
+
+
+.logobox {
+    text-align: center;
+    margin: @margin * 2 0;
+    .logo{
+        font-size: 8em;
+    }
+    .btn {
+        margin: @margin;
+    }
+}
+
+.slogan {
+    font-size: 2em;
+    margin-bottom: 10vh;
+}
+
+.search {
+    display: flex;
+    .btn{margin-left: @margin;}
+}
